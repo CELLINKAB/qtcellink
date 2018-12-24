@@ -38,31 +38,17 @@
 #include <QtQml/qqml.h>
 #include <QtCore/qloggingcategory.h>
 
-#include "qquickplatformdialog_p.h"
-#include "qquickplatformcolordialog_p.h"
-#include "qquickplatformfiledialog_p.h"
-#include "qquickplatformfolderdialog_p.h"
-#include "qquickplatformfontdialog_p.h"
-#include "qquickplatformmessagedialog_p.h"
-
 #include "qquickplatformmenu_p.h"
 #include "qquickplatformmenubar_p.h"
 #include "qquickplatformmenuitem_p.h"
 #include "qquickplatformmenuitemgroup_p.h"
 #include "qquickplatformmenuseparator_p.h"
 
-#include "qquickplatformstandardpaths_p.h"
-#if QT_CONFIG(systemtrayicon)
-# include "qquickplatformsystemtrayicon_p.h"
-#endif
-
 #include "qquickplatformicon_p.h"
 
 QT_BEGIN_NAMESPACE
 
-Q_LOGGING_CATEGORY(qtLabsPlatformDialogs, "qt.labs.platform.dialogs")
 Q_LOGGING_CATEGORY(qtLabsPlatformMenus, "qt.labs.platform.menus")
-Q_LOGGING_CATEGORY(qtLabsPlatformTray, "qt.labs.platform.tray")
 
 class QtLabsPlatformPlugin: public QQmlExtensionPlugin
 {
@@ -80,32 +66,12 @@ QtLabsPlatformPlugin::QtLabsPlatformPlugin(QObject *parent) : QQmlExtensionPlugi
 
 void QtLabsPlatformPlugin::registerTypes(const char *uri)
 {
-    qmlRegisterUncreatableType<QQuickPlatformDialog>(uri, 1, 0, "Dialog", QQuickPlatformDialog::tr("Dialog is an abstract base class"));
-    qmlRegisterType<QQuickPlatformColorDialog>(uri, 1, 0, "ColorDialog");
-    qmlRegisterType<QQuickPlatformFileDialog>(uri, 1, 0, "FileDialog");
-    qmlRegisterType<QQuickPlatformFileNameFilter>();
-    qmlRegisterType<QQuickPlatformFolderDialog>(uri, 1, 0, "FolderDialog");
-    qmlRegisterType<QQuickPlatformFontDialog>(uri, 1, 0, "FontDialog");
-    qmlRegisterType<QQuickPlatformMessageDialog>(uri, 1, 0, "MessageDialog");
-
     qmlRegisterType<QQuickPlatformMenu>(uri, 1, 0, "Menu");
     qmlRegisterType<QQuickPlatformMenuBar>(uri, 1, 0, "MenuBar");
     qmlRegisterType<QQuickPlatformMenuItem>(uri, 1, 0, "MenuItem");
     qmlRegisterType<QQuickPlatformMenuItemGroup>(uri, 1, 0, "MenuItemGroup");
     qmlRegisterType<QQuickPlatformMenuSeparator>(uri, 1, 0, "MenuSeparator");
     qRegisterMetaType<QPlatformMenu::MenuType>();
-
-    qmlRegisterUncreatableType<QPlatformDialogHelper>(uri, 1, 0, "StandardButton", QQuickPlatformDialog::tr("Cannot create an instance of StandardButton"));
-    qmlRegisterSingletonType<QQuickPlatformStandardPaths>(uri, 1, 0, "StandardPaths", QQuickPlatformStandardPaths::create);
-    qRegisterMetaType<QStandardPaths::StandardLocation>();
-    qRegisterMetaType<QStandardPaths::LocateOptions>();
-
-#if QT_CONFIG(systemtrayicon)
-    qmlRegisterType<QQuickPlatformSystemTrayIcon>(uri, 1, 0, "SystemTrayIcon");
-    qmlRegisterType<QQuickPlatformSystemTrayIcon, 1>(uri, 1, 1, "SystemTrayIcon");
-    qRegisterMetaType<QPlatformSystemTrayIcon::ActivationReason>();
-    qRegisterMetaType<QPlatformSystemTrayIcon::MessageIcon>();
-#endif
 
     qmlRegisterType<QQuickPlatformIcon>();
     qRegisterMetaType<QQuickPlatformIcon>();

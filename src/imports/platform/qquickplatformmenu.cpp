@@ -54,10 +54,6 @@
 
 #include "widgets/qwidgetplatform_p.h"
 
-#if QT_CONFIG(systemtrayicon)
-#include "qquickplatformsystemtrayicon_p.h"
-#endif
-
 QT_BEGIN_NAMESPACE
 
 /*!
@@ -203,7 +199,6 @@ QQuickPlatformMenu::QQuickPlatformMenu(QObject *parent)
       m_type(QPlatformMenu::DefaultMenu),
       m_menuBar(nullptr),
       m_parentMenu(nullptr),
-      m_systemTrayIcon(nullptr),
       m_menuItem(nullptr),
       m_iconLoader(nullptr),
       m_handle(nullptr)
@@ -246,10 +241,6 @@ QPlatformMenu * QQuickPlatformMenu::create()
             m_handle = m_menuBar->handle()->createMenu();
         else if (m_parentMenu && m_parentMenu->handle())
             m_handle = m_parentMenu->handle()->createSubMenu();
-#if QT_CONFIG(systemtrayicon)
-        else if (m_systemTrayIcon && m_systemTrayIcon->handle())
-            m_handle = m_systemTrayIcon->handle()->createMenu();
-#endif
 
         // TODO: implement ^
         // - QCocoaMenuBar::createMenu()
@@ -306,10 +297,6 @@ void QQuickPlatformMenu::sync()
 
     if (m_menuBar && m_menuBar->handle())
         m_menuBar->handle()->syncMenu(m_handle);
-#if QT_CONFIG(systemtrayicon)
-    else if (m_systemTrayIcon && m_systemTrayIcon->handle())
-        m_systemTrayIcon->handle()->updateMenu(m_handle);
-#endif
 
     for (QQuickPlatformMenuItem *item : qAsConst(m_items))
         item->sync();
@@ -382,28 +369,6 @@ void QQuickPlatformMenu::setParentMenu(QQuickPlatformMenu *menu)
     m_parentMenu = menu;
     destroy();
     emit parentMenuChanged();
-}
-
-/*!
-    \readonly
-    \qmlproperty SystemTrayIcon Qt.labs.platform::Menu::systemTrayIcon
-
-    This property holds the system tray icon that the menu belongs to, or \c null
-    if the menu is not in a system tray icon.
-*/
-QQuickPlatformSystemTrayIcon *QQuickPlatformMenu::systemTrayIcon() const
-{
-    return m_systemTrayIcon;
-}
-
-void QQuickPlatformMenu::setSystemTrayIcon(QQuickPlatformSystemTrayIcon *icon)
-{
-    if (m_systemTrayIcon == icon)
-        return;
-
-    m_systemTrayIcon = icon;
-    destroy();
-    emit systemTrayIconChanged();
 }
 
 /*!

@@ -7,8 +7,6 @@ QT_PRIVATE += core-private gui-private qml-private quick-private
 
 DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 
-QMAKE_DOCS = $$PWD/doc/qtlabsplatform.qdocconf
-
 OTHER_FILES += \
     qmldir
 

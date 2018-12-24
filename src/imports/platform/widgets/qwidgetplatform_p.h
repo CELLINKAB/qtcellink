@@ -51,30 +51,13 @@
 #include <QtCore/qdebug.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtGui/qpa/qplatformtheme.h>
-#include <QtGui/qpa/qplatformdialoghelper.h>
-#include <QtGui/qpa/qplatformsystemtrayicon.h>
 #include <QtGui/qpa/qplatformmenu.h>
 
 #ifdef QT_WIDGETS_LIB
 #include <QtWidgets/qtwidgetsglobal.h>
-#if QT_CONFIG(colordialog)
-#include "qwidgetplatformcolordialog_p.h"
-#endif
-#if QT_CONFIG(filedialog)
-#include "qwidgetplatformfiledialog_p.h"
-#endif
-#if QT_CONFIG(fontdialog)
-#include "qwidgetplatformfontdialog_p.h"
-#endif
-#if QT_CONFIG(messagebox)
-#include "qwidgetplatformmessagedialog_p.h"
-#endif
 #if QT_CONFIG(menu)
 #include "qwidgetplatformmenu_p.h"
 #include "qwidgetplatformmenuitem_p.h"
-#endif
-#ifndef QT_NO_SYSTEMTRAYICON
-#include "qwidgetplatformsystemtrayicon_p.h"
 #endif
 #endif
 
@@ -83,11 +66,6 @@ QT_BEGIN_NAMESPACE
 #ifndef QT_WIDGETS_LIB
 typedef QPlatformMenu QWidgetPlatformMenu;
 typedef QPlatformMenuItem QWidgetPlatformMenuItem;
-typedef QPlatformColorDialogHelper QWidgetPlatformColorDialog;
-typedef QPlatformFileDialogHelper QWidgetPlatformFileDialog;
-typedef QPlatformFontDialogHelper QWidgetPlatformFontDialog;
-typedef QPlatformMessageDialogHelper QWidgetPlatformMessageDialog;
-typedef QPlatformSystemTrayIcon QWidgetPlatformSystemTrayIcon;
 #endif
 
 namespace QWidgetPlatform
@@ -132,36 +110,6 @@ namespace QWidgetPlatform
         Q_UNUSED(parent);
         return nullptr;
 #endif
-    }
-    static inline QPlatformSystemTrayIcon *createSystemTrayIcon(QObject *parent = nullptr) {
-#ifndef QT_NO_SYSTEMTRAYICON
-        return createWidget<QWidgetPlatformSystemTrayIcon>("SystemTrayIcon", parent);
-#else
-        Q_UNUSED(parent);
-        return nullptr;
-#endif
-    }
-    static inline QPlatformDialogHelper *createDialog(QPlatformTheme::DialogType type, QObject *parent = nullptr)
-    {
-#if !defined(QT_WIDGETS_LIB) || !(QT_CONFIG(colordialog) || QT_CONFIG(filedialog) || QT_CONFIG(fontdialog) || QT_CONFIG(messagebox))
-        Q_UNUSED(parent);
-#endif
-        switch (type) {
-#if defined(QT_WIDGETS_LIB) && QT_CONFIG(colordialog)
-        case QPlatformTheme::ColorDialog: return createWidget<QWidgetPlatformColorDialog>("ColorDialog", parent);
-#endif
-#if defined(QT_WIDGETS_LIB) && QT_CONFIG(filedialog)
-        case QPlatformTheme::FileDialog: return createWidget<QWidgetPlatformFileDialog>("FileDialog", parent);
-#endif
-#if defined(QT_WIDGETS_LIB) && QT_CONFIG(fontdialog)
-        case QPlatformTheme::FontDialog: return createWidget<QWidgetPlatformFontDialog>("FontDialog", parent);
-#endif
-#if defined(QT_WIDGETS_LIB) && QT_CONFIG(messagebox)
-        case QPlatformTheme::MessageDialog: return createWidget<QWidgetPlatformMessageDialog>("MessageDialog", parent);
-#endif
-        default: break;
-        }
-        return nullptr;
     }
 }
 

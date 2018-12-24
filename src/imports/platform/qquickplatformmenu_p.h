@@ -68,7 +68,6 @@ class QQmlV4Function;
 class QQuickPlatformMenuBar;
 class QQuickPlatformMenuItem;
 class QQuickPlatformIconLoader;
-class QQuickPlatformSystemTrayIcon;
 
 class QQuickPlatformMenu : public QObject, public QQmlParserStatus
 {
@@ -78,7 +77,6 @@ class QQuickPlatformMenu : public QObject, public QQmlParserStatus
     Q_PROPERTY(QQmlListProperty<QQuickPlatformMenuItem> items READ items NOTIFY itemsChanged FINAL)
     Q_PROPERTY(QQuickPlatformMenuBar *menuBar READ menuBar NOTIFY menuBarChanged FINAL)
     Q_PROPERTY(QQuickPlatformMenu *parentMenu READ parentMenu NOTIFY parentMenuChanged FINAL)
-    Q_PROPERTY(QQuickPlatformSystemTrayIcon *systemTrayIcon READ systemTrayIcon NOTIFY systemTrayIconChanged FINAL)
     Q_PROPERTY(QQuickPlatformMenuItem *menuItem READ menuItem CONSTANT FINAL)
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged FINAL)
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged FINAL)
@@ -109,9 +107,6 @@ public:
 
     QQuickPlatformMenu *parentMenu() const;
     void setParentMenu(QQuickPlatformMenu *menu);
-
-    QQuickPlatformSystemTrayIcon *systemTrayIcon() const;
-    void setSystemTrayIcon(QQuickPlatformSystemTrayIcon *icon);
 
     QQuickPlatformMenuItem *menuItem() const;
 
@@ -163,7 +158,6 @@ Q_SIGNALS:
     void itemsChanged();
     void menuBarChanged();
     void parentMenuChanged();
-    void systemTrayIconChanged();
     void titleChanged();
     void iconSourceChanged();
     void iconNameChanged();
@@ -209,7 +203,6 @@ private:
     QList<QQuickPlatformMenuItem *> m_items;
     QQuickPlatformMenuBar *m_menuBar;
     QQuickPlatformMenu *m_parentMenu;
-    QQuickPlatformSystemTrayIcon *m_systemTrayIcon;
     mutable QQuickPlatformMenuItem *m_menuItem;
     mutable QQuickPlatformIconLoader *m_iconLoader;
     QPlatformMenu *m_handle;

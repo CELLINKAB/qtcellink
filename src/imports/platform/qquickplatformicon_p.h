@@ -26,8 +26,6 @@
 #include <QtCore/qurl.h>
 #include <QtCore/qstring.h>
 
-QT_BEGIN_NAMESPACE
-
 class QObject;
 
 class QQuickPlatformIcon
@@ -55,7 +53,5 @@ private:
     QUrl m_source;
     QString m_name;
 };
-
-QT_END_NAMESPACE
 
 #endif // QQUICKPLATFORMICON_P_H

@@ -32,8 +32,6 @@
 
 #include "qquickplatformicon_p.h"
 
-QT_BEGIN_NAMESPACE
-
 Q_LOGGING_CATEGORY(qtLabsPlatformMenus, "qt.labs.platform.menus")
 
 class CellinkPlatformPlugin: public QQmlExtensionPlugin
@@ -62,7 +60,5 @@ void CellinkPlatformPlugin::registerTypes(const char *uri)
     qmlRegisterType<QQuickPlatformIcon>();
     qRegisterMetaType<QQuickPlatformIcon>();
 }
-
-QT_END_NAMESPACE
 
 #include "cellinkplatformplugin.moc"

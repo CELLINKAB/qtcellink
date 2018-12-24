@@ -30,8 +30,6 @@
 
 #include "qquickplatformicon_p.h"
 
-QT_BEGIN_NAMESPACE
-
 class QObject;
 
 class QQuickPlatformIconLoader : public QQuickPixmap
@@ -55,7 +53,5 @@ private:
     bool m_enabled;
     QQuickPlatformIcon m_icon;
 };
-
-QT_END_NAMESPACE
 
 #endif // QQUICKPLATFORMICONLOADER_P_H

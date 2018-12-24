@@ -33,8 +33,6 @@
 
 #include "qquickplatformicon_p.h"
 
-QT_BEGIN_NAMESPACE
-
 class QIcon;
 class QWindow;
 class QQuickItem;
@@ -187,8 +185,6 @@ private:
     mutable QQuickPlatformIconLoader *m_iconLoader;
     QPlatformMenu *m_handle;
 };
-
-QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QQuickPlatformMenu)
 Q_DECLARE_METATYPE(QPlatformMenu::MenuType)

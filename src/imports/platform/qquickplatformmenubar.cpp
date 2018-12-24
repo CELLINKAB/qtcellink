@@ -30,8 +30,6 @@
 #include <QtQuick/qquickwindow.h>
 #include <QtQuick/qquickitem.h>
 
-QT_BEGIN_NAMESPACE
-
 /*!
     \qmltype MenuBar
     \inherits QtObject
@@ -312,5 +310,3 @@ void QQuickPlatformMenuBar::menus_clear(QQmlListProperty<QQuickPlatformMenu> *pr
     QQuickPlatformMenuBar *menuBar = static_cast<QQuickPlatformMenuBar *>(property->object);
     menuBar->clear();
 }
-
-QT_END_NAMESPACE

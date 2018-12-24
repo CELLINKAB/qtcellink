@@ -32,8 +32,6 @@
 
 #include "qquickplatformicon_p.h"
 
-QT_BEGIN_NAMESPACE
-
 class QQuickAction;
 class QPlatformMenuItem;
 class QQuickPlatformMenu;
@@ -173,8 +171,6 @@ private:
     friend class QQuickPlatformMenu;
     friend class QQuickPlatformMenuItemGroup;
 };
-
-QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QQuickPlatformMenuItem)
 

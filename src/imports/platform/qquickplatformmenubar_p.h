@@ -28,8 +28,6 @@
 #include <QtQml/qqmllist.h>
 #include <QtQml/qqml.h>
 
-QT_BEGIN_NAMESPACE
-
 class QWindow;
 class QPlatformMenuBar;
 class QQuickPlatformMenu;
@@ -87,8 +85,6 @@ private:
     QList<QQuickPlatformMenu *> m_menus;
     QPlatformMenuBar *m_handle;
 };
-
-QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QQuickPlatformMenuBar)
 

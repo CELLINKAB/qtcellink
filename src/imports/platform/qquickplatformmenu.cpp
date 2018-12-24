@@ -39,8 +39,6 @@
 #include <QtQuick/qquickitem.h>
 #include <QtQuickTemplates2/private/qquickaction_p.h>
 
-QT_BEGIN_NAMESPACE
-
 /*!
     \qmltype Menu
     \inherits QtObject
@@ -919,5 +917,3 @@ void QQuickPlatformMenu::updateIcon()
     m_handle->setIcon(m_iconLoader->toQIcon());
     sync();
 }
-
-QT_END_NAMESPACE

@@ -22,8 +22,6 @@
 
 #include "qquickplatformmenuseparator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 /*!
     \qmltype MenuSeparator
     \inherits MenuItem
@@ -47,5 +45,3 @@ QQuickPlatformMenuSeparator::QQuickPlatformMenuSeparator(QObject *parent)
 {
     setSeparator(true);
 }
-
-QT_END_NAMESPACE

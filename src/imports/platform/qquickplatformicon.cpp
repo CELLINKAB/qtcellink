@@ -22,8 +22,6 @@
 
 #include "qquickplatformicon_p.h"
 
-QT_BEGIN_NAMESPACE
-
 QUrl QQuickPlatformIcon::source() const
 {
     return m_source;
@@ -63,5 +61,3 @@ bool QQuickPlatformIcon::operator!=(const QQuickPlatformIcon &other) const
 {
     return !(*this == other);
 }
-
-QT_END_NAMESPACE

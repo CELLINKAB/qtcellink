@@ -23,8 +23,6 @@
 #include "qquickplatformmenuitemgroup_p.h"
 #include "qquickplatformmenuitem_p.h"
 
-QT_BEGIN_NAMESPACE
-
 /*!
     \qmltype MenuItemGroup
     \inherits QtObject
@@ -372,5 +370,3 @@ void QQuickPlatformMenuItemGroup::items_clear(QQmlListProperty<QQuickPlatformMen
     QQuickPlatformMenuItemGroup *group = static_cast<QQuickPlatformMenuItemGroup *>(prop->object);
     group->clear();
 }
-
-QT_END_NAMESPACE

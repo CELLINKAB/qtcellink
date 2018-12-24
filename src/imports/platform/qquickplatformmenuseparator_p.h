@@ -25,8 +25,6 @@
 
 #include "qquickplatformmenuitem_p.h"
 
-QT_BEGIN_NAMESPACE
-
 class QQuickPlatformMenuSeparator : public QQuickPlatformMenuItem
 {
     Q_OBJECT
@@ -34,8 +32,6 @@ class QQuickPlatformMenuSeparator : public QQuickPlatformMenuItem
 public:
     explicit QQuickPlatformMenuSeparator(QObject *parent = nullptr);
 };
-
-QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QQuickPlatformMenuSeparator)
 

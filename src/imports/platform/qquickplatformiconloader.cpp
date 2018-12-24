@@ -26,8 +26,6 @@
 #include <QtCore/qmetaobject.h>
 #include <QtQml/qqml.h>
 
-QT_BEGIN_NAMESPACE
-
 QQuickPlatformIconLoader::QQuickPlatformIconLoader(int slot, QObject *parent)
     : m_parent(parent),
       m_slot(slot),
@@ -83,5 +81,3 @@ void QQuickPlatformIconLoader::loadIcon()
     if (!isLoading())
         m_parent->metaObject()->method(m_slot).invoke(m_parent);
 }
-
-QT_END_NAMESPACE

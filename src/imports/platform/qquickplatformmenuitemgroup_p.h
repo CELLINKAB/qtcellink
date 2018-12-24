@@ -27,8 +27,6 @@
 #include <QtCore/qvector.h>
 #include <QtQml/qqml.h>
 
-QT_BEGIN_NAMESPACE
-
 class QQuickPlatformMenuItem;
 class QQuickPlatformMenuItemGroupPrivate;
 
@@ -90,8 +88,6 @@ private:
     QQuickPlatformMenuItem *m_checkedItem;
     QVector<QQuickPlatformMenuItem*> m_items;
 };
-
-QT_END_NAMESPACE
 
 QML_DECLARE_TYPE(QQuickPlatformMenuItemGroup)
 

@@ -2,6 +2,7 @@
 /lib
 /mkspecs
 /doc
+/qml
 
 *.so
 *.so.*

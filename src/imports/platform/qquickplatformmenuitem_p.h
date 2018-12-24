@@ -1,5 +1,6 @@
 /****************************************************************************
 **
+** Copyright (C) 2019 J-P Nurmi <jpnurmi@gmail.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
@@ -59,6 +60,7 @@
 
 QT_BEGIN_NAMESPACE
 
+class QQuickAction;
 class QPlatformMenuItem;
 class QQuickPlatformMenu;
 class QQuickPlatformIconLoader;
@@ -83,6 +85,7 @@ class QQuickPlatformMenuItem : public QObject, public QQmlParserStatus
     Q_PROPERTY(QVariant shortcut READ shortcut WRITE setShortcut NOTIFY shortcutChanged FINAL)
     Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY fontChanged FINAL)
     Q_PROPERTY(QQuickPlatformIcon icon READ icon WRITE setIcon NOTIFY iconChanged FINAL REVISION 1)
+    Q_PROPERTY(QQuickAction *action READ action WRITE setAction NOTIFY actionChanged)
     Q_ENUMS(QPlatformMenuItem::MenuRole)
 
 public:
@@ -138,6 +141,9 @@ public:
     QQuickPlatformIcon icon() const;
     void setIcon(const QQuickPlatformIcon &icon);
 
+    QQuickAction *action() const;
+    void setAction(QQuickAction *action);
+
 public Q_SLOTS:
     void toggle();
 
@@ -160,6 +166,7 @@ Q_SIGNALS:
     void shortcutChanged();
     void fontChanged();
     Q_REVISION(1) void iconChanged();
+    void actionChanged();
 
 protected:
     void classBegin() override;
@@ -182,6 +189,7 @@ private:
     QString m_text;
     QVariant m_shortcut;
     QFont m_font;
+    QQuickAction *m_action;
     QQuickPlatformMenu *m_menu;
     QQuickPlatformMenu *m_subMenu;
     QQuickPlatformMenuItemGroup *m_group;

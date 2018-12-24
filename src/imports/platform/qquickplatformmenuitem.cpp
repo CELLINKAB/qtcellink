@@ -1,5 +1,6 @@
 /****************************************************************************
 **
+** Copyright (C) 2019 J-P Nurmi <jpnurmi@gmail.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
@@ -43,6 +44,7 @@
 #include <QtGui/qkeysequence.h>
 #include <QtGui/qpa/qplatformtheme.h>
 #include <QtGui/private/qguiapplication_p.h>
+#include <QtQuickTemplates2/private/qquickaction_p.h>
 
 #include "widgets/qwidgetplatform_p.h"
 
@@ -106,6 +108,7 @@ QQuickPlatformMenuItem::QQuickPlatformMenuItem(QObject *parent)
       m_checkable(false),
       m_checked(false),
       m_role(QPlatformMenuItem::TextHeuristicRole),
+      m_action(nullptr),
       m_menu(nullptr),
       m_subMenu(nullptr),
       m_group(nullptr),
@@ -353,6 +356,8 @@ void QQuickPlatformMenuItem::setCheckable(bool checkable)
         return;
 
     m_checkable = checkable;
+    if (m_action)
+        m_action->setCheckable(checkable);
     sync();
     emit checkableChanged();
 }
@@ -379,6 +384,8 @@ void QQuickPlatformMenuItem::setChecked(bool checked)
         setCheckable(true);
 
     m_checked = checked;
+    if (m_action)
+        m_action->setChecked(checked);
     sync();
     emit checkedChanged();
 }
@@ -573,6 +580,44 @@ void QQuickPlatformMenuItem::setIcon(const QQuickPlatformIcon &icon)
     emit iconChanged();
 }
 
+QQuickAction *QQuickPlatformMenuItem::action() const
+{
+    return m_action;
+}
+
+void QQuickPlatformMenuItem::setAction(QQuickAction *action)
+{
+    if (m_action == action)
+        return;
+
+    if (QQuickAction *oldAction = m_action) {
+        disconnect(oldAction, &QQuickAction::triggered, this, &QQuickPlatformMenuItem::triggered);
+        disconnect(oldAction, &QQuickAction::textChanged, this, &QQuickPlatformMenuItem::setText);
+        disconnect(oldAction, &QQuickAction::enabledChanged, this, &QQuickPlatformMenuItem::setEnabled);
+        disconnect(oldAction, &QQuickAction::checkedChanged, this, &QQuickPlatformMenuItem::setChecked);
+        disconnect(oldAction, &QQuickAction::checkableChanged, this, &QQuickPlatformMenuItem::setCheckable);
+        disconnect(oldAction, &QQuickAction::shortcutChanged, this, &QQuickPlatformMenuItem::setShortcut);
+    }
+
+    if (action) {
+        connect(action, &QQuickAction::triggered, this, &QQuickPlatformMenuItem::triggered);
+        connect(action, &QQuickAction::textChanged, this, &QQuickPlatformMenuItem::setText);
+        connect(action, &QQuickAction::enabledChanged, this, &QQuickPlatformMenuItem::setEnabled);
+        connect(action, &QQuickAction::checkedChanged, this, &QQuickPlatformMenuItem::setChecked);
+        connect(action, &QQuickAction::checkableChanged, this, &QQuickPlatformMenuItem::setCheckable);
+        connect(action, &QQuickAction::shortcutChanged, this, &QQuickPlatformMenuItem::setShortcut);
+
+        setText(action->text());
+        setChecked(action->isChecked());
+        setCheckable(action->isCheckable());
+        setEnabled(action->isEnabled());
+    }
+
+    m_action = action;
+    sync();
+    emit actionChanged();
+}
+
 /*!
     \qmlmethod void Qt.labs.platform::MenuItem::toggle()
 
@@ -610,7 +655,10 @@ QQuickPlatformIconLoader *QQuickPlatformMenuItem::iconLoader() const
 void QQuickPlatformMenuItem::activate()
 {
     toggle();
-    emit triggered();
+    if (m_action && m_action->isEnabled())
+        m_action->trigger(this);
+    else if (m_enabled)
+        emit triggered();
 }
 
 void QQuickPlatformMenuItem::updateIcon()

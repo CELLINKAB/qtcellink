@@ -1,5 +1,6 @@
 /****************************************************************************
 **
+** Copyright (C) 2019 J-P Nurmi <jpnurmi@gmail.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
@@ -51,6 +52,7 @@
 #include <QtQuick/qquickrendercontrol.h>
 #include <QtQuick/qquickwindow.h>
 #include <QtQuick/qquickitem.h>
+#include <QtQuickTemplates2/private/qquickaction_p.h>
 
 #include "widgets/qwidgetplatform_p.h"
 
@@ -689,6 +691,40 @@ void QQuickPlatformMenu::removeMenu(QQuickPlatformMenu *menu)
     removeItem(menu->menuItem());
 }
 
+void QQuickPlatformMenu::addAction(QQuickAction *action)
+{
+    insertAction(m_items.count(), action);
+}
+
+void QQuickPlatformMenu::insertAction(int index, QQuickAction *action)
+{
+    if (!action)
+        return;
+
+    QQuickPlatformMenuItem *item = new QQuickPlatformMenuItem(this);
+    item->setAction(action);
+    item->componentComplete();
+    insertItem(index, item);
+}
+
+void QQuickPlatformMenu::removeAction(QQuickAction *action)
+{
+    if (!action)
+        return;
+
+    const int count = m_items.count();
+    for (int i = 0; i < count; ++i) {
+        QQuickPlatformMenuItem *item = qobject_cast<QQuickPlatformMenuItem *>(m_items.at(i));
+        if (!item || item->action() != action)
+            continue;
+
+        removeItem(item);
+        break;
+    }
+
+    action->deleteLater();
+}
+
 /*!
     \qmlmethod void Qt.labs.platform::Menu::clear()
 
@@ -847,6 +883,8 @@ void QQuickPlatformMenu::data_append(QQmlListProperty<QObject> *property, QObjec
         menu->addItem(item);
     else if (QQuickPlatformMenu *subMenu = qobject_cast<QQuickPlatformMenu *>(object))
         menu->addMenu(subMenu);
+    else if (QQuickAction *action = qobject_cast<QQuickAction *>(object))
+        menu->addAction(action);
     else
         menu->m_data.append(object);
 }

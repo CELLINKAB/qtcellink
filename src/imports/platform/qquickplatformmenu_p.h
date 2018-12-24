@@ -1,5 +1,6 @@
 /****************************************************************************
 **
+** Copyright (C) 2019 J-P Nurmi <jpnurmi@gmail.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
@@ -63,6 +64,7 @@ QT_BEGIN_NAMESPACE
 class QIcon;
 class QWindow;
 class QQuickItem;
+class QQuickAction;
 class QPlatformMenu;
 class QQmlV4Function;
 class QQuickPlatformMenuBar;
@@ -144,6 +146,10 @@ public:
     Q_INVOKABLE void addMenu(QQuickPlatformMenu *menu);
     Q_INVOKABLE void insertMenu(int index, QQuickPlatformMenu *menu);
     Q_INVOKABLE void removeMenu(QQuickPlatformMenu *menu);
+
+    Q_INVOKABLE void addAction(QQuickAction *action);
+    Q_INVOKABLE void insertAction(int index, QQuickAction *action);
+    Q_INVOKABLE void removeAction(QQuickAction *action);
 
     Q_INVOKABLE void clear();
 

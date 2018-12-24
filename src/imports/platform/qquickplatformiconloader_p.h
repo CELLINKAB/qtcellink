@@ -49,8 +49,8 @@ private:
     void loadIcon();
 
     QObject *m_parent;
-    int m_slot;
-    bool m_enabled;
+    int m_slot = -1;
+    bool m_enabled = false;
     QQuickPlatformIcon m_icon;
 };
 

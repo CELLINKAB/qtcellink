@@ -174,17 +174,7 @@
 Q_DECLARE_LOGGING_CATEGORY(qtLabsPlatformMenus)
 
 QQuickPlatformMenu::QQuickPlatformMenu(QObject *parent)
-    : QObject(parent),
-      m_complete(false),
-      m_enabled(true),
-      m_visible(true),
-      m_minimumWidth(-1),
-      m_type(QPlatformMenu::DefaultMenu),
-      m_menuBar(nullptr),
-      m_parentMenu(nullptr),
-      m_menuItem(nullptr),
-      m_iconLoader(nullptr),
-      m_handle(nullptr)
+    : QObject(parent)
 {
 }
 

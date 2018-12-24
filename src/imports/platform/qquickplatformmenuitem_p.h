@@ -145,21 +145,21 @@ private Q_SLOTS:
     void updateIcon();
 
 private:
-    bool m_complete;
-    bool m_enabled;
-    bool m_visible;
-    bool m_separator;
-    bool m_checkable;
-    bool m_checked;
-    QPlatformMenuItem::MenuRole m_role;
+    bool m_complete = false;
+    bool m_enabled = true;
+    bool m_visible = true;
+    bool m_separator = false;
+    bool m_checkable = false;
+    bool m_checked = false;
+    QPlatformMenuItem::MenuRole m_role = QPlatformMenuItem::TextHeuristicRole;
     QString m_text;
     QVariant m_shortcut;
     QFont m_font;
-    QQuickAction *m_action;
-    QQuickPlatformMenu *m_menu;
-    QQuickPlatformMenu *m_subMenu;
-    mutable QQuickPlatformIconLoader *m_iconLoader;
-    QPlatformMenuItem *m_handle;
+    QQuickAction *m_action = nullptr;
+    QQuickPlatformMenu *m_menu = nullptr;
+    QQuickPlatformMenu *m_subMenu = nullptr;
+    mutable QQuickPlatformIconLoader *m_iconLoader = nullptr;
+    QPlatformMenuItem *m_handle = nullptr;
 
     friend class QQuickPlatformMenu;
 };

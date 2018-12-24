@@ -28,8 +28,7 @@
 
 QQuickPlatformIconLoader::QQuickPlatformIconLoader(int slot, QObject *parent)
     : m_parent(parent),
-      m_slot(slot),
-      m_enabled(false)
+      m_slot(slot)
 {
     Q_ASSERT(slot != -1 && parent);
 }

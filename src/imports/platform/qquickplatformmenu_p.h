@@ -170,20 +170,20 @@ private Q_SLOTS:
 private:
     void unparentSubmenus();
 
-    bool m_complete;
-    bool m_enabled;
-    bool m_visible;
-    int m_minimumWidth;
-    QPlatformMenu::MenuType m_type;
+    bool m_complete = false;
+    bool m_enabled = true;
+    bool m_visible = true;
+    int m_minimumWidth = -1;
+    QPlatformMenu::MenuType m_type = QPlatformMenu::DefaultMenu;
     QString m_title;
     QFont m_font;
     QList<QObject *> m_data;
     QList<QQuickPlatformMenuItem *> m_items;
-    QQuickPlatformMenuBar *m_menuBar;
-    QQuickPlatformMenu *m_parentMenu;
-    mutable QQuickPlatformMenuItem *m_menuItem;
-    mutable QQuickPlatformIconLoader *m_iconLoader;
-    QPlatformMenu *m_handle;
+    QQuickPlatformMenuBar *m_menuBar = nullptr;
+    QQuickPlatformMenu *m_parentMenu = nullptr;
+    mutable QQuickPlatformMenuItem *m_menuItem = nullptr;
+    mutable QQuickPlatformIconLoader *m_iconLoader = nullptr;
+    QPlatformMenu *m_handle = nullptr;
 };
 
 QML_DECLARE_TYPE(QQuickPlatformMenu)

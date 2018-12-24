@@ -90,10 +90,7 @@
 Q_DECLARE_LOGGING_CATEGORY(qtLabsPlatformMenus)
 
 QQuickPlatformMenuBar::QQuickPlatformMenuBar(QObject *parent)
-    : QObject(parent),
-      m_complete(false),
-      m_window(nullptr),
-      m_handle(nullptr)
+    : QObject(parent)
 {
     m_handle = QGuiApplicationPrivate::platformTheme()->createPlatformMenuBar();
     qCDebug(qtLabsPlatformMenus) << "MenuBar ->" << m_handle;

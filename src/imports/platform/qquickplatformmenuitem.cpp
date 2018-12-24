@@ -80,19 +80,7 @@
 */
 
 QQuickPlatformMenuItem::QQuickPlatformMenuItem(QObject *parent)
-    : QObject(parent),
-      m_complete(false),
-      m_enabled(true),
-      m_visible(true),
-      m_separator(false),
-      m_checkable(false),
-      m_checked(false),
-      m_role(QPlatformMenuItem::TextHeuristicRole),
-      m_action(nullptr),
-      m_menu(nullptr),
-      m_subMenu(nullptr),
-      m_iconLoader(nullptr),
-      m_handle(nullptr)
+    : QObject(parent)
 {
 }
 

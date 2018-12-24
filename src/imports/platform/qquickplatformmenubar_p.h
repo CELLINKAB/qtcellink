@@ -79,11 +79,11 @@ protected:
     static void menus_clear(QQmlListProperty<QQuickPlatformMenu> *property);
 
 private:
-    bool m_complete;
-    QWindow *m_window;
+    bool m_complete = false;
+    QWindow *m_window = nullptr;
     QList<QObject *> m_data;
     QList<QQuickPlatformMenu *> m_menus;
-    QPlatformMenuBar *m_handle;
+    QPlatformMenuBar *m_handle = nullptr;
 };
 
 QML_DECLARE_TYPE(QQuickPlatformMenuBar)

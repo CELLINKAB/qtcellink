@@ -50,21 +50,21 @@ QT_BEGIN_NAMESPACE
 
 Q_LOGGING_CATEGORY(qtLabsPlatformMenus, "qt.labs.platform.menus")
 
-class QtLabsPlatformPlugin: public QQmlExtensionPlugin
+class CellinkPlatformPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    QtLabsPlatformPlugin(QObject *parent = nullptr);
+    CellinkPlatformPlugin(QObject *parent = nullptr);
     void registerTypes(const char *uri) override;
 };
 
-QtLabsPlatformPlugin::QtLabsPlatformPlugin(QObject *parent) : QQmlExtensionPlugin(parent)
+CellinkPlatformPlugin::CellinkPlatformPlugin(QObject *parent) : QQmlExtensionPlugin(parent)
 {
 }
 
-void QtLabsPlatformPlugin::registerTypes(const char *uri)
+void CellinkPlatformPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<QQuickPlatformMenu>(uri, 1, 0, "Menu");
     qmlRegisterType<QQuickPlatformMenuBar>(uri, 1, 0, "MenuBar");
@@ -79,4 +79,4 @@ void QtLabsPlatformPlugin::registerTypes(const char *uri)
 
 QT_END_NAMESPACE
 
-#include "qtlabsplatformplugin.moc"
+#include "cellinkplatformplugin.moc"

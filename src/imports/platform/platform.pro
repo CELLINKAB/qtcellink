@@ -1,5 +1,5 @@
-TARGET = qtlabsplatformplugin
-TARGETPATH = Qt/labs/platform
+TARGET = cellinkplatformplugin
+TARGETPATH = Cellink/Platform
 IMPORT_VERSION = 1.0
 
 QT += qml quick
@@ -11,7 +11,7 @@ OTHER_FILES += \
     qmldir
 
 SOURCES += \
-    $$PWD/qtlabsplatformplugin.cpp
+    $$PWD/cellinkplatformplugin.cpp
 
 include(platform.pri)
 qtHaveModule(widgets): include(widgets/widgets.pri)

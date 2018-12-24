@@ -730,6 +730,11 @@ void QQuickPlatformMenu::open(QQmlV4Function *args)
                         menuItem ? menuItem->handle() : nullptr);
 }
 
+void QQuickPlatformMenu::popup(QQmlV4Function *args)
+{
+    open(args);
+}
+
 /*!
     \qmlmethod void Qt.labs.platform::Menu::close()
 

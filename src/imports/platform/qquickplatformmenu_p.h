@@ -119,6 +119,7 @@ public:
 
 public Q_SLOTS:
     void open(QQmlV4Function *args);
+    void popup(QQmlV4Function *args);
     void close();
 
 Q_SIGNALS:

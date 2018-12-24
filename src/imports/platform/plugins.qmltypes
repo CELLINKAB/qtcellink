@@ -114,7 +114,6 @@ Module {
         exportMetaObjectRevisions: [0]
         Property { name: "menu"; type: "QQuickPlatformMenu"; isReadonly: true; isPointer: true }
         Property { name: "subMenu"; type: "QQuickPlatformMenu"; isReadonly: true; isPointer: true }
-        Property { name: "group"; type: "QQuickPlatformMenuItemGroup"; isPointer: true }
         Property { name: "enabled"; type: "bool" }
         Property { name: "visible"; type: "bool" }
         Property { name: "separator"; type: "bool" }
@@ -132,34 +131,6 @@ Module {
         Signal { name: "hovered" }
         Signal { name: "iconChanged"; revision: 1 }
         Method { name: "toggle" }
-    }
-    Component {
-        name: "QQuickPlatformMenuItemGroup"
-        prototype: "QObject"
-        exports: ["Cellink.Platform/MenuItemGroup 1.0"]
-        exportMetaObjectRevisions: [0]
-        Property { name: "enabled"; type: "bool" }
-        Property { name: "visible"; type: "bool" }
-        Property { name: "exclusive"; type: "bool" }
-        Property { name: "checkedItem"; type: "QQuickPlatformMenuItem"; isPointer: true }
-        Property { name: "items"; type: "QQuickPlatformMenuItem"; isList: true; isReadonly: true }
-        Signal {
-            name: "triggered"
-            Parameter { name: "item"; type: "QQuickPlatformMenuItem"; isPointer: true }
-        }
-        Signal {
-            name: "hovered"
-            Parameter { name: "item"; type: "QQuickPlatformMenuItem"; isPointer: true }
-        }
-        Method {
-            name: "addItem"
-            Parameter { name: "item"; type: "QQuickPlatformMenuItem"; isPointer: true }
-        }
-        Method {
-            name: "removeItem"
-            Parameter { name: "item"; type: "QQuickPlatformMenuItem"; isPointer: true }
-        }
-        Method { name: "clear" }
     }
     Component {
         name: "QQuickPlatformMenuSeparator"

@@ -36,7 +36,6 @@ class QQuickAction;
 class QPlatformMenuItem;
 class QQuickPlatformMenu;
 class QQuickPlatformIconLoader;
-class QQuickPlatformMenuItemGroup;
 
 class QQuickPlatformMenuItem : public QObject, public QQmlParserStatus
 {
@@ -44,7 +43,6 @@ class QQuickPlatformMenuItem : public QObject, public QQmlParserStatus
     Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(QQuickPlatformMenu *menu READ menu NOTIFY menuChanged FINAL)
     Q_PROPERTY(QQuickPlatformMenu *subMenu READ subMenu NOTIFY subMenuChanged FINAL)
-    Q_PROPERTY(QQuickPlatformMenuItemGroup *group READ group WRITE setGroup NOTIFY groupChanged FINAL)
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged FINAL)
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged FINAL)
     Q_PROPERTY(bool separator READ isSeparator WRITE setSeparator NOTIFY separatorChanged FINAL)
@@ -73,9 +71,6 @@ public:
 
     QQuickPlatformMenu *subMenu() const;
     void setSubMenu(QQuickPlatformMenu *menu);
-
-    QQuickPlatformMenuItemGroup *group() const;
-    void setGroup(QQuickPlatformMenuItemGroup *group);
 
     bool isEnabled() const;
     void setEnabled(bool enabled);
@@ -125,7 +120,6 @@ Q_SIGNALS:
 
     void menuChanged();
     void subMenuChanged();
-    void groupChanged();
     void enabledChanged();
     void visibleChanged();
     void separatorChanged();
@@ -164,12 +158,10 @@ private:
     QQuickAction *m_action;
     QQuickPlatformMenu *m_menu;
     QQuickPlatformMenu *m_subMenu;
-    QQuickPlatformMenuItemGroup *m_group;
     mutable QQuickPlatformIconLoader *m_iconLoader;
     QPlatformMenuItem *m_handle;
 
     friend class QQuickPlatformMenu;
-    friend class QQuickPlatformMenuItemGroup;
 };
 
 QML_DECLARE_TYPE(QQuickPlatformMenuItem)

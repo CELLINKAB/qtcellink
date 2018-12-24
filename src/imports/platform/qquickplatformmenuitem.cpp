@@ -22,7 +22,6 @@
 
 #include "qquickplatformmenuitem_p.h"
 #include "qquickplatformmenu_p.h"
-#include "qquickplatformmenuitemgroup_p.h"
 #include "qquickplatformiconloader_p.h"
 
 #include <QtGui/qicon.h>
@@ -92,7 +91,6 @@ QQuickPlatformMenuItem::QQuickPlatformMenuItem(QObject *parent)
       m_action(nullptr),
       m_menu(nullptr),
       m_subMenu(nullptr),
-      m_group(nullptr),
       m_iconLoader(nullptr),
       m_handle(nullptr)
 {
@@ -102,8 +100,6 @@ QQuickPlatformMenuItem::~QQuickPlatformMenuItem()
 {
     if (m_menu)
         m_menu->removeItem(this);
-    if (m_group)
-        m_group->removeItem(this);
     delete m_iconLoader;
     m_iconLoader = nullptr;
     delete m_handle;
@@ -145,7 +141,6 @@ void QQuickPlatformMenuItem::sync()
     m_handle->setRole(m_role);
     m_handle->setText(m_text);
     m_handle->setFont(m_font);
-    m_handle->setHasExclusiveGroup(m_group && m_group->isExclusive());
     if (m_subMenu && m_subMenu->handle())
         m_handle->setMenu(m_subMenu->handle());
 
@@ -206,38 +201,6 @@ void QQuickPlatformMenuItem::setSubMenu(QQuickPlatformMenu *menu)
 }
 
 /*!
-    \qmlproperty MenuItemGroup Qt.labs.platform::MenuItem::group
-
-    This property holds the group that the item belongs to, or \c null if the
-    item is not in a group.
-*/
-QQuickPlatformMenuItemGroup *QQuickPlatformMenuItem::group() const
-{
-    return m_group;
-}
-
-void QQuickPlatformMenuItem::setGroup(QQuickPlatformMenuItemGroup *group)
-{
-    if (m_group == group)
-        return;
-
-    bool wasEnabled = isEnabled();
-    bool wasVisible = isVisible();
-
-    if (group)
-        group->addItem(this);
-
-    m_group = group;
-    sync();
-    emit groupChanged();
-
-    if (isEnabled() != wasEnabled)
-        emit enabledChanged();
-    if (isVisible() != wasVisible)
-        emit visibleChanged();
-}
-
-/*!
     \qmlproperty bool Qt.labs.platform::MenuItem::enabled
 
     This property holds whether the item is enabled. The default value is \c true.
@@ -250,7 +213,7 @@ void QQuickPlatformMenuItem::setGroup(QQuickPlatformMenuItemGroup *group)
 */
 bool QQuickPlatformMenuItem::isEnabled() const
 {
-    return m_enabled && (!m_group || m_group->isEnabled());
+    return m_enabled;
 }
 
 void QQuickPlatformMenuItem::setEnabled(bool enabled)
@@ -272,7 +235,7 @@ void QQuickPlatformMenuItem::setEnabled(bool enabled)
 */
 bool QQuickPlatformMenuItem::isVisible() const
 {
-    return m_visible && (!m_group || m_group->isVisible());
+    return m_visible;
 }
 
 void QQuickPlatformMenuItem::setVisible(bool visible)

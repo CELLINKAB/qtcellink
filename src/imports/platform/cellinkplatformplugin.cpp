@@ -27,7 +27,6 @@
 #include "qquickplatformmenu_p.h"
 #include "qquickplatformmenubar_p.h"
 #include "qquickplatformmenuitem_p.h"
-#include "qquickplatformmenuitemgroup_p.h"
 #include "qquickplatformmenuseparator_p.h"
 
 #include "qquickplatformicon_p.h"
@@ -53,7 +52,6 @@ void CellinkPlatformPlugin::registerTypes(const char *uri)
     qmlRegisterType<QQuickPlatformMenu>(uri, 1, 0, "Menu");
     qmlRegisterType<QQuickPlatformMenuBar>(uri, 1, 0, "MenuBar");
     qmlRegisterType<QQuickPlatformMenuItem>(uri, 1, 0, "MenuItem");
-    qmlRegisterType<QQuickPlatformMenuItemGroup>(uri, 1, 0, "MenuItemGroup");
     qmlRegisterType<QQuickPlatformMenuSeparator>(uri, 1, 0, "MenuSeparator");
     qRegisterMetaType<QPlatformMenu::MenuType>();
 

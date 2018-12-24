@@ -4,7 +4,6 @@ HEADERS += \
     $$PWD/qquickplatformmenu_p.h \
     $$PWD/qquickplatformmenubar_p.h \
     $$PWD/qquickplatformmenuitem_p.h \
-    $$PWD/qquickplatformmenuitemgroup_p.h \
     $$PWD/qquickplatformmenuseparator_p.h
 
 SOURCES += \
@@ -13,5 +12,4 @@ SOURCES += \
     $$PWD/qquickplatformmenu.cpp \
     $$PWD/qquickplatformmenubar.cpp \
     $$PWD/qquickplatformmenuitem.cpp \
-    $$PWD/qquickplatformmenuitemgroup.cpp \
     $$PWD/qquickplatformmenuseparator.cpp

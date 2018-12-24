@@ -14,7 +14,6 @@ SOURCES += \
     $$PWD/cellinkplatformplugin.cpp
 
 include(platform.pri)
-qtHaveModule(widgets): include(widgets/widgets.pri)
 
 CONFIG += no_cxx_module
 load(qml_plugin)

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 J-P Nurmi <jpnurmi@gmail.com>
+** Copyright (C) 2019 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Labs Platform module of Qt).

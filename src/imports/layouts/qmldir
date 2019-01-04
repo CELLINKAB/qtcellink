@@ -1,0 +1,4 @@
+module Cellink.Layouts
+plugin cellinklayoutsplugin
+classname CellinkLayoutsPlugin
+depends QtQuick 2.11

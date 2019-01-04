@@ -1,0 +1,3 @@
+module Cellink.Controls
+plugin cellinkcontrolsplugin
+classname CellinkControlsPlugin

@@ -1,3 +1,5 @@
 TEMPLATE = subdirs
 SUBDIRS += \
-    platform
+    controls \
+    platform \
+    templates

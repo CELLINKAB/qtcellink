@@ -1,7 +1,6 @@
 /****************************************************************************
 **
 ** Copyright (C) 2019 CELLINK AB <info@cellink.com>
-
 **
 ** This file is part of QtCellink.
 **

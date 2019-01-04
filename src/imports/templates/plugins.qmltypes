@@ -35,4 +35,11 @@ Module {
         Method { name: "increase" }
         Method { name: "decrease" }
     }
+    Component {
+        name: "DoubleSpinButton"
+        prototype: "QObject"
+        Property { name: "pressed"; type: "bool" }
+        Property { name: "indicator"; type: "QQuickItem"; isPointer: true }
+        Property { name: "hovered"; type: "bool" }
+    }
 }

@@ -42,4 +42,12 @@ Module {
         Property { name: "indicator"; type: "QQuickItem"; isPointer: true }
         Property { name: "hovered"; type: "bool" }
     }
+    Component {
+        name: "TitleSeparator"
+        defaultProperty: "data"
+        prototype: "QQuickControl"
+        exports: ["Cellink.Templates/TitleSeparator 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "title"; type: "string" }
+    }
 }

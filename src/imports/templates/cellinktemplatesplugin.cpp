@@ -23,6 +23,7 @@
 #include <QtQml/qqml.h>
 
 #include "doublespinbox.h"
+#include "titleseparator.h"
 
 class CellinkTemplatesPlugin: public QQmlExtensionPlugin
 {
@@ -42,6 +43,7 @@ void CellinkTemplatesPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<DoubleSpinBox>(uri, 1, 0, "DoubleSpinBox");
     qmlRegisterType<DoubleSpinButton>();
+    qmlRegisterType<TitleSeparator>(uri, 1, 0, "TitleSeparator");
 }
 
 #include "cellinktemplatesplugin.moc"

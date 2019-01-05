@@ -23,14 +23,6 @@
 #include <QtQml/qqml.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qcommandlineparser.h>
-#include <QtCore/qloggingcategory.h>
-
-#include "nativemenubar.h"
-#include "nativemenu.h"
-#include "nativemenuitem.h"
-#include "nativemenuseparator.h"
-
-Q_LOGGING_CATEGORY(lcMenus, "cellink.menus")
 
 class CellinkControlsPlugin: public QQmlExtensionPlugin
 {
@@ -76,17 +68,15 @@ void CellinkControlsPlugin::registerTypes(const char *uri)
     qmlRegisterType(typeUrl(QStringLiteral("TitleSeparator.qml")), uri, 1, 0, "TitleSeparator");
 
     if (useNative()) {
-        qCInfo(lcMenus) << "Registering native menus";
-        qmlRegisterType<NativeMenu>(uri, 1, 0, "Menu");
-        qmlRegisterType<NativeMenuBar>(uri, 1, 0, "MenuBar");
-        qmlRegisterType<NativeMenuItem>(uri, 1, 0, "MenuItem");
-        qmlRegisterType<NativeMenuSeparator>(uri, 1, 0, "MenuSeparator");
+        qmlRegisterType(typeUrl(QStringLiteral("NativeMenu.qml")), uri, 1, 0, "Menu");
+        qmlRegisterType(typeUrl(QStringLiteral("NativeMenuBar.qml")), uri, 1, 0, "MenuBar");
+        qmlRegisterType(typeUrl(QStringLiteral("NativeMenuItem.qml")), uri, 1, 0, "MenuItem");
+        qmlRegisterType(typeUrl(QStringLiteral("NativeMenuSeparator.qml")), uri, 1, 0, "MenuSeparator");
     } else {
-        qCInfo(lcMenus) << "Registering Qt Quick menus";
-        qmlRegisterType(typeUrl(QStringLiteral("Menu.qml")), uri, 1, 0, "Menu");
-        qmlRegisterType(typeUrl(QStringLiteral("MenuBar.qml")), uri, 1, 0, "MenuBar");
-        qmlRegisterType(typeUrl(QStringLiteral("MenuItem.qml")), uri, 1, 0, "MenuItem");
-        qmlRegisterType(typeUrl(QStringLiteral("MenuSeparator.qml")), uri, 1, 0, "MenuSeparator");
+        qmlRegisterType(typeUrl(QStringLiteral("QuickMenu.qml")), uri, 1, 0, "Menu");
+        qmlRegisterType(typeUrl(QStringLiteral("QuickMenuBar.qml")), uri, 1, 0, "MenuBar");
+        qmlRegisterType(typeUrl(QStringLiteral("QuickMenuItem.qml")), uri, 1, 0, "MenuItem");
+        qmlRegisterType(typeUrl(QStringLiteral("QuickMenuSeparator.qml")), uri, 1, 0, "MenuSeparator");
     }
 }
 

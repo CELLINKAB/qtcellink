@@ -21,9 +21,17 @@
 
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
+#include <QtCore/qloggingcategory.h>
 
 #include "doublespinbox.h"
 #include "titleseparator.h"
+
+#include "nativemenubar.h"
+#include "nativemenu.h"
+#include "nativemenuitem.h"
+#include "nativemenuseparator.h"
+
+Q_LOGGING_CATEGORY(lcMenus, "cellink.menus")
 
 class CellinkTemplatesPlugin: public QQmlExtensionPlugin
 {
@@ -44,6 +52,11 @@ void CellinkTemplatesPlugin::registerTypes(const char *uri)
     qmlRegisterType<DoubleSpinBox>(uri, 1, 0, "DoubleSpinBox");
     qmlRegisterType<DoubleSpinButton>();
     qmlRegisterType<TitleSeparator>(uri, 1, 0, "TitleSeparator");
+
+    qmlRegisterType<NativeMenu>(uri, 1, 0, "NativeMenu");
+    qmlRegisterType<NativeMenuBar>(uri, 1, 0, "NativeMenuBar");
+    qmlRegisterType<NativeMenuItem>(uri, 1, 0, "NativeMenuItem");
+    qmlRegisterType<NativeMenuSeparator>(uri, 1, 0, "NativeMenuSeparator");
 }
 
 #include "cellinktemplatesplugin.moc"

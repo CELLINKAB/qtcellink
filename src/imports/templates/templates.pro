@@ -14,6 +14,7 @@ SOURCES += \
     $$PWD/cellinktemplatesplugin.cpp
 
 include(templates.pri)
+include(native/native.pri)
 
 CONFIG += no_cxx_module
 load(qml_plugin)

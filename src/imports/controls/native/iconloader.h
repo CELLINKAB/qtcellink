@@ -20,38 +20,37 @@
 **
 ****************************************************************************/
 
-#ifndef QQUICKPLATFORMICONLOADER_P_H
-#define QQUICKPLATFORMICONLOADER_P_H
+#ifndef ICONLOADER_H
+#define ICONLOADER_H
 
 #include <QtCore/qurl.h>
 #include <QtCore/qstring.h>
 #include <QtGui/qicon.h>
 #include <QtQuick/private/qquickpixmapcache_p.h>
-
-#include "qquickplatformicon_p.h"
+#include <QtQuickTemplates2/private/qquickicon_p.h>
 
 class QObject;
 
-class QQuickPlatformIconLoader : public QQuickPixmap
+class IconLoader : public QQuickPixmap
 {
 public:
-    QQuickPlatformIconLoader(int slot, QObject *parent);
+    IconLoader(int slot, QObject *parent);
 
     bool isEnabled() const;
     void setEnabled(bool enabled);
 
     QIcon toQIcon() const;
 
-    QQuickPlatformIcon icon() const;
-    void setIcon(const QQuickPlatformIcon &icon);
+    QQuickIcon icon() const;
+    void setIcon(const QQuickIcon &icon);
 
 private:
     void loadIcon();
 
-    QObject *m_parent;
+    QObject *m_parent = nullptr;
     int m_slot = -1;
     bool m_enabled = false;
-    QQuickPlatformIcon m_icon;
+    QQuickIcon m_icon;
 };
 
-#endif // QQUICKPLATFORMICONLOADER_P_H
+#endif // ICONLOADER_H

@@ -21,5 +21,8 @@ OTHER_FILES += \
 SOURCES += \
     $$PWD/cellinkcontrolsplugin.cpp
 
+include(native/native.pri)
+include(quick/quick.pri)
+
 CONFIG += no_cxx_module
 load(qml_plugin)

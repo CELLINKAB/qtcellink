@@ -1,3 +1,0 @@
-module Cellink.Platform
-plugin cellinkplatformplugin
-classname CellinkPlatformPlugin

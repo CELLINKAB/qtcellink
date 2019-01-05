@@ -20,28 +20,10 @@
 **
 ****************************************************************************/
 
-#include "qquickplatformmenuseparator_p.h"
+#include "nativemenuseparator.h"
 
-/*!
-    \qmltype MenuSeparator
-    \inherits MenuItem
-    \instantiates QQuickPlatformMenuSeparator
-    \inqmlmodule Qt.labs.platform
-    \since 5.8
-    \brief A native menu separator.
-
-    The MenuSeparator type is provided for convenience. It is a MenuItem
-    that has the \l {MenuItem::}{separator} property set to \c true by default.
-
-    \image qtlabsplatform-menubar.png
-
-    \labs
-
-    \sa Menu, MenuItem
-*/
-
-QQuickPlatformMenuSeparator::QQuickPlatformMenuSeparator(QObject *parent)
-    : QQuickPlatformMenuItem(parent)
+NativeMenuSeparator::NativeMenuSeparator(QObject *parent)
+    : NativeMenuItem(parent)
 {
     setSeparator(true);
 }

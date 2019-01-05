@@ -20,8 +20,8 @@
 **
 ****************************************************************************/
 
-#ifndef QQUICKPLATFORMMENU_P_H
-#define QQUICKPLATFORMMENU_P_H
+#ifndef NATIVEMENU_H
+#define NATIVEMENU_H
 
 #include <QtCore/qobject.h>
 #include <QtCore/qurl.h>
@@ -30,8 +30,7 @@
 #include <QtQml/qqmlparserstatus.h>
 #include <QtQml/qqmllist.h>
 #include <QtQml/qqml.h>
-
-#include "qquickplatformicon_p.h"
+#include <QtQuickTemplates2/private/qquickicon_p.h>
 
 class QIcon;
 class QWindow;
@@ -39,32 +38,30 @@ class QQuickItem;
 class QQuickAction;
 class QPlatformMenu;
 class QQmlV4Function;
-class QQuickPlatformMenuBar;
-class QQuickPlatformMenuItem;
-class QQuickPlatformIconLoader;
+class NativeMenuBar;
+class NativeMenuItem;
+class IconLoader;
 
-class QQuickPlatformMenu : public QObject, public QQmlParserStatus
+class NativeMenu : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(QQmlListProperty<QObject> data READ data FINAL)
-    Q_PROPERTY(QQmlListProperty<QQuickPlatformMenuItem> items READ items NOTIFY itemsChanged FINAL)
-    Q_PROPERTY(QQuickPlatformMenuBar *menuBar READ menuBar NOTIFY menuBarChanged FINAL)
-    Q_PROPERTY(QQuickPlatformMenu *parentMenu READ parentMenu NOTIFY parentMenuChanged FINAL)
-    Q_PROPERTY(QQuickPlatformMenuItem *menuItem READ menuItem CONSTANT FINAL)
+    Q_PROPERTY(QQmlListProperty<NativeMenuItem> items READ items NOTIFY itemsChanged FINAL)
+    Q_PROPERTY(NativeMenuBar *menuBar READ menuBar NOTIFY menuBarChanged FINAL)
+    Q_PROPERTY(NativeMenu *parentMenu READ parentMenu NOTIFY parentMenuChanged FINAL)
+    Q_PROPERTY(NativeMenuItem *menuItem READ menuItem CONSTANT FINAL)
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged FINAL)
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged FINAL)
     Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged FINAL)
-    Q_PROPERTY(QPlatformMenu::MenuType type READ type WRITE setType NOTIFY typeChanged FINAL)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
     Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY fontChanged FINAL)
-    Q_PROPERTY(QQuickPlatformIcon icon READ icon WRITE setIcon NOTIFY iconChanged FINAL)
-    Q_ENUMS(QPlatformMenu::MenuType)
+    Q_PROPERTY(QQuickIcon icon READ icon WRITE setIcon NOTIFY iconChanged FINAL)
     Q_CLASSINFO("DefaultProperty", "data")
 
 public:
-    explicit QQuickPlatformMenu(QObject *parent = nullptr);
-    ~QQuickPlatformMenu();
+    explicit NativeMenu(QObject *parent = nullptr);
+    ~NativeMenu();
 
     QPlatformMenu *handle() const;
     QPlatformMenu *create();
@@ -72,15 +69,15 @@ public:
     void sync();
 
     QQmlListProperty<QObject> data();
-    QQmlListProperty<QQuickPlatformMenuItem> items();
+    QQmlListProperty<NativeMenuItem> items();
 
-    QQuickPlatformMenuBar *menuBar() const;
-    void setMenuBar(QQuickPlatformMenuBar *menuBar);
+    NativeMenuBar *menuBar() const;
+    void setMenuBar(NativeMenuBar *menuBar);
 
-    QQuickPlatformMenu *parentMenu() const;
-    void setParentMenu(QQuickPlatformMenu *menu);
+    NativeMenu *parentMenu() const;
+    void setParentMenu(NativeMenu *menu);
 
-    QQuickPlatformMenuItem *menuItem() const;
+    NativeMenuItem *menuItem() const;
 
     bool isEnabled() const;
     void setEnabled(bool enabled);
@@ -91,25 +88,22 @@ public:
     int minimumWidth() const;
     void setMinimumWidth(int width);
 
-    QPlatformMenu::MenuType type() const;
-    void setType(QPlatformMenu::MenuType type);
-
     QString title() const;
     void setTitle(const QString &title);
 
     QFont font() const;
     void setFont(const QFont &font);
 
-    QQuickPlatformIcon icon() const;
-    void setIcon(const QQuickPlatformIcon &icon);
+    QQuickIcon icon() const;
+    void setIcon(const QQuickIcon &icon);
 
-    Q_INVOKABLE void addItem(QQuickPlatformMenuItem *item);
-    Q_INVOKABLE void insertItem(int index, QQuickPlatformMenuItem *item);
-    Q_INVOKABLE void removeItem(QQuickPlatformMenuItem *item);
+    Q_INVOKABLE void addItem(NativeMenuItem *item);
+    Q_INVOKABLE void insertItem(int index, NativeMenuItem *item);
+    Q_INVOKABLE void removeItem(NativeMenuItem *item);
 
-    Q_INVOKABLE void addMenu(QQuickPlatformMenu *menu);
-    Q_INVOKABLE void insertMenu(int index, QQuickPlatformMenu *menu);
-    Q_INVOKABLE void removeMenu(QQuickPlatformMenu *menu);
+    Q_INVOKABLE void addMenu(NativeMenu *menu);
+    Q_INVOKABLE void insertMenu(int index, NativeMenu *menu);
+    Q_INVOKABLE void removeMenu(NativeMenu *menu);
 
     Q_INVOKABLE void addAction(QQuickAction *action);
     Q_INVOKABLE void insertAction(int index, QQuickAction *action);
@@ -118,13 +112,14 @@ public:
     Q_INVOKABLE void clear();
 
 public Q_SLOTS:
-    void open(QQmlV4Function *args);
     void popup(QQmlV4Function *args);
     void close();
 
 Q_SIGNALS:
     void aboutToShow();
     void aboutToHide();
+    void opened();
+    void closed();
 
     void itemsChanged();
     void menuBarChanged();
@@ -134,14 +129,13 @@ Q_SIGNALS:
     void visibleChanged();
     void minimumWidthChanged();
     void fontChanged();
-    void typeChanged();
     void iconChanged();
 
 protected:
     void classBegin() override;
     void componentComplete() override;
 
-    QQuickPlatformIconLoader *iconLoader() const;
+    IconLoader *iconLoader() const;
 
     QWindow *findWindow(QQuickItem *target, QPoint *offset) const;
 
@@ -150,10 +144,10 @@ protected:
     static QObject *data_at(QQmlListProperty<QObject> *property, int index);
     static void data_clear(QQmlListProperty<QObject> *property);
 
-    static void items_append(QQmlListProperty<QQuickPlatformMenuItem> *property, QQuickPlatformMenuItem *item);
-    static int items_count(QQmlListProperty<QQuickPlatformMenuItem> *property);
-    static QQuickPlatformMenuItem *items_at(QQmlListProperty<QQuickPlatformMenuItem> *property, int index);
-    static void items_clear(QQmlListProperty<QQuickPlatformMenuItem> *property);
+    static void items_append(QQmlListProperty<NativeMenuItem> *property, NativeMenuItem *item);
+    static int items_count(QQmlListProperty<NativeMenuItem> *property);
+    static NativeMenuItem *items_at(QQmlListProperty<NativeMenuItem> *property, int index);
+    static void items_clear(QQmlListProperty<NativeMenuItem> *property);
 
 private Q_SLOTS:
     void updateIcon();
@@ -165,19 +159,17 @@ private:
     bool m_enabled = true;
     bool m_visible = true;
     int m_minimumWidth = -1;
-    QPlatformMenu::MenuType m_type = QPlatformMenu::DefaultMenu;
     QString m_title;
     QFont m_font;
     QList<QObject *> m_data;
-    QList<QQuickPlatformMenuItem *> m_items;
-    QQuickPlatformMenuBar *m_menuBar = nullptr;
-    QQuickPlatformMenu *m_parentMenu = nullptr;
-    mutable QQuickPlatformMenuItem *m_menuItem = nullptr;
-    mutable QQuickPlatformIconLoader *m_iconLoader = nullptr;
+    QList<NativeMenuItem *> m_items;
+    NativeMenuBar *m_menuBar = nullptr;
+    NativeMenu *m_parentMenu = nullptr;
+    mutable NativeMenuItem *m_menuItem = nullptr;
+    mutable IconLoader *m_iconLoader = nullptr;
     QPlatformMenu *m_handle = nullptr;
 };
 
-QML_DECLARE_TYPE(QQuickPlatformMenu)
-Q_DECLARE_METATYPE(QPlatformMenu::MenuType)
+QML_DECLARE_TYPE(NativeMenu)
 
-#endif // QQUICKPLATFORMMENU_P_H
+#endif // NATIVEMENU_H

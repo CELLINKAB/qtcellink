@@ -20,8 +20,8 @@
 **
 ****************************************************************************/
 
-#ifndef QQUICKPLATFORMMENUBAR_P_H
-#define QQUICKPLATFORMMENUBAR_P_H
+#ifndef NATIVEMENUBAR_H
+#define NATIVEMENUBAR_H
 
 #include <QtCore/qobject.h>
 #include <QtQml/qqmlparserstatus.h>
@@ -30,32 +30,32 @@
 
 class QWindow;
 class QPlatformMenuBar;
-class QQuickPlatformMenu;
+class NativeMenu;
 
-class QQuickPlatformMenuBar : public QObject, public QQmlParserStatus
+class NativeMenuBar : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(QQmlListProperty<QObject> data READ data FINAL)
-    Q_PROPERTY(QQmlListProperty<QQuickPlatformMenu> menus READ menus NOTIFY menusChanged FINAL)
+    Q_PROPERTY(QQmlListProperty<NativeMenu> menus READ menus NOTIFY menusChanged FINAL)
     Q_PROPERTY(QWindow *window READ window WRITE setWindow NOTIFY windowChanged FINAL)
     Q_CLASSINFO("DefaultProperty", "data")
 
 public:
-    explicit QQuickPlatformMenuBar(QObject *parent = nullptr);
-    ~QQuickPlatformMenuBar();
+    explicit NativeMenuBar(QObject *parent = nullptr);
+    ~NativeMenuBar();
 
     QPlatformMenuBar *handle() const;
 
     QQmlListProperty<QObject> data();
-    QQmlListProperty<QQuickPlatformMenu> menus();
+    QQmlListProperty<NativeMenu> menus();
 
     QWindow *window() const;
     void setWindow(QWindow *window);
 
-    Q_INVOKABLE void addMenu(QQuickPlatformMenu *menu);
-    Q_INVOKABLE void insertMenu(int index, QQuickPlatformMenu *menu);
-    Q_INVOKABLE void removeMenu(QQuickPlatformMenu *menu);
+    Q_INVOKABLE void addMenu(NativeMenu *menu);
+    Q_INVOKABLE void insertMenu(int index, NativeMenu *menu);
+    Q_INVOKABLE void removeMenu(NativeMenu *menu);
     Q_INVOKABLE void clear();
 
 Q_SIGNALS:
@@ -73,19 +73,19 @@ protected:
     static QObject *data_at(QQmlListProperty<QObject> *property, int index);
     static void data_clear(QQmlListProperty<QObject> *property);
 
-    static void menus_append(QQmlListProperty<QQuickPlatformMenu> *property, QQuickPlatformMenu *menu);
-    static int menus_count(QQmlListProperty<QQuickPlatformMenu> *property);
-    static QQuickPlatformMenu *menus_at(QQmlListProperty<QQuickPlatformMenu> *property, int index);
-    static void menus_clear(QQmlListProperty<QQuickPlatformMenu> *property);
+    static void menus_append(QQmlListProperty<NativeMenu> *property, NativeMenu *menu);
+    static int menus_count(QQmlListProperty<NativeMenu> *property);
+    static NativeMenu *menus_at(QQmlListProperty<NativeMenu> *property, int index);
+    static void menus_clear(QQmlListProperty<NativeMenu> *property);
 
 private:
     bool m_complete = false;
     QWindow *m_window = nullptr;
     QList<QObject *> m_data;
-    QList<QQuickPlatformMenu *> m_menus;
+    QList<NativeMenu *> m_menus;
     QPlatformMenuBar *m_handle = nullptr;
 };
 
-QML_DECLARE_TYPE(QQuickPlatformMenuBar)
+QML_DECLARE_TYPE(NativeMenuBar)
 
-#endif // QQUICKPLATFORMMENUBAR_P_H
+#endif // NATIVEMENUBAR_H

@@ -20,52 +20,50 @@
 **
 ****************************************************************************/
 
-#include "qquickplatformiconloader_p.h"
+#include "iconloader.h"
 
 #include <QtCore/qobject.h>
 #include <QtCore/qmetaobject.h>
 #include <QtQml/qqml.h>
 
-QQuickPlatformIconLoader::QQuickPlatformIconLoader(int slot, QObject *parent)
+IconLoader::IconLoader(int slot, QObject *parent)
     : m_parent(parent),
       m_slot(slot)
 {
     Q_ASSERT(slot != -1 && parent);
 }
 
-bool QQuickPlatformIconLoader::isEnabled() const
+bool IconLoader::isEnabled() const
 {
     return m_enabled;
 }
 
-void QQuickPlatformIconLoader::setEnabled(bool enabled)
+void IconLoader::setEnabled(bool enabled)
 {
     m_enabled = enabled;
     if (m_enabled)
         loadIcon();
 }
 
-QIcon QQuickPlatformIconLoader::toQIcon() const
+QIcon IconLoader::toQIcon() const
 {
     QIcon fallback = QPixmap::fromImage(image());
-    QIcon icon = QIcon::fromTheme(m_icon.name(), fallback);
-    icon.setIsMask(m_icon.isMask());
-    return icon;
+    return QIcon::fromTheme(m_icon.name(), fallback);
 }
 
-QQuickPlatformIcon QQuickPlatformIconLoader::icon() const
+QQuickIcon IconLoader::icon() const
 {
     return m_icon;
 }
 
-void QQuickPlatformIconLoader::setIcon(const QQuickPlatformIcon& icon)
+void IconLoader::setIcon(const QQuickIcon& icon)
 {
     m_icon = icon;
     if (m_enabled)
         loadIcon();
 }
 
-void QQuickPlatformIconLoader::loadIcon()
+void IconLoader::loadIcon()
 {
     if (m_icon.source().isEmpty()) {
         clear(m_parent);

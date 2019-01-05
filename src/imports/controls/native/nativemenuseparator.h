@@ -20,44 +20,19 @@
 **
 ****************************************************************************/
 
-#include "qquickplatformicon_p.h"
+#ifndef NATIVEMENUSEPARATOR_H
+#define NATIVEMENUSEPARATOR_H
 
-QUrl QQuickPlatformIcon::source() const
-{
-    return m_source;
-}
+#include "nativemenuitem.h"
 
-void QQuickPlatformIcon::setSource(const QUrl& source)
+class NativeMenuSeparator : public NativeMenuItem
 {
-    m_source = source;
-}
+    Q_OBJECT
 
-QString QQuickPlatformIcon::name() const
-{
-    return m_name;
-}
+public:
+    explicit NativeMenuSeparator(QObject *parent = nullptr);
+};
 
-void QQuickPlatformIcon::setName(const QString& name)
-{
-    m_name = name;
-}
+QML_DECLARE_TYPE(NativeMenuSeparator)
 
-bool QQuickPlatformIcon::isMask() const
-{
-    return m_mask;
-}
-
-void QQuickPlatformIcon::setMask(bool mask)
-{
-    m_mask = mask;
-}
-
-bool QQuickPlatformIcon::operator==(const QQuickPlatformIcon &other) const
-{
-    return m_source == other.m_source && m_name == other.m_name && m_mask == other.m_mask;
-}
-
-bool QQuickPlatformIcon::operator!=(const QQuickPlatformIcon &other) const
-{
-    return !(*this == other);
-}
+#endif // NATIVEMENUSEPARATOR_H

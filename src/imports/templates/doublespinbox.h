@@ -50,6 +50,7 @@ class DoubleSpinBox : public QQuickControl
     Q_PROPERTY(bool wrap READ wrap WRITE setWrap NOTIFY wrapChanged FINAL)
     Q_PROPERTY(QString displayText READ displayText NOTIFY displayTextChanged FINAL)
     Q_PROPERTY(int decimals READ decimals WRITE setDecimals NOTIFY decimalsChanged FINAL)
+    Q_PROPERTY(QString prefix READ prefix WRITE setPrefix NOTIFY prefixChanged FINAL)
     Q_PROPERTY(QString suffix READ suffix WRITE setSuffix NOTIFY suffixChanged FINAL)
 
 public:
@@ -98,6 +99,9 @@ public:
     int decimals() const;
     void setDecimals(int decimals);
 
+    QString prefix() const;
+    void setPrefix(const QString &prefix);
+
     QString suffix() const;
     void setSuffix(const QString &suffix);
 
@@ -121,6 +125,7 @@ Q_SIGNALS:
     void wrapChanged();
     void displayTextChanged();
     void decimalsChanged();
+    void prefixChanged();
     void suffixChanged();
 
 protected:

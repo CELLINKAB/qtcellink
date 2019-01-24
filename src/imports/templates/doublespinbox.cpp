@@ -79,6 +79,7 @@ public:
     int delayTimer = 0;
     int repeatTimer = 0;
     int  decimals = 2;
+    QString prefix;
     QString suffix;
     QString displayText;
     DoubleSpinButton *up = nullptr;
@@ -611,6 +612,22 @@ void DoubleSpinBox::setDecimals(int decimals)
     d->decimals = decimals;
     d->updateDisplayText();
     emit decimalsChanged();
+}
+
+QString DoubleSpinBox::prefix() const
+{
+    Q_D(const DoubleSpinBox);
+    return d->prefix;
+}
+
+void DoubleSpinBox::setPrefix(const QString &prefix)
+{
+    Q_D(DoubleSpinBox);
+    if (d->prefix == prefix)
+        return;
+
+    d->prefix = prefix;
+    emit prefixChanged();
 }
 
 QString DoubleSpinBox::suffix() const

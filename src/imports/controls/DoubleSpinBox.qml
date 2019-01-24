@@ -71,6 +71,15 @@ C.DoubleSpinBox {
         selectByMouse: true
 
         Text {
+            text: control.prefix
+            x: control.leftPadding
+            anchors.baseline: parent.baseline
+            font.family: control.font.family
+            font.pixelSize: control.font.pixelSize - 2
+            color: control.palette.text
+        }
+
+        Text {
             text: control.suffix
             x: (parent.width + parent.contentWidth) / 2 + control.spacing
             anchors.baseline: parent.baseline

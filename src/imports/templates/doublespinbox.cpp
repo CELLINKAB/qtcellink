@@ -626,7 +626,7 @@ void DoubleSpinBox::setSuffix(const QString &suffix)
         return;
 
     d->suffix = suffix;
-    emit decimalsChanged();
+    emit suffixChanged();
 }
 
 void DoubleSpinBox::increase()

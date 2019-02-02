@@ -23,6 +23,8 @@
 #include <QtQml/qqml.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qcommandlineparser.h>
+#include <QtQuickControls2/qquickstyle.h>
+#include <QtQuickControls2/private/qquickstyleselector_p.h>
 
 class CellinkControlsPlugin: public QQmlExtensionPlugin
 {
@@ -63,9 +65,16 @@ static bool useNative()
 
 void CellinkControlsPlugin::registerTypes(const char *uri)
 {
-    qmlRegisterType(typeUrl(QStringLiteral("DoubleSpinBox.qml")), uri, 1, 0, "DoubleSpinBox");
-    qmlRegisterType(typeUrl(QStringLiteral("SplitView.qml")), uri, 1, 0, "SplitView");
-    qmlRegisterType(typeUrl(QStringLiteral("TitleSeparator.qml")), uri, 1, 0, "TitleSeparator");
+    QQuickStyleSelector selector;
+    const QString style = QQuickStyle::name();
+    if (!style.isEmpty())
+        selector.addSelector(style);
+    selector.addSelector(QStringLiteral("Controls"));
+    selector.setPaths(QQuickStyle::stylePathList());
+
+    qmlRegisterType(selector.select(QStringLiteral("DoubleSpinBox.qml")), uri, 1, 0, "DoubleSpinBox");
+    qmlRegisterType(selector.select(QStringLiteral("SplitView.qml")), uri, 1, 0, "SplitView");
+    qmlRegisterType(selector.select(QStringLiteral("TitleSeparator.qml")), uri, 1, 0, "TitleSeparator");
 
     if (useNative()) {
         qmlRegisterType(typeUrl(QStringLiteral("NativeMenu.qml")), uri, 1, 0, "Menu");

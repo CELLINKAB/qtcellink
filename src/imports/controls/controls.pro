@@ -2,8 +2,8 @@ TARGET = cellinkcontrolsplugin
 TARGETPATH = Cellink/Controls
 IMPORT_VERSION = 1.0
 
-QT += qml quick
-QT_PRIVATE += core-private gui-private qml-private quick-private quicktemplates2-private
+QT += qml quick quickcontrols2
+QT_PRIVATE += core-private gui-private qml-private quick-private quicktemplates2-private quickcontrols2-private
 
 DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 

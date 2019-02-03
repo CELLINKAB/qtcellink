@@ -71,6 +71,7 @@ public:
 
     bool editable = false;
     bool wrap = false;
+    bool hasDisplayText = false;
     qreal from = 0;
     qreal to = 99.99;
     qreal value = 0;
@@ -195,6 +196,9 @@ qreal DoubleSpinBoxPrivate::effectiveStepSize(qreal step) const
 void DoubleSpinBoxPrivate::updateDisplayText()
 {
     Q_Q(DoubleSpinBox);
+    if (hasDisplayText)
+        return;
+
     QString text;
     QQmlEngine *engine = qmlEngine(q);
     if (engine && textFromValue.isCallable()) {
@@ -595,6 +599,23 @@ QString DoubleSpinBox::displayText() const
 {
     Q_D(const DoubleSpinBox);
     return d->displayText;
+}
+
+void DoubleSpinBox::setDisplayText(const QString &text)
+{
+    Q_D(DoubleSpinBox);
+    d->hasDisplayText = true;
+    d->setDisplayText(text);
+}
+
+void DoubleSpinBox::resetDisplayText()
+{
+    Q_D(DoubleSpinBox);
+    if (!d->hasDisplayText)
+        return;
+
+    d->hasDisplayText = false;
+    d->updateDisplayText();
 }
 
 int DoubleSpinBox::decimals() const

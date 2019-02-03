@@ -48,7 +48,7 @@ class DoubleSpinBox : public QQuickControl
     Q_PROPERTY(Qt::InputMethodHints inputMethodHints READ inputMethodHints WRITE setInputMethodHints NOTIFY inputMethodHintsChanged FINAL)
     Q_PROPERTY(bool inputMethodComposing READ isInputMethodComposing NOTIFY inputMethodComposingChanged FINAL)
     Q_PROPERTY(bool wrap READ wrap WRITE setWrap NOTIFY wrapChanged FINAL)
-    Q_PROPERTY(QString displayText READ displayText NOTIFY displayTextChanged FINAL)
+    Q_PROPERTY(QString displayText READ displayText WRITE setDisplayText RESET resetDisplayText NOTIFY displayTextChanged FINAL)
     Q_PROPERTY(int decimals READ decimals WRITE setDecimals NOTIFY decimalsChanged FINAL)
     Q_PROPERTY(QString prefix READ prefix WRITE setPrefix NOTIFY prefixChanged FINAL)
     Q_PROPERTY(QString suffix READ suffix WRITE setSuffix NOTIFY suffixChanged FINAL)
@@ -95,6 +95,8 @@ public:
     void setWrap(bool wrap);
 
     QString displayText() const;
+    void setDisplayText(const QString &text);
+    void resetDisplayText();
 
     int decimals() const;
     void setDecimals(int decimals);

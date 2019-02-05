@@ -73,7 +73,7 @@ public:
     bool wrap = false;
     bool hasDisplayText = false;
     qreal from = 0;
-    qreal to = 99.99;
+    qreal to = 100;
     qreal value = 0;
     qreal stepSize = 1;
     qreal pageStepSize = 10;

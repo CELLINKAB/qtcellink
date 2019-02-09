@@ -24,6 +24,7 @@
 #include <QtCore/qloggingcategory.h>
 
 #include "doublespinbox.h"
+#include "flipview.h"
 #include "titleseparator.h"
 
 #include "nativemenubar.h"
@@ -51,6 +52,8 @@ void CellinkTemplatesPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<DoubleSpinBox>(uri, 1, 0, "DoubleSpinBox");
     qmlRegisterType<DoubleSpinButton>();
+    qmlRegisterType<FlipView>(uri, 1, 0, "FlipView");
+    qmlRegisterType<FlipViewAttached>();
     qmlRegisterType<TitleSeparator>(uri, 1, 0, "TitleSeparator");
 
     qmlRegisterType<NativeMenu>(uri, 1, 0, "NativeMenu");

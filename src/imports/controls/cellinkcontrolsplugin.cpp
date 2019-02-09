@@ -37,6 +37,7 @@ public:
     void registerTypes(const char *uri) override;
 
 private:
+    QUrl typeUrl(const QUrl &fileUrl) const;
     QUrl typeUrl(const QString &fileName) const;
 };
 
@@ -72,9 +73,10 @@ void CellinkControlsPlugin::registerTypes(const char *uri)
     selector.addSelector(QStringLiteral("Controls"));
     selector.setPaths(QQuickStyle::stylePathList());
 
-    qmlRegisterType(selector.select(QStringLiteral("DoubleSpinBox.qml")), uri, 1, 0, "DoubleSpinBox");
-    qmlRegisterType(selector.select(QStringLiteral("SplitView.qml")), uri, 1, 0, "SplitView");
-    qmlRegisterType(selector.select(QStringLiteral("TitleSeparator.qml")), uri, 1, 0, "TitleSeparator");
+    qmlRegisterType(typeUrl(selector.select(QStringLiteral("DoubleSpinBox.qml"))), uri, 1, 0, "DoubleSpinBox");
+    qmlRegisterType(typeUrl(selector.select(QStringLiteral("FlipView.qml"))), uri, 1, 0, "FlipView");
+    qmlRegisterType(typeUrl(selector.select(QStringLiteral("SplitView.qml"))), uri, 1, 0, "SplitView");
+    qmlRegisterType(typeUrl(selector.select(QStringLiteral("TitleSeparator.qml"))), uri, 1, 0, "TitleSeparator");
 
     if (useNative()) {
         qmlRegisterType(typeUrl(QStringLiteral("NativeMenu.qml")), uri, 1, 0, "Menu");
@@ -87,6 +89,13 @@ void CellinkControlsPlugin::registerTypes(const char *uri)
         qmlRegisterType(typeUrl(QStringLiteral("QuickMenuItem.qml")), uri, 1, 0, "MenuItem");
         qmlRegisterType(typeUrl(QStringLiteral("QuickMenuSeparator.qml")), uri, 1, 0, "MenuSeparator");
     }
+}
+
+QUrl CellinkControlsPlugin::typeUrl(const QUrl &fileUrl) const
+{
+    if (fileUrl.isLocalFile())
+        return fileUrl;
+    return typeUrl(fileUrl.toString());
 }
 
 QUrl CellinkControlsPlugin::typeUrl(const QString &fileName) const

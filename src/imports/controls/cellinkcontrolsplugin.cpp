@@ -93,7 +93,7 @@ void CellinkControlsPlugin::registerTypes(const char *uri)
 
 QUrl CellinkControlsPlugin::typeUrl(const QUrl &fileUrl) const
 {
-    if (fileUrl.isLocalFile())
+    if (fileUrl.isLocalFile() || fileUrl.scheme() == QLatin1String("qrc"))
         return fileUrl;
     return typeUrl(fileUrl.toString());
 }

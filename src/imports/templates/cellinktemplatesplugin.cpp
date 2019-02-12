@@ -25,6 +25,7 @@
 
 #include "doublespinbox.h"
 #include "flipview.h"
+#include "progressindicator.h"
 #include "titleseparator.h"
 
 #include "nativemenubar.h"
@@ -54,12 +55,16 @@ void CellinkTemplatesPlugin::registerTypes(const char *uri)
     qmlRegisterType<DoubleSpinButton>();
     qmlRegisterType<FlipView>(uri, 1, 0, "FlipView");
     qmlRegisterType<FlipViewAttached>();
+    qmlRegisterType<ProgressIndicator>(uri, 1, 0, "ProgressIndicator");
     qmlRegisterType<TitleSeparator>(uri, 1, 0, "TitleSeparator");
 
     qmlRegisterType<NativeMenu>(uri, 1, 0, "NativeMenu");
     qmlRegisterType<NativeMenuBar>(uri, 1, 0, "NativeMenuBar");
     qmlRegisterType<NativeMenuItem>(uri, 1, 0, "NativeMenuItem");
     qmlRegisterType<NativeMenuSeparator>(uri, 1, 0, "NativeMenuSeparator");
+
+    qmlRegisterRevision<QQuickItem, QT_VERSION_MINOR>(uri, 1, 0);
+    qmlRegisterRevision<QQuickControl, QT_VERSION_MINOR>(uri, 1, 0);
 }
 
 #include "cellinktemplatesplugin.moc"

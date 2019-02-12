@@ -10,6 +10,7 @@ DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 AUX_QML_FILES += \
     $$PWD/DoubleSpinBox.qml \
     $$PWD/FlipView.qml \
+    $$PWD/ProgressIndicator.qml \
     $$PWD/SplitView.qml \
     $$PWD/TitleSeparator.qml \
     $$PWD/arrow.png \
@@ -19,8 +20,12 @@ OTHER_FILES += \
     $$PWD/qmldir \
     $$AUX_QML_FILES
 
+HEADERS += \
+    $$PWD/progressindicator.h
+
 SOURCES += \
-    $$PWD/cellinkcontrolsplugin.cpp
+    $$PWD/cellinkcontrolsplugin.cpp \
+    $$PWD/progressindicator.cpp
 
 include(native/native.pri)
 include(quick/quick.pri)

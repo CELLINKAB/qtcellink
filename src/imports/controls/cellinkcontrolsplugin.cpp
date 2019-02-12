@@ -25,6 +25,7 @@
 #include <QtCore/qcommandlineparser.h>
 #include <QtQuickControls2/qquickstyle.h>
 #include <QtQuickControls2/private/qquickstyleselector_p.h>
+#include "progressindicator.h"
 
 class CellinkControlsPlugin: public QQmlExtensionPlugin
 {
@@ -75,6 +76,7 @@ void CellinkControlsPlugin::registerTypes(const char *uri)
 
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("DoubleSpinBox.qml"))), uri, 1, 0, "DoubleSpinBox");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("FlipView.qml"))), uri, 1, 0, "FlipView");
+    qmlRegisterType(typeUrl(selector.select(QStringLiteral("ProgressIndicator.qml"))), uri, 1, 0, "ProgressIndicator");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("SplitView.qml"))), uri, 1, 0, "SplitView");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("TitleSeparator.qml"))), uri, 1, 0, "TitleSeparator");
 
@@ -89,6 +91,9 @@ void CellinkControlsPlugin::registerTypes(const char *uri)
         qmlRegisterType(typeUrl(QStringLiteral("QuickMenuItem.qml")), uri, 1, 0, "MenuItem");
         qmlRegisterType(typeUrl(QStringLiteral("QuickMenuSeparator.qml")), uri, 1, 0, "MenuSeparator");
     }
+
+    QByteArray import = QByteArray(uri) + ".impl";
+    qmlRegisterType<ProgressIndicator>(import, 1, 0, "ProgressIndicatorImpl");
 }
 
 QUrl CellinkControlsPlugin::typeUrl(const QUrl &fileUrl) const

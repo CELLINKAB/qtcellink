@@ -8,9 +8,11 @@ QT_PRIVATE += core-private gui-private qml-private quick-private quicktemplates2
 DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 
 AUX_QML_FILES += \
+    $$PWD/ButtonRow.qml \
     $$PWD/DoubleSpinBox.qml \
     $$PWD/FlipView.qml \
     $$PWD/ProgressIndicator.qml \
+    $$PWD/RowButton.qml \
     $$PWD/SplitView.qml \
     $$PWD/TitleSeparator.qml \
     $$PWD/arrow.png \

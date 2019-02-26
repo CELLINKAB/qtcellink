@@ -23,9 +23,11 @@
 #include <QtQml/qqml.h>
 #include <QtCore/qloggingcategory.h>
 
+#include "buttonrow.h"
 #include "doublespinbox.h"
 #include "flipview.h"
 #include "progressindicator.h"
+#include "rowbutton.h"
 #include "titleseparator.h"
 
 #include "nativemenubar.h"
@@ -51,11 +53,13 @@ CellinkTemplatesPlugin::CellinkTemplatesPlugin(QObject *parent) : QQmlExtensionP
 
 void CellinkTemplatesPlugin::registerTypes(const char *uri)
 {
+    qmlRegisterType<ButtonRow>(uri, 1, 0, "ButtonRow");
     qmlRegisterType<DoubleSpinBox>(uri, 1, 0, "DoubleSpinBox");
     qmlRegisterType<DoubleSpinButton>();
     qmlRegisterType<FlipView>(uri, 1, 0, "FlipView");
     qmlRegisterType<FlipViewAttached>();
     qmlRegisterType<ProgressIndicator>(uri, 1, 0, "ProgressIndicator");
+    qmlRegisterType<RowButton>(uri, 1, 0, "RowButton");
     qmlRegisterType<TitleSeparator>(uri, 1, 0, "TitleSeparator");
 
     qmlRegisterType<NativeMenu>(uri, 1, 0, "NativeMenu");
@@ -65,6 +69,8 @@ void CellinkTemplatesPlugin::registerTypes(const char *uri)
 
     qmlRegisterRevision<QQuickItem, QT_VERSION_MINOR>(uri, 1, 0);
     qmlRegisterRevision<QQuickControl, QT_VERSION_MINOR>(uri, 1, 0);
+    qmlRegisterRevision<QQuickContainer, QT_VERSION_MINOR>(uri, 1, 0);
+    qmlRegisterRevision<QQuickAbstractButton, QT_VERSION_MINOR>(uri, 1, 0);
 }
 
 #include "cellinktemplatesplugin.moc"

@@ -74,9 +74,11 @@ void CellinkControlsPlugin::registerTypes(const char *uri)
     selector.addSelector(QStringLiteral("Controls"));
     selector.setPaths(QQuickStyle::stylePathList());
 
+    qmlRegisterType(typeUrl(selector.select(QStringLiteral("ButtonRow.qml"))), uri, 1, 0, "ButtonRow");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("DoubleSpinBox.qml"))), uri, 1, 0, "DoubleSpinBox");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("FlipView.qml"))), uri, 1, 0, "FlipView");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("ProgressIndicator.qml"))), uri, 1, 0, "ProgressIndicator");
+    qmlRegisterType(typeUrl(selector.select(QStringLiteral("RowButton.qml"))), uri, 1, 0, "RowButton");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("SplitView.qml"))), uri, 1, 0, "SplitView");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("TitleSeparator.qml"))), uri, 1, 0, "TitleSeparator");
 

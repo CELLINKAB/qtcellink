@@ -92,12 +92,21 @@ void ButtonRowPrivate::updateAttachedProperties()
 
 void ButtonRowPrivate::updateCurrentItem()
 {
+    Q_Q(ButtonRow);
     if (!exclusive)
         return;
 
     RowButton *button = qobject_cast<RowButton *>(contentModel->get(currentIndex));
-    if (button)
+    if (button) {
         button->setChecked(true);
+    } else {
+        const int count = contentModel->count();
+        for (int i = 0; i < count; ++i) {
+            RowButton *button = qobject_cast<RowButton *>(q->itemAt(i));
+            if (button)
+                button->setChecked(false);
+        }
+    }
 }
 
 void ButtonRowPrivate::updateCurrentIndex()

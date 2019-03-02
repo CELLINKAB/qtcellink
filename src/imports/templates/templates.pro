@@ -1,5 +1,5 @@
-TARGET = cellinktemplatesplugin
-TARGETPATH = Cellink/Templates
+TARGET = qtcellinktemplatesplugin
+TARGETPATH = QtCellink/Templates
 IMPORT_VERSION = 1.0
 
 QT += qml quick
@@ -11,7 +11,7 @@ OTHER_FILES += \
     qmldir
 
 SOURCES += \
-    $$PWD/cellinktemplatesplugin.cpp
+    $$PWD/qtcellinktemplatesplugin.cpp
 
 include(templates.pri)
 include(native/native.pri)

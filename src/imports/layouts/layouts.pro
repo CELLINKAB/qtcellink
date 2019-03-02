@@ -1,5 +1,5 @@
-TARGET = cellinklayoutsplugin
-TARGETPATH = Cellink/Layouts
+TARGET = qtcellinklayoutsplugin
+TARGETPATH = QtCellink/Layouts
 IMPORT_VERSION = 1.0
 
 QT += qml quick
@@ -14,8 +14,8 @@ HEADERS += \
     $$PWD/layoutgroup.h
 
 SOURCES += \
-    $$PWD/cellinklayoutsplugin.cpp \
-    $$PWD/layoutgroup.cpp
+    $$PWD/layoutgroup.cpp \
+    $$PWD/qtcellinklayoutsplugin.cpp
 
 CONFIG += no_cxx_module
 load(qml_plugin)

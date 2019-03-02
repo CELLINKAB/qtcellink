@@ -1,5 +1,5 @@
 import QtQuick 2.12
-import Cellink.Templates 1.0 as T
+import QtCellink.Templates 1.0 as T
 
 T.FlipView {
     id: control

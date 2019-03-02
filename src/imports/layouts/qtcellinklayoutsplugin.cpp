@@ -24,25 +24,25 @@
 
 #include "layoutgroup.h"
 
-class CellinkLayoutsPlugin: public QQmlExtensionPlugin
+class QtCellinkLayoutsPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    CellinkLayoutsPlugin(QObject *parent = nullptr);
+    QtCellinkLayoutsPlugin(QObject *parent = nullptr);
 
     void registerTypes(const char *uri) override;
 };
 
-CellinkLayoutsPlugin::CellinkLayoutsPlugin(QObject *parent)
+QtCellinkLayoutsPlugin::QtCellinkLayoutsPlugin(QObject *parent)
     : QQmlExtensionPlugin(parent)
 {
 }
 
-void CellinkLayoutsPlugin::registerTypes(const char *uri)
+void QtCellinkLayoutsPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<LayoutGroup>(uri, 1, 0, "LayoutGroup");
 }
 
-#include "cellinklayoutsplugin.moc"
+#include "qtcellinklayoutsplugin.moc"

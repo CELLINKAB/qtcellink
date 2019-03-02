@@ -30,23 +30,23 @@
 #include "mnemoniclabel.h"
 #include "paddedrectangle.h"
 
-class CellinkExtrasPlugin: public QQmlExtensionPlugin
+class QtCellinkExtrasPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    explicit CellinkExtrasPlugin(QObject *parent = nullptr);
+    explicit QtCellinkExtrasPlugin(QObject *parent = nullptr);
 
     void registerTypes(const char *uri) override;
 };
 
-CellinkExtrasPlugin::CellinkExtrasPlugin(QObject *parent)
+QtCellinkExtrasPlugin::QtCellinkExtrasPlugin(QObject *parent)
     : QQmlExtensionPlugin(parent)
 {
 }
 
-void CellinkExtrasPlugin::registerTypes(const char *uri)
+void QtCellinkExtrasPlugin::registerTypes(const char *uri)
 {
     qmlRegisterSingletonType<Color>(uri, 1, 0, "Color", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Color(engine); });
     qmlRegisterType<ColorImage>(uri, 1, 0, "ColorImage");
@@ -56,4 +56,4 @@ void CellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterType<PaddedRectangle>(uri, 1, 0, "PaddedRectangle");
 }
 
-#include "cellinkextrasplugin.moc"
+#include "qtcellinkextrasplugin.moc"

@@ -21,9 +21,9 @@
 ****************************************************************************/
 
 import QtQuick 2.12
-import Cellink.Templates 1.0 as T
-import Cellink.Controls 1.0
-import Cellink.Controls.impl 1.0
+import QtCellink.Templates 1.0 as T
+import QtCellink.Controls 1.0
+import QtCellink.Controls.impl 1.0
 
 T.ProgressIndicator {
     id: control

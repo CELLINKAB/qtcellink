@@ -1,5 +1,5 @@
-TARGET = cellinkcontrolsplugin
-TARGETPATH = Cellink/Controls
+TARGET = qtcellinkcontrolsplugin
+TARGETPATH = QtCellink/Controls
 IMPORT_VERSION = 1.0
 
 QT += qml quick quickcontrols2
@@ -26,8 +26,8 @@ HEADERS += \
     $$PWD/progressindicator.h
 
 SOURCES += \
-    $$PWD/cellinkcontrolsplugin.cpp \
-    $$PWD/progressindicator.cpp
+    $$PWD/progressindicator.cpp \
+    $$PWD/qtcellinkcontrolsplugin.cpp
 
 include(native/native.pri)
 include(quick/quick.pri)

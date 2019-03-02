@@ -35,23 +35,23 @@
 #include "nativemenuitem.h"
 #include "nativemenuseparator.h"
 
-Q_LOGGING_CATEGORY(lcMenus, "cellink.menus")
+Q_LOGGING_CATEGORY(lcMenus, "qtcellink.menus")
 
-class CellinkTemplatesPlugin: public QQmlExtensionPlugin
+class QtCellinkTemplatesPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    CellinkTemplatesPlugin(QObject *parent = nullptr);
+    QtCellinkTemplatesPlugin(QObject *parent = nullptr);
     void registerTypes(const char *uri) override;
 };
 
-CellinkTemplatesPlugin::CellinkTemplatesPlugin(QObject *parent) : QQmlExtensionPlugin(parent)
+QtCellinkTemplatesPlugin::QtCellinkTemplatesPlugin(QObject *parent) : QQmlExtensionPlugin(parent)
 {
 }
 
-void CellinkTemplatesPlugin::registerTypes(const char *uri)
+void QtCellinkTemplatesPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<ButtonRow>(uri, 1, 0, "ButtonRow");
     qmlRegisterType<DoubleSpinBox>(uri, 1, 0, "DoubleSpinBox");
@@ -73,4 +73,4 @@ void CellinkTemplatesPlugin::registerTypes(const char *uri)
     qmlRegisterRevision<QQuickAbstractButton, QT_VERSION_MINOR>(uri, 1, 0);
 }
 
-#include "cellinktemplatesplugin.moc"
+#include "qtcellinktemplatesplugin.moc"

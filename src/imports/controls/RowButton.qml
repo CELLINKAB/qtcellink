@@ -25,7 +25,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.impl 2.12
 import QtQuick.Controls.Fusion 2.12
 import QtQuick.Controls.Fusion.impl 2.12
-import Cellink.Templates 1.0 as T
+import QtCellink.Templates 1.0 as T
 
 T.RowButton {
     id: control

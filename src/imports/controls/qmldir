@@ -1,3 +1,3 @@
-module Cellink.Controls
-plugin cellinkcontrolsplugin
-classname CellinkControlsPlugin
+module QtCellink.Controls
+plugin qtcellinkcontrolsplugin
+classname QtCellinkControlsPlugin

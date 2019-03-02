@@ -1,5 +1,5 @@
-TARGET = cellinkextrasplugin
-TARGETPATH = Cellink/Extras
+TARGET = qtcellinkextrasplugin
+TARGETPATH = QtCellink/Extras
 IMPORT_VERSION = 1.0
 
 QT += qml quick
@@ -21,13 +21,13 @@ HEADERS += \
     $$PWD/paddedrectangle.h
 
 SOURCES += \
-    $$PWD/cellinkextrasplugin.cpp \
     $$PWD/color.cpp \
     $$PWD/colorimage.cpp \
     $$PWD/iconimage.cpp \
     $$PWD/iconlabel.cpp \
     $$PWD/mnemoniclabel.cpp \
-    $$PWD/paddedrectangle.cpp
+    $$PWD/paddedrectangle.cpp \
+    $$PWD/qtcellinkextrasplugin.cpp
 
 CONFIG += no_cxx_module
 load(qml_plugin)

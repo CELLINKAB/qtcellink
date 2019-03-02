@@ -27,13 +27,13 @@
 #include <QtQuickControls2/private/qquickstyleselector_p.h>
 #include "progressindicator.h"
 
-class CellinkControlsPlugin: public QQmlExtensionPlugin
+class QtCellinkControlsPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    CellinkControlsPlugin(QObject *parent = nullptr);
+    QtCellinkControlsPlugin(QObject *parent = nullptr);
 
     void registerTypes(const char *uri) override;
 
@@ -42,7 +42,7 @@ private:
     QUrl typeUrl(const QString &fileName) const;
 };
 
-CellinkControlsPlugin::CellinkControlsPlugin(QObject *parent)
+QtCellinkControlsPlugin::QtCellinkControlsPlugin(QObject *parent)
     : QQmlExtensionPlugin(parent)
 {
 }
@@ -65,7 +65,7 @@ static bool useNative()
 #endif
 }
 
-void CellinkControlsPlugin::registerTypes(const char *uri)
+void QtCellinkControlsPlugin::registerTypes(const char *uri)
 {
     QQuickStyleSelector selector;
     const QString style = QQuickStyle::name();
@@ -98,18 +98,18 @@ void CellinkControlsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ProgressIndicator>(import, 1, 0, "ProgressIndicatorImpl");
 }
 
-QUrl CellinkControlsPlugin::typeUrl(const QUrl &fileUrl) const
+QUrl QtCellinkControlsPlugin::typeUrl(const QUrl &fileUrl) const
 {
     if (fileUrl.isLocalFile() || fileUrl.scheme() == QLatin1String("qrc"))
         return fileUrl;
     return typeUrl(fileUrl.toString());
 }
 
-QUrl CellinkControlsPlugin::typeUrl(const QString &fileName) const
+QUrl QtCellinkControlsPlugin::typeUrl(const QString &fileName) const
 {
     QUrl url = baseUrl();
     url.setPath(url.path() + QLatin1Char('/') + fileName);
     return url;
 }
 
-#include "cellinkcontrolsplugin.moc"
+#include "qtcellinkcontrolsplugin.moc"

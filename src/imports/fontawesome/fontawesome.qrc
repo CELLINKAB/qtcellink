@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/qt-project.org/imports/QtCellink/FontAwesome">
+        <file alias="Font Awesome 5 Free-Solid-900.otf">../../3rdparty/Font-Awesome/otfs/Font Awesome 5 Free-Solid-900.otf</file>
+    </qresource>
+</RCC>

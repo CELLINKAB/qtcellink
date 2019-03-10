@@ -18,7 +18,8 @@ HEADERS += \
     $$PWD/iconlabel.h \
     $$PWD/iconlabel_p.h \
     $$PWD/mnemoniclabel.h \
-    $$PWD/paddedrectangle.h
+    $$PWD/paddedrectangle.h \
+    $$PWD/rect.h
 
 SOURCES += \
     $$PWD/color.cpp \
@@ -27,7 +28,8 @@ SOURCES += \
     $$PWD/iconlabel.cpp \
     $$PWD/mnemoniclabel.cpp \
     $$PWD/paddedrectangle.cpp \
-    $$PWD/qtcellinkextrasplugin.cpp
+    $$PWD/qtcellinkextrasplugin.cpp \
+    $$PWD/rect.cpp
 
 CONFIG += no_cxx_module
 load(qml_plugin)

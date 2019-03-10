@@ -29,6 +29,7 @@
 #include "iconlabel.h"
 #include "mnemoniclabel.h"
 #include "paddedrectangle.h"
+#include "rect.h"
 
 class QtCellinkExtrasPlugin: public QQmlExtensionPlugin
 {
@@ -54,6 +55,7 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterType<IconLabel>(uri, 1, 0, "IconLabel");
     qmlRegisterType<MnemonicLabel>(uri, 1, 0, "MnemonicLabel");
     qmlRegisterType<PaddedRectangle>(uri, 1, 0, "PaddedRectangle");
+    qmlRegisterSingletonType<Rect>(uri, 1, 0, "Rect", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Rect(engine); });
 }
 
 #include "qtcellinkextrasplugin.moc"

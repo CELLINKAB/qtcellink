@@ -27,6 +27,7 @@
 #include "colorimage.h"
 #include "iconimage.h"
 #include "iconlabel.h"
+#include "keyboard.h"
 #include "mnemoniclabel.h"
 #include "paddedrectangle.h"
 #include "rect.h"
@@ -53,6 +54,7 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterType<ColorImage>(uri, 1, 0, "ColorImage");
     qmlRegisterType<IconImage>(uri, 1, 0, "IconImage");
     qmlRegisterType<IconLabel>(uri, 1, 0, "IconLabel");
+    qmlRegisterSingletonType<Keyboard>(uri, 1, 0, "Keyboard", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Keyboard(engine); });
     qmlRegisterType<MnemonicLabel>(uri, 1, 0, "MnemonicLabel");
     qmlRegisterType<PaddedRectangle>(uri, 1, 0, "PaddedRectangle");
     qmlRegisterSingletonType<Rect>(uri, 1, 0, "Rect", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Rect(engine); });

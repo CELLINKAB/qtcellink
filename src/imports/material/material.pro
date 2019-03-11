@@ -2,6 +2,8 @@ TARGET = qtcellinkmaterialplugin
 TARGETPATH = QtCellink/Material
 IMPORT_VERSION = 1.0
 
+QT += qml
+
 OTHER_FILES += \
     $$PWD/qmldir
 

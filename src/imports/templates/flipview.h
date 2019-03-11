@@ -70,7 +70,7 @@ private:
 
 class FlipViewAttachedPrivate;
 
-class Q_QUICKTEMPLATES2_PRIVATE_EXPORT FlipViewAttached : public QObject
+class FlipViewAttached : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int index READ index NOTIFY indexChanged FINAL)

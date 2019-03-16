@@ -259,7 +259,7 @@ void ButtonRow::itemAdded(int index, QQuickItem *item)
     QQuickItemPrivate::get(item)->setCulled(true); // QTBUG-55129
     if (RowButton *button = qobject_cast<RowButton *>(item)) {
         button->setAutoExclusive(d->exclusive);
-        QObjectPrivate::connect(button, &RowButton::checkedChanged, d, &ButtonRowPrivate::activate);
+        QObjectPrivate::connect(button, &RowButton::toggled, d, &ButtonRowPrivate::activate);
         QObjectPrivate::connect(button, &RowButton::checkedChanged, d, &ButtonRowPrivate::updateCurrentIndex);
     }
     d->updateAttachedProperties();

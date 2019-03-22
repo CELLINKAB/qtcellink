@@ -37,9 +37,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Layouts 1.3
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
 
 /*!
     \qmltype SplitView
@@ -87,7 +87,7 @@ import QtQuick.Layouts 1.3
         \li \l{Layout::fillHeight}{Layout.fillHeight} (\c true for only one child)
     \endlist
 
-    \note import QtQuick.Layouts 1.0 in your QML file in order to use the Layout
+    \note import QtQuick.Layouts 1.12 in your QML file in order to use the Layout
     attached properties inside SplitView.
 
     Example:

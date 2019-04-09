@@ -1,3 +1,6 @@
 [submodule "fontawesome"]
 	path = src/3rdparty/Font-Awesome
 	url = https://github.com/FortAwesome/Font-Awesome.git
+[submodule "assimp"]
+	path = src/3rdparty/assimp
+	url = https://github.com/assimp/assimp.git

@@ -63,7 +63,6 @@ public:
     void setTo(qreal to);
 
     qreal value() const;
-    void setValue(qreal value);
 
     qreal stepSize() const;
     void setStepSize(qreal step);
@@ -110,6 +109,7 @@ public:
 public Q_SLOTS:
     void increase();
     void decrease();
+    void setValue(qreal value);
 
 Q_SIGNALS:
     void fromChanged();

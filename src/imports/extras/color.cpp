@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include "color.h"
+#include <cmath>
 
 Color::Color(QObject *parent) :
     QObject(parent)
@@ -45,4 +46,10 @@ QColor Color::blend(const QColor &a, const QColor &b, qreal factor) const
     color.setGreenF(a.greenF() * (1.0 - factor) + b.greenF() * factor);
     color.setBlueF(a.blueF() * (1.0 - factor) + b.blueF() * factor);
     return color;
+}
+
+QColor Color::hue(const QColor &color, qreal factor) const
+{
+    QColor base = color.toHsl();
+    return QColor::fromHslF(std::fmod(std::abs(base.hueF() + factor), 1.0), base.saturationF(), base.lightnessF());
 }

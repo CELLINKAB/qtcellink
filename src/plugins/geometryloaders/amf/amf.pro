@@ -1,6 +1,7 @@
 TARGET = amfgeometryloader
 QT += core-private 3dcore 3dcore-private 3drender 3drender-private
 
+win32: LIBS += -ladvapi32
 gcc: QMAKE_CXXFLAGS += -Wno-psabi
 
 load(qt_build_config)

@@ -112,6 +112,7 @@ public Q_SLOTS:
     void setValue(qreal value);
 
 Q_SIGNALS:
+    void accepted();
     void fromChanged();
     void toChanged();
     void valueChanged();

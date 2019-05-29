@@ -835,8 +835,10 @@ void DoubleSpinBox::itemChange(ItemChange change, const ItemChangeData &value)
 void DoubleSpinBox::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
 {
     Q_D(DoubleSpinBox);
-    if (QQuickTextInput *oldInput = qobject_cast<QQuickTextInput *>(oldItem))
+    if (QQuickTextInput *oldInput = qobject_cast<QQuickTextInput *>(oldItem)) {
+        disconnect(oldInput, &QQuickTextInput::accepted, this, &DoubleSpinBox::accepted);
         disconnect(oldInput, &QQuickTextInput::inputMethodComposingChanged, this, &DoubleSpinBox::inputMethodComposingChanged);
+    }
 
     if (newItem) {
         newItem->setActiveFocusOnTab(true);
@@ -847,8 +849,10 @@ void DoubleSpinBox::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
             newItem->setCursor(Qt::IBeamCursor);
 #endif
 
-        if (QQuickTextInput *newInput = qobject_cast<QQuickTextInput *>(newItem))
+        if (QQuickTextInput *newInput = qobject_cast<QQuickTextInput *>(newItem)) {
+            connect(newInput, &QQuickTextInput::accepted, this, &DoubleSpinBox::accepted);
             connect(newInput, &QQuickTextInput::inputMethodComposingChanged, this, &DoubleSpinBox::inputMethodComposingChanged);
+        }
     }
 }
 

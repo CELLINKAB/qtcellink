@@ -1,11 +1,6 @@
 TARGET = amfgeometryloader
 QT += core-private 3dcore 3dcore-private 3drender 3drender-private
-
-win32: LIBS += -ladvapi32
-gcc: QMAKE_CXXFLAGS += -Wno-psabi
-
-load(qt_build_config)
-include(assimp/assimp.pri)
+CONFIG += assimp
 
 HEADERS += \
     amfgeometryloader.h \
@@ -21,4 +16,5 @@ DISTFILES += \
 
 PLUGIN_TYPE = geometryloaders
 PLUGIN_CLASS_NAME = AmfGeometryLoaderPlugin
+load(qt_build_config)
 load(qt_plugin)

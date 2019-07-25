@@ -56,9 +56,9 @@ bool AmfGeometryLoader::doLoad(QIODevice *device, const QString &subMesh)
             return false;
     }
 
-    int count = node ? node->mNumMeshes : scene->mNumMeshes;
+    uint count = node ? node->mNumMeshes : scene->mNumMeshes;
 
-    for (int m = 0; m < count; ++m) {
+    for (uint m = 0; m < count; ++m) {
         uint idx = node ? node->mMeshes[m] : m;
         const aiMesh *mesh = scene->mMeshes[idx];
 
@@ -66,12 +66,12 @@ bool AmfGeometryLoader::doLoad(QIODevice *device, const QString &subMesh)
         if (mesh->mNormals)
             m_normals.reserve(m_normals.size() + mesh->mNumVertices);
 
-        for (int v = 0; v < mesh->mNumVertices; ++v) {
+        for (uint v = 0; v < mesh->mNumVertices; ++v) {
             m_points += toQVector3D(mesh->mVertices[v]);
             if (mesh->mNormals)
                 m_normals += toQVector3D(mesh->mNormals[v]);
             if (mesh->mTextureCoords) {
-                for (int t = 0; t < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++t) {
+                for (uint t = 0; t < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++t) {
                     if (!mesh->mTextureCoords[t])
                         break;
                     m_texCoords += toQVector2D(*mesh->mTextureCoords[t]);
@@ -79,9 +79,9 @@ bool AmfGeometryLoader::doLoad(QIODevice *device, const QString &subMesh)
             }
         }
 
-        for (int f = 0; f < mesh->mNumFaces; ++f) {
+        for (uint f = 0; f < mesh->mNumFaces; ++f) {
             const aiFace &face = mesh->mFaces[f];
-            for (int i = 0; i < face.mNumIndices; ++i)
+            for (uint i = 0; i < face.mNumIndices; ++i)
                 m_indices += face.mIndices[i];
         }
     }

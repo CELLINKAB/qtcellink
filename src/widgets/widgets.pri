@@ -2,7 +2,9 @@ INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 HEADERS += \
-    $$PWD/codeeditor.h
+    $$PWD/codeeditor.h \
+    $$PWD/progressindicator.h
 
 SOURCES += \
-    $$PWD/codeeditor.cpp
+    $$PWD/codeeditor.cpp \
+    $$PWD/progressindicator.cpp

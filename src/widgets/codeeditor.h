@@ -39,10 +39,11 @@
 #define CODEEDITOR_H
 
 #include <QtWidgets/qplaintextedit.h>
+#include <QtCellink/cellink.h>
 
 QT_FORWARD_DECLARE_CLASS(QCompleter)
 
-class CodeEditor : public QPlainTextEdit
+class Q_CELLINK_EXPORT CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
 

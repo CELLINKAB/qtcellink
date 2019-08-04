@@ -53,6 +53,7 @@
 
 #include <Qt3DExtras/qt3dextras_global.h>
 #include <QtGui/QWindow>
+#include <QtCellink/cellink.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -86,7 +87,7 @@ namespace Qt3DExtras {
 
 class Qt3DWindowPrivate;
 
-class /*QT3DEXTRASSHARED_EXPORT*/ Qt3DWindow : public QWindow
+class Q_CELLINK_EXPORT Qt3DWindow : public QWindow
 {
     Q_OBJECT
 public:

@@ -24,11 +24,46 @@
  **
  ****************************************************************************/
 #include "rangeslider.h"
-#include "rangeslider_p.h"
 
 #include <QtGui/qevent.h>
 #include <QtWidgets/qstylepainter.h>
 #include <QtWidgets/qstyleoption.h>
+
+class RangeSliderPrivate
+{
+    Q_DECLARE_PUBLIC(RangeSlider)
+
+public:
+    void init(RangeSlider *slider);
+    void initStyleOption(QStyleOptionSlider* option, RangeSlider::RangeHandle handle = RangeSlider::UpperHandle) const;
+    int pick(const QPoint& pt) const
+    {
+        return q_func()->orientation() == Qt::Horizontal ? pt.x() : pt.y();
+    }
+    int pixelPosToRangeValue(int pos) const;
+    void handleMousePress(const QPoint& pos, QStyle::SubControl& control, int value, RangeSlider::RangeHandle handle);
+    void drawHandle(QStylePainter* painter, RangeSlider::RangeHandle handle) const;
+    void setupPainter(QPainter* painter, Qt::Orientation orientation, qreal x1, qreal y1, qreal x2, qreal y2) const;
+    void drawRange(QStylePainter* painter, const QRect& rect) const;
+    void triggerAction(QAbstractSlider::SliderAction action, bool main);
+    void swapControls();
+    void movePressedHandle();
+
+    bool firstMovement = false;
+    bool blockTracking = false;
+    int lower = 0;
+    int upper = 0;
+    int lowerPos = 0;
+    int upperPos = 0;
+    int offset = 0;
+    int position = 0;
+    RangeSlider::RangeHandle lastPressed = RangeSlider::NoHandle;
+    RangeSlider::RangeHandle mainControl = RangeSlider::LowerHandle;
+    QStyle::SubControl lowerPressed = QStyle::SC_None;
+    QStyle::SubControl upperPressed = QStyle::SC_None;
+    RangeSlider::HandleMovementMode movement = RangeSlider::FreeMovement;
+    RangeSlider *q_ptr = nullptr;
+};
 
 void RangeSliderPrivate::init(RangeSlider *slider)
 {

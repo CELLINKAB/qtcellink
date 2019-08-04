@@ -28,6 +28,7 @@
 
 #include <QColor>
 #include <QWidget>
+#include <QtCellink/cellink.h>
 
 /*!
     \class QProgressIndicator
@@ -38,7 +39,7 @@
    is busy.
     \sa QProgressBar
 */
-class ProgressIndicator : public QWidget
+class Q_CELLINK_EXPORT ProgressIndicator : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(int delay READ animationDelay WRITE setAnimationDelay)

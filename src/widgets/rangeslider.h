@@ -27,10 +27,11 @@
 #define RANGESLIDER_H
 
 #include <QtWidgets/qslider.h>
+#include <QtCellink/cellink.h>
 
 class RangeSliderPrivate;
 
-class RangeSlider : public QSlider
+class Q_CELLINK_EXPORT RangeSlider : public QSlider
 {
     Q_OBJECT
     Q_PROPERTY(int lowerValue READ lowerValue WRITE setLowerValue)

@@ -109,9 +109,9 @@ void ProgressIndicatorNode::updateProgress(qreal progress)
     pen.setWidth(m_lineWidth * m_devicePixelRatio);
     painter.setPen(pen);
 
-    const QRectF arcBounds = QRectF(pen.width() / 2, pen.width() / 2,
-                                    m_devicePixelRatio * size - pen.width(),
-                                    m_devicePixelRatio * size - pen.width());
+    const QRectF arcBounds = QRectF(pen.width() / 2 + 1, pen.width() / 2 + 1,
+                                    m_devicePixelRatio * size - pen.width() - 1,
+                                    m_devicePixelRatio * size - pen.width() - 1);
 
     if (isRunning()) {
         int time = progress * RotationAnimationDuration;

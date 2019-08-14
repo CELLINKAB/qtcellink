@@ -37,6 +37,7 @@ T.ProgressIndicator {
         implicitWidth: 48
         implicitHeight: 48
         color: control.palette.highlight
+        lineWidth: Math.max(4, Math.ceil(width / 24))
 
         value: control.value
         running: control.running

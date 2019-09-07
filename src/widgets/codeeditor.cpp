@@ -158,14 +158,14 @@ void CodeEditor::keyPressEvent(QKeyEvent *event)
         QPlainTextEdit::keyPressEvent(event);
 
     const bool ctrlOrShift = event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
-    if (!m_completer || (ctrlOrShift && event->text().isEmpty()))
+    if (!m_completer || (ctrlOrShift && event->text().isEmpty()) || event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Return)
         return;
 
     static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
     bool hasModifier = (event->modifiers() != Qt::NoModifier) && !ctrlOrShift;
     QString completionPrefix = textUnderCursor();
 
-    if (!isShortcut && (hasModifier || event->text().isEmpty()|| completionPrefix.isEmpty() || eow.contains(event->text().right(1)))) {
+    if (!isShortcut && (hasModifier || event->text().isEmpty() || eow.contains(event->text().right(1)))) {
         m_completer->popup()->hide();
         return;
     }
@@ -228,10 +228,10 @@ void CodeEditor::insertCompletion(const QString& completion)
     if (m_completer->widget() != this)
         return;
     QTextCursor tc = textCursor();
-    int extra = completion.length() - m_completer->completionPrefix().length();
-    tc.movePosition(QTextCursor::Left);
-    tc.movePosition(QTextCursor::EndOfWord);
-    tc.insertText(completion.right(extra));
+    QString prefix = m_completer->completionPrefix();
+    if (!prefix.isEmpty())
+        tc.setPosition(tc.position() - prefix.length(), QTextCursor::KeepAnchor);
+    tc.insertText(completion);
     setTextCursor(tc);
 }
 

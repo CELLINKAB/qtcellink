@@ -170,13 +170,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *event)
         return;
     }
 
-    if (completionPrefix != m_completer->completionPrefix()) {
-        m_completer->setCompletionPrefix(completionPrefix);
-        m_completer->popup()->setCurrentIndex(m_completer->completionModel()->index(0, 0));
-    }
-    QRect cr = cursorRect();
-    cr.setWidth(m_completer->popup()->sizeHintForColumn(0) + m_completer->popup()->verticalScrollBar()->sizeHint().width());
-    m_completer->complete(cr); // popup it up!
+    complete(completionPrefix);
 }
 
 void CodeEditor::resizeEvent(QResizeEvent *event)
@@ -185,6 +179,17 @@ void CodeEditor::resizeEvent(QResizeEvent *event)
 
     QRect cr = contentsRect();
     m_lineNumberBar->setGeometry(QRect(cr.left(), cr.top(), m_lineNumberBar->sizeHint().width(), cr.height()));
+}
+
+void CodeEditor::complete(const QString &prefix)
+{
+    if (prefix != m_completer->completionPrefix()) {
+        m_completer->setCompletionPrefix(prefix);
+        m_completer->popup()->setCurrentIndex(m_completer->completionModel()->index(0, 0));
+    }
+    QRect cr = cursorRect();
+    cr.setWidth(m_completer->popup()->sizeHintForColumn(0) + m_completer->popup()->verticalScrollBar()->sizeHint().width());
+    m_completer->complete(cr); // popup it up!
 }
 
 void CodeEditor::highlightCurrentLine()

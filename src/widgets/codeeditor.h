@@ -58,6 +58,8 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
+    virtual void complete(const QString &prefix);
+
 private slots:
     void highlightCurrentLine();
     void updateViewportMargins();

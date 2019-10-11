@@ -24,13 +24,13 @@
 #include <QtQml/qqml.h>
 #include "material.h"
 
-class MaterialPlugin: public QQmlExtensionPlugin
+class QtCellinkMaterialPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    explicit MaterialPlugin(QObject *parent = nullptr) : QQmlExtensionPlugin(parent) { }
+    explicit QtCellinkMaterialPlugin(QObject *parent = nullptr) : QQmlExtensionPlugin(parent) { }
 
     void registerTypes(const char *uri) override
     {

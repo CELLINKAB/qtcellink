@@ -95,7 +95,7 @@ void QtCellinkControlsPlugin::registerTypes(const char *uri)
     }
 
     QByteArray import = QByteArray(uri) + ".impl";
-    qmlRegisterType<ProgressIndicator>(import, 1, 0, "ProgressIndicatorImpl");
+    qmlRegisterType<ProgressIndicatorImpl>(import, 1, 0, "ProgressIndicatorImpl");
 }
 
 QUrl QtCellinkControlsPlugin::typeUrl(const QUrl &fileUrl) const

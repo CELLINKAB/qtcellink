@@ -53,7 +53,7 @@ static const qreal MaxSweepSpan = 300 * OneDegree;
 class ProgressIndicatorNode : public QQuickAnimatedNode
 {
 public:
-    ProgressIndicatorNode(ProgressIndicator *item);
+    ProgressIndicatorNode(ProgressIndicatorImpl *item);
 
     void sync(QQuickItem *item) override;
 
@@ -71,7 +71,7 @@ private:
     int m_lineWidth = 0;
 };
 
-ProgressIndicatorNode::ProgressIndicatorNode(ProgressIndicator *item) : QQuickAnimatedNode(item)
+ProgressIndicatorNode::ProgressIndicatorNode(ProgressIndicatorImpl *item) : QQuickAnimatedNode(item)
 {
     setLoopCount(Infinite);
     setCurrentTime(item->elapsed());
@@ -162,7 +162,7 @@ void ProgressIndicatorNode::updateCurrentTime(int time)
 
 void ProgressIndicatorNode::sync(QQuickItem *item)
 {
-    ProgressIndicator *indicator = static_cast<ProgressIndicator *>(item);
+    ProgressIndicatorImpl *indicator = static_cast<ProgressIndicatorImpl *>(item);
     m_color = indicator->color();
     m_width = indicator->width();
     m_height = indicator->height();
@@ -176,17 +176,17 @@ void ProgressIndicatorNode::sync(QQuickItem *item)
     }
 }
 
-ProgressIndicator::ProgressIndicator(QQuickItem *parent) : QQuickItem(parent)
+ProgressIndicatorImpl::ProgressIndicatorImpl(QQuickItem *parent) : QQuickItem(parent)
 {
     setFlag(ItemHasContents);
 }
 
-QColor ProgressIndicator::color() const
+QColor ProgressIndicatorImpl::color() const
 {
     return m_color;
 }
 
-void ProgressIndicator::setColor(QColor color)
+void ProgressIndicatorImpl::setColor(QColor color)
 {
     if (m_color == color)
         return;
@@ -195,12 +195,12 @@ void ProgressIndicator::setColor(QColor color)
     update();
 }
 
-int ProgressIndicator::lineWidth() const
+int ProgressIndicatorImpl::lineWidth() const
 {
     return m_lineWidth;
 }
 
-void ProgressIndicator::setLineWidth(int width)
+void ProgressIndicatorImpl::setLineWidth(int width)
 {
     if (m_lineWidth == width)
         return;
@@ -209,12 +209,12 @@ void ProgressIndicator::setLineWidth(int width)
     update();
 }
 
-bool ProgressIndicator::isRunning() const
+bool ProgressIndicatorImpl::isRunning() const
 {
     return m_running;
 }
 
-void ProgressIndicator::setRunning(bool running)
+void ProgressIndicatorImpl::setRunning(bool running)
 {
     if (m_running == running)
         return;
@@ -223,12 +223,12 @@ void ProgressIndicator::setRunning(bool running)
     update();
 }
 
-qreal ProgressIndicator::value() const
+qreal ProgressIndicatorImpl::value() const
 {
     return m_value;
 }
 
-void ProgressIndicator::setValue(qreal value)
+void ProgressIndicatorImpl::setValue(qreal value)
 {
     if (qFuzzyCompare(m_value, value))
         return;
@@ -237,19 +237,19 @@ void ProgressIndicator::setValue(qreal value)
     update();
 }
 
-int ProgressIndicator::elapsed() const
+int ProgressIndicatorImpl::elapsed() const
 {
     return m_elapsed;
 }
 
-void ProgressIndicator::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &data)
+void ProgressIndicatorImpl::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &data)
 {
     QQuickItem::itemChange(change, data);
     if (change == ItemVisibleHasChanged)
         update();
 }
 
-QSGNode *ProgressIndicator::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+QSGNode *ProgressIndicatorImpl::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
     ProgressIndicatorNode *node = static_cast<ProgressIndicatorNode *>(oldNode);
     if (isVisible() && width() > 0 && height() > 0) {

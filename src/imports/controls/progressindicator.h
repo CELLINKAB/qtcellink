@@ -26,7 +26,7 @@
 #include <QtQuick/qquickitem.h>
 #include <QtGui/qcolor.h>
 
-class ProgressIndicator : public QQuickItem
+class ProgressIndicatorImpl : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor FINAL)
@@ -35,7 +35,7 @@ class ProgressIndicator : public QQuickItem
     Q_PROPERTY(qreal value READ value WRITE setValue FINAL)
 
 public:
-    explicit ProgressIndicator(QQuickItem *parent = nullptr);
+    explicit ProgressIndicatorImpl(QQuickItem *parent = nullptr);
 
     QColor color() const;
     void setColor(QColor color);

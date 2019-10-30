@@ -4,3 +4,6 @@
 [submodule "assimp"]
 	path = src/3rdparty/assimp
 	url = https://github.com/assimp/assimp.git
+[submodule "material-design-icons"]
+	path = src/3rdparty/material-design-icons
+	url = https://github.com/google/material-design-icons.git

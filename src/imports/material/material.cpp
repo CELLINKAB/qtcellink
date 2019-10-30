@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include "material.h"
+#include <QtGui/qfontdatabase.h>
 
 Material::Material(QObject *parent) : QObject(parent)
 {
@@ -374,4 +375,14 @@ QColor Material::color(Color color, Shade shade) const
     };
 
     return colors[color][shade];
+}
+
+QString Material::fontFamily()
+{
+    static QString family;
+    if (family.isEmpty()) {
+        int id = QFontDatabase::addApplicationFont(":/qt-project.org/imports/QtCellink/Material/MaterialIcons-Regular.ttf");
+        family = QFontDatabase::applicationFontFamilies(id).value(0);
+    }
+    return family;
 }

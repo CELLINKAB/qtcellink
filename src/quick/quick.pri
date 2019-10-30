@@ -3,7 +3,7 @@ DEPENDPATH += $$PWD
 QT += qml quick quickcontrols2
 
 HEADERS += \
-    $$PWD/quickapp.h
+    $$PWD/quickengine.h
 
 SOURCES += \
-    $$PWD/quickapp.cpp
+    $$PWD/quickengine.cpp

@@ -30,27 +30,23 @@
 **
 ****************************************************************************/
 
-#ifndef QUICKAPP_H
-#define QUICKAPP_H
+#ifndef QUICKENGINE_H
+#define QUICKENGINE_H
 
-#include <QtGui/qguiapplication.h>
 #include <QtQml/qqmlapplicationengine.h>
 
-class QuickApp : public QGuiApplication
+class QuickEngine : public QQmlApplicationEngine
 {
     Q_OBJECT
 
 public:
-    QuickApp(int &argc, char *argv[]);
+    explicit QuickEngine(QObject *parent = nullptr);
 
-    void init(const QString &name);
+    void init(const QString &style);
     bool load(const QUrl &source);
 
     static void addFont(const QString &source);
     static void setFont(const QString &family, int pixelSize);
-
-private:
-    QQmlApplicationEngine m_engine;
 };
 
-#endif // QUICKAPP_H
+#endif // QUICKENGINE_H

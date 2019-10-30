@@ -30,29 +30,30 @@
 **
 ****************************************************************************/
 
-#include "quickapp.h"
+#include "quickengine.h"
 
 #include <QtCore/qdir.h>
 #include <QtCore/qlocale.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qfontdatabase.h>
+#include <QtGui/qguiapplication.h>
 #include <QtGui/qicon.h>
 #include <QtQml/qqmlcontext.h>
 #include <QtQuickControls2/qquickstyle.h>
 
-QuickApp::QuickApp(int &argc, char *argv[]) : QGuiApplication(argc, argv)
+QuickEngine::QuickEngine(QObject *parent) : QQmlApplicationEngine(parent)
 {
     QLocale locale;
     locale.setNumberOptions(locale.numberOptions() | QLocale::OmitGroupSeparator);
     QLocale::setDefault(locale);
 
 #if !defined(Q_OS_MACOS)
-    QString appPath = applicationDirPath();
+    QString appPath = QCoreApplication::applicationDirPath();
     QStringList libraryPaths = QCoreApplication::libraryPaths();
     QDir pluginDir(appPath);
     if (pluginDir.cd("../plugins"))
         libraryPaths.prepend(pluginDir.canonicalPath());
-    libraryPaths.prepend(applicationDirPath());
+    libraryPaths.prepend(appPath);
     QCoreApplication::setLibraryPaths(libraryPaths);
 #endif
 }
@@ -62,11 +63,10 @@ static inline QString organizationStylePath()
     return QCoreApplication::organizationName() + QStringLiteral("/Styles");
 }
 
-void QuickApp::init(const QString &name)
+void QuickEngine::init(const QString &style)
 {
-    setApplicationName(name);
-    QIcon::setThemeName(name);
-    QQuickStyle::setStyle(name);
+    QIcon::setThemeName(style);
+    QQuickStyle::setStyle(style);
     QQuickStyle::addStylePath(QStringLiteral("qrc:/qt-project.org/imports/%1").arg(organizationStylePath()));
 }
 
@@ -74,7 +74,9 @@ static void initEngine(QQmlEngine *engine)
 {
     QQmlContext *context = engine->rootContext();
     context->setContextProperty("QT_VERSION_STR", QT_VERSION_STR);
+#ifdef BUILD_DATE
     context->setContextProperty("BUILD_DATE", BUILD_DATE);
+#endif
 
     engine->addImportPath(":/qml");
 
@@ -93,21 +95,21 @@ static void initEngine(QQmlEngine *engine)
     }
 }
 
-bool QuickApp::load(const QUrl &url)
+bool QuickEngine::load(const QUrl &url)
 {
-    if (m_engine.rootObjects().isEmpty())
-        initEngine(&m_engine);
+    if (rootObjects().isEmpty())
+        initEngine(this);
 
-    m_engine.load(url);
-    return !m_engine.rootObjects().isEmpty();
+    QQmlApplicationEngine::load(url);
+    return !rootObjects().isEmpty();
 }
 
-void QuickApp::addFont(const QString &source)
+void QuickEngine::addFont(const QString &source)
 {
     QFontDatabase::addApplicationFont(source);
 }
 
-void QuickApp::setFont(const QString &family, int pixelSize)
+void QuickEngine::setFont(const QString &family, int pixelSize)
 {
     QFont font(family);
     font.setPixelSize(pixelSize);

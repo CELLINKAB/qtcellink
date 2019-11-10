@@ -1,0 +1,3 @@
+module QtCellink.Node
+plugin qtcellinknodeplugin
+classname QtCellinkNodePlugin

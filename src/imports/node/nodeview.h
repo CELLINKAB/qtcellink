@@ -149,7 +149,8 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
 
 private:
-    QPointF calculateZoomCenterPoint() const;
+    QRectF viewportArea() const;
+    QRectF selectionArea() const;
 
     qreal m_zoomFactor = 1.0;
     qreal m_minimumZoomFactor = 1.0;

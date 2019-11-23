@@ -398,9 +398,30 @@ void NodeView::zoom(qreal factor, const QPointF &point)
 
 void NodeView::zoomIn(qreal factor)
 {
-    zoom(m_zoomFactor + factor, calculateZoomCenterPoint());
-    setContentX(std::clamp(contentX(), 0.0, contentWidth() - width()));
-    setContentY(std::clamp(contentY(), 0.0, contentHeight() - height()));
+    if (selectionArea().isEmpty()) {
+        // no selection -> zoom towards viewport center
+        zoom(m_zoomFactor + factor, viewportArea().center());
+        return;
+    }
+
+    // zoom towards selection center
+    zoom(m_zoomFactor + factor, selectionArea().center());
+
+    // attempt to keep the selection within viewport
+    QRectF selection = selectionArea();
+    QRectF bounds(0, 0, contentWidth() - width(), contentHeight() - height());
+    if (selection.left() < contentX())
+        bounds.setRight(selection.left());
+    else if (selection.right() > contentX() + width())
+        bounds.setLeft(selection.right() - width());
+    if (selection.top() < contentY())
+        bounds.setBottom(selection.top());
+    else if (selection.bottom() > contentY() + height())
+        bounds.setTop(selection.bottom() - height());
+
+    // keep within bounds
+    setContentX(std::clamp(contentX(), bounds.left(), bounds.right()));
+    setContentY(std::clamp(contentY(), bounds.top(), bounds.bottom()));
 }
 
 void NodeView::zoomOut(qreal factor)
@@ -434,22 +455,17 @@ void NodeView::wheelEvent(QWheelEvent *event)
     zoom(m_zoomFactor + event->angleDelta().y() / deltasPerStep, mapToItem(m_nodeItem, event->posF()));
 }
 
-QPointF NodeView::calculateZoomCenterPoint() const
+QRectF NodeView::viewportArea() const
+{
+    return QRectF(contentX(), contentY(), width(), height());
+}
+
+QRectF NodeView::selectionArea() const
 {
     QItemSelectionModel *selectionModel = NodeView::selectionModel();
-    if (!m_nodeItem || !selectionModel || !selectionModel->hasSelection())
-        return QPointF(contentX() + width() / 2, contentY() + height() / 2);
+    if (!selectionModel || !selectionModel->hasSelection())
+        return QRectF();
 
-    QPointF center;
-    QItemSelectionRange selection = selectionModel->selection().value(0);
-    QRectF area(m_nodeItem->nodeRect(selection.topLeft()).topLeft(), m_nodeItem->nodeRect(selection.bottomRight()).bottomRight());
-    if (area.center().x() < contentX() + width() / 2)
-        center.setX(area.left());
-    else
-        center.setX(area.right());
-    if (area.center().y() < contentY() + height() / 2)
-        center.setY(area.top());
-    else
-        center.setY(area.bottom());
-    return center;
+    QItemSelectionRange range = selectionModel->selection().value(0);
+    return QRectF(m_nodeItem->nodeRect(range.topLeft()).topLeft(), m_nodeItem->nodeRect(range.bottomRight()).bottomRight());
 }

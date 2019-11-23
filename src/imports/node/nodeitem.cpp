@@ -53,7 +53,6 @@ NodeItem::NodeItem(QQuickItem *parent) : QQuickItem(parent)
 {
     setFlag(ItemHasContents);
     setAcceptedMouseButtons(Qt::LeftButton);
-    setSelectionModel(new QItemSelectionModel(nullptr, this));
 }
 
 int NodeItem::count() const
@@ -341,13 +340,14 @@ void NodeItem::clearSelection()
 void NodeItem::cancelSelection()
 {
     setKeepMouseGrab(false);
-    m_selectionModel->clearCurrentIndex();
+    if (m_selectionModel)
+        m_selectionModel->clearCurrentIndex();
     stopPressAndHold();
 }
 
 void NodeItem::mousePressEvent(QMouseEvent *event)
 {
-    if (m_selectionMode == NoSelection) {
+    if (m_selectionMode == NoSelection || !m_selectionModel) {
         event->ignore();
         return;
     }
@@ -359,6 +359,11 @@ void NodeItem::mousePressEvent(QMouseEvent *event)
 
 void NodeItem::mouseMoveEvent(QMouseEvent *event)
 {
+    if (m_selectionMode == NoSelection || !m_selectionModel) {
+        event->ignore();
+        return;
+    }
+
     QModelIndex index = nodeAt(event->pos());
     QModelIndex currentIndex = m_selectionModel->currentIndex();
     if (index != currentIndex) {
@@ -379,7 +384,7 @@ void NodeItem::mouseMoveEvent(QMouseEvent *event)
 void NodeItem::mouseReleaseEvent(QMouseEvent *event)
 {
     cancelSelection();
-    event->accept();
+    event->setAccepted(m_selectionMode != NoSelection && m_selectionModel);
 }
 
 void NodeItem::mouseUngrabEvent()
@@ -392,9 +397,11 @@ void NodeItem::timerEvent(QTimerEvent *event)
     if (event->timerId() == m_pressTimer) {
         stopPressAndHold();
         setKeepMouseGrab(true);
-        QModelIndex index = m_selectionModel->currentIndex();
-        m_selectionModel->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Clear);
-        emit ensureVisible(nodeRect(index));
+        if (m_selectionModel) {
+            QModelIndex index = m_selectionModel->currentIndex();
+            m_selectionModel->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Clear);
+            emit ensureVisible(nodeRect(index));
+        }
     }
 }
 

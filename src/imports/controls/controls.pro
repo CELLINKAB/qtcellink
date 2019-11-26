@@ -29,8 +29,8 @@ SOURCES += \
     $$PWD/progressindicator.cpp \
     $$PWD/qtcellinkcontrolsplugin.cpp
 
-include(native/native.pri)
-include(quick/quick.pri)
+include(native.pri)
+include(quick.pri)
 
 CONFIG += no_cxx_module
 load(qml_plugin)

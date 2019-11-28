@@ -102,6 +102,14 @@ void NodeView::setModel(QObject *model)
     m_nodeItem->setModel(model);
 }
 
+QRect NodeView::selection() const
+{
+    if (!m_nodeItem)
+        return QRect();
+
+    return m_nodeItem->selection();
+}
+
 NodeView::SelectionMode NodeView::selectionMode() const
 {
     if (!m_nodeItem)
@@ -283,6 +291,7 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         disconnect(m_nodeItem, &NodeItem::rowsChanged, this, &NodeView::rowsChanged);
         disconnect(m_nodeItem, &NodeItem::columnsChanged, this, &NodeView::columnsChanged);
         disconnect(m_nodeItem, &NodeItem::modelChanged, this, &NodeView::modelChanged);
+        disconnect(m_nodeItem, &NodeItem::selectionChanged, this, &NodeView::selectionChanged);
         disconnect(m_nodeItem, &NodeItem::selectionModeChanged, this, &NodeView::selectionModeChanged);
         disconnect(m_nodeItem, &NodeItem::selectionModelChanged, this, &NodeView::selectionModelChanged);
         disconnect(m_nodeItem, &NodeItem::nodeWidthChanged, this, &NodeView::nodeWidthChanged);
@@ -301,6 +310,7 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         connect(nodeItem, &NodeItem::rowsChanged, this, &NodeView::rowsChanged);
         connect(nodeItem, &NodeItem::columnsChanged, this, &NodeView::columnsChanged);
         connect(nodeItem, &NodeItem::modelChanged, this, &NodeView::modelChanged);
+        connect(nodeItem, &NodeItem::selectionChanged, this, &NodeView::selectionChanged);
         connect(nodeItem, &NodeItem::selectionModeChanged, this, &NodeView::selectionModeChanged);
         connect(nodeItem, &NodeItem::selectionModelChanged, this, &NodeView::selectionModelChanged);
         connect(nodeItem, &NodeItem::nodeWidthChanged, this, &NodeView::nodeWidthChanged);
@@ -317,6 +327,7 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
     emit rowsChanged();
     emit columnsChanged();
     emit modelChanged();
+    emit selectionChanged();
     emit selectionModelChanged();
     emit nodeWidthChanged();
     emit nodeHeightChanged();
@@ -331,6 +342,14 @@ void NodeView::selectAll()
         return;
 
     m_nodeItem->selectAll();
+}
+
+void NodeView::select(const QRect &selection)
+{
+    if (!m_nodeItem)
+        return;
+
+    m_nodeItem->select(selection);
 }
 
 void NodeView::clearSelection()

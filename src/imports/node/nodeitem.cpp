@@ -79,6 +79,20 @@ void NodeItem::setRows(int rows)
     rowsChange();
 }
 
+QRect NodeItem::selection() const
+{
+    return m_selection;
+}
+
+void NodeItem::setSelection(const QRect &selection)
+{
+    if (m_selection == selection)
+        return;
+
+    m_selection = selection;
+    emit selectionChanged();
+}
+
 int NodeItem::columns() const
 {
     if (m_hasColumns || !m_model)
@@ -327,6 +341,14 @@ void NodeItem::selectAll()
         return;
 
     m_selectionModel->select(QItemSelection(m_model->index(0, 0), m_model->index(m_model->rowCount() - 1, m_model->columnCount() - 1)), QItemSelectionModel::Select);
+}
+
+void NodeItem::select(const QRect &selection)
+{
+    if (!m_selectionModel || !m_model)
+        return;
+
+    m_selectionModel->select(QItemSelection(m_model->index(selection.top(), selection.left()), m_model->index(selection.bottom(), selection.right())), QItemSelectionModel::ClearAndSelect);
 }
 
 void NodeItem::clearSelection()
@@ -606,6 +628,11 @@ void NodeItem::currentChange(const QModelIndex &current, const QModelIndex &prev
 
 void NodeItem::selectionChange(const QItemSelection &selected, const QItemSelection &deselected)
 {
+    if (m_selectionModel) {
+        QItemSelectionRange range = m_selectionModel->selection().value(0);
+        setSelection(QRect(range.left(), range.top(), range.right() - range.left() + 1, range.bottom() - range.top() + 1));
+    }
+
     m_updates.merge(selected, QItemSelectionModel::Select);
     m_updates.merge(deselected, QItemSelectionModel::Select);
     m_deselected = deselected;

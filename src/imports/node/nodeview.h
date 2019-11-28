@@ -49,6 +49,7 @@ class NodeView : public QQuickFlickable
     Q_PROPERTY(int rows READ rows WRITE setRows NOTIFY rowsChanged)
     Q_PROPERTY(int columns READ columns WRITE setColumns NOTIFY columnsChanged)
     Q_PROPERTY(QObject *model READ model WRITE setModel NOTIFY modelChanged)
+    Q_PROPERTY(QRect selection READ selection NOTIFY selectionChanged)
     Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode NOTIFY selectionModeChanged)
     Q_PROPERTY(QItemSelectionModel *selectionModel READ selectionModel WRITE setSelectionModel NOTIFY selectionModelChanged)
     Q_PROPERTY(qreal nodeWidth READ nodeWidth WRITE setNodeWidth NOTIFY nodeWidthChanged)
@@ -76,6 +77,8 @@ public:
 
     QObject *model() const;
     void setModel(QObject *model);
+
+    QRect selection() const;
 
     enum SelectionMode { NoSelection, SingleSelection, MultiSelection };
     Q_ENUM(SelectionMode)
@@ -117,6 +120,7 @@ public:
 
 public slots:
     void selectAll();
+    void select(const QRect &selection);
     void clearSelection();
     void cancelSelection();
     void ensureVisible(const QRectF &rect);
@@ -129,6 +133,7 @@ signals:
     void rowsChanged();
     void columnsChanged();
     void modelChanged();
+    void selectionChanged();
     void selectionModeChanged();
     void selectionModelChanged();
     void nodeWidthChanged();

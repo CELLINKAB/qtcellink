@@ -54,7 +54,7 @@ static bool useNative()
     QCommandLineOption nonNativeOption(QStringLiteral("no-native"));
     cmdLine.addOptions({nativeOption, nonNativeOption});
     cmdLine.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
-    cmdLine.process(QCoreApplication::arguments());
+    cmdLine.parse(QCoreApplication::arguments());
 
 #if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
     // native menus by default on macOS and Windows

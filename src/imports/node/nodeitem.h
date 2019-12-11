@@ -50,6 +50,7 @@ class NodeItem : public QQuickItem
     Q_PROPERTY(QObject *model READ model WRITE setModel NOTIFY modelChanged)
     Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode NOTIFY selectionModeChanged)
     Q_PROPERTY(QItemSelectionModel *selectionModel READ selectionModel WRITE setSelectionModel NOTIFY selectionModelChanged)
+    Q_PROPERTY(bool selecting READ isSelecting NOTIFY selectingChanged)
     Q_PROPERTY(qreal nodeWidth READ nodeWidth WRITE setNodeWidth NOTIFY nodeWidthChanged)
     Q_PROPERTY(qreal nodeHeight READ nodeHeight WRITE setNodeHeight NOTIFY nodeHeightChanged)
     Q_PROPERTY(qreal nodeSpacing READ nodeSpacing WRITE setNodeSpacing NOTIFY nodeSpacingChanged)
@@ -82,6 +83,9 @@ public:
 
     QItemSelectionModel *selectionModel() const;
     void setSelectionModel(QItemSelectionModel *selectionModel);
+
+    bool isSelecting() const;
+    void setSelecting(bool selecting);
 
     qreal nodeWidth() const;
     void setNodeWidth(qreal nodeWidth);
@@ -122,6 +126,7 @@ signals:
     void modelChanged();
     void selectionModeChanged();
     void selectionModelChanged();
+    void selectingChanged();
     void nodeWidthChanged();
     void nodeHeightChanged();
     void nodeSpacingChanged();
@@ -183,6 +188,7 @@ private:
     QItemSelection m_selected;
     QItemSelection m_deselected;
     QRect m_selection;
+    bool m_selecting;
 };
 
 #endif // NODEITEM_H

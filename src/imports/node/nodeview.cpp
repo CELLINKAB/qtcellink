@@ -142,6 +142,22 @@ void NodeView::setSelectionModel(QItemSelectionModel *selectionModel)
     m_nodeItem->setSelectionModel(selectionModel);
 }
 
+bool NodeView::isSelecting() const
+{
+    if (!m_nodeItem)
+        return false;
+
+    return m_nodeItem->isSelecting();
+}
+
+void NodeView::setSelecting(bool selecting)
+{
+    if (!m_nodeItem)
+        return;
+
+    m_nodeItem->setSelecting(selecting);
+}
+
 qreal NodeView::nodeWidth() const
 {
     if (!m_nodeItem)
@@ -294,6 +310,7 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         disconnect(m_nodeItem, &NodeItem::selectionChanged, this, &NodeView::selectionChanged);
         disconnect(m_nodeItem, &NodeItem::selectionModeChanged, this, &NodeView::selectionModeChanged);
         disconnect(m_nodeItem, &NodeItem::selectionModelChanged, this, &NodeView::selectionModelChanged);
+        disconnect(m_nodeItem, &NodeItem::selectingChanged, this, &NodeView::selectingChanged);
         disconnect(m_nodeItem, &NodeItem::nodeWidthChanged, this, &NodeView::nodeWidthChanged);
         disconnect(m_nodeItem, &NodeItem::nodeHeightChanged, this, &NodeView::nodeHeightChanged);
         disconnect(m_nodeItem, &NodeItem::nodeSpacingChanged, this, &NodeView::nodeSpacingChanged);
@@ -313,6 +330,7 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         connect(nodeItem, &NodeItem::selectionChanged, this, &NodeView::selectionChanged);
         connect(nodeItem, &NodeItem::selectionModeChanged, this, &NodeView::selectionModeChanged);
         connect(nodeItem, &NodeItem::selectionModelChanged, this, &NodeView::selectionModelChanged);
+        connect(nodeItem, &NodeItem::selectingChanged, this, &NodeView::selectingChanged);
         connect(nodeItem, &NodeItem::nodeWidthChanged, this, &NodeView::nodeWidthChanged);
         connect(nodeItem, &NodeItem::nodeHeightChanged, this, &NodeView::nodeHeightChanged);
         connect(nodeItem, &NodeItem::nodeSpacingChanged, this, &NodeView::nodeSpacingChanged);
@@ -329,6 +347,7 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
     emit modelChanged();
     emit selectionChanged();
     emit selectionModelChanged();
+    emit selectingChanged();
     emit nodeWidthChanged();
     emit nodeHeightChanged();
     emit nodeSpacingChanged();

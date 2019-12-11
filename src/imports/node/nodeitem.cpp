@@ -190,6 +190,20 @@ void NodeItem::setSelectionModel(QItemSelectionModel *selectionModel)
     emit selectionModelChanged();
 }
 
+bool NodeItem::isSelecting() const
+{
+    return m_selecting;
+}
+
+void NodeItem::setSelecting(bool selecting)
+{
+    if (m_selecting == selecting)
+        return;
+
+    m_selecting = selecting;
+    emit selectingChanged();
+}
+
 qreal NodeItem::nodeWidth() const
 {
     return m_nodeWidth;
@@ -365,6 +379,7 @@ void NodeItem::cancelSelection()
     if (m_selectionModel)
         m_selectionModel->clearCurrentIndex();
     stopPressAndHold();
+    setSelecting(false);
 }
 
 void NodeItem::mousePressEvent(QMouseEvent *event)
@@ -405,7 +420,13 @@ void NodeItem::mouseMoveEvent(QMouseEvent *event)
 
 void NodeItem::mouseReleaseEvent(QMouseEvent *event)
 {
-    cancelSelection();
+    if (m_selectionMode != NoSelection && m_selectionModel && !keepMouseGrab()) {
+        QModelIndex index = nodeAt(event->pos());
+        if (index == m_selectionModel->currentIndex())
+            m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+    } else {
+        cancelSelection();
+    }
     event->setAccepted(m_selectionMode != NoSelection && m_selectionModel);
 }
 
@@ -417,6 +438,7 @@ void NodeItem::mouseUngrabEvent()
 void NodeItem::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == m_pressTimer) {
+        setSelecting(true);
         stopPressAndHold();
         setKeepMouseGrab(true);
         if (m_selectionModel) {

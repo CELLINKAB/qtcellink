@@ -132,6 +132,7 @@ signals:
     void nodeSpacingChanged();
     void nodeScaleXChanged();
     void nodeScaleYChanged();
+    void clicked(const QModelIndex &index);
     void ensureVisible(const QRectF &rect);
 
 protected:

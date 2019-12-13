@@ -149,6 +149,7 @@ signals:
     void nodeItemChanged();
     void minimumZoomFactorChanged();
     void maximumZoomFactorChanged();
+    void clicked(const QModelIndex &index);
     void zoomChanged(qreal factor, const QPointF &point);
 
 protected slots:

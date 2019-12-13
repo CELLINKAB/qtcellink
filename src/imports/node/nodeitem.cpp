@@ -422,8 +422,10 @@ void NodeItem::mouseReleaseEvent(QMouseEvent *event)
 {
     if (m_selectionMode != NoSelection && m_selectionModel && !keepMouseGrab()) {
         QModelIndex index = nodeAt(event->pos());
-        if (index == m_selectionModel->currentIndex())
+        if (index == m_selectionModel->currentIndex()) {
             m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+            emit clicked(index);
+        }
     } else {
         cancelSelection();
     }

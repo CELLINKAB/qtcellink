@@ -171,6 +171,7 @@ private:
     bool m_hasNodeScaleY = false;
     bool m_hasRows = false;
     bool m_hasColumns = false;
+    bool m_selecting = false;
     int m_rows = 0;
     int m_columns = 0;
     int m_pressTimer = 0;
@@ -188,7 +189,6 @@ private:
     QItemSelection m_selected;
     QItemSelection m_deselected;
     QRect m_selection;
-    bool m_selecting;
 };
 
 #endif // NODEITEM_H

@@ -582,7 +582,7 @@ QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         }
 
         if (m_model)
-            m_updates.select(m_model->index(0, 0), m_model->index(rows - 1, columns - 1));
+            m_updates = QItemSelection(m_model->index(0, 0), m_model->index(rows - 1, columns - 1));
 
         m_relayout = false;
     }
@@ -665,14 +665,14 @@ void NodeItem::columnsChange()
 
 void NodeItem::dataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-    m_updates.select(topLeft, bottomRight);
+    m_updates.merge(QItemSelection(topLeft, bottomRight), QItemSelectionModel::Select);
     update();
 }
 
 void NodeItem::currentChange(const QModelIndex &current, const QModelIndex &previous)
 {
-    m_updates.select(current, current);
-    m_updates.select(previous, previous);
+    m_updates.merge(QItemSelection(current, current), QItemSelectionModel::Select);
+    m_updates.merge(QItemSelection(previous, previous), QItemSelectionModel::Select);
     m_current = current;
     update();
 }
@@ -714,7 +714,7 @@ void NodeItem::fullUpdate()
     if (!m_model)
         return;
 
-    m_updates.select(m_model->index(0, 0), m_model->index(m_model->rowCount() - 1, m_model->columnCount() - 1));
+    m_updates = QItemSelection(m_model->index(0, 0), m_model->index(m_model->rowCount() - 1, m_model->columnCount() - 1));
     update();
 }
 

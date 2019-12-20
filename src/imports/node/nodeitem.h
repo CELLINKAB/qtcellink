@@ -106,6 +106,7 @@ public:
 
     QQmlListProperty<NodeDelegate> delegates();
 
+    bool isEnabled(const QModelIndex &index) const;
     bool isCurrent(const QModelIndex &index) const;
     bool isSelected(const QModelIndex &index) const;
 

@@ -301,6 +301,14 @@ QQmlListProperty<NodeDelegate> NodeItem::delegates()
     return QQmlListProperty<NodeDelegate>(this, nullptr, delegates_append, delegates_count, delegates_at, delegates_clear);
 }
 
+bool NodeItem::isEnabled(const QModelIndex &index) const
+{
+    if (!m_model || !QQuickItem::isEnabled())
+        return false;
+
+    return m_model->flags(index).testFlag(Qt::ItemIsEnabled);
+}
+
 bool NodeItem::isCurrent(const QModelIndex &index) const
 {
     if (!m_selectionModel)
@@ -389,8 +397,11 @@ void NodeItem::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    m_selectionModel->setCurrentIndex(nodeAt(event->pos()), QItemSelectionModel::Current);
-    startPressAndHold();
+    QModelIndex index = nodeAt(event->pos());
+    if (isEnabled(index)) {
+        m_selectionModel->setCurrentIndex(index, QItemSelectionModel::Current);
+        startPressAndHold();
+    }
     event->accept();
 }
 
@@ -402,18 +413,20 @@ void NodeItem::mouseMoveEvent(QMouseEvent *event)
     }
 
     QModelIndex index = nodeAt(event->pos());
-    QModelIndex currentIndex = m_selectionModel->currentIndex();
-    if (index != currentIndex) {
-        stopPressAndHold();
-        if (!keepMouseGrab())
-            m_selectionModel->clearCurrentIndex();
-    }
-    if (index.isValid() && keepMouseGrab()) {
-        if (m_selectionMode == MultiSelection)
-            m_selectionModel->select(QItemSelection(topLeft(index, currentIndex), bottomRight(index, currentIndex)), QItemSelectionModel::ClearAndSelect);
-        else
-            m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
-        emit ensureVisible(nodeRect(index));
+    if (isEnabled(index)) {
+        QModelIndex currentIndex = m_selectionModel->currentIndex();
+        if (index != currentIndex) {
+            stopPressAndHold();
+            if (!keepMouseGrab())
+                m_selectionModel->clearCurrentIndex();
+        }
+        if (index.isValid() && keepMouseGrab()) {
+            if (m_selectionMode == MultiSelection)
+                m_selectionModel->select(QItemSelection(topLeft(index, currentIndex), bottomRight(index, currentIndex)), QItemSelectionModel::ClearAndSelect);
+            else
+                m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+            emit ensureVisible(nodeRect(index));
+        }
     }
     event->accept();
 }
@@ -422,7 +435,7 @@ void NodeItem::mouseReleaseEvent(QMouseEvent *event)
 {
     if (m_selectionMode != NoSelection && m_selectionModel && !keepMouseGrab()) {
         QModelIndex index = nodeAt(event->pos());
-        if (index == m_selectionModel->currentIndex()) {
+        if (isEnabled(index) && index == m_selectionModel->currentIndex()) {
             m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
             emit clicked(index);
         }
@@ -445,8 +458,10 @@ void NodeItem::timerEvent(QTimerEvent *event)
         setKeepMouseGrab(true);
         if (m_selectionModel) {
             QModelIndex index = m_selectionModel->currentIndex();
-            m_selectionModel->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Clear);
-            emit ensureVisible(nodeRect(index));
+            if (isEnabled(index)) {
+                m_selectionModel->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Clear);
+                emit ensureVisible(nodeRect(index));
+            }
         }
     }
 }
@@ -593,15 +608,20 @@ QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 
     if (!m_updates.isEmpty()) {
         for (const QItemSelectionRange &range : m_updates) {
-            const QList<QModelIndex> indexes = range.indexes();
-            for (const QModelIndex &index : indexes) {
-                QuickItemNode *itemNode = viewNode->itemNode(index.row(), index.column());
-                if (!itemNode || itemNode->nodes.count() != m_delegates.count())
-                    continue;
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                for (int column = range.left(); column <= range.right(); ++column) {
+                    QuickItemNode *itemNode = viewNode->itemNode(row, column);
+                    if (!itemNode || itemNode->nodes.count() != m_delegates.count())
+                        continue;
 
-                for (int i = 0; i < m_delegates.count(); ++i) {
-                    NodeDelegate *delegate = m_delegates.at(i);
-                    delegate->updateNode(itemNode->nodes.at(i), index, this);
+                    const QModelIndex index = m_model->index(row, column);
+                    if (!isEnabled(index))
+                        lowerNode(itemNode);
+
+                    for (int i = 0; i < m_delegates.count(); ++i) {
+                        NodeDelegate *delegate = m_delegates.at(i);
+                        delegate->updateNode(itemNode->nodes.at(i), index, this);
+                    }
                 }
             }
         }

@@ -299,7 +299,7 @@ qreal RectDelegate::nodeRadius(const QModelIndex &index, NodeItem *item) const
 
 QColor RectDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
 {
-    if (!item->isEnabled())
+    if (!item->isEnabled(index))
         return m_disabledColor;
     if (item->isSelected(index))
         return m_selectedColor;
@@ -310,7 +310,7 @@ QColor RectDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
 
 QColor RectDelegate::nodeBorderColor(const QModelIndex &index, NodeItem *item) const
 {
-    if (!item->isEnabled())
+    if (!item->isEnabled(index))
         return m_disabledBorderColor;
     if (item->isSelected(index))
         return m_selectedBorderColor;
@@ -322,7 +322,7 @@ QColor RectDelegate::nodeBorderColor(const QModelIndex &index, NodeItem *item) c
 qreal RectDelegate::nodeBorderWidth(const QModelIndex &index, NodeItem *item) const
 {
     qreal borderWidth = 0;
-    if (!item->isEnabled())
+    if (!item->isEnabled(index))
         borderWidth = m_disabledBorderWidth;
     else if (item->isSelected(index))
         borderWidth = m_selectedBorderWidth;
@@ -484,7 +484,7 @@ QString TextDelegate::nodeText(const QModelIndex &index, NodeItem *item) const
 
 QColor TextDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
 {
-    if (!item->isEnabled())
+    if (!item->isEnabled(index))
         return m_disabledColor;
     if (item->isSelected(index))
         return m_selectedColor;

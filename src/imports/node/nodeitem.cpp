@@ -401,6 +401,7 @@ void NodeItem::mousePressEvent(QMouseEvent *event)
     if (isEnabled(index)) {
         m_selectionModel->setCurrentIndex(index, QItemSelectionModel::Current);
         startPressAndHold();
+        emit pressed(index);
     }
     event->accept();
 }
@@ -426,6 +427,7 @@ void NodeItem::mouseMoveEvent(QMouseEvent *event)
             else
                 m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
             emit ensureVisible(nodeRect(index));
+            emit activated(index);
         }
     }
     event->accept();
@@ -435,9 +437,13 @@ void NodeItem::mouseReleaseEvent(QMouseEvent *event)
 {
     if (m_selectionMode != NoSelection && m_selectionModel && !keepMouseGrab()) {
         QModelIndex index = nodeAt(event->pos());
-        if (isEnabled(index) && index == m_selectionModel->currentIndex()) {
-            m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
-            emit clicked(index);
+        if (isEnabled(index)) {
+            emit released(index);
+            if (index == m_selectionModel->currentIndex()) {
+                m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+                emit clicked(index);
+            }
+            emit activated(index);
         }
     } else {
         cancelSelection();
@@ -461,6 +467,7 @@ void NodeItem::timerEvent(QTimerEvent *event)
             if (isEnabled(index)) {
                 m_selectionModel->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Clear);
                 emit ensureVisible(nodeRect(index));
+                emit activated(index);
             }
         }
     }

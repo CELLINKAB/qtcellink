@@ -80,6 +80,7 @@ void QtCellinkControlsPlugin::registerTypes(const char *uri)
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("ProgressIndicator.qml"))), uri, 1, 0, "ProgressIndicator");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("RowButton.qml"))), uri, 1, 0, "RowButton");
     qmlRegisterType(typeUrl(QStringLiteral("SplitView.qml")), uri, 1, 0, "SplitView");
+    qmlRegisterType(typeUrl(selector.select(QStringLiteral("TabBar.qml"))), uri, 1, 0, "TabBar");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("TitleSeparator.qml"))), uri, 1, 0, "TitleSeparator");
 
     if (useNative()) {

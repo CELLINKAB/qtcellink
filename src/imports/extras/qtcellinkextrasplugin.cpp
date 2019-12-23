@@ -31,6 +31,7 @@
 #include "mnemoniclabel.h"
 #include "paddedrectangle.h"
 #include "rect.h"
+#include "filtermodel.h"
 
 class QtCellinkExtrasPlugin: public QQmlExtensionPlugin
 {
@@ -52,6 +53,7 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
 {
     qmlRegisterSingletonType<Color>(uri, 1, 0, "Color", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Color(engine); });
     qmlRegisterType<ColorImage>(uri, 1, 0, "ColorImage");
+    qmlRegisterType<FilterModel>(uri, 1, 0, "FilterModel");
     qmlRegisterType<IconImage>(uri, 1, 0, "IconImage");
     qmlRegisterType<IconLabel>(uri, 1, 0, "IconLabel");
     qmlRegisterSingletonType<Keyboard>(uri, 1, 0, "Keyboard", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Keyboard(engine); });

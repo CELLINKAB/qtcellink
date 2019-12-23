@@ -1,6 +1,9 @@
 /****************************************************************************
 **
 ** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2016 The Qt Company Ltd.
+**
+** This file is part of QtCellink (based on Qt docs).
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions are met:

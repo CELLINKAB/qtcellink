@@ -88,6 +88,16 @@ void FilterModel::setFilterValue(const QVariant &value)
         invalidateFilter();
 }
 
+int FilterModel::mapToSourceRow(int row) const
+{
+    return mapToSource(index(row, 0)).row();
+}
+
+int FilterModel::mapFromSourceRow(int row) const
+{
+    return mapFromSource(index(row, 0)).row();
+}
+
 QJSValue FilterModel::get(int idx) const
 {
     QJSEngine *engine = qmlEngine(this);

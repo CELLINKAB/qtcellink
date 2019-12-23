@@ -72,6 +72,9 @@ public:
     QVariant filterValue() const;
     void setFilterValue(const QVariant &value);
 
+    Q_INVOKABLE int mapToSourceRow(int row) const;
+    Q_INVOKABLE int mapFromSourceRow(int row) const;
+
 signals:
     void countChanged();
 

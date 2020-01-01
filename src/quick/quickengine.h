@@ -47,6 +47,7 @@ public:
 
     static void addFont(const QString &source);
     static void setFont(const QString &family, int pixelSize);
+    static void allowExternalRegistrations(const char *uri);
 };
 
 #endif // QUICKENGINE_H

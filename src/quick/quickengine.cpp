@@ -41,6 +41,9 @@
 #include <QtQml/qqmlcontext.h>
 #include <QtQuickControls2/qquickstyle.h>
 
+Q_GLOBAL_STATIC(QByteArrayList, allowExternalModules)
+static QtMessageHandler messageHandler = nullptr;
+
 QuickEngine::QuickEngine(QObject *parent) : QQmlApplicationEngine(parent)
 {
     QLocale locale;
@@ -101,6 +104,9 @@ bool QuickEngine::load(const QUrl &url)
         initEngine(this);
 
     QQmlApplicationEngine::load(url);
+    if (messageHandler)
+        qInstallMessageHandler(messageHandler);
+    messageHandler = nullptr;
     return !rootObjects().isEmpty();
 }
 
@@ -114,4 +120,26 @@ void QuickEngine::setFont(const QString &family, int pixelSize)
     QFont font(family);
     font.setPixelSize(pixelSize);
     QGuiApplication::setFont(font);
+}
+
+
+void externalRegistrationHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    if (type == QtWarningMsg && msg.startsWith("Module '")) {
+        const QByteArrayList modules = *allowExternalModules();
+        for (const QByteArray &module : modules) {
+            if (msg == QStringLiteral("Module '%1' does not contain a module identifier directive - it cannot be protected from external registrations.").arg(QString::fromLocal8Bit(module)))
+                return;
+        }
+    }
+    if (messageHandler)
+        messageHandler(type, context, msg);
+}
+
+void QuickEngine::allowExternalRegistrations(const char *uri)
+{
+    if (!messageHandler)
+        messageHandler = qInstallMessageHandler(externalRegistrationHandler);
+
+    allowExternalModules()->append(uri);
 }

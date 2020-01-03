@@ -14,7 +14,6 @@ AUX_QML_FILES += \
     $$PWD/ProgressIndicator.qml \
     $$PWD/RowButton.qml \
     $$PWD/SplitView.qml \
-    $$PWD/TabBar.qml \
     $$PWD/TitleSeparator.qml \
     $$PWD/arrow.png \
     $$PWD/arrow@2x.png

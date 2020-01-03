@@ -28,7 +28,6 @@
 #include "flipview.h"
 #include "progressindicator.h"
 #include "rowbutton.h"
-#include "tabbar.h"
 #include "titleseparator.h"
 
 #include "nativemenubar.h"
@@ -61,8 +60,6 @@ void QtCellinkTemplatesPlugin::registerTypes(const char *uri)
     qmlRegisterType<FlipViewAttached>();
     qmlRegisterType<ProgressIndicator>(uri, 1, 0, "ProgressIndicator");
     qmlRegisterType<RowButton>(uri, 1, 0, "RowButton");
-    qmlRegisterType<TabBar>(uri, 1, 0, "TabBar");
-    qmlRegisterType<TabBarAttached>();
     qmlRegisterType<TitleSeparator>(uri, 1, 0, "TitleSeparator");
 
     qmlRegisterType<NativeMenu>(uri, 1, 0, "NativeMenu");
@@ -74,7 +71,6 @@ void QtCellinkTemplatesPlugin::registerTypes(const char *uri)
     qmlRegisterRevision<QQuickControl, QT_VERSION_MINOR>(uri, 1, 0);
     qmlRegisterRevision<QQuickContainer, QT_VERSION_MINOR>(uri, 1, 0);
     qmlRegisterRevision<QQuickAbstractButton, QT_VERSION_MINOR>(uri, 1, 0);
-    qmlRegisterRevision<QQuickTabBar, QT_VERSION_MINOR>(uri, 1, 0);
 }
 
 #include "qtcellinktemplatesplugin.moc"

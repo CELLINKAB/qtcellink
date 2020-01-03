@@ -72,7 +72,7 @@ static void initResources()
 
 QT_BEGIN_NAMESPACE
 
-namespace Qt3DExtras {
+namespace QtCellink {
 
 class Qt3DWindowPrivate : public QWindowPrivate
 {

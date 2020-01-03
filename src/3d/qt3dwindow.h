@@ -48,8 +48,8 @@
 **
 ****************************************************************************/
 
-#ifndef QT3DWINDOW_H
-#define QT3DWINDOW_H
+#ifndef QTCELLINK3DWINDOW_H
+#define QTCELLINK3DWINDOW_H
 
 #include <Qt3DExtras/qt3dextras_global.h>
 #include <QtGui/QWindow>
@@ -83,7 +83,7 @@ namespace Qt3DLogic {
 class QLogicAspect;
 }
 
-namespace Qt3DExtras {
+namespace QtCellink {
 
 class Qt3DWindowPrivate;
 
@@ -119,8 +119,8 @@ private:
     Q_DECLARE_PRIVATE(Qt3DWindow)
 };
 
-} // Qt3DExtras
+} // QtCellink
 
 QT_END_NAMESPACE
 
-#endif // QT3DWINDOW_H
+#endif // QTCELLINK3DWINDOW_H

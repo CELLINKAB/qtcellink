@@ -24,6 +24,7 @@
 #include <QtCore/qloggingcategory.h>
 
 #include "buttonrow.h"
+#include "componentview.h"
 #include "doublespinbox.h"
 #include "flipview.h"
 #include "progressindicator.h"
@@ -54,6 +55,7 @@ QtCellinkTemplatesPlugin::QtCellinkTemplatesPlugin(QObject *parent) : QQmlExtens
 void QtCellinkTemplatesPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<ButtonRow>(uri, 1, 0, "ButtonRow");
+    qmlRegisterType<ComponentView>(uri, 1, 0, "ComponentView");
     qmlRegisterType<DoubleSpinBox>(uri, 1, 0, "DoubleSpinBox");
     qmlRegisterType<DoubleSpinButton>();
     qmlRegisterType<FlipView>(uri, 1, 0, "FlipView");

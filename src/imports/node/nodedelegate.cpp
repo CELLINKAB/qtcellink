@@ -636,13 +636,12 @@ void ProgressDelegate::setLayoutDirection(Qt::LayoutDirection layoutDirection)
 
 QRectF ProgressDelegate::nodeRect(const QModelIndex &index, NodeItem *item) const
 {
-    QRectF rect = RectDelegate::nodeRect(index, item);
-
     bool ok = false;
-    qreal progress = index.data(m_progressRole).toReal(&ok);
-    if (!ok)
-        return rect;
+    qreal progress = std::clamp(index.data(m_progressRole).toReal(&ok), 0.0, 1.0);
+    if (!ok || qFuzzyIsNull(progress))
+        return QRectF();
 
+    QRectF rect = RectDelegate::nodeRect(index, item);
     if (m_orientation == Qt::Horizontal) {
         qreal width = rect.width();
         rect.setWidth(progress * width);

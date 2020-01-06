@@ -282,4 +282,38 @@ private:
     Qt::Orientation m_orientation = Qt::Horizontal;
 };
 
+class AbstractOpacityDelegate : public NodeDelegate
+{
+    Q_OBJECT
+
+public:
+    explicit AbstractOpacityDelegate(QObject *parent = nullptr);
+
+    QSGNode *createNode(NodeItem *item) override;
+    void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) override;
+
+    virtual qreal nodeOpacity(const QModelIndex &index, NodeItem *item) const = 0;
+};
+
+class OpacityDelegate : public AbstractOpacityDelegate
+{
+    Q_OBJECT
+    Q_PROPERTY(int opacityRole READ opacityRole WRITE setOpacityRole NOTIFY opacityRoleChanged)
+
+public:
+    explicit OpacityDelegate(QObject *parent = nullptr);
+
+    int opacityRole() const;
+    void setOpacityRole(int opacityRole);
+
+signals:
+    void opacityRoleChanged();
+
+protected:
+    qreal nodeOpacity(const QModelIndex &index, NodeItem *item) const override;
+
+private:
+    int m_opacityRole = -1;
+};
+
 #endif // NODEDELEGATE_H

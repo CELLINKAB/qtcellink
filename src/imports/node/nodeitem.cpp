@@ -553,11 +553,13 @@ QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
                     QuickItemNode *itemNode = new QuickItemNode;
                     viewNode->appendChildNode(itemNode);
 
+                    QSGNode *parentNode = itemNode;
                     for (NodeDelegate *delegate : qAsConst(m_delegates)) {
                         QSGNode *node = delegate->createNode(this);
                         Q_ASSERT(node);
                         itemNode->nodes += node;
-                        itemNode->appendChildNode(node);
+                        parentNode->appendChildNode(node);
+                        parentNode = node;
                     }
 
                     viewNode->setItemNode(row, column, itemNode);

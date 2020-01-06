@@ -534,3 +534,49 @@ QString HeaderDelegate::nodeText(const QModelIndex &index, NodeItem *item) const
     int section = m_orientation == Qt::Horizontal ? index.column() : index.row();
     return model->headerData(section, m_orientation, textRole()).toString();
 }
+
+AbstractOpacityDelegate::AbstractOpacityDelegate(QObject *parent) : NodeDelegate(parent)
+{
+}
+
+QSGNode *AbstractOpacityDelegate::createNode(NodeItem *item)
+{
+    Q_UNUSED(item);
+    QSGOpacityNode *opacityNode = new QSGOpacityNode;
+    return opacityNode;
+}
+
+void AbstractOpacityDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
+{
+    QSGOpacityNode *opacityNode = static_cast<QSGOpacityNode *>(node);
+    opacityNode->setOpacity(nodeOpacity(index, item));
+}
+
+OpacityDelegate::OpacityDelegate(QObject *parent) : AbstractOpacityDelegate(parent)
+{
+}
+
+int OpacityDelegate::opacityRole() const
+{
+    return m_opacityRole;
+}
+
+void OpacityDelegate::setOpacityRole(int opacityRole)
+{
+    if (m_opacityRole == opacityRole)
+        return;
+
+    m_opacityRole = opacityRole;
+    emit opacityRoleChanged();
+    emit changed();
+}
+
+qreal OpacityDelegate::nodeOpacity(const QModelIndex &index, NodeItem *item) const
+{
+    Q_UNUSED(item);
+    bool ok = false;
+    qreal opacity = index.data(m_opacityRole).toReal(&ok);
+    if (!ok)
+        return 1;
+    return opacity;
+}

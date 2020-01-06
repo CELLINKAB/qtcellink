@@ -175,10 +175,10 @@ private:
     QColor m_currentColor;
     QColor m_selectedColor;
     QColor m_disabledColor;
-    qreal m_borderWidth = 0;
-    qreal m_currentBorderWidth = 0;
-    qreal m_selectedBorderWidth = 0;
-    qreal m_disabledBorderWidth = 0;
+    qreal m_borderWidth = -1;
+    qreal m_currentBorderWidth = -1;
+    qreal m_selectedBorderWidth = -1;
+    qreal m_disabledBorderWidth = -1;
     QColor m_borderColor;
     QColor m_currentBorderColor;
     QColor m_selectedBorderColor;

@@ -299,36 +299,40 @@ qreal RectDelegate::nodeRadius(const QModelIndex &index, NodeItem *item) const
 
 QColor RectDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
 {
-    if (!item->isEnabled(index))
+    if (m_disabledColor.isValid() && !item->isEnabled(index))
         return m_disabledColor;
-    if (item->isSelected(index))
+    if (m_selectedColor.isValid() && item->isSelected(index))
         return m_selectedColor;
-    if (item->isCurrent(index))
+    if (m_currentColor.isValid() && item->isCurrent(index))
         return m_currentColor;
-    return m_color;
+    if (m_color.isValid())
+        return m_color;
+    return Qt::transparent;
 }
 
 QColor RectDelegate::nodeBorderColor(const QModelIndex &index, NodeItem *item) const
 {
-    if (!item->isEnabled(index))
+    if (m_disabledColor.isValid() && !item->isEnabled(index))
         return m_disabledBorderColor;
-    if (item->isSelected(index))
+    if (m_selectedBorderColor.isValid() && item->isSelected(index))
         return m_selectedBorderColor;
-    if (item->isCurrent(index))
+    if (m_currentBorderColor.isValid() && item->isCurrent(index))
         return m_currentBorderColor;
-    return m_borderColor;
+    if (m_borderColor.isValid())
+        return m_borderColor;
+    return Qt::transparent;
 }
 
 qreal RectDelegate::nodeBorderWidth(const QModelIndex &index, NodeItem *item) const
 {
     qreal borderWidth = 0;
-    if (!item->isEnabled(index))
+    if (m_disabledBorderWidth >= 0 && !item->isEnabled(index))
         borderWidth = m_disabledBorderWidth;
-    else if (item->isSelected(index))
+    else if (m_selectedBorderWidth >= 0 && item->isSelected(index))
         borderWidth = m_selectedBorderWidth;
-    else if (item->isCurrent(index))
+    else if (m_currentBorderWidth >= 0 && item->isCurrent(index))
         borderWidth = m_currentBorderWidth;
-    else
+    else if (m_borderWidth >= 0)
         borderWidth = m_borderWidth;
     return borderWidth * item->nodeScale();
 }
@@ -484,11 +488,11 @@ QString TextDelegate::nodeText(const QModelIndex &index, NodeItem *item) const
 
 QColor TextDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
 {
-    if (!item->isEnabled(index))
+    if (m_disabledColor.isValid() && !item->isEnabled(index))
         return m_disabledColor;
-    if (item->isSelected(index))
+    if (m_selectedColor.isValid() && item->isSelected(index))
         return m_selectedColor;
-    if (item->isCurrent(index))
+    if (m_currentColor.isValid() && item->isCurrent(index))
         return m_currentColor;
     return m_color;
 }

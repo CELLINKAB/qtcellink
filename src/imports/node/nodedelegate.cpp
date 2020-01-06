@@ -312,7 +312,7 @@ QColor RectDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
 
 QColor RectDelegate::nodeBorderColor(const QModelIndex &index, NodeItem *item) const
 {
-    if (m_disabledColor.isValid() && !item->isEnabled(index))
+    if (m_disabledBorderColor.isValid() && !item->isEnabled(index))
         return m_disabledBorderColor;
     if (m_selectedBorderColor.isValid() && item->isSelected(index))
         return m_selectedBorderColor;

@@ -316,4 +316,37 @@ private:
     int m_opacityRole = -1;
 };
 
+class ProgressDelegate : public RectDelegate
+{
+    Q_OBJECT
+    Q_PROPERTY(int progressRole READ progressRole WRITE setProgressRole NOTIFY progressRoleChanged)
+    Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
+    Q_PROPERTY(Qt::LayoutDirection layoutDirection READ layoutDirection WRITE setLayoutDirection NOTIFY layoutDirectionChanged)
+
+public:
+    explicit ProgressDelegate(QObject *parent = nullptr);
+
+    int progressRole() const;
+    void setProgressRole(int progressRole);
+
+    Qt::Orientation orientation() const;
+    void setOrientation(Qt::Orientation orientation);
+
+    Qt::LayoutDirection layoutDirection() const;
+    void setLayoutDirection(Qt::LayoutDirection layoutDirection);
+
+signals:
+    void progressRoleChanged();
+    void orientationChanged();
+    void layoutDirectionChanged();
+
+protected:
+    QRectF nodeRect(const QModelIndex &index, NodeItem *item) const override;
+
+private:
+    int m_progressRole = -1;
+    Qt::Orientation m_orientation = Qt::Horizontal;
+    Qt::LayoutDirection m_layoutDirection = Qt::LeftToRight;
+};
+
 #endif // NODEDELEGATE_H

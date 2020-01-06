@@ -580,3 +580,74 @@ qreal OpacityDelegate::nodeOpacity(const QModelIndex &index, NodeItem *item) con
         return 1;
     return opacity;
 }
+
+ProgressDelegate::ProgressDelegate(QObject *parent) : RectDelegate(parent)
+{
+}
+
+int ProgressDelegate::progressRole() const
+{
+    return m_progressRole;
+}
+
+void ProgressDelegate::setProgressRole(int progressRole)
+{
+    if (m_progressRole == progressRole)
+        return;
+
+    m_progressRole = progressRole;
+    emit progressRoleChanged();
+    emit changed();
+}
+
+Qt::Orientation ProgressDelegate::orientation() const
+{
+    return m_orientation;
+}
+
+void ProgressDelegate::setOrientation(Qt::Orientation orientation)
+{
+    if (m_orientation == orientation)
+        return;
+
+    m_orientation = orientation;
+    emit orientationChanged();
+    emit changed();
+}
+
+Qt::LayoutDirection ProgressDelegate::layoutDirection() const
+{
+    return m_layoutDirection;
+}
+
+void ProgressDelegate::setLayoutDirection(Qt::LayoutDirection layoutDirection)
+{
+    if (m_layoutDirection == layoutDirection)
+        return;
+
+    m_layoutDirection = layoutDirection;
+    emit layoutDirectionChanged();
+    emit changed();
+}
+
+QRectF ProgressDelegate::nodeRect(const QModelIndex &index, NodeItem *item) const
+{
+    QRectF rect = RectDelegate::nodeRect(index, item);
+
+    bool ok = false;
+    qreal progress = index.data(m_progressRole).toReal(&ok);
+    if (!ok)
+        return rect;
+
+    if (m_orientation == Qt::Horizontal) {
+        qreal width = rect.width();
+        rect.setWidth(progress * width);
+        if (m_layoutDirection == Qt::RightToLeft)
+            rect.moveRight(width);
+    } else {
+        qreal height = rect.height();
+        rect.setHeight(progress * height);
+        rect.moveBottom(height);
+    }
+    return rect;
+}

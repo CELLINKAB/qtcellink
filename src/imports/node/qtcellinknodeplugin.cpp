@@ -59,6 +59,7 @@ void QtCellinkNodePlugin::registerTypes(const char *uri)
     qmlRegisterType<NodeDelegate>();
     qmlRegisterType<HeaderDelegate>(uri, 1, 0, "HeaderDelegate");
     qmlRegisterType<OpacityDelegate>(uri, 1, 0, "OpacityDelegate");
+    qmlRegisterType<ProgressDelegate>(uri, 1, 0, "ProgressDelegate");
     qmlRegisterType<RectDelegate>(uri, 1, 0, "RectDelegate");
     qmlRegisterType<TextDelegate>(uri, 1, 0, "TextDelegate");
 

@@ -52,9 +52,15 @@ static bool useNative()
     QCommandLineParser cmdLine;
     QCommandLineOption nativeOption(QStringLiteral("native"));
     QCommandLineOption nonNativeOption(QStringLiteral("no-native"));
+
     cmdLine.addOptions({nativeOption, nonNativeOption});
     cmdLine.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
-    cmdLine.process(QCoreApplication::arguments());
+
+    // fails if we call the exe with unknown arguments unless filtered
+    auto filteredArgs = qApp->arguments().filter(QRegExp(QStringLiteral("`(no-)?native$")));
+    filteredArgs.push_front(qApp->arguments().front());
+
+    cmdLine.process(filteredArgs);
 
 #if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
     // native menus by default on macOS and Windows

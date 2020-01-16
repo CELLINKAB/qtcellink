@@ -50,6 +50,20 @@ void NavigationItem::setEnabled(bool enabled)
     emit enabledChanged();
 }
 
+bool NavigationItem::confirm() const
+{
+    return m_confirm;
+}
+
+void NavigationItem::setConfirm(bool confirm)
+{
+    if (m_confirm == confirm)
+        return;
+
+    m_confirm = confirm;
+    emit confirmChanged();
+}
+
 bool NavigationItem::isFullScreen() const
 {
     return m_fullScreen;
@@ -139,5 +153,5 @@ void NavigationItem::trigger()
     if (!m_enabled)
         return;
 
-    emit triggered();
+    emit triggered(this);
 }

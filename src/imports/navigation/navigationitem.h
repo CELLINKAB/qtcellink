@@ -30,8 +30,8 @@
 **
 ****************************************************************************/
 
-#ifndef NAVIgationITEM_H
-#define NAVIgationITEM_H
+#ifndef NAVIGATIONITEM_H
+#define NAVIGATIONITEM_H
 
 #include <QtCore/qobject.h>
 #include <QtCore/qstring.h>
@@ -41,6 +41,7 @@ class NavigationItem : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool confirm READ confirm WRITE setConfirm NOTIFY confirmChanged)
     Q_PROPERTY(bool fullScreen READ isFullScreen WRITE setFullScreen NOTIFY fullScreenChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
@@ -53,6 +54,9 @@ public:
 
     bool isEnabled() const;
     void setEnabled(bool enabled);
+
+    bool confirm() const;
+    void setConfirm(bool confirm);
 
     bool isFullScreen() const;
     void setFullScreen(bool fullScreen);
@@ -77,16 +81,18 @@ public slots:
 
 signals:
     void enabledChanged();
+    void confirmChanged();
     void fullScreenChanged();
     void nameChanged();
     void titleChanged();
     void iconChanged();
     void urlChanged();
     void propertiesChanged();
-    void triggered();
+    void triggered(NavigationItem *item);
 
 private:
     bool m_enabled = true;
+    bool m_confirm = false;
     bool m_fullScreen = false;
     QString m_name;
     QString m_title;
@@ -95,4 +101,4 @@ private:
     QJSValue m_properties;
 };
 
-#endif // NAVIgationITEM_H
+#endif // NAVIGATIONITEM_H

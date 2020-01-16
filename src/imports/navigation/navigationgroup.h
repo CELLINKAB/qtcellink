@@ -54,7 +54,8 @@ public:
     QQmlListProperty<NavigationItem> items();
 
     Q_INVOKABLE NavigationItem *itemAt(int index) const;
-    Q_INVOKABLE int indexOf(const QString &name) const;
+    Q_INVOKABLE int indexOf(NavigationItem *item) const;
+    Q_INVOKABLE int find(const QString &name) const;
     Q_INVOKABLE void addItem(NavigationItem *item);
 
 public slots:
@@ -64,6 +65,8 @@ public slots:
 
 signals:
     void itemsChanged();
+    void confirm(NavigationItem *item);
+    void triggered(NavigationItem *item);
 
 private:
     static void data_append(QQmlListProperty<QObject> *property, QObject *object);

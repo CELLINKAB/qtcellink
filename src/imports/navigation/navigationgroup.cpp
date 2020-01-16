@@ -57,7 +57,12 @@ NavigationItem *NavigationGroup::itemAt(int index) const
     return m_items.value(index);
 }
 
-int NavigationGroup::indexOf(const QString &name) const
+int NavigationGroup::indexOf(NavigationItem *item) const
+{
+    return m_items.indexOf(item);
+}
+
+int NavigationGroup::find(const QString &name) const
 {
     for (int  i = 0; i < m_items.count(); ++i) {
         if (m_items.at(i)->name() == name)
@@ -68,6 +73,7 @@ int NavigationGroup::indexOf(const QString &name) const
 
 void NavigationGroup::addItem(NavigationItem *item)
 {
+    connect(item, &NavigationItem::triggered, this, &NavigationGroup::triggered);
     m_items.append(item);
     emit itemsChanged();
 }
@@ -77,8 +83,28 @@ void NavigationGroup::clear()
     if (m_items.isEmpty())
         return;
 
+    for (NavigationItem *item : qAsConst(m_items))
+        item->disconnect(this);
+
     m_items.clear();
     emit itemsChanged();
+}
+
+void NavigationGroup::trigger(const QString &name)
+{
+    triggerAt(find(name));
+}
+
+void NavigationGroup::triggerAt(int index)
+{
+    NavigationItem *item = itemAt(index);
+    if (!item)
+        return;
+
+    if (item->confirm())
+        emit confirm(item);
+    else
+        item->trigger();
 }
 
 void NavigationGroup::data_append(QQmlListProperty<QObject> *property, QObject *object)

@@ -571,6 +571,9 @@ QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         m_relayout = true;
     }
 
+    if (!viewNode)
+        return nullptr;
+
     if (m_relayout) {
         for (int column = 0; column < columns; ++column) {
             for (int row = 0; row < rows; ++row) {

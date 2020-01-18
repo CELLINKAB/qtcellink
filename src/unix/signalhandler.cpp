@@ -44,9 +44,11 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-static int sigIntFd[2];
-static int sigHupFd[2];
-static int sigTermFd[2];
+namespace {
+int sigIntFd[2];
+int sigHupFd[2];
+int sigTermFd[2];
+}
 
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_GCC("-Wunused-result")
@@ -77,13 +79,13 @@ SignalHandler::SignalHandler(QObject *parent) : QObject(parent)
 {
 #ifdef Q_OS_UNIX
     if (::socketpair(AF_UNIX, SOCK_STREAM, 0, sigIntFd))
-        qFatal("Couldn't create INT socketpair");
+        qFatal("Couldn't create SIGINT socketpair");
 
     if (::socketpair(AF_UNIX, SOCK_STREAM, 0, sigHupFd))
-        qFatal("Couldn't create HUP socketpair");
+        qFatal("Couldn't create SIGHUP socketpair");
 
     if (::socketpair(AF_UNIX, SOCK_STREAM, 0, sigTermFd))
-        qFatal("Couldn't create TERM socketpair");
+        qFatal("Couldn't create SIGTERM socketpair");
 
     sigHupNotifier = new QSocketNotifier(sigHupFd[1], QSocketNotifier::Read, this);
     connect(sigHupNotifier, &QSocketNotifier::activated, this, &SignalHandler::handleSigHup);

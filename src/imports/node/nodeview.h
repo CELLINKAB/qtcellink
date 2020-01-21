@@ -52,6 +52,7 @@ class NodeView : public QQuickFlickable
     Q_PROPERTY(QRect selection READ selection NOTIFY selectionChanged)
     Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode NOTIFY selectionModeChanged)
     Q_PROPERTY(QItemSelectionModel *selectionModel READ selectionModel WRITE setSelectionModel NOTIFY selectionModelChanged)
+    Q_PROPERTY(bool pressed READ isPressed NOTIFY pressedChanged)
     Q_PROPERTY(bool selecting READ isSelecting NOTIFY selectingChanged)
     Q_PROPERTY(qreal nodeWidth READ nodeWidth WRITE setNodeWidth NOTIFY nodeWidthChanged)
     Q_PROPERTY(qreal nodeHeight READ nodeHeight WRITE setNodeHeight NOTIFY nodeHeightChanged)
@@ -89,6 +90,9 @@ public:
 
     QItemSelectionModel *selectionModel() const;
     void setSelectionModel(QItemSelectionModel *selectionModel);
+
+    bool isPressed() const;
+    void setPressed(bool pressed);
 
     bool isSelecting() const;
     void setSelecting(bool selecting);
@@ -140,6 +144,7 @@ signals:
     void selectionChanged();
     void selectionModeChanged();
     void selectionModelChanged();
+    void pressedChanged();
     void selectingChanged();
     void nodeWidthChanged();
     void nodeHeightChanged();

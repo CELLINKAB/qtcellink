@@ -190,6 +190,20 @@ void NodeItem::setSelectionModel(QItemSelectionModel *selectionModel)
     emit selectionModelChanged();
 }
 
+bool NodeItem::isPressed() const
+{
+    return m_pressed;
+}
+
+void NodeItem::setPressed(bool pressed)
+{
+    if (m_pressed == pressed)
+        return;
+
+    m_pressed = pressed;
+    emit pressedChanged();
+}
+
 bool NodeItem::isSelecting() const
 {
     return m_selecting;
@@ -388,6 +402,7 @@ void NodeItem::cancelSelection()
         m_selectionModel->clearCurrentIndex();
     stopPressAndHold();
     setSelecting(false);
+    setPressed(false);
 }
 
 void NodeItem::mousePressEvent(QMouseEvent *event)
@@ -402,6 +417,7 @@ void NodeItem::mousePressEvent(QMouseEvent *event)
         m_selectionModel->setCurrentIndex(index, QItemSelectionModel::Current);
         startPressAndHold();
         emit pressed(index);
+        setPressed(true);
     }
     event->accept();
 }
@@ -444,6 +460,7 @@ void NodeItem::mouseReleaseEvent(QMouseEvent *event)
                 emit clicked(index);
             }
             emit activated(index);
+            setPressed(false);
         }
     } else {
         cancelSelection();

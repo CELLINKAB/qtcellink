@@ -1,0 +1,3 @@
+module QtCellink.License
+plugin qtcellinklicenseplugin
+classname QtCellinkLicensePlugin

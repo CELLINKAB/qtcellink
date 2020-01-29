@@ -8,6 +8,7 @@ import QtQuick.tooling 1.2
 
 Module {
     dependencies: ["QtQuick 2.0"]
+    Component { name: "AbstractOpacityDelegate"; prototype: "NodeDelegate" }
     Component { name: "AbstractRectDelegate"; prototype: "NodeDelegate" }
     Component { name: "AbstractTextDelegate"; prototype: "NodeDelegate" }
     Component {
@@ -17,7 +18,11 @@ Module {
         exportMetaObjectRevisions: [0]
         Property { name: "orientation"; type: "Qt::Orientation" }
     }
-    Component { name: "NodeDelegate"; prototype: "QObject" }
+    Component {
+        name: "NodeDelegate"
+        prototype: "QObject"
+        Signal { name: "changed" }
+    }
     Component {
         name: "NodeItem"
         defaultProperty: "data"
@@ -33,11 +38,14 @@ Module {
             }
         }
         Property { name: "count"; type: "int"; isReadonly: true }
-        Property { name: "rows"; type: "int"; isReadonly: true }
-        Property { name: "columns"; type: "int"; isReadonly: true }
+        Property { name: "rows"; type: "int" }
+        Property { name: "columns"; type: "int" }
+        Property { name: "selection"; type: "QRect"; isReadonly: true }
         Property { name: "model"; type: "QObject"; isPointer: true }
         Property { name: "selectionMode"; type: "SelectionMode" }
         Property { name: "selectionModel"; type: "QItemSelectionModel"; isPointer: true }
+        Property { name: "pressed"; type: "bool"; isReadonly: true }
+        Property { name: "selecting"; type: "bool"; isReadonly: true }
         Property { name: "nodeWidth"; type: "double" }
         Property { name: "nodeHeight"; type: "double" }
         Property { name: "nodeSpacing"; type: "double" }
@@ -45,10 +53,30 @@ Module {
         Property { name: "nodeScaleY"; type: "double" }
         Property { name: "delegates"; type: "NodeDelegate"; isList: true; isReadonly: true }
         Signal {
+            name: "pressed"
+            Parameter { name: "index"; type: "QModelIndex" }
+        }
+        Signal {
+            name: "released"
+            Parameter { name: "index"; type: "QModelIndex" }
+        }
+        Signal {
+            name: "activated"
+            Parameter { name: "index"; type: "QModelIndex" }
+        }
+        Signal {
+            name: "clicked"
+            Parameter { name: "index"; type: "QModelIndex" }
+        }
+        Signal {
             name: "ensureVisible"
             Parameter { name: "rect"; type: "QRectF" }
         }
         Method { name: "selectAll" }
+        Method {
+            name: "select"
+            Parameter { name: "selection"; type: "QRect" }
+        }
         Method { name: "clearSelection" }
         Method { name: "cancelSelection" }
     }
@@ -67,11 +95,14 @@ Module {
             }
         }
         Property { name: "count"; type: "int"; isReadonly: true }
-        Property { name: "rows"; type: "int"; isReadonly: true }
-        Property { name: "columns"; type: "int"; isReadonly: true }
+        Property { name: "rows"; type: "int" }
+        Property { name: "columns"; type: "int" }
         Property { name: "model"; type: "QObject"; isPointer: true }
+        Property { name: "selection"; type: "QRect"; isReadonly: true }
         Property { name: "selectionMode"; type: "SelectionMode" }
         Property { name: "selectionModel"; type: "QItemSelectionModel"; isPointer: true }
+        Property { name: "pressed"; type: "bool"; isReadonly: true }
+        Property { name: "selecting"; type: "bool"; isReadonly: true }
         Property { name: "nodeWidth"; type: "double" }
         Property { name: "nodeHeight"; type: "double" }
         Property { name: "nodeSpacing"; type: "double" }
@@ -84,11 +115,19 @@ Module {
         Property { name: "maximumZoomFactor"; type: "double" }
         Property { name: "nodeItem"; type: "NodeItem"; isPointer: true }
         Signal {
+            name: "clicked"
+            Parameter { name: "index"; type: "QModelIndex" }
+        }
+        Signal {
             name: "zoomChanged"
             Parameter { name: "factor"; type: "double" }
             Parameter { name: "point"; type: "QPointF" }
         }
         Method { name: "selectAll" }
+        Method {
+            name: "select"
+            Parameter { name: "selection"; type: "QRect" }
+        }
         Method { name: "clearSelection" }
         Method { name: "cancelSelection" }
         Method {
@@ -110,6 +149,22 @@ Module {
             Parameter { name: "factor"; type: "double" }
         }
         Method { name: "zoomOut" }
+    }
+    Component {
+        name: "OpacityDelegate"
+        prototype: "AbstractOpacityDelegate"
+        exports: ["QtCellink.Node/OpacityDelegate 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "opacityRole"; type: "int" }
+    }
+    Component {
+        name: "ProgressDelegate"
+        prototype: "RectDelegate"
+        exports: ["QtCellink.Node/ProgressDelegate 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "progressRole"; type: "int" }
+        Property { name: "orientation"; type: "Qt::Orientation" }
+        Property { name: "layoutDirection"; type: "Qt::LayoutDirection" }
     }
     Component {
         name: "RectDelegate"

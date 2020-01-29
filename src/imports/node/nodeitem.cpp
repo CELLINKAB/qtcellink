@@ -588,7 +588,7 @@ QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         m_relayout = true;
     }
 
-    if (!viewNode)
+    if (!viewNode || !m_model)
         return nullptr;
 
     if (m_relayout) {
@@ -603,8 +603,7 @@ QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
             }
         }
 
-        if (m_model)
-            m_updates = QItemSelection(m_model->index(0, 0), m_model->index(rows - 1, columns - 1));
+        m_updates = QItemSelection(m_model->index(0, 0), m_model->index(rows - 1, columns - 1));
 
         m_relayout = false;
     }

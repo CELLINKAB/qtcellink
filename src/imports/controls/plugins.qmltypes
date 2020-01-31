@@ -70,38 +70,6 @@ Module {
         defaultProperty: "contentData"
     }
     Component {
-        prototype: "QQuickMenu"
-        name: "QtCellink.Controls/Menu 1.0"
-        exports: ["QtCellink.Controls/Menu 1.0"]
-        exportMetaObjectRevisions: [0]
-        isComposite: true
-        defaultProperty: "contentData"
-    }
-    Component {
-        prototype: "QQuickMenuBar"
-        name: "QtCellink.Controls/MenuBar 1.0"
-        exports: ["QtCellink.Controls/MenuBar 1.0"]
-        exportMetaObjectRevisions: [0]
-        isComposite: true
-        defaultProperty: "contentData"
-    }
-    Component {
-        prototype: "QQuickMenuItem"
-        name: "QtCellink.Controls/MenuItem 1.0"
-        exports: ["QtCellink.Controls/MenuItem 1.0"]
-        exportMetaObjectRevisions: [0]
-        isComposite: true
-        defaultProperty: "data"
-    }
-    Component {
-        prototype: "QQuickMenuSeparator"
-        name: "QtCellink.Controls/MenuSeparator 1.0"
-        exports: ["QtCellink.Controls/MenuSeparator 1.0"]
-        exportMetaObjectRevisions: [0]
-        isComposite: true
-        defaultProperty: "data"
-    }
-    Component {
         prototype: "ProgressIndicator"
         name: "QtCellink.Controls/ProgressIndicator 1.0"
         exports: ["QtCellink.Controls/ProgressIndicator 1.0"]

@@ -1,0 +1,3 @@
+module QtCellink.Native
+plugin qtcellinknativeplugin
+classname QtCellinkNativePlugin

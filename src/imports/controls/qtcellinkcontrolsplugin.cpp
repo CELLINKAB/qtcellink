@@ -21,8 +21,6 @@
 
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qcommandlineparser.h>
 #include <QtQuickControls2/qquickstyle.h>
 #include <QtQuickControls2/private/qquickstyleselector_p.h>
 #include "progressindicator.h"
@@ -47,24 +45,6 @@ QtCellinkControlsPlugin::QtCellinkControlsPlugin(QObject *parent)
 {
 }
 
-static bool useNative()
-{
-    QCommandLineParser cmdLine;
-    QCommandLineOption nativeOption(QStringLiteral("native"));
-    QCommandLineOption nonNativeOption(QStringLiteral("no-native"));
-    cmdLine.addOptions({nativeOption, nonNativeOption});
-    cmdLine.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
-    cmdLine.parse(QCoreApplication::arguments());
-
-#if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
-    // native menus by default on macOS and Windows
-    return !cmdLine.isSet(nonNativeOption);
-#else
-    // non-native menus by default on Linux
-    return cmdLine.isSet(nativeOption);
-#endif
-}
-
 void QtCellinkControlsPlugin::registerTypes(const char *uri)
 {
     QQuickStyleSelector selector;
@@ -82,18 +62,6 @@ void QtCellinkControlsPlugin::registerTypes(const char *uri)
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("RowButton.qml"))), uri, 1, 0, "RowButton");
     qmlRegisterType(typeUrl(QStringLiteral("SplitView.qml")), uri, 1, 0, "SplitView");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("TitleSeparator.qml"))), uri, 1, 0, "TitleSeparator");
-
-    if (useNative()) {
-        qmlRegisterType(typeUrl(QStringLiteral("NativeMenu.qml")), uri, 1, 0, "Menu");
-        qmlRegisterType(typeUrl(QStringLiteral("NativeMenuBar.qml")), uri, 1, 0, "MenuBar");
-        qmlRegisterType(typeUrl(QStringLiteral("NativeMenuItem.qml")), uri, 1, 0, "MenuItem");
-        qmlRegisterType(typeUrl(QStringLiteral("NativeMenuSeparator.qml")), uri, 1, 0, "MenuSeparator");
-    } else {
-        qmlRegisterType(typeUrl(QStringLiteral("QuickMenu.qml")), uri, 1, 0, "Menu");
-        qmlRegisterType(typeUrl(QStringLiteral("QuickMenuBar.qml")), uri, 1, 0, "MenuBar");
-        qmlRegisterType(typeUrl(QStringLiteral("QuickMenuItem.qml")), uri, 1, 0, "MenuItem");
-        qmlRegisterType(typeUrl(QStringLiteral("QuickMenuSeparator.qml")), uri, 1, 0, "MenuSeparator");
-    }
 
     QByteArray import = QByteArray(uri) + ".impl";
     qmlRegisterType<ProgressIndicatorImpl>(import, 1, 0, "ProgressIndicatorImpl");

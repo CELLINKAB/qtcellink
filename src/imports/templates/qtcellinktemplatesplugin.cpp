@@ -21,7 +21,6 @@
 
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
-#include <QtCore/qloggingcategory.h>
 
 #include "buttonrow.h"
 #include "componentview.h"
@@ -30,13 +29,6 @@
 #include "progressindicator.h"
 #include "rowbutton.h"
 #include "titleseparator.h"
-
-#include "nativemenubar.h"
-#include "nativemenu.h"
-#include "nativemenuitem.h"
-#include "nativemenuseparator.h"
-
-Q_LOGGING_CATEGORY(lcMenus, "qtcellink.menus")
 
 class QtCellinkTemplatesPlugin: public QQmlExtensionPlugin
 {
@@ -63,11 +55,6 @@ void QtCellinkTemplatesPlugin::registerTypes(const char *uri)
     qmlRegisterType<ProgressIndicator>(uri, 1, 0, "ProgressIndicator");
     qmlRegisterType<RowButton>(uri, 1, 0, "RowButton");
     qmlRegisterType<TitleSeparator>(uri, 1, 0, "TitleSeparator");
-
-    qmlRegisterType<NativeMenu>(uri, 1, 0, "NativeMenu");
-    qmlRegisterType<NativeMenuBar>(uri, 1, 0, "NativeMenuBar");
-    qmlRegisterType<NativeMenuItem>(uri, 1, 0, "NativeMenuItem");
-    qmlRegisterType<NativeMenuSeparator>(uri, 1, 0, "NativeMenuSeparator");
 
     qmlRegisterRevision<QQuickItem, QT_VERSION_MINOR>(uri, 1, 0);
     qmlRegisterRevision<QQuickControl, QT_VERSION_MINOR>(uri, 1, 0);

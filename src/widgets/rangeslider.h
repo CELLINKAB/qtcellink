@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+ ** Copyright (C) 2020 CELLINK AB <info@cellink.com>
  ** Copyright (C) Qxt Foundation. Some rights reserved.
  **
  ** This file is based on the QxtSpanSlider class from the Qxt library.

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2019 CELLINK AB <info@cellink.com>
+ * Copyright (C) 2020 CELLINK AB <info@cellink.com>
  * Copyright (c) 2011 Morgan Leborgne
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy

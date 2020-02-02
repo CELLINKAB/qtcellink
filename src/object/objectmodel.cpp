@@ -285,7 +285,7 @@ QJsonArray ObjectModel::saveState() const
 
 QHash<int, QByteArray> ObjectModel::roleNames() const
 {
-    QHash<int, QByteArray> roles = {
+    static const QHash<int, QByteArray> roles = {
         { ObjectRole, "object" },
         { NameRole, "name" },
         { UuidRole, "uuid" },
@@ -307,18 +307,15 @@ QVariant ObjectModel::data(const QModelIndex &index, int role) const
     if (index.row() < 0 || index.row() >= m_objects.count())
         return QVariant();
 
-    switch (role) {
-    case ObjectRole:
+    if (role == ObjectRole)
         return QVariant::fromValue(get(index.row()));
-    case NameRole:
-        return m_objects.at(index.row())->name();
-    case UuidRole:
-        return m_objects.at(index.row())->uuid();
-    case DateRole:
-        return m_objects.at(index.row())->date();
-    default:
+
+    const QByteArray propertyName = roleNames().value(role);
+    if (propertyName.isEmpty())
         return QVariant();
-    }
+
+    Object *object = m_objects.at(index.row());
+    return object->property(propertyName);
 }
 
 QString ObjectModel::filePath() const
@@ -416,15 +413,13 @@ void ObjectModel::doInsert(int index, Object *object)
 
 bool ObjectModel::lessThan(Object *left, Object *right, int role) const
 {
-    switch (role) {
-    case NameRole:
-        return left->name() < right->name();
-    case DateRole:
-        return left->date() < right->date();
-    default:
+    const QByteArray propertyName = roleNames().value(role);
+    if (propertyName.isEmpty()) {
         qCWarning(loggingCategory()) << "unsupported sort role:" << role;
         return false;
     }
+
+    return left->property(propertyName) < right->property(propertyName);
 }
 
 void ObjectModel::cleanupObject(Object *object) const

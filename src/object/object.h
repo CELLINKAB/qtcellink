@@ -101,7 +101,7 @@ protected:
     void endInitialize();
 
     virtual QJsonObject toJson() const;
-    virtual void initFrom(const QJsonObject &json);
+    virtual void initJson(const QJsonObject &json);
 
     virtual void modify();
     virtual void updateValid();

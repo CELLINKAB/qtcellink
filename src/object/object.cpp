@@ -178,7 +178,7 @@ QJsonObject Object::saveState() const
 void Object::restoreState(const QJsonObject &json)
 {
     beginInitialize();
-    initFrom(json);
+    initJson(json);
     endInitialize();
 
     resetModified();
@@ -235,7 +235,7 @@ QJsonObject Object::toJson() const
     return QJsonObject();
 }
 
-void Object::initFrom(const QJsonObject &json)
+void Object::initJson(const QJsonObject &json)
 {
     Q_UNUSED(json);
 }

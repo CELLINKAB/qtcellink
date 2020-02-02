@@ -81,6 +81,8 @@ public:
 
     QString filePath() const;
 
+    Q_INVOKABLE void initFrom(const Object *object);
+
 public slots:
     virtual bool load(const QString &filePath = QString());
     virtual bool save(const QString &filePath = QString());

@@ -190,6 +190,14 @@ QString Object::filePath() const
     return m_filePath;
 }
 
+void Object::initFrom(const Object *object)
+{
+    if (!object)
+        return;
+
+    initJson(object->toJson());
+}
+
 bool Object::load(const QString &filePath)
 {
     if (!filePath.isEmpty())

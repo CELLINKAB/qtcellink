@@ -76,6 +76,11 @@ ObjectModel::ObjectModel(const QString &category, QObject *parent)
 {
 }
 
+ObjectModel::ObjectModel(const QString &category, const QMetaObject *metaObject, QObject *parent)
+    : QAbstractListModel(parent), m_category(category), m_metaObject(metaObject)
+{
+}
+
 QString ObjectModel::category() const
 {
     return m_category;
@@ -399,7 +404,10 @@ void ObjectModel::flush()
 
 Object *ObjectModel::doCreate(QObject *parent) const
 {
-    return new Object(parent);
+    if (!m_metaObject)
+        return new Object(parent);
+
+    return qobject_cast<Object *>(m_metaObject->newInstance(Q_ARG(QObject *, parent)));
 }
 
 void ObjectModel::doInsert(int index, Object *object)

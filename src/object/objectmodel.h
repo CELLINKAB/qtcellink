@@ -50,6 +50,7 @@ class Q_CELLINK_EXPORT ObjectModel : public QAbstractListModel
 
 public:
     explicit ObjectModel(const QString &category, QObject *parent = nullptr);
+    explicit ObjectModel(const QString &category, const QMetaObject *metaObject, QObject *parent = nullptr);
 
     QString category() const;
     void setCategory(const QString &category);
@@ -124,6 +125,7 @@ private:
     Object *m_current = nullptr;
     QList<Object *> m_objects;
     QList<Object *> m_danglingObjects;
+    const QMetaObject *m_metaObject = nullptr;
 };
 
 #endif // OBJECTMODEL_H

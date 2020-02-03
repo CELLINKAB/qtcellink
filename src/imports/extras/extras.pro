@@ -22,6 +22,9 @@ HEADERS += \
     $$PWD/license.h \
     $$PWD/licensemodel.h \
     $$PWD/mnemoniclabel.h \
+    $$PWD/navigationgroup.h \
+    $$PWD/navigationitem.h \
+    $$PWD/navigationstack.h \
     $$PWD/paddedrectangle.h \
     $$PWD/rect.h
 
@@ -34,6 +37,9 @@ SOURCES += \
     $$PWD/keyboard.cpp \
     $$PWD/licensemodel.cpp \
     $$PWD/mnemoniclabel.cpp \
+    $$PWD/navigationgroup.cpp \
+    $$PWD/navigationitem.cpp \
+    $$PWD/navigationstack.cpp \
     $$PWD/paddedrectangle.cpp \
     $$PWD/qtcellinkextrasplugin.cpp \
     $$PWD/rect.cpp

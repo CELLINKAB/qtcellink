@@ -1,3 +1,0 @@
-module QtCellink.Navigation
-plugin qtcellinknavigationplugin
-classname QtCellinkNavigationPlugin

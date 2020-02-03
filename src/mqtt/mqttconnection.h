@@ -51,9 +51,8 @@ public:
     void setPort(quint16 port);
 
     bool subscribe(const QString &topic, std::function<void()> callback = nullptr);
-    virtual void publish(const QString &topic, const QByteArray &message = QByteArray(), bool retain = false);
-    virtual void unpublish(const QString &topic);
-    virtual void receive(const QString &topic, const QByteArray &message);
+    void publish(const QString &topic, const QByteArray &message = QByteArray(), bool retain = false);
+    void unpublish(const QString &topic);
 
     bool willRetain() const;
     QString willTopic() const;
@@ -62,7 +61,7 @@ public:
 
 signals:
     void subscribed(const QString &topic);
-    void received(const QString &topic, const QByteArray &message);
+    void messageReceived(const QString &topic, const QByteArray &message);
 
 protected:
     void doOpen() override;

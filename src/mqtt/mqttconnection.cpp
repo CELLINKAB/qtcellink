@@ -54,8 +54,7 @@ MqttConnection::MqttConnection(QObject *parent)
     connect(m_mqttClient, &QMqttClient::messageReceived, this, [this](const QByteArray &message, const QMqttTopicName &topic) {
         QString topicName = topic.name();
         qCDebug(lcMqtt) << "received:" << topicName << message;
-        receive(topicName, message);
-        emit received(topicName, message);
+        emit messageReceived(topicName, message);
     });
 
     connect(m_mqttClient, &QMqttClient::errorChanged, this, [this](QMqttClient::ClientError err) {
@@ -127,12 +126,6 @@ void MqttConnection::unpublish(const QString &topic)
 
     qCDebug(lcMqtt) << "unpublished" << topic;
     m_mqttClient->publish(topic, QByteArray(), 0, true);
-}
-
-void MqttConnection::receive(const QString &topic, const QByteArray &message)
-{
-    Q_UNUSED(topic)
-    Q_UNUSED(message)
 }
 
 bool MqttConnection::willRetain() const

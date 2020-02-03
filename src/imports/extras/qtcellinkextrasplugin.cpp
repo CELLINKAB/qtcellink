@@ -25,13 +25,15 @@
 
 #include "color.h"
 #include "colorimage.h"
+#include "filtermodel.h"
 #include "iconimage.h"
 #include "iconlabel.h"
 #include "keyboard.h"
+#include "license.h"
+#include "licensemodel.h"
 #include "mnemoniclabel.h"
 #include "paddedrectangle.h"
 #include "rect.h"
-#include "filtermodel.h"
 
 class QtCellinkExtrasPlugin: public QQmlExtensionPlugin
 {
@@ -57,6 +59,8 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterType<IconImage>(uri, 1, 0, "IconImage");
     qmlRegisterType<IconLabel>(uri, 1, 0, "IconLabel");
     qmlRegisterSingletonType<Keyboard>(uri, 1, 0, "Keyboard", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Keyboard(engine); });
+    qRegisterMetaType<License>();
+    qmlRegisterType<LicenseModel>(uri, 1, 0, "LicenseModel");
     qmlRegisterType<MnemonicLabel>(uri, 1, 0, "MnemonicLabel");
     qmlRegisterType<PaddedRectangle>(uri, 1, 0, "PaddedRectangle");
     qmlRegisterSingletonType<Rect>(uri, 1, 0, "Rect", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Rect(engine); });

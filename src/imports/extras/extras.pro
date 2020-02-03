@@ -19,6 +19,8 @@ HEADERS += \
     $$PWD/iconlabel.h \
     $$PWD/iconlabel_p.h \
     $$PWD/keyboard.h \
+    $$PWD/license.h \
+    $$PWD/licensemodel.h \
     $$PWD/mnemoniclabel.h \
     $$PWD/paddedrectangle.h \
     $$PWD/rect.h
@@ -30,6 +32,7 @@ SOURCES += \
     $$PWD/iconimage.cpp \
     $$PWD/iconlabel.cpp \
     $$PWD/keyboard.cpp \
+    $$PWD/licensemodel.cpp \
     $$PWD/mnemoniclabel.cpp \
     $$PWD/paddedrectangle.cpp \
     $$PWD/qtcellinkextrasplugin.cpp \

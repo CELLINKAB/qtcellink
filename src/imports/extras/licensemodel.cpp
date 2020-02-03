@@ -73,7 +73,7 @@ QString LicenseModel::manifest() const
 static License parseLicense(License license, const QString &value, const QStringList &licenses)
 {
     license.licenses = licenses;
-    const QStringList parts = value.split(' ', QString::SkipEmptyParts);
+    const QStringList parts = value.split(QLatin1Char(' '), QString::SkipEmptyParts);
     for (QString part : parts) {
         while (!part.isEmpty() && !part.front().isLetterOrNumber())
             part.remove(0, 1);
@@ -106,7 +106,7 @@ void LicenseModel::setManifest(const QString &manifest)
         QMap<QString, License> licenses;
         QTextStream stream(&file);
         while (!model.isNull() && stream.readLineInto(&line)) {
-            int colon = line.indexOf(':');
+            int colon = line.indexOf(QLatin1Char(':'));
             if (colon == -1)
                 continue;
 

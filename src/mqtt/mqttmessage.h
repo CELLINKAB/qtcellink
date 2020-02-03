@@ -30,49 +30,24 @@
 **
 ****************************************************************************/
 
-#ifndef MQTTCONNECTION_H
-#define MQTTCONNECTION_H
+#ifndef MQTTMESSAGE_H
+#define MQTTMESSAGE_H
 
 #include <QtCellink/cellink.h>
-#include <QtCellink/connection.h>
-#include <QtCellink/mqttmessage.h>
-#include <functional>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qstring.h>
 
-class QMqttClient;
-
-class Q_CELLINK_EXPORT MqttConnection : public Connection
+struct Q_CELLINK_EXPORT MqttMessage
 {
-    Q_OBJECT
+    static MqttMessage retained(const QString &topic, const QByteArray &payload = QByteArray(), quint8 qos = 0)
+    {
+        return MqttMessage({topic, payload, qos, true});
+    }
 
-public:
-    explicit MqttConnection(QObject *parent = nullptr);
-    ~MqttConnection();
-
-    quint16 port() const;
-    void setPort(quint16 port);
-
-    bool subscribe(const QString &topic, std::function<void()> callback = nullptr);
-    void unsubscribe(const QString &topic);
-
-    void publish(const MqttMessage &message);
-    void publish(const QString &topic, const QByteArray &message = QByteArray());
-    void unpublish(const QString &topic);
-
-    MqttMessage willMessage() const;
-    void setWillMessage(const MqttMessage &message);
-    void setWillMessage(const QString &topic, const QByteArray &message = QByteArray());
-
-signals:
-    void subscribed(const QString &topic);
-    void messageReceived(const QString &topic, const QByteArray &message);
-
-protected:
-    void doOpen() override;
-    void doClose() override;
-    const QLoggingCategory &loggingCategory() const override;
-
-private:
-    QMqttClient *m_mqttClient = nullptr;
+    QString topic;
+    QByteArray payload;
+    quint8 qos = 0;
+    bool retain = false;
 };
 
-#endif // MQTTCONNECTION_H
+#endif // MQTTMESSAGE_H

@@ -115,13 +115,18 @@ void MqttConnection::unsubscribe(const QString &topic)
     m_mqttClient->unsubscribe(topic);
 }
 
-void MqttConnection::publish(const QString &topic, const QByteArray &message, bool retain)
+void MqttConnection::publish(const MqttMessage &message)
 {
-    if (topic.isEmpty())
+    if (message.topic.isEmpty())
         return;
 
-    qCDebug(lcMqtt) << "published" << topic << message;
-    m_mqttClient->publish(topic, message, 0, retain);
+    qCDebug(lcMqtt) << "published" << message.topic << message.payload;
+    m_mqttClient->publish(message.topic, message.payload, message.qos, message.retain);
+}
+
+void MqttConnection::publish(const QString &topic, const QByteArray &message)
+{
+    publish({topic, message});
 }
 
 void MqttConnection::unpublish(const QString &topic)
@@ -133,26 +138,22 @@ void MqttConnection::unpublish(const QString &topic)
     m_mqttClient->publish(topic, QByteArray(), 0, true);
 }
 
-bool MqttConnection::willRetain() const
+MqttMessage MqttConnection::willMessage() const
 {
-    return m_mqttClient->willRetain();
+    return { m_mqttClient->willTopic(), m_mqttClient->willMessage(), m_mqttClient->willRetain(), m_mqttClient->willQoS() };
 }
 
-QString MqttConnection::willTopic() const
+void MqttConnection::setWillMessage(const MqttMessage &message)
 {
-    return m_mqttClient->willTopic();
+    m_mqttClient->setWillTopic(message.topic);
+    m_mqttClient->setWillMessage(message.payload);
+    m_mqttClient->setWillRetain(message.retain);
+    m_mqttClient->setWillQoS(message.qos);
 }
 
-QByteArray MqttConnection::willMessage() const
+void MqttConnection::setWillMessage(const QString &topic, const QByteArray &message)
 {
-    return m_mqttClient->willMessage();
-}
-
-void MqttConnection::setWillMessage(const QString &topic, const QByteArray &message, bool retain)
-{
-    m_mqttClient->setWillTopic(topic);
-    m_mqttClient->setWillMessage(message);
-    m_mqttClient->setWillRetain(retain);
+    setWillMessage({topic, message});
 }
 
 void MqttConnection::doOpen()

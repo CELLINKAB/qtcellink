@@ -25,6 +25,9 @@ HEADERS += \
     $$PWD/navigationgroup.h \
     $$PWD/navigationitem.h \
     $$PWD/navigationstack.h \
+    $$PWD/nodedelegate.h \
+    $$PWD/nodeitem.h \
+    $$PWD/nodeview.h \
     $$PWD/paddedrectangle.h \
     $$PWD/rect.h
 
@@ -40,6 +43,9 @@ SOURCES += \
     $$PWD/navigationgroup.cpp \
     $$PWD/navigationitem.cpp \
     $$PWD/navigationstack.cpp \
+    $$PWD/nodedelegate.cpp \
+    $$PWD/nodeitem.cpp \
+    $$PWD/nodeview.cpp \
     $$PWD/paddedrectangle.cpp \
     $$PWD/qtcellinkextrasplugin.cpp \
     $$PWD/rect.cpp

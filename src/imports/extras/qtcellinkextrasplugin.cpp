@@ -32,6 +32,9 @@
 #include "license.h"
 #include "licensemodel.h"
 #include "mnemoniclabel.h"
+#include "navigationgroup.h"
+#include "navigationitem.h"
+#include "navigationstack.h"
 #include "paddedrectangle.h"
 #include "rect.h"
 
@@ -62,6 +65,9 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qRegisterMetaType<License>();
     qmlRegisterType<LicenseModel>(uri, 1, 0, "LicenseModel");
     qmlRegisterType<MnemonicLabel>(uri, 1, 0, "MnemonicLabel");
+    qmlRegisterType<NavigationGroup>(uri, 1, 0, "NavigationGroup");
+    qmlRegisterType<NavigationItem>(uri, 1, 0, "NavigationItem");
+    qmlRegisterType<NavigationStack>(uri, 1, 0, "NavigationStack");
     qmlRegisterType<PaddedRectangle>(uri, 1, 0, "PaddedRectangle");
     qmlRegisterSingletonType<Rect>(uri, 1, 0, "Rect", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Rect(engine); });
 }

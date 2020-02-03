@@ -310,6 +310,11 @@ void NodeItem::setNodeScaleY(qreal nodeScaleY)
     emit nodeScaleYChanged();
 }
 
+QList<NodeDelegate *> NodeItem::delegateList() const
+{
+    return m_delegates;
+}
+
 QQmlListProperty<NodeDelegate> NodeItem::delegates()
 {
     return QQmlListProperty<NodeDelegate>(this, nullptr, delegates_append, delegates_count, delegates_at, delegates_clear);
@@ -358,6 +363,14 @@ QModelIndex NodeItem::nodeAt(const QPointF &pos) const
     int row = std::floor(y / (nh + vsp));
     int column = std::floor(x / (nw + hsp));
     return m_model->index(std::min(row, rows - 1), std::min(column, columns - 1));
+}
+
+QModelIndex NodeItem::nodeIndex(int row, int column) const
+{
+    if (!m_model)
+        return QModelIndex();
+
+    return m_model->index(row, column);
 }
 
 QRectF NodeItem::nodeRect(const QModelIndex &index) const
@@ -513,16 +526,45 @@ public:
 class QuickViewNode : public QSGTransformNode
 {
 public:
-    QuickViewNode(int rows, int columns) : m_rows(rows), m_nodes(rows * columns) { }
+    QuickViewNode(NodeItem *nodeItem) : m_rows(nodeItem->rows()), m_nodes(nodeItem->count())
+    {
+        const QList<NodeDelegate *> delegates = nodeItem->delegateList();
+        for (int column = 0; column < nodeItem->columns(); ++column) {
+            for (int row = 0; row < nodeItem->rows(); ++row) {
+                QuickItemNode *itemNode = new QuickItemNode;
+                appendChildNode(itemNode);
+
+                QSGNode *parentNode = itemNode;
+                for (NodeDelegate *delegate : delegates) {
+                    QSGNode *node = delegate->createNode(nodeItem);
+                    Q_ASSERT(node);
+                    itemNode->nodes += node;
+                    parentNode->appendChildNode(node);
+                    parentNode = node;
+                }
+
+                m_nodes[row + column * m_rows] = itemNode;
+            }
+        }
+    }
 
     QuickItemNode *itemNode(int row, int column) const
     {
         return m_nodes.value(row + column * m_rows);
     }
 
-    void setItemNode(int row, int column, QuickItemNode *node)
+    void relayout(NodeItem *nodeItem)
     {
-        m_nodes[row + column * m_rows] = node;
+        for (int column = 0; column < nodeItem->columns(); ++column) {
+            for (int row = 0; row < nodeItem->rows(); ++row) {
+                QuickItemNode *node = itemNode(row, column);
+                if (!node)
+                    continue;
+
+                const QRectF geometry = nodeItem->nodeRect(nodeItem->nodeIndex(row, column));
+                node->setMatrix(QTransform::fromTranslate(geometry.x(), geometry.y()));
+            }
+        }
     }
 
 private:
@@ -550,6 +592,40 @@ static void lowerNode(QSGNode *node)
     parentNode->prependChildNode(node);
 }
 
+typedef void (*StackFunc)(QSGNode *node);
+
+static void restackNodes(QuickViewNode *viewNode, const QItemSelection &selection, StackFunc stackFunc)
+{
+    for (const QItemSelectionRange &range : selection) {
+        const QList<QModelIndex> indexes = range.indexes();
+        for (const QModelIndex &index : indexes)
+            stackFunc(viewNode->itemNode(index.row(), index.column()));
+    }
+}
+
+static void updateNodes(QuickViewNode *viewNode, const QItemSelection &selection, NodeItem *nodeItem)
+{
+    const QList<NodeDelegate *> delegates = nodeItem->delegateList();
+    for (const QItemSelectionRange &range : selection) {
+        for (int row = range.top(); row <= range.bottom(); ++row) {
+            for (int column = range.left(); column <= range.right(); ++column) {
+                QuickItemNode *itemNode = viewNode->itemNode(row, column);
+                if (!itemNode || itemNode->nodes.count() != delegates.count())
+                    continue;
+
+                const QModelIndex index = nodeItem->nodeIndex(row, column);
+                if (!nodeItem->isEnabled(index))
+                    lowerNode(itemNode);
+
+                for (int i = 0; i < delegates.count(); ++i) {
+                    NodeDelegate *delegate = delegates.at(i);
+                    delegate->updateNode(itemNode->nodes.at(i), index, nodeItem);
+                }
+            }
+        }
+    }
+}
+
 QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
     int count = NodeItem::count();
@@ -561,29 +637,8 @@ QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
     if (m_rebuild) {
         delete viewNode;
         viewNode = nullptr;
-
-        if (count > 0) {
-            viewNode = new QuickViewNode(rows, columns);
-
-            for (int column = 0; column < columns; ++column) {
-                for (int row = 0; row < rows; ++row) {
-                    QuickItemNode *itemNode = new QuickItemNode;
-                    viewNode->appendChildNode(itemNode);
-
-                    QSGNode *parentNode = itemNode;
-                    for (NodeDelegate *delegate : qAsConst(m_delegates)) {
-                        QSGNode *node = delegate->createNode(this);
-                        Q_ASSERT(node);
-                        itemNode->nodes += node;
-                        parentNode->appendChildNode(node);
-                        parentNode = node;
-                    }
-
-                    viewNode->setItemNode(row, column, itemNode);
-                }
-            }
-        }
-
+        if (count > 0)
+            viewNode = new QuickViewNode(this);
         m_rebuild = false;
         m_relayout = true;
     }
@@ -592,67 +647,28 @@ QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         return nullptr;
 
     if (m_relayout) {
-        for (int column = 0; column < columns; ++column) {
-            for (int row = 0; row < rows; ++row) {
-                QuickItemNode *itemNode = viewNode->itemNode(row, column);
-                if (!itemNode)
-                    continue;
-
-                const QRectF geometry = nodeRect(m_model->index(row, column));
-                itemNode->setMatrix(QTransform::fromTranslate(geometry.x(), geometry.y()));
-            }
-        }
-
+        viewNode->relayout(this);
         m_updates = QItemSelection(m_model->index(0, 0), m_model->index(rows - 1, columns - 1));
-
         m_relayout = false;
     }
 
-    // lower deselected nodes
     if (!m_deselected.isEmpty()) {
-        for (const QItemSelectionRange &range : m_deselected) {
-            const QList<QModelIndex> indexes = range.indexes();
-            for (const QModelIndex &index : indexes)
-                lowerNode(viewNode->itemNode(index.row(), index.column()));
-        }
+        restackNodes(viewNode, m_deselected, lowerNode); // lower deselected nodes
         m_selected.clear();
     }
 
-    // raise selected nodes
     if (!m_selected.isEmpty()) {
-        for (const QItemSelectionRange &range : m_selected) {
-            const QList<QModelIndex> indexes = range.indexes();
-            for (const QModelIndex &index : indexes)
-                raiseNode(viewNode->itemNode(index.row(), index.column()));
-        }
+        restackNodes(viewNode, m_selected, raiseNode); // raise selected nodes
         m_selected.clear();
     }
 
-    // raise current node
     if (m_current.isValid()) {
-        raiseNode(viewNode->itemNode(m_current.row(), m_current.column()));
+        raiseNode(viewNode->itemNode(m_current.row(), m_current.column())); // raise current node
         m_current = QModelIndex();
     }
 
     if (!m_updates.isEmpty()) {
-        for (const QItemSelectionRange &range : m_updates) {
-            for (int row = range.top(); row <= range.bottom(); ++row) {
-                for (int column = range.left(); column <= range.right(); ++column) {
-                    QuickItemNode *itemNode = viewNode->itemNode(row, column);
-                    if (!itemNode || itemNode->nodes.count() != m_delegates.count())
-                        continue;
-
-                    const QModelIndex index = m_model->index(row, column);
-                    if (!isEnabled(index))
-                        lowerNode(itemNode);
-
-                    for (int i = 0; i < m_delegates.count(); ++i) {
-                        NodeDelegate *delegate = m_delegates.at(i);
-                        delegate->updateNode(itemNode->nodes.at(i), index, this);
-                    }
-                }
-            }
-        }
+        updateNodes(viewNode, m_updates, this);
         m_updates.clear();
     }
 

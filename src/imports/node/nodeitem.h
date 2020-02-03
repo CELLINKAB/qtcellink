@@ -108,6 +108,7 @@ public:
     qreal nodeScaleY() const;
     void setNodeScaleY(qreal nodeScaleY);
 
+    QList<NodeDelegate *> delegateList() const;
     QQmlListProperty<NodeDelegate> delegates();
 
     bool isEnabled(const QModelIndex &index) const;
@@ -115,6 +116,7 @@ public:
     bool isSelected(const QModelIndex &index) const;
 
     virtual QModelIndex nodeAt(const QPointF &pos) const;
+    virtual QModelIndex nodeIndex(int row, int column) const;
     virtual QRectF nodeRect(const QModelIndex &index) const;
 
 public slots:

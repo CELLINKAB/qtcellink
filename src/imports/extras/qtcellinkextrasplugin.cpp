@@ -35,6 +35,9 @@
 #include "navigationgroup.h"
 #include "navigationitem.h"
 #include "navigationstack.h"
+#include "nodedelegate.h"
+#include "nodeitem.h"
+#include "nodeview.h"
 #include "paddedrectangle.h"
 #include "rect.h"
 
@@ -59,6 +62,7 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterSingletonType<Color>(uri, 1, 0, "Color", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Color(engine); });
     qmlRegisterType<ColorImage>(uri, 1, 0, "ColorImage");
     qmlRegisterType<FilterModel>(uri, 1, 0, "FilterModel");
+    qmlRegisterType<HeaderDelegate>(uri, 1, 0, "HeaderDelegate");
     qmlRegisterType<IconImage>(uri, 1, 0, "IconImage");
     qmlRegisterType<IconLabel>(uri, 1, 0, "IconLabel");
     qmlRegisterSingletonType<Keyboard>(uri, 1, 0, "Keyboard", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Keyboard(engine); });
@@ -68,8 +72,18 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterType<NavigationGroup>(uri, 1, 0, "NavigationGroup");
     qmlRegisterType<NavigationItem>(uri, 1, 0, "NavigationItem");
     qmlRegisterType<NavigationStack>(uri, 1, 0, "NavigationStack");
+    qmlRegisterType<NodeItem>(uri, 1, 0, "NodeItem");
+    qmlRegisterType<NodeView>(uri, 1, 0, "NodeView");
+    qmlRegisterType<NodeDelegate>();
+    qmlRegisterType<OpacityDelegate>(uri, 1, 0, "OpacityDelegate");
     qmlRegisterType<PaddedRectangle>(uri, 1, 0, "PaddedRectangle");
+    qmlRegisterType<ProgressDelegate>(uri, 1, 0, "ProgressDelegate");
     qmlRegisterSingletonType<Rect>(uri, 1, 0, "Rect", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Rect(engine); });
+    qmlRegisterType<RectDelegate>(uri, 1, 0, "RectDelegate");
+    qmlRegisterType<TextDelegate>(uri, 1, 0, "TextDelegate");
+
+    qmlRegisterRevision<QQuickItem, QT_VERSION_MINOR>(uri, 1, 0);
+    qmlRegisterRevision<QQuickFlickable, QT_VERSION_MINOR>(uri, 1, 0);
 }
 
 #include "qtcellinkextrasplugin.moc"

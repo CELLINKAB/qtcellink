@@ -110,6 +110,11 @@ bool MqttConnection::subscribe(const QString &topic, std::function<void()> callb
     return true;
 }
 
+void MqttConnection::unsubscribe(const QString &topic)
+{
+    m_mqttClient->unsubscribe(topic);
+}
+
 void MqttConnection::publish(const QString &topic, const QByteArray &message, bool retain)
 {
     if (topic.isEmpty())

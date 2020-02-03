@@ -51,6 +51,8 @@ public:
     void setPort(quint16 port);
 
     bool subscribe(const QString &topic, std::function<void()> callback = nullptr);
+    void unsubscribe(const QString &topic);
+
     void publish(const QString &topic, const QByteArray &message = QByteArray(), bool retain = false);
     void unpublish(const QString &topic);
 

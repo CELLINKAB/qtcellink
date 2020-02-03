@@ -23,14 +23,22 @@
 #include <QtQml/qqml.h>
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qcommandlineparser.h>
+#include <QtCore/qloggingcategory.h>
 
-class QtCellinkControlsPlugin: public QQmlExtensionPlugin
+#include "nativemenubar.h"
+#include "nativemenu.h"
+#include "nativemenuitem.h"
+#include "nativemenuseparator.h"
+
+Q_LOGGING_CATEGORY(lcMenus, "qtcellink.menus")
+
+class QtCellinkMenusPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    QtCellinkControlsPlugin(QObject *parent = nullptr);
+    QtCellinkMenusPlugin(QObject *parent = nullptr);
 
     void registerTypes(const char *uri) override;
 
@@ -38,7 +46,7 @@ private:
     QUrl typeUrl(const QString &fileName) const;
 };
 
-QtCellinkControlsPlugin::QtCellinkControlsPlugin(QObject *parent)
+QtCellinkMenusPlugin::QtCellinkMenusPlugin(QObject *parent)
     : QQmlExtensionPlugin(parent)
 {
 }
@@ -61,8 +69,13 @@ static bool useNative()
 #endif
 }
 
-void QtCellinkControlsPlugin::registerTypes(const char *uri)
+void QtCellinkMenusPlugin::registerTypes(const char *uri)
 {
+    qmlRegisterType<NativeMenu>(uri, 1, 0, "NativeMenu");
+    qmlRegisterType<NativeMenuBar>(uri, 1, 0, "NativeMenuBar");
+    qmlRegisterType<NativeMenuItem>(uri, 1, 0, "NativeMenuItem");
+    qmlRegisterType<NativeMenuSeparator>(uri, 1, 0, "NativeMenuSeparator");
+
     if (useNative()) {
         qmlRegisterType(typeUrl(QStringLiteral("NativeMenu.qml")), uri, 1, 0, "Menu");
         qmlRegisterType(typeUrl(QStringLiteral("NativeMenuBar.qml")), uri, 1, 0, "MenuBar");
@@ -76,7 +89,7 @@ void QtCellinkControlsPlugin::registerTypes(const char *uri)
     }
 }
 
-QUrl QtCellinkControlsPlugin::typeUrl(const QString &fileName) const
+QUrl QtCellinkMenusPlugin::typeUrl(const QString &fileName) const
 {
     QUrl url = baseUrl();
     url.setPath(url.path() + QLatin1Char('/') + fileName);

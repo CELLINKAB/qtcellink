@@ -43,6 +43,8 @@ namespace Json
     Q_CELLINK_EXPORT QJsonDocument readFile(const QString &filePath);
     Q_CELLINK_EXPORT bool writeFile(const QString &filePath, const QJsonDocument &json);
 
+    inline const QString Ext = QStringLiteral("json");
+
     template <typename T>
     QJsonArray fromVector(const QVector<T> &values)
     {

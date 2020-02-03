@@ -1,3 +1,3 @@
-import QtCellink.Native 1.0 as N
+import QtCellink.Menus 1.0 as QCM
 
-N.NativeMenuBar { }
+QCM.NativeMenuBar { }

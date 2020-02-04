@@ -140,7 +140,7 @@ void MqttConnection::unpublish(const QString &topic)
 
 MqttMessage MqttConnection::willMessage() const
 {
-    return { m_mqttClient->willTopic(), m_mqttClient->willMessage(), m_mqttClient->willRetain(), m_mqttClient->willQoS() };
+    return { m_mqttClient->willTopic(), m_mqttClient->willMessage(), m_mqttClient->willQoS(), m_mqttClient->willRetain() };
 }
 
 void MqttConnection::setWillMessage(const MqttMessage &message)

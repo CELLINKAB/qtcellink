@@ -190,7 +190,7 @@ QString Object::filePath() const
     return m_filePath;
 }
 
-void Object::initFrom(const Object *object)
+void Object::initFrom(Object *object)
 {
     if (!object)
         return;

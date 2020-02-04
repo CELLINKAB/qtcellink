@@ -644,7 +644,7 @@ QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
     }
 
     if (!viewNode || !m_model)
-        return nullptr;
+        return viewNode;
 
     if (m_relayout) {
         viewNode->relayout(this);

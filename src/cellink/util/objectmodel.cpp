@@ -312,14 +312,25 @@ QVariant ObjectModel::data(const QModelIndex &index, int role) const
     if (index.row() < 0 || index.row() >= m_objects.count())
         return QVariant();
 
+    switch (role) {
+    case ObjectRole:
     if (role == ObjectRole)
-        return QVariant::fromValue(get(index.row()));
+         return QVariant::fromValue(get(index.row()));
+    case NameRole:
+        return m_objects.at(index.row())->name();
+    case UuidRole:
+        return m_objects.at(index.row())->uuid();
+    case DateRole:
+        return m_objects.at(index.row())->date();
+    default:
+        break;
+    }
 
+    Object *object = get(index.row());
     const QByteArray propertyName = roleNames().value(role);
-    if (propertyName.isEmpty())
-        return QVariant();
+    if (!object || propertyName.isEmpty())
+         return QVariant();
 
-    Object *object = m_objects.at(index.row());
     return object->property(propertyName);
 }
 

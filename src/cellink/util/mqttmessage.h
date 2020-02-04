@@ -37,8 +37,9 @@
 #include <QtCore/qbytearray.h>
 #include <QtCore/qstring.h>
 
-struct Q_CELLINK_EXPORT MqttMessage
+class Q_CELLINK_EXPORT MqttMessage
 {
+public:
     static MqttMessage retained(const QString &topic, const QByteArray &payload = QByteArray(), quint8 qos = 0)
     {
         return MqttMessage({topic, payload, qos, true});

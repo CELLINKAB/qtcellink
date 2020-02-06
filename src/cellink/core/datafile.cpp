@@ -33,7 +33,11 @@
 #include "datafile.h"
 #include <QtCore/qdatastream.h>
 #include <QtCore/qfile.h>
+#include <QtCore/qfileinfo.h>
+#include <QtCore/qloggingcategory.h>
 #include <QtCore/qvariant.h>
+
+Q_LOGGING_CATEGORY(lcData, "qtcellink.data")
 
 DataFile::DataFile(const QString &filePath) : m_filePath(filePath)
 {
@@ -44,32 +48,75 @@ QString DataFile::filePath() const
     return m_filePath;
 }
 
+static inline QString fileName(const QString &filePath)
+{
+    return QFileInfo(filePath).fileName();
+}
+
+static QByteArray qualifiedPropertyName(const char *className, const char *propertyName, int revision)
+{
+    QByteArray name = className + QByteArray("::") + propertyName;
+    if (revision > 0)
+        name += " (REVISION " + QByteArray::number(revision) + ")";
+    return name;
+}
+
+static QByteArray streamStatusString(QDataStream::Status status)
+{
+    switch (status) {
+    case QDataStream::Ok: return "QDataStream::Ok";
+    case QDataStream::ReadPastEnd: return "QDataStream::ReadPastEnd";
+    case QDataStream::ReadCorruptData: return "QDataStream::ReadCorruptData";
+    case QDataStream::WriteFailed: return "QDataStream::WriteFailed";
+    default: return "QDataStream::Status(" + QByteArray::number(status) +")";
+    }
+}
+
 bool DataFile::loadGadget(void *gadget, const QMetaObject *metaObject, int revision)
 {
     Q_ASSERT(gadget && metaObject);
 
     QFile file(m_filePath);
-    if (!file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly)) {
+        qCWarning(lcData) << "failed to open" << fileName(m_filePath) << "for reading:" << file.errorString();
         return false;
+    }
 
     QDataStream stream(&file);
     int fileRevision = 0;
     stream >> fileRevision;
 
-    if (stream.status() != QDataStream::Ok)
+    if (stream.status() != QDataStream::Ok) {
+        qCWarning(lcData).nospace() << "failed to read revision from " << fileName(m_filePath) << ": " << streamStatusString(stream.status());
         return false;
+    }
 
-    int count = metaObject->propertyCount();
-    for (int i = 0; i < count; ++i) {
+    int lastRevision = 0;
+    int propertyCount = metaObject->propertyCount();
+    for (int i = 0; i < propertyCount; ++i) {
         QMetaProperty property = metaObject->property(i);
-        if (!property.isWritable() || fileRevision < property.revision())
+        int propertyRevision = property.revision();
+        if (!property.isWritable() || fileRevision < propertyRevision)
             continue;
+
+        if (propertyRevision < lastRevision) {
+            qCCritical(lcData).noquote() << "failed to read misordered property" << qualifiedPropertyName(metaObject->className(), property.name(), propertyRevision);
+            return false;
+        }
+        lastRevision = propertyRevision;
+
         QVariant value;
         value.load(stream);
-        if (revision >= property.revision())
+
+        if (stream.status() != QDataStream::Ok) {
+            qCCritical(lcData) << "failed to read property" << property.name() << "from" << fileName(m_filePath) << streamStatusString(stream.status());
+            return false;
+        }
+
+        if (revision >= propertyRevision)
             property.writeOnGadget(gadget, value);
     }
-    return stream.status() == QDataStream::Ok;
+    return true;
 }
 
 bool DataFile::saveGadget(const void *gadget, const QMetaObject *metaObject, int revision)
@@ -77,22 +124,40 @@ bool DataFile::saveGadget(const void *gadget, const QMetaObject *metaObject, int
     Q_ASSERT(gadget && metaObject);
 
     QFile file(m_filePath);
-    if (!file.open(QIODevice::WriteOnly))
+    if (!file.open(QIODevice::WriteOnly)) {
+        qCWarning(lcData) << "failed to open" << fileName(m_filePath) << "for writing:" << file.errorString();
         return false;
+    }
 
     QDataStream stream(&file);
     stream << revision;
 
-    if (stream.status() != QDataStream::Ok)
+    if (stream.status() != QDataStream::Ok) {
+        qCWarning(lcData).nospace() << "failed to write revision to " << fileName(m_filePath) << ": " << streamStatusString(stream.status());
         return false;
+    }
 
-    int count = metaObject->propertyCount();
-    for (int i = 0; i < count; ++i) {
+    int lastRevision = 0;
+    int propertyCount = metaObject->propertyCount();
+    for (int i = 0; i < propertyCount; ++i) {
         QMetaProperty property = metaObject->property(i);
-        if (!property.isWritable() || revision < property.revision())
+        int propertyRevision = property.revision();
+        if (!property.isWritable() || revision < propertyRevision)
             continue;
+
+        if (propertyRevision < lastRevision) {
+            qCCritical(lcData).noquote() << "failed to write misordered property" << qualifiedPropertyName(metaObject->className(), property.name(), propertyRevision);
+            return false;
+        }
+        lastRevision = propertyRevision;
+
         QVariant value = property.readOnGadget(gadget);
         value.save(stream);
+
+        if (stream.status() != QDataStream::Ok) {
+            qCCritical(lcData) << "failed to write property" << property.name() << "to" << fileName(m_filePath) << streamStatusString(stream.status());
+            return false;
+        }
     }
-    return stream.status() == QDataStream::Ok;
+    return true;
 }

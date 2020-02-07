@@ -589,6 +589,21 @@ ProgressDelegate::ProgressDelegate(QObject *parent) : RectDelegate(parent)
 {
 }
 
+int ProgressDelegate::colorRole() const
+{
+    return m_colorRole;
+}
+
+void ProgressDelegate::setColorRole(int colorRole)
+{
+    if (m_colorRole == colorRole)
+        return;
+
+    m_colorRole = colorRole;
+    emit colorRoleChanged();
+    emit changed();
+}
+
 int ProgressDelegate::progressRole() const
 {
     return m_progressRole;
@@ -653,4 +668,14 @@ QRectF ProgressDelegate::nodeRect(const QModelIndex &index, NodeItem *item) cons
         rect.moveBottom(height);
     }
     return rect;
+}
+
+QColor ProgressDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
+{
+    if (m_colorRole != -1) {
+        QColor color = index.data(m_colorRole).value<QColor>();
+        if (color.isValid())
+            return color;
+    }
+    return RectDelegate::nodeColor(index, item);
 }

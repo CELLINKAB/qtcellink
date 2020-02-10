@@ -30,6 +30,10 @@
 #include "rowbutton.h"
 #include "titleseparator.h"
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+template <typename T> static void qmlRegisterAnonymousType(const char *, int) { qmlRegisterType<T>(); }
+#endif
+
 class QtCellinkTemplatesPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
@@ -49,9 +53,9 @@ void QtCellinkTemplatesPlugin::registerTypes(const char *uri)
     qmlRegisterType<ButtonRow>(uri, 1, 0, "ButtonRow");
     qmlRegisterType<ComponentView>(uri, 1, 0, "ComponentView");
     qmlRegisterType<DoubleSpinBox>(uri, 1, 0, "DoubleSpinBox");
-    qmlRegisterType<DoubleSpinButton>();
+    qmlRegisterAnonymousType<DoubleSpinButton>(uri, 1);
     qmlRegisterType<FlipView>(uri, 1, 0, "FlipView");
-    qmlRegisterType<FlipViewAttached>();
+    qmlRegisterAnonymousType<FlipViewAttached>(uri, 1);
     qmlRegisterType<ProgressIndicator>(uri, 1, 0, "ProgressIndicator");
     qmlRegisterType<RowButton>(uri, 1, 0, "RowButton");
     qmlRegisterType<TitleSeparator>(uri, 1, 0, "TitleSeparator");

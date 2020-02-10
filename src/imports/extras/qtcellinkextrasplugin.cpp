@@ -41,6 +41,10 @@
 #include "paddedrectangle.h"
 #include "rect.h"
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+template <typename T> static void qmlRegisterAnonymousType(const char *, int) { qmlRegisterType<T>(); }
+#endif
+
 class QtCellinkExtrasPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
@@ -74,7 +78,7 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterType<NavigationStack>(uri, 1, 0, "NavigationStack");
     qmlRegisterType<NodeItem>(uri, 1, 0, "NodeItem");
     qmlRegisterType<NodeView>(uri, 1, 0, "NodeView");
-    qmlRegisterType<NodeDelegate>();
+    qmlRegisterAnonymousType<NodeDelegate>(uri, 1);
     qmlRegisterType<OpacityDelegate>(uri, 1, 0, "OpacityDelegate");
     qmlRegisterType<PaddedRectangle>(uri, 1, 0, "PaddedRectangle");
     qmlRegisterType<ProgressDelegate>(uri, 1, 0, "ProgressDelegate");

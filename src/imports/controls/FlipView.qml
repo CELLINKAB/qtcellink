@@ -21,7 +21,7 @@ T.FlipView {
                 y: control.availableHeight / 2
             }
             angle: control.angle
-            Behavior on angle { NumberAnimation { duration: 125; easing.type: Easing.InOutCubic } }
+            Behavior on angle { NumberAnimation { duration: 175; easing.type: Easing.InOutCubic } }
         }
     }
 }

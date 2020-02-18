@@ -64,6 +64,8 @@ public:
     void startPressRepeat();
     void stopPressRepeat();
 
+    void accept();
+
     void handlePress(const QPointF &point) override;
     void handleMove(const QPointF &point) override;
     void handleRelease(const QPointF &point) override;
@@ -285,6 +287,13 @@ void DoubleSpinBoxPrivate::stopPressRepeat()
         q->killTimer(repeatTimer);
         repeatTimer = 0;
     }
+}
+
+void DoubleSpinBoxPrivate::accept()
+{
+    Q_Q(DoubleSpinBox);
+    updateValue();
+    emit q->accepted();
 }
 
 void DoubleSpinBoxPrivate::handlePress(const QPointF &point)
@@ -836,7 +845,7 @@ void DoubleSpinBox::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
 {
     Q_D(DoubleSpinBox);
     if (QQuickTextInput *oldInput = qobject_cast<QQuickTextInput *>(oldItem)) {
-        disconnect(oldInput, &QQuickTextInput::accepted, this, &DoubleSpinBox::accepted);
+        QObjectPrivate::disconnect(oldInput, &QQuickTextInput::accepted, d, &DoubleSpinBoxPrivate::accept);
         disconnect(oldInput, &QQuickTextInput::inputMethodComposingChanged, this, &DoubleSpinBox::inputMethodComposingChanged);
     }
 
@@ -850,7 +859,7 @@ void DoubleSpinBox::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
 #endif
 
         if (QQuickTextInput *newInput = qobject_cast<QQuickTextInput *>(newItem)) {
-            connect(newInput, &QQuickTextInput::accepted, this, &DoubleSpinBox::accepted);
+            QObjectPrivate::connect(newInput, &QQuickTextInput::accepted, d, &DoubleSpinBoxPrivate::accept);
             connect(newInput, &QQuickTextInput::inputMethodComposingChanged, this, &DoubleSpinBox::inputMethodComposingChanged);
         }
     }

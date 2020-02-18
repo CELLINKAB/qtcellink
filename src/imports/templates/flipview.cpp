@@ -86,10 +86,6 @@ void FlipViewPrivate::flip()
         showFront = true;
     }
 
-    QQuickItem *previousItem = q->itemAt(previousIndex);
-    if (previousItem)
-        QQuickItemPrivate::get(previousItem)->setCulled(true);
-
     QQuickItem *currentItem = q->itemAt(currentIndex);
     if (currentItem) {
         QQuickItemPrivate::get(currentItem)->setCulled(false);

@@ -325,8 +325,7 @@ QVariant ObjectModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case ObjectRole:
-    if (role == ObjectRole)
-         return QVariant::fromValue(get(index.row()));
+        return QVariant::fromValue(get(index.row()));
     case NameRole:
         return m_objects.at(index.row())->name();
     case UuidRole:

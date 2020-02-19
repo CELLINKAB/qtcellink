@@ -33,6 +33,29 @@
 #include "connection.h"
 #include <QtCore/qcoreevent.h>
 #include <QtCore/qloggingcategory.h>
+#include <cmath>
+
+// 500, 1000, 2500, 5000, 10000, 10000...
+static const int MinInterval = 500;
+static const int MaxInterval = 10000;
+static const int IntervalSteps = 5;
+
+static int roundToNearest(int value, int nearest)
+{
+    return (value + nearest - 1) / nearest * nearest;
+}
+
+static int reconnectInterval(int index)
+{
+    static const int minInterval = qEnvironmentVariable("MIN_RECONNECT_INTERVAL", QString::number(MinInterval)).toInt();
+    static const int maxInterval = qEnvironmentVariable("MAX_RECONNECT_INTERVAL", QString::number(MaxInterval)).toInt();
+
+    qreal progress = std::clamp(static_cast<qreal>(index) / (IntervalSteps - 1), 0.0, 1.0);
+    qreal min = std::log(minInterval);
+    qreal max = std::log(maxInterval);
+    int value = std::floor(std::exp(min + progress * (max - min)));
+    return roundToNearest(value, minInterval);
+}
 
 Connection::Connection(QObject *parent) : QObject(parent)
 {
@@ -69,6 +92,7 @@ void Connection::setState(State state)
         qCDebug(loggingCategory()) << "connected to:" << m_address;
         emit connected();
         stopTimeout();
+        m_reconnectIndex = 0;
         break;
     case Connecting:
         qCDebug(loggingCategory()) << "connecting to:" << m_address;
@@ -82,7 +106,7 @@ void Connection::setState(State state)
         startReconnect();
         break;
     case Waiting:
-        qCDebug(loggingCategory()) << "waiting:" << m_reconnectInterval << "ms";
+        qCDebug(loggingCategory()) << "waiting:" << reconnectInterval(m_reconnectIndex) << "ms";
         emit waiting();
         break;
     default:
@@ -111,14 +135,14 @@ void Connection::setTimeout(int timeout)
     m_timeout = timeout;
 }
 
-int Connection::reconnectInterval() const
+bool Connection::autoReconnect() const
 {
-    return m_reconnectInterval;
+    return m_reconnect;
 }
 
-void Connection::setReconnectInterval(int interval)
+void Connection::setAutoReconnect(bool reconnect)
 {
-    m_reconnectInterval = interval;
+    m_reconnect = reconnect;
 }
 
 void Connection::open()
@@ -156,8 +180,8 @@ void Connection::startReconnect()
 {
     stopReconnect();
 
-    if (!m_closed && m_reconnectInterval > 0) {
-        m_reconnectTimer = startTimer(m_reconnectInterval);
+    if (!m_closed && m_reconnect) {
+        m_reconnectTimer = startTimer(reconnectInterval(++m_reconnectIndex));
         setState(Waiting);
     }
 }

@@ -59,8 +59,8 @@ public:
     int timeout() const;
     void setTimeout(int timeout);
 
-    int reconnectInterval() const;
-    void setReconnectInterval(int interval);
+    bool autoReconnect() const;
+    void setAutoReconnect(bool autoReconnect);
 
 public slots:
     void open();
@@ -88,10 +88,11 @@ protected:
 
 private:
     bool m_closed = false;
+    bool m_reconnect = false;
     int m_timer = 0;
     int m_timeout = 0;
     int m_reconnectTimer = 0;
-    int m_reconnectInterval = 0;
+    int m_reconnectIndex = -1;
     State m_state = Disconnected;
     QString m_address;
 };

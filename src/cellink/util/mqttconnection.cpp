@@ -38,7 +38,6 @@ Q_LOGGING_CATEGORY(lcMqtt, "qtcellink.mqtt")
 
 static const int MqttPort = 1883;
 static const int MqttTimeout = 10000;
-static const int MqttReconnectInterval = 10000;
 static const QString MqttHost = QStringLiteral("localhost");
 
 MqttConnection::MqttConnection(QObject *parent)
@@ -47,7 +46,7 @@ MqttConnection::MqttConnection(QObject *parent)
     setPort(MqttPort);
     setAddress(MqttHost);
     setTimeout(MqttTimeout);
-    setReconnectInterval(MqttReconnectInterval);
+    setAutoReconnect(true);
 
     m_mqttClient->setProtocolVersion(QMqttClient::ProtocolVersion::MQTT_3_1_1);
 

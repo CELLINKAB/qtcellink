@@ -107,6 +107,11 @@ bool ObjectModel::isEmpty() const
     return m_objects.isEmpty();
 }
 
+bool ObjectModel::isModified() const
+{
+    return m_modified;
+}
+
 Object *ObjectModel::current() const
 {
     return m_current;
@@ -117,12 +122,17 @@ void ObjectModel::setCurrent(Object *current)
     if (m_current == current)
         return;
 
-    if (m_current && m_currentIndex == -1)
+    if (m_current && m_currentIndex == -1) {
         disconnect(m_current, &Object::destroyed, this, &ObjectModel::remove);
+        disconnect(m_current, &Object::modifiedChanged, this, &ObjectModel::updateModified);
+    }
     m_current = current;
     m_currentIndex = m_objects.indexOf(current);
-    if (current && m_currentIndex == -1)
+    if (current && m_currentIndex == -1) {
         connect(current, &Object::destroyed, this, &ObjectModel::remove);
+        connect(current, &Object::modifiedChanged, this, &ObjectModel::updateModified);
+    }
+    updateModified();
     emit currentChanged();
 }
 
@@ -138,6 +148,7 @@ void ObjectModel::setCurrentIndex(int index)
 
     m_currentIndex = index;
     m_current = m_objects.value(index);
+    updateModified();
     emit currentChanged();
 }
 
@@ -404,6 +415,7 @@ void ObjectModel::reset()
     beginRemoveRows(QModelIndex(), 0, m_objects.count() - 1);
     m_objects.clear();
     endRemoveRows();
+    updateModified();
     emit emptyChanged();
     emit countChanged();
 }
@@ -424,8 +436,12 @@ Object *ObjectModel::doCreate(QObject *parent) const
 void ObjectModel::doInsert(int index, Object *object)
 {
     m_objects.insert(index, object);
-    if (object != m_current)
+    if (object == m_current) {
+        updateModified();
+    } else {
         connect(object, &Object::destroyed, this, &ObjectModel::remove);
+        connect(object, &Object::modifiedChanged, this, &ObjectModel::updateModified);
+    }
     connect(object, &Object::modified, this, [=]() { saveObject(object); });
     connect(object, &Object::metaDataChanged, this, &ObjectModel::saveLater);
 }
@@ -470,4 +486,14 @@ void ObjectModel::saveLater()
 
     m_saving = true;
     QMetaObject::invokeMethod(this, [=]() { save(); }, Qt::QueuedConnection);
+}
+
+void ObjectModel::updateModified()
+{
+    bool modified = m_current && m_current->isModified() && !contains(m_current);
+    if (m_modified == modified)
+        return;
+
+    m_modified = modified;
+    emit modifiedChanged();
 }

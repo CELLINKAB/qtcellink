@@ -45,6 +45,7 @@ class Q_CELLINK_EXPORT ObjectModel : public QAbstractListModel
     Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_PROPERTY(bool empty READ isEmpty NOTIFY emptyChanged)
+    Q_PROPERTY(bool modified READ isModified NOTIFY modifiedChanged)
     Q_PROPERTY(Object *current READ current WRITE setCurrent NOTIFY currentChanged)
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentChanged)
 
@@ -57,6 +58,7 @@ public:
 
     int count() const;
     bool isEmpty() const;
+    bool isModified() const;
 
     Object *current() const;
     void setCurrent(Object *current);
@@ -103,6 +105,7 @@ signals:
     void categoryChanged();
     void countChanged();
     void emptyChanged();
+    void modifiedChanged();
     void currentChanged();
 
 protected:
@@ -116,9 +119,11 @@ protected slots:
     void loadObject(Object *object) const;
     void saveObject(Object *object) const;
     void saveLater();
+    void updateModified();
 
 private:
     bool m_saving = false;
+    bool m_modified = false;
     int m_currentIndex = -1;
     QString m_category;
     QString m_filePath;

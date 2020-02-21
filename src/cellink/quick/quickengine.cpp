@@ -73,6 +73,15 @@ void QuickEngine::init(const QString &style)
     QQuickStyle::addStylePath(QStringLiteral("qrc:/qt-project.org/imports/%1").arg(organizationStylePath()));
 }
 
+static void addStylePaths(const QString &path)
+{
+    QDir dir(path);
+    if (dir.cd(QCoreApplication::organizationName())) {
+        dir.cd(QStringLiteral("Styles"));
+        QQuickStyle::addStylePath(dir.path());
+    }
+}
+
 static void initEngine(QQmlEngine *engine)
 {
     QQmlContext *context = engine->rootContext();
@@ -86,15 +95,11 @@ static void initEngine(QQmlEngine *engine)
     QDir appDir(QCoreApplication::applicationDirPath());
     if (appDir.exists(QCoreApplication::organizationName()) || appDir.cd("../qml") || appDir.cd("../Resources/qml")) {
         engine->addImportPath(appDir.absolutePath());
-        if (appDir.cd(organizationStylePath()))
-            QQuickStyle::addStylePath(appDir.path());
+        addStylePaths(appDir.path());
     } else {
         const QStringList importPaths = engine->importPathList();
-        for (const QString &importPath : importPaths) {
-            QDir importDir(importPath);
-            if (importDir.cd(organizationStylePath()))
-                QQuickStyle::addStylePath(importDir.path());
-        }
+        for (const QString &importPath : importPaths)
+            addStylePaths(importPath);
     }
 }
 

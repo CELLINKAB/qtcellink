@@ -42,7 +42,7 @@ class QuickEngine : public QQmlApplicationEngine
 public:
     explicit QuickEngine(QObject *parent = nullptr);
 
-    void init(const QString &style);
+    void init(const QString &style, const QString &path = QString());
     bool load(const QUrl &source);
 
     static void addFont(const QString &source);

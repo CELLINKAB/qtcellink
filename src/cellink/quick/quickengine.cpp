@@ -66,11 +66,11 @@ static inline QString organizationStylePath()
     return QCoreApplication::organizationName() + QStringLiteral("/Styles");
 }
 
-void QuickEngine::init(const QString &style)
+void QuickEngine::init(const QString &style, const QString &path)
 {
     QIcon::setThemeName(style);
     QQuickStyle::setStyle(style);
-    QQuickStyle::addStylePath(QStringLiteral("qrc:/qt-project.org/imports/%1").arg(organizationStylePath()));
+    QQuickStyle::addStylePath(path.isEmpty() ? QStringLiteral("qrc:/qt-project.org/imports/%1").arg(organizationStylePath()) : path);
 }
 
 static void addStylePaths(const QString &path)

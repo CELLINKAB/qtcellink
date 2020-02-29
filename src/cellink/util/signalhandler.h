@@ -36,7 +36,10 @@
 #ifndef SIGNALHANDLER_H
 #define SIGNALHANDLER_H
 
-#include <QtCore/qsocketnotifier.h>
+#include <QtCore/qobject.h>
+#include <functional>
+
+QT_FORWARD_DECLARE_CLASS(QSocketNotifier)
 
 class SignalHandler : public QObject
 {
@@ -46,19 +49,12 @@ public:
     explicit SignalHandler(QObject *parent = nullptr);
 
 public slots:
-    void setup();
-
-signals:
-    void sigHupReceived();
-    void sigIntReceived();
-    void sigTermReceived();
-
-private slots:
-    void handleSigHup();
-    void handleSigInt();
-    void handleSigTerm();
+    void setup(std::function<void()> callback);
 
 private:
+    void handleSignal(int fd, QSocketNotifier *socket);
+
+    std::function<void()> callback = nullptr;
     QSocketNotifier *sigIntNotifier = nullptr;
     QSocketNotifier *sigHupNotifier = nullptr;
     QSocketNotifier *sigTermNotifier = nullptr;

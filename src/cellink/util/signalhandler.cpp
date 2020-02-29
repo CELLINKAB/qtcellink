@@ -34,8 +34,7 @@
 ****************************************************************************/
 
 #include "signalhandler.h"
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qloggingcategory.h>
+#include <QtCore/qdebug.h>
 #include <QtCore/qsocketnotifier.h>
 
 #ifdef Q_OS_UNIX
@@ -88,18 +87,20 @@ SignalHandler::SignalHandler(QObject *parent) : QObject(parent)
         qFatal("Couldn't create SIGTERM socketpair");
 
     sigHupNotifier = new QSocketNotifier(sigHupFd[1], QSocketNotifier::Read, this);
-    connect(sigHupNotifier, &QSocketNotifier::activated, this, &SignalHandler::handleSigHup);
+    connect(sigHupNotifier, &QSocketNotifier::activated, [&]() { handleSignal(sigHupFd[1], sigHupNotifier); });
 
     sigIntNotifier = new QSocketNotifier(sigIntFd[1], QSocketNotifier::Read, this);
-    connect(sigIntNotifier, &QSocketNotifier::activated, this, &SignalHandler::handleSigInt);
+    connect(sigIntNotifier, &QSocketNotifier::activated, [&]() { handleSignal(sigIntFd[1], sigIntNotifier); });
 
     sigTermNotifier = new QSocketNotifier(sigTermFd[1], QSocketNotifier::Read, this);
-    connect(sigTermNotifier, &QSocketNotifier::activated, this, &SignalHandler::handleSigTerm);
+    connect(sigTermNotifier, &QSocketNotifier::activated, [&]() { handleSignal(sigTermFd[1], sigTermNotifier); });
 #endif
 }
 
-void SignalHandler::setup()
+void SignalHandler::setup(std::function<void()> func)
 {
+    callback = func;
+
 #ifdef Q_OS_UNIX
     const struct Signal {
         int num;
@@ -124,45 +125,15 @@ void SignalHandler::setup()
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_GCC("-Wunused-result")
 
-void SignalHandler::handleSigHup()
+void SignalHandler::handleSignal(int fd, QSocketNotifier *socket)
 {
 #ifdef Q_OS_UNIX
-    sigHupNotifier->setEnabled(false);
+    socket->setEnabled(false);
     char tmp;
-    ::read(sigHupFd[1], &tmp, sizeof(tmp));
-
-    qDebug() << "SignalHandler: received SIGHUP";
-    emit sigHupReceived();
-
-    sigHupNotifier->setEnabled(true);
-#endif
-}
-
-void SignalHandler::handleSigInt()
-{
-#ifdef Q_OS_UNIX
-    sigIntNotifier->setEnabled(false);
-    char tmp;
-    ::read(sigIntFd[1], &tmp, sizeof(tmp));
-
-    qDebug() << "SignalHandler: received SIGINT";
-    emit sigIntReceived();
-
-    sigIntNotifier->setEnabled(true);
-#endif
-}
-
-void SignalHandler::handleSigTerm()
-{
-#ifdef Q_OS_UNIX
-    sigTermNotifier->setEnabled(false);
-     char tmp;
-     ::read(sigTermFd[1], &tmp, sizeof(tmp));
-
-     qDebug() << "SignalHandler: received SIGTERM";
-     emit sigTermReceived();
-
-     sigTermNotifier->setEnabled(true);
+    ::read(fd, &tmp, sizeof(tmp));
+    if (callback)
+        callback();
+    socket->setEnabled(true);
 #endif
 }
 

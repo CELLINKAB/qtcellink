@@ -12,5 +12,3 @@ HEADERS += \
     $$PWD/qtest_json.h \
     $$PWD/serialtestcase.h \
     $$PWD/testcase.h
-
-requires(!heartos)

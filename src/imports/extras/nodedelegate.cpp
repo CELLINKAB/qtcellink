@@ -560,6 +560,66 @@ OpacityDelegate::OpacityDelegate(QObject *parent) : AbstractOpacityDelegate(pare
 {
 }
 
+qreal OpacityDelegate::opacity() const
+{
+    return m_opacity;
+}
+
+void OpacityDelegate::setOpacity(qreal opacity)
+{
+    if (qFuzzyCompare(m_opacity, opacity))
+        return;
+
+    m_opacity = opacity;
+    emit opacityChanged();
+    emit changed();
+}
+
+qreal OpacityDelegate::currentOpacity() const
+{
+    return m_currentOpacity;
+}
+
+void OpacityDelegate::setCurrentOpacity(qreal currentOpacity)
+{
+    if (qFuzzyCompare(m_currentOpacity, currentOpacity))
+        return;
+
+    m_currentOpacity = currentOpacity;
+    emit currentOpacityChanged();
+    emit changed();
+}
+
+qreal OpacityDelegate::selectedOpacity() const
+{
+    return m_selectedOpacity;
+}
+
+void OpacityDelegate::setSelectedOpacity(qreal selectedOpacity)
+{
+    if (qFuzzyCompare(m_selectedOpacity, selectedOpacity))
+        return;
+
+    m_selectedOpacity = selectedOpacity;
+    emit selectedOpacityChanged();
+    emit changed();
+}
+
+qreal OpacityDelegate::disabledOpacity() const
+{
+    return m_disabledOpacity;
+}
+
+void OpacityDelegate::setDisabledOpacity(qreal disabledOpacity)
+{
+    if (qFuzzyCompare(m_disabledOpacity, disabledOpacity))
+        return;
+
+    m_disabledOpacity = disabledOpacity;
+    emit disabledOpacityChanged();
+    emit changed();
+}
+
 int OpacityDelegate::opacityRole() const
 {
     return m_opacityRole;
@@ -575,14 +635,26 @@ void OpacityDelegate::setOpacityRole(int opacityRole)
     emit changed();
 }
 
+static bool isValidOpacity(qreal opacity)
+{
+    return qFuzzyIsNull(opacity) || opacity > 0;
+}
+
 qreal OpacityDelegate::nodeOpacity(const QModelIndex &index, NodeItem *item) const
 {
-    Q_UNUSED(item);
-    bool ok = false;
-    qreal opacity = index.data(m_opacityRole).toReal(&ok);
-    if (!ok)
-        return 1;
-    return opacity;
+    if (m_opacityRole != -1) {
+        bool ok = false;
+        qreal opacity = index.data(m_opacityRole).toReal(&ok);
+        if (ok && isValidOpacity(opacity))
+            return opacity;
+    }
+    if (isValidOpacity(m_disabledOpacity) && !item->isEnabled(index))
+        return m_disabledOpacity;
+    if (isValidOpacity(m_selectedOpacity) && item->isSelected(index))
+        return m_selectedOpacity;
+    if (isValidOpacity(m_currentOpacity) && item->isCurrent(index))
+        return m_currentOpacity;
+    return m_opacity;
 }
 
 ProgressDelegate::ProgressDelegate(QObject *parent) : RectDelegate(parent)

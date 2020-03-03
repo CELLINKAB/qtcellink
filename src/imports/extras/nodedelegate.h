@@ -298,15 +298,35 @@ public:
 class OpacityDelegate : public AbstractOpacityDelegate
 {
     Q_OBJECT
+    Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity NOTIFY opacityChanged)
+    Q_PROPERTY(qreal currentOpacity READ currentOpacity WRITE setCurrentOpacity NOTIFY currentOpacityChanged)
+    Q_PROPERTY(qreal selectedOpacity READ selectedOpacity WRITE setSelectedOpacity NOTIFY selectedOpacityChanged)
+    Q_PROPERTY(qreal disabledOpacity READ disabledOpacity WRITE setDisabledOpacity NOTIFY disabledOpacityChanged)
     Q_PROPERTY(int opacityRole READ opacityRole WRITE setOpacityRole NOTIFY opacityRoleChanged)
 
 public:
     explicit OpacityDelegate(QObject *parent = nullptr);
 
+    qreal opacity() const;
+    void setOpacity(qreal opacity);
+
+    qreal currentOpacity() const;
+    void setCurrentOpacity(qreal currentOpacity);
+
+    qreal selectedOpacity() const;
+    void setSelectedOpacity(qreal selectedOpacity);
+
+    qreal disabledOpacity() const;
+    void setDisabledOpacity(qreal disabledOpacity);
+
     int opacityRole() const;
     void setOpacityRole(int opacityRole);
 
 signals:
+    void opacityChanged();
+    void currentOpacityChanged();
+    void selectedOpacityChanged();
+    void disabledOpacityChanged();
     void opacityRoleChanged();
 
 protected:
@@ -314,6 +334,10 @@ protected:
 
 private:
     int m_opacityRole = -1;
+    qreal m_opacity = 1.0;
+    qreal m_currentOpacity = -1.0;
+    qreal m_selectedOpacity = -1.0;
+    qreal m_disabledOpacity = -1.0;
 };
 
 class ProgressDelegate : public RectDelegate

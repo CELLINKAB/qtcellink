@@ -37,11 +37,12 @@
 #define SIGNALHANDLER_H
 
 #include <QtCore/qobject.h>
+#include <QtCellink/cellink.h>
 #include <functional>
 
 QT_FORWARD_DECLARE_CLASS(QSocketNotifier)
 
-class SignalHandler : public QObject
+class Q_CELLINK_EXPORT SignalHandler : public QObject
 {
     Q_OBJECT
 

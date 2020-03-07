@@ -33,9 +33,10 @@
 #ifndef QUICKENGINE_H
 #define QUICKENGINE_H
 
+#include <QtCellink/cellink.h>
 #include <QtQml/qqmlapplicationengine.h>
 
-class QuickEngine : public QQmlApplicationEngine
+class Q_CELLINK_EXPORT QuickEngine : public QQmlApplicationEngine
 {
     Q_OBJECT
 

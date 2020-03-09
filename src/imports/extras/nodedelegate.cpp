@@ -36,6 +36,7 @@
 #include <QtGui/qtextlayout.h>
 #include <QtQuick/qsgimagenode.h>
 #include <QtQuick/qquickwindow.h>
+#include <QtQuick/private/qquickclipnode_p.h>
 #include <QtQuick/private/qquickitem_p.h>
 #include <QtQuick/private/qquicktextnode_p.h>
 #include <QtQuick/private/qsgadaptationlayer_p.h>
@@ -721,14 +722,31 @@ void ProgressDelegate::setLayoutDirection(Qt::LayoutDirection layoutDirection)
     emit changed();
 }
 
-QRectF ProgressDelegate::nodeRect(const QModelIndex &index, NodeItem *item) const
+QSGNode *ProgressDelegate::createNode(NodeItem *item)
+{
+    QQuickDefaultClipNode *clipNode = new QQuickDefaultClipNode(QRectF());
+    clipNode->appendChildNode(RectDelegate::createNode(item));
+    return clipNode;
+}
+
+void ProgressDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
+{
+    QQuickDefaultClipNode *clipNode = static_cast<QQuickDefaultClipNode *>(node);
+    QSGInternalRectangleNode *rectNode = static_cast<QSGInternalRectangleNode *>(clipNode->firstChild());
+    Q_ASSERT(rectNode);
+    RectDelegate::updateNode(rectNode, index, item);
+    clipNode->setRect(clipRect(index, item));
+    clipNode->update();
+}
+
+QRectF ProgressDelegate::clipRect(const QModelIndex &index, NodeItem *item) const
 {
     bool ok = false;
     qreal progress = std::clamp(index.data(m_progressRole).toReal(&ok), 0.0, 1.0);
     if (!ok || qFuzzyIsNull(progress))
         return QRectF();
 
-    QRectF rect = RectDelegate::nodeRect(index, item);
+    QRectF rect = nodeRect(index, item);
     if (m_orientation == Qt::Horizontal) {
         qreal width = rect.width();
         rect.setWidth(progress * width);

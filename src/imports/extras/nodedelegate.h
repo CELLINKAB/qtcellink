@@ -363,6 +363,9 @@ public:
     Qt::LayoutDirection layoutDirection() const;
     void setLayoutDirection(Qt::LayoutDirection layoutDirection);
 
+    QSGNode *createNode(NodeItem *item) override;
+    void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) override;
+
 signals:
     void colorRoleChanged();
     void progressRoleChanged();
@@ -370,7 +373,7 @@ signals:
     void layoutDirectionChanged();
 
 protected:
-    QRectF nodeRect(const QModelIndex &index, NodeItem *item) const override;
+    virtual QRectF clipRect(const QModelIndex &index, NodeItem *item) const;
     QColor nodeColor(const QModelIndex &index, NodeItem *item) const override;
 
 private:

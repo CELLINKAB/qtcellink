@@ -40,6 +40,7 @@
 #include <QtGui/qcolor.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qimage.h>
+#include <optional>
 
 class QSGNode;
 class NodeItem;
@@ -47,9 +48,29 @@ class NodeItem;
 class NodeDelegate : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(qreal padding READ padding WRITE setPadding NOTIFY paddingChanged)
+    Q_PROPERTY(qreal topPadding READ topPadding WRITE setTopPadding NOTIFY topPaddingChanged)
+    Q_PROPERTY(qreal leftPadding READ leftPadding WRITE setLeftPadding NOTIFY leftPaddingChanged)
+    Q_PROPERTY(qreal rightPadding READ rightPadding WRITE setRightPadding NOTIFY rightPaddingChanged)
+    Q_PROPERTY(qreal bottomPadding READ bottomPadding WRITE setBottomPadding NOTIFY bottomPaddingChanged)
 
 public:
     explicit NodeDelegate(QObject *parent = nullptr);
+
+    qreal padding() const;
+    void setPadding(qreal padding);
+
+    qreal topPadding() const;
+    void setTopPadding(qreal topPadding);
+
+    qreal leftPadding() const;
+    void setLeftPadding(qreal leftPadding);
+
+    qreal rightPadding() const;
+    void setRightPadding(qreal rightPadding);
+
+    qreal bottomPadding() const;
+    void setBottomPadding(qreal bottomPadding);
 
     virtual QSGNode *createNode(NodeItem *item) = 0;
     virtual void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) = 0;
@@ -58,6 +79,18 @@ public:
 
 signals:
     void changed();
+    void paddingChanged();
+    void topPaddingChanged();
+    void leftPaddingChanged();
+    void rightPaddingChanged();
+    void bottomPaddingChanged();
+
+private:
+    qreal m_padding = 0;
+    std::optional<qreal> m_topPadding;
+    std::optional<qreal> m_leftPadding;
+    std::optional<qreal> m_rightPadding;
+    std::optional<qreal> m_bottomPadding;
 };
 
 class AbstractImageDelegate : public NodeDelegate

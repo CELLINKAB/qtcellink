@@ -45,10 +45,86 @@ NodeDelegate::NodeDelegate(QObject *parent) : QObject(parent)
 {
 }
 
+qreal NodeDelegate::padding() const
+{
+    return m_padding;
+}
+
+void NodeDelegate::setPadding(qreal padding)
+{
+    if (qFuzzyCompare(m_padding, padding))
+        return;
+
+    m_padding = padding;
+    emit paddingChanged();
+    emit changed();
+}
+
+qreal NodeDelegate::topPadding() const
+{
+    return m_topPadding.value_or(m_padding);
+}
+
+void NodeDelegate::setTopPadding(qreal topPadding)
+{
+    if (qFuzzyCompare(m_topPadding.value_or(m_padding), topPadding))
+        return;
+
+    m_padding = topPadding;
+    emit topPaddingChanged();
+    emit changed();
+}
+
+qreal NodeDelegate::leftPadding() const
+{
+    return m_leftPadding.value_or(m_padding);
+}
+
+void NodeDelegate::setLeftPadding(qreal leftPadding)
+{
+    if (qFuzzyCompare(m_leftPadding.value_or(m_padding), leftPadding))
+        return;
+
+    m_padding = leftPadding;
+    emit leftPaddingChanged();
+    emit changed();
+}
+
+qreal NodeDelegate::rightPadding() const
+{
+    return m_rightPadding.value_or(m_padding);
+}
+
+void NodeDelegate::setRightPadding(qreal rightPadding)
+{
+    if (qFuzzyCompare(m_rightPadding.value_or(m_padding), rightPadding))
+        return;
+
+    m_padding = rightPadding;
+    emit rightPaddingChanged();
+    emit changed();
+}
+
+qreal NodeDelegate::bottomPadding() const
+{
+    return m_bottomPadding.value_or(m_padding);
+}
+
+void NodeDelegate::setBottomPadding(qreal bottomPadding)
+{
+    if (qFuzzyCompare(m_bottomPadding.value_or(m_padding), bottomPadding))
+        return;
+
+    m_padding = bottomPadding;
+    emit bottomPaddingChanged();
+    emit changed();
+}
+
 QRectF NodeDelegate::nodeRect(const QModelIndex &index, NodeItem *item) const
 {
-    QRectF rect = item->nodeRect(index);
-    return QRectF(0, 0, rect.width(), rect.height());
+    const qreal scale = item->nodeScale();
+    const QRectF rect(QPointF(0, 0), item->nodeRect(index).size());
+    return rect.adjusted(scale * leftPadding(), scale * topPadding(), scale * -rightPadding(), scale * -bottomPadding());
 }
 
 AbstractImageDelegate::AbstractImageDelegate(QObject *parent) : NodeDelegate(parent)

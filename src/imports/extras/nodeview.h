@@ -154,6 +154,9 @@ signals:
     void nodeItemChanged();
     void minimumZoomFactorChanged();
     void maximumZoomFactorChanged();
+    void pressed(const QModelIndex &index);
+    void released(const QModelIndex &index);
+    void activated(const QModelIndex &index);
     void clicked(const QModelIndex &index);
     void zoomChanged(qreal factor, const QPointF &point);
 

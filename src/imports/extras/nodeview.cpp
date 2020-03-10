@@ -318,6 +318,9 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         m_nodeItem->setParentItem(nullptr);
         disconnect(m_nodeItem, &QQuickItem::implicitWidthChanged, this, &NodeView::updateContentSize);
         disconnect(m_nodeItem, &QQuickItem::implicitHeightChanged, this, &NodeView::updateContentSize);
+        disconnect(m_nodeItem, &NodeItem::pressed, this, &NodeView::pressed);
+        disconnect(m_nodeItem, &NodeItem::released, this, &NodeView::released);
+        disconnect(m_nodeItem, &NodeItem::activated, this, &NodeView::activated);
         disconnect(m_nodeItem, &NodeItem::clicked, this, &NodeView::clicked);
         disconnect(m_nodeItem, &NodeItem::ensureVisible, this, &NodeView::ensureVisible);
         disconnect(m_nodeItem, &NodeItem::countChanged, this, &NodeView::countChanged);
@@ -340,6 +343,9 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         nodeItem->setParentItem(contentItem());
         connect(nodeItem, &QQuickItem::implicitWidthChanged, this, &NodeView::updateContentSize);
         connect(nodeItem, &QQuickItem::implicitHeightChanged, this, &NodeView::updateContentSize);
+        connect(nodeItem, &NodeItem::pressed, this, &NodeView::pressed);
+        connect(nodeItem, &NodeItem::released, this, &NodeView::released);
+        connect(nodeItem, &NodeItem::activated, this, &NodeView::activated);
         connect(nodeItem, &NodeItem::clicked, this, &NodeView::clicked);
         connect(nodeItem, &NodeItem::ensureVisible, this, &NodeView::ensureVisible);
         connect(nodeItem, &NodeItem::countChanged, this, &NodeView::countChanged);

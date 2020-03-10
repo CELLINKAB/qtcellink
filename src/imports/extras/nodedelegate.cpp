@@ -823,6 +823,9 @@ QRectF ProgressDelegate::clipRect(const QModelIndex &index, NodeItem *item) cons
         return QRectF();
 
     QRectF rect = nodeRect(index, item);
+    if (qFuzzyCompare(progress, 1.0))
+        return rect;
+
     if (m_orientation == Qt::Horizontal) {
         qreal right = rect.right();
         rect.setWidth(progress * rect.width());

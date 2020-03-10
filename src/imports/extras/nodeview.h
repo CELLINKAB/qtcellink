@@ -63,7 +63,7 @@ class NodeView : public QQuickFlickable
     Q_PROPERTY(qreal zoomFactor READ zoomFactor NOTIFY zoomChanged)
     Q_PROPERTY(QPointF zoomPoint READ zoomPoint NOTIFY zoomChanged)
     Q_PROPERTY(qreal minimumZoomFactor READ minimumZoomFactor WRITE setMinimumZoomFactor NOTIFY minimumZoomFactorChanged)
-    Q_PROPERTY(qreal maximumZoomFactor READ maximumZoomFactor WRITE setMaximumZoomFactor NOTIFY minimumZoomFactorChanged)
+    Q_PROPERTY(qreal maximumZoomFactor READ maximumZoomFactor WRITE setMaximumZoomFactor NOTIFY maximumZoomFactorChanged)
     Q_PROPERTY(NodeItem *nodeItem READ nodeItem WRITE setNodeItem NOTIFY nodeItemChanged)
 
 public:

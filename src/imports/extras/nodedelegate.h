@@ -126,18 +126,18 @@ class RectDelegate : public AbstractRectDelegate
 {
     Q_OBJECT
     Q_PROPERTY(qreal radius READ radius WRITE setRadius NOTIFY radiusChanged)
-    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
-    Q_PROPERTY(QColor currentColor READ currentColor WRITE setCurrentColor NOTIFY currentColorChanged)
-    Q_PROPERTY(QColor selectedColor READ selectedColor WRITE setSelectedColor NOTIFY selectedColorChanged)
-    Q_PROPERTY(QColor disabledColor READ disabledColor WRITE setDisabledColor NOTIFY disabledColorChanged)
+    Q_PROPERTY(QColor color READ color WRITE setColor RESET resetColor NOTIFY colorChanged)
+    Q_PROPERTY(QColor currentColor READ currentColor WRITE setCurrentColor RESET resetCurrentColor NOTIFY currentColorChanged)
+    Q_PROPERTY(QColor selectedColor READ selectedColor WRITE setSelectedColor RESET resetSelectedColor NOTIFY selectedColorChanged)
+    Q_PROPERTY(QColor disabledColor READ disabledColor WRITE setDisabledColor RESET resetDisabledColor NOTIFY disabledColorChanged)
     Q_PROPERTY(qreal borderWidth READ borderWidth WRITE setBorderWidth NOTIFY borderWidthChanged)
     Q_PROPERTY(qreal currentBorderWidth READ currentBorderWidth WRITE setCurrentBorderWidth NOTIFY currentBorderWidthChanged)
     Q_PROPERTY(qreal selectedBorderWidth READ selectedBorderWidth WRITE setSelectedBorderWidth NOTIFY selectedBorderWidthChanged)
     Q_PROPERTY(qreal disabledBorderWidth READ disabledBorderWidth WRITE setDisabledBorderWidth NOTIFY disabledBorderWidthChanged)
-    Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
-    Q_PROPERTY(QColor currentBorderColor READ currentBorderColor WRITE setCurrentBorderColor NOTIFY currentBorderColorChanged)
-    Q_PROPERTY(QColor selectedBorderColor READ selectedBorderColor WRITE setSelectedBorderColor NOTIFY selectedBorderColorChanged)
-    Q_PROPERTY(QColor disabledBorderColor READ disabledBorderColor WRITE setDisabledBorderColor NOTIFY disabledBorderColorChanged)
+    Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor RESET resetBorderColor NOTIFY borderColorChanged)
+    Q_PROPERTY(QColor currentBorderColor READ currentBorderColor WRITE setCurrentBorderColor RESET resetCurrentBorderColor NOTIFY currentBorderColorChanged)
+    Q_PROPERTY(QColor selectedBorderColor READ selectedBorderColor WRITE setSelectedBorderColor RESET resetSelectedBorderColor NOTIFY selectedBorderColorChanged)
+    Q_PROPERTY(QColor disabledBorderColor READ disabledBorderColor WRITE setDisabledBorderColor RESET resetDisabledBorderColor NOTIFY disabledBorderColorChanged)
 
 public:
     explicit RectDelegate(QObject *parent = nullptr);
@@ -147,15 +147,19 @@ public:
 
     QColor color() const;
     void setColor(const QColor &color);
+    void resetColor();
 
     QColor currentColor() const;
     void setCurrentColor(const QColor &currentColor);
+    void resetCurrentColor();
 
     QColor selectedColor() const;
     void setSelectedColor(const QColor &selectedColor);
+    void resetSelectedColor();
 
     QColor disabledColor() const;
     void setDisabledColor(const QColor &disabledColor);
+    void resetDisabledColor();
 
     qreal borderWidth() const;
     void setBorderWidth(qreal borderWidth);
@@ -171,15 +175,19 @@ public:
 
     QColor borderColor() const;
     void setBorderColor(const QColor &borderColor);
+    void resetBorderColor();
 
     QColor currentBorderColor() const;
     void setCurrentBorderColor(const QColor &currentBorderColor);
+    void resetCurrentBorderColor();
 
     QColor selectedBorderColor() const;
     void setSelectedBorderColor(const QColor &selectedBorderColor);
+    void resetSelectedBorderColor();
 
     QColor disabledBorderColor() const;
     void setDisabledBorderColor(const QColor &disabledBorderColor);
+    void resetDisabledBorderColor();
 
 signals:
     void radiusChanged();

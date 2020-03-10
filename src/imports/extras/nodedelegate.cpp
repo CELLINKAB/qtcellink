@@ -203,6 +203,11 @@ void RectDelegate::setColor(const QColor &color)
     emit changed();
 }
 
+void RectDelegate::resetColor()
+{
+    setColor(QColor());
+}
+
 QColor RectDelegate::currentColor() const
 {
     return m_currentColor;
@@ -216,6 +221,11 @@ void RectDelegate::setCurrentColor(const QColor &currentColor)
     m_currentColor = currentColor;
     emit currentColorChanged();
     emit changed();
+}
+
+void RectDelegate::resetCurrentColor()
+{
+    setCurrentColor(QColor());
 }
 
 QColor RectDelegate::selectedColor() const
@@ -233,6 +243,11 @@ void RectDelegate::setSelectedColor(const QColor &selectedColor)
     emit changed();
 }
 
+void RectDelegate::resetSelectedColor()
+{
+    setSelectedColor(QColor());
+}
+
 QColor RectDelegate::disabledColor() const
 {
     return m_disabledColor;
@@ -246,6 +261,11 @@ void RectDelegate::setDisabledColor(const QColor &disabledColor)
     m_disabledColor = disabledColor;
     emit disabledColorChanged();
     emit changed();
+}
+
+void RectDelegate::resetDisabledColor()
+{
+    setDisabledColor(QColor());
 }
 
 qreal RectDelegate::borderWidth() const
@@ -323,6 +343,11 @@ void RectDelegate::setBorderColor(const QColor &borderColor)
     emit changed();
 }
 
+void RectDelegate::resetBorderColor()
+{
+    setBorderColor(QColor());
+}
+
 QColor RectDelegate::currentBorderColor() const
 {
     return m_currentBorderColor;
@@ -336,6 +361,11 @@ void RectDelegate::setCurrentBorderColor(const QColor &currentBorderColor)
     m_currentBorderColor = currentBorderColor;
     emit currentBorderColorChanged();
     emit changed();
+}
+
+void RectDelegate::resetCurrentBorderColor()
+{
+    setCurrentBorderColor(QColor());
 }
 
 QColor RectDelegate::selectedBorderColor() const
@@ -358,6 +388,11 @@ void RectDelegate::setDisabledBorderColor(const QColor &disabledBorderColor)
     emit changed();
 }
 
+void RectDelegate::resetDisabledBorderColor()
+{
+    setDisabledBorderColor(QColor());
+}
+
 void RectDelegate::setSelectedBorderColor(const QColor &selectedBorderColor)
 {
     if (m_selectedBorderColor == selectedBorderColor)
@@ -366,6 +401,11 @@ void RectDelegate::setSelectedBorderColor(const QColor &selectedBorderColor)
     m_selectedBorderColor = selectedBorderColor;
     emit selectedBorderColorChanged();
     emit changed();
+}
+
+void RectDelegate::resetSelectedBorderColor()
+{
+    setSelectedBorderColor(QColor());
 }
 
 qreal RectDelegate::nodeRadius(const QModelIndex &index, NodeItem *item) const

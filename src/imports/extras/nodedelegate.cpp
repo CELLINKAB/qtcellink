@@ -824,14 +824,14 @@ QRectF ProgressDelegate::clipRect(const QModelIndex &index, NodeItem *item) cons
 
     QRectF rect = nodeRect(index, item);
     if (m_orientation == Qt::Horizontal) {
-        qreal width = rect.width();
-        rect.setWidth(progress * width);
+        qreal right = rect.right();
+        rect.setWidth(progress * rect.width());
         if (m_layoutDirection == Qt::RightToLeft)
-            rect.moveRight(width);
+            rect.moveRight(right);
     } else {
-        qreal height = rect.height();
-        rect.setHeight(progress * height);
-        rect.moveBottom(height);
+        qreal bottom = rect.bottom();
+        rect.setHeight(progress * rect.height());
+        rect.moveBottom(bottom);
     }
     return rect;
 }

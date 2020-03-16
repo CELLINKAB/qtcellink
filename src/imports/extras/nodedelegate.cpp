@@ -123,7 +123,7 @@ void NodeDelegate::setBottomPadding(qreal bottomPadding)
 QRectF NodeDelegate::nodeRect(const QModelIndex &index, NodeItem *item) const
 {
     const qreal scale = item->nodeScale();
-    const QRectF rect(QPointF(0, 0), item->nodeRect(index).size());
+    const QRectF rect(QPointF(0, 0), item->nodeRect(index.row(), index.column()).size());
     return rect.adjusted(scale * leftPadding(), scale * topPadding(), scale * -rightPadding(), scale * -bottomPadding());
 }
 

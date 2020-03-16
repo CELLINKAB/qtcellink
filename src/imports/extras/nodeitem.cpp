@@ -373,15 +373,16 @@ QModelIndex NodeItem::nodeIndex(int row, int column) const
     return m_model->index(row, column);
 }
 
-QRectF NodeItem::nodeRect(const QModelIndex &index) const
+QRectF NodeItem::nodeRect(int row, int column) const
 {
-    qreal nw = m_nodeWidth * nodeScaleX();
-    qreal nh = m_nodeHeight * nodeScaleY();
-    qreal hsp = m_nodeSpacing * nodeScaleX();
-    qreal vsp = m_nodeSpacing * nodeScaleY();
+    const qreal sx = nodeScaleX();
+    const qreal sy = nodeScaleY();
+    const qreal nw = m_nodeWidth * sx;
+    const qreal nh = m_nodeHeight * sy;
+    const qreal hsp = m_nodeSpacing * sx;
+    const qreal vsp = m_nodeSpacing * sy;
 
-    return QRectF(index.column() * nw + index.column() * hsp,
-                  index.row() * nh + index.row() * vsp, nw, nh);
+    return QRectF(column * nw + column * hsp, row * nh + row * vsp, nw, nh);
 }
 
 void NodeItem::selectAll()
@@ -455,7 +456,7 @@ void NodeItem::mouseMoveEvent(QMouseEvent *event)
                 m_selectionModel->select(QItemSelection(topLeft(index, currentIndex), bottomRight(index, currentIndex)), QItemSelectionModel::ClearAndSelect);
             else
                 m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
-            emit ensureVisible(nodeRect(index));
+            emit ensureVisible(nodeRect(index.row(), index.column()));
             emit activated(index);
         }
     }
@@ -496,7 +497,7 @@ void NodeItem::timerEvent(QTimerEvent *event)
             QModelIndex index = m_selectionModel->currentIndex();
             if (isEnabled(index)) {
                 m_selectionModel->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Clear);
-                emit ensureVisible(nodeRect(index));
+                emit ensureVisible(nodeRect(index.row(), index.column()));
                 emit activated(index);
             }
         }
@@ -561,7 +562,7 @@ public:
                 if (!node)
                     continue;
 
-                const QRectF geometry = nodeItem->nodeRect(nodeItem->nodeIndex(row, column));
+                const QRectF geometry = nodeItem->nodeRect(row, column);
                 node->setMatrix(QTransform::fromTranslate(geometry.x(), geometry.y()));
             }
         }

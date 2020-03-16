@@ -117,7 +117,7 @@ public:
 
     virtual QModelIndex nodeAt(const QPointF &pos) const;
     virtual QModelIndex nodeIndex(int row, int column) const;
-    virtual QRectF nodeRect(const QModelIndex &index) const;
+    virtual QRectF nodeRect(int row, int column) const;
 
 public slots:
     void selectAll();

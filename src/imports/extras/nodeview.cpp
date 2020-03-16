@@ -532,5 +532,5 @@ QRectF NodeView::selectionArea() const
         return QRectF();
 
     QItemSelectionRange range = selectionModel->selection().value(0);
-    return QRectF(m_nodeItem->nodeRect(range.topLeft()).topLeft(), m_nodeItem->nodeRect(range.bottomRight()).bottomRight());
+    return QRectF(m_nodeItem->nodeRect(range.top(), range.left()).topLeft(), m_nodeItem->nodeRect(range.bottom(), range.right()).bottomRight());
 }

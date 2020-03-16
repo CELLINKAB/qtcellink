@@ -170,6 +170,8 @@ protected:
     void startPressAndHold();
     void stopPressAndHold();
     void updateImplicitSize();
+    void updateSelection(const QItemSelection &selection);
+    void updateArea(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
 private:
     static void delegates_append(QQmlListProperty<NodeDelegate> *property, NodeDelegate *delegate);

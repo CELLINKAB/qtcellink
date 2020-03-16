@@ -704,14 +704,14 @@ void NodeItem::columnsChange()
 
 void NodeItem::dataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-    m_updates.merge(QItemSelection(topLeft, bottomRight), QItemSelectionModel::Select);
+    updateArea(topLeft, bottomRight);
     update();
 }
 
 void NodeItem::currentChange(const QModelIndex &current, const QModelIndex &previous)
 {
-    m_updates.merge(QItemSelection(current, current), QItemSelectionModel::Select);
-    m_updates.merge(QItemSelection(previous, previous), QItemSelectionModel::Select);
+    updateArea(current, current);
+    updateArea(previous, previous);
     m_current = current;
     update();
 }
@@ -723,8 +723,8 @@ void NodeItem::selectionChange(const QItemSelection &selected, const QItemSelect
         setSelection(QRect(range.left(), range.top(), range.right() - range.left() + 1, range.bottom() - range.top() + 1));
     }
 
-    m_updates.merge(selected, QItemSelectionModel::Select);
-    m_updates.merge(deselected, QItemSelectionModel::Select);
+    updateSelection(selected);
+    updateSelection(deselected);
     m_deselected = deselected;
     m_selected = selected;
     update();
@@ -778,6 +778,27 @@ void NodeItem::updateImplicitSize()
     int columns = NodeItem::columns();
     setImplicitSize(m_nodeWidth * columns + m_nodeSpacing * (columns - 1),
                     m_nodeHeight * rows + m_nodeSpacing * (rows -1 ));
+}
+
+void NodeItem::updateSelection(const QItemSelection &selection)
+{
+    for (const QItemSelectionRange &range : selection)
+        updateArea(range.topLeft(), range.bottomRight());
+}
+
+static QModelIndex clamp(const QModelIndex &index, int rows, int columns)
+{
+    if (!index.isValid())
+        return index;
+
+    return index.sibling(std::min(index.row(), rows - 1), std::min(index.column(), columns - 1));
+}
+
+void NodeItem::updateArea(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    int rows = NodeItem::rows();
+    int columns = NodeItem::columns();
+    m_updates.merge(QItemSelection(clamp(topLeft, rows, columns), clamp(bottomRight, rows, columns)), QItemSelectionModel::Select);
 }
 
 void NodeItem::delegates_append(QQmlListProperty<NodeDelegate> *property, NodeDelegate *delegate)

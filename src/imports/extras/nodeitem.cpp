@@ -527,11 +527,11 @@ public:
 class QuickViewNode : public QSGTransformNode
 {
 public:
-    QuickViewNode(NodeItem *nodeItem) : m_rows(nodeItem->rows()), m_nodes(nodeItem->count())
+    QuickViewNode(NodeItem *nodeItem) : m_rows(nodeItem->rows()), m_columns(nodeItem->columns()), m_nodes(nodeItem->count())
     {
         const QList<NodeDelegate *> delegates = nodeItem->delegateList();
-        for (int column = 0; column < nodeItem->columns(); ++column) {
-            for (int row = 0; row < nodeItem->rows(); ++row) {
+        for (int row = 0; row < m_rows; ++row) {
+            for (int column = 0; column < m_columns; ++column) {
                 QuickItemNode *itemNode = new QuickItemNode;
                 appendChildNode(itemNode);
 
@@ -544,20 +544,20 @@ public:
                     parentNode = node;
                 }
 
-                m_nodes[row + column * m_rows] = itemNode;
+                m_nodes[column + row * m_columns] = itemNode;
             }
         }
     }
 
     QuickItemNode *itemNode(int row, int column) const
     {
-        return m_nodes.value(row + column * m_rows);
+        return m_nodes.value(column + row * m_columns);
     }
 
     void relayout(NodeItem *nodeItem)
     {
-        for (int column = 0; column < nodeItem->columns(); ++column) {
-            for (int row = 0; row < nodeItem->rows(); ++row) {
+        for (int row = 0; row < m_rows; ++row) {
+            for (int column = 0; column < m_columns; ++column) {
                 QuickItemNode *node = itemNode(row, column);
                 if (!node)
                     continue;
@@ -570,6 +570,7 @@ public:
 
 private:
     int m_rows = 0;
+    int m_columns = 0;
     QVector<QuickItemNode *> m_nodes;
 };
 

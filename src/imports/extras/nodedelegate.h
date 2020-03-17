@@ -415,6 +415,7 @@ signals:
 
 protected:
     virtual QRectF clipRect(const QModelIndex &index, NodeItem *item) const;
+    QRectF nodeRect(const QModelIndex &index, NodeItem *item) const override;
     QColor nodeColor(const QModelIndex &index, NodeItem *item) const override;
 
 private:

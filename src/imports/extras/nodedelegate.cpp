@@ -840,6 +840,9 @@ void ProgressDelegate::setLayoutDirection(Qt::LayoutDirection layoutDirection)
 
 QSGNode *ProgressDelegate::createNode(NodeItem *item)
 {
+    if (qFuzzyIsNull(radius()))
+        return RectDelegate::createNode(item);
+
     QQuickDefaultClipNode *clipNode = new QQuickDefaultClipNode(QRectF());
     clipNode->appendChildNode(RectDelegate::createNode(item));
     return clipNode;
@@ -847,6 +850,11 @@ QSGNode *ProgressDelegate::createNode(NodeItem *item)
 
 void ProgressDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
 {
+    if (qFuzzyIsNull(radius())) {
+        RectDelegate::updateNode(node, index, item);
+        return;
+    }
+
     QQuickDefaultClipNode *clipNode = static_cast<QQuickDefaultClipNode *>(node);
     QSGInternalRectangleNode *rectNode = static_cast<QSGInternalRectangleNode *>(clipNode->firstChild());
     Q_ASSERT(rectNode);
@@ -862,7 +870,7 @@ QRectF ProgressDelegate::clipRect(const QModelIndex &index, NodeItem *item) cons
     if (!ok || qFuzzyIsNull(progress))
         return QRectF();
 
-    QRectF rect = nodeRect(index, item);
+    QRectF rect = RectDelegate::nodeRect(index, item);
     if (qFuzzyCompare(progress, 1.0))
         return rect;
 
@@ -877,6 +885,14 @@ QRectF ProgressDelegate::clipRect(const QModelIndex &index, NodeItem *item) cons
         rect.moveBottom(bottom);
     }
     return rect;
+}
+
+QRectF ProgressDelegate::nodeRect(const QModelIndex &index, NodeItem *item) const
+{
+    if (qFuzzyIsNull(radius()))
+        return clipRect(index, item);
+
+    return RectDelegate::nodeRect(index, item);
 }
 
 QColor ProgressDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const

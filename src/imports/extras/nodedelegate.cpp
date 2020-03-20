@@ -36,7 +36,6 @@
 #include <QtGui/qtextlayout.h>
 #include <QtQuick/qsgimagenode.h>
 #include <QtQuick/qquickwindow.h>
-#include <QtQuick/private/qquickclipnode_p.h>
 #include <QtQuick/private/qquickitem_p.h>
 #include <QtQuick/private/qquicktextnode_p.h>
 #include <QtQuick/private/qsgadaptationlayer_p.h>
@@ -164,6 +163,8 @@ void AbstractRectDelegate::updateNode(QSGNode *node, const QModelIndex &index, N
     rectNode->setRect(nodeRect(index, item));
     rectNode->setRadius(nodeRadius(index, item));
     rectNode->setColor(nodeColor(index, item));
+    rectNode->setGradientStops(nodeGradientStops(index, item));
+    rectNode->setGradientVertical(nodeGradientOrientation(index, item) == Qt::Vertical);
     rectNode->setPenColor(nodeBorderColor(index, item));
     rectNode->setPenWidth(nodeBorderWidth(index, item));
     rectNode->update();
@@ -425,6 +426,16 @@ QColor RectDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
     if (m_color.isValid())
         return m_color;
     return Qt::transparent;
+}
+
+QGradientStops RectDelegate::nodeGradientStops(const QModelIndex &, NodeItem *) const
+{
+    return QGradientStops();
+}
+
+Qt::Orientation RectDelegate::nodeGradientOrientation(const QModelIndex &, NodeItem *) const
+{
+    return Qt::Vertical;
 }
 
 QColor RectDelegate::nodeBorderColor(const QModelIndex &index, NodeItem *item) const
@@ -838,63 +849,6 @@ void ProgressDelegate::setLayoutDirection(Qt::LayoutDirection layoutDirection)
     emit changed();
 }
 
-QSGNode *ProgressDelegate::createNode(NodeItem *item)
-{
-    if (qFuzzyIsNull(radius()))
-        return RectDelegate::createNode(item);
-
-    QQuickDefaultClipNode *clipNode = new QQuickDefaultClipNode(QRectF());
-    clipNode->appendChildNode(RectDelegate::createNode(item));
-    return clipNode;
-}
-
-void ProgressDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
-{
-    if (qFuzzyIsNull(radius())) {
-        RectDelegate::updateNode(node, index, item);
-        return;
-    }
-
-    QQuickDefaultClipNode *clipNode = static_cast<QQuickDefaultClipNode *>(node);
-    QSGInternalRectangleNode *rectNode = static_cast<QSGInternalRectangleNode *>(clipNode->firstChild());
-    Q_ASSERT(rectNode);
-    RectDelegate::updateNode(rectNode, index, item);
-    clipNode->setRect(clipRect(index, item));
-    clipNode->update();
-}
-
-QRectF ProgressDelegate::clipRect(const QModelIndex &index, NodeItem *item) const
-{
-    bool ok = false;
-    qreal progress = std::clamp(index.data(m_progressRole).toReal(&ok), 0.0, 1.0);
-    if (!ok || qFuzzyIsNull(progress))
-        return QRectF();
-
-    QRectF rect = RectDelegate::nodeRect(index, item);
-    if (qFuzzyCompare(progress, 1.0))
-        return rect;
-
-    if (m_orientation == Qt::Horizontal) {
-        qreal right = rect.right();
-        rect.setWidth(progress * rect.width());
-        if (m_layoutDirection == Qt::RightToLeft)
-            rect.moveRight(right);
-    } else {
-        qreal bottom = rect.bottom();
-        rect.setHeight(progress * rect.height());
-        rect.moveBottom(bottom);
-    }
-    return rect;
-}
-
-QRectF ProgressDelegate::nodeRect(const QModelIndex &index, NodeItem *item) const
-{
-    if (qFuzzyIsNull(radius()))
-        return clipRect(index, item);
-
-    return RectDelegate::nodeRect(index, item);
-}
-
 QColor ProgressDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
 {
     if (m_colorRole != -1) {
@@ -903,4 +857,36 @@ QColor ProgressDelegate::nodeColor(const QModelIndex &index, NodeItem *item) con
             return color;
     }
     return RectDelegate::nodeColor(index, item);
+}
+
+QGradientStops ProgressDelegate::nodeGradientStops(const QModelIndex &index, NodeItem *item) const
+{
+    if (qFuzzyIsNull(radius()))
+        return QGradientStops();
+
+    bool ok = false;
+    qreal progress = std::clamp(index.data(m_progressRole).toReal(&ok), 0.0, 1.0);
+    if (!ok || qFuzzyCompare(progress, 1.0))
+        return QGradientStops();
+
+    QColor color1 = nodeColor(index, item);
+    QColor color2 = Qt::transparent;
+    if (m_orientation == Qt::Vertical || m_layoutDirection == Qt::RightToLeft) {
+        progress = 1.0 - progress;
+        std::swap(color1, color2);
+    }
+
+    QGradientStops stops;
+    stops += qMakePair(0.0, color1);
+    stops += qMakePair(progress, color1);
+    stops += qMakePair(progress, color2);
+    stops += qMakePair(1.0, color2);
+    return stops;
+}
+
+Qt::Orientation ProgressDelegate::nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const
+{
+    Q_UNUSED(index)
+    Q_UNUSED(item)
+    return m_orientation;
 }

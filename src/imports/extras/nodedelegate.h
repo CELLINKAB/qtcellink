@@ -37,6 +37,7 @@
 #include <QtCore/qobject.h>
 #include <QtCore/qrect.h>
 #include <QtCore/qstring.h>
+#include <QtGui/qbrush.h>
 #include <QtGui/qcolor.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qimage.h>
@@ -118,6 +119,8 @@ public:
 
     virtual qreal nodeRadius(const QModelIndex &index, NodeItem *item) const = 0;
     virtual QColor nodeColor(const QModelIndex &index, NodeItem *item) const = 0;
+    virtual QGradientStops nodeGradientStops(const QModelIndex &index, NodeItem *item) const = 0;
+    virtual Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const = 0;
     virtual QColor nodeBorderColor(const QModelIndex &index, NodeItem *item) const = 0;
     virtual qreal nodeBorderWidth(const QModelIndex &index, NodeItem *item) const = 0;
 };
@@ -207,6 +210,8 @@ signals:
 protected:
     qreal nodeRadius(const QModelIndex &index, NodeItem *item) const override;
     QColor nodeColor(const QModelIndex &index, NodeItem *item) const override;
+    QGradientStops nodeGradientStops(const QModelIndex &index, NodeItem *item) const override;
+    Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const override;
     QColor nodeBorderColor(const QModelIndex &index, NodeItem *item) const override;
     qreal nodeBorderWidth(const QModelIndex &index, NodeItem *item) const override;
 
@@ -404,9 +409,6 @@ public:
     Qt::LayoutDirection layoutDirection() const;
     void setLayoutDirection(Qt::LayoutDirection layoutDirection);
 
-    QSGNode *createNode(NodeItem *item) override;
-    void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) override;
-
 signals:
     void colorRoleChanged();
     void progressRoleChanged();
@@ -414,9 +416,9 @@ signals:
     void layoutDirectionChanged();
 
 protected:
-    virtual QRectF clipRect(const QModelIndex &index, NodeItem *item) const;
-    QRectF nodeRect(const QModelIndex &index, NodeItem *item) const override;
     QColor nodeColor(const QModelIndex &index, NodeItem *item) const override;
+    QGradientStops nodeGradientStops(const QModelIndex &index, NodeItem *item) const override;
+    Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const override;
 
 private:
     int m_colorRole = -1;

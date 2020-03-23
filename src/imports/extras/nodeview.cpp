@@ -86,6 +86,22 @@ void NodeView::setColumns(int columns)
     m_nodeItem->setColumns(columns);
 }
 
+int NodeView::currentRow() const
+{
+    if (!m_nodeItem)
+        return -1;
+
+    return m_nodeItem->currentRow();
+}
+
+int NodeView::currentColumn() const
+{
+    if (!m_nodeItem)
+        return -1;
+
+    return m_nodeItem->currentColumn();
+}
+
 QObject *NodeView::model() const
 {
     if (!m_nodeItem)
@@ -326,6 +342,8 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         disconnect(m_nodeItem, &NodeItem::countChanged, this, &NodeView::countChanged);
         disconnect(m_nodeItem, &NodeItem::rowsChanged, this, &NodeView::rowsChanged);
         disconnect(m_nodeItem, &NodeItem::columnsChanged, this, &NodeView::columnsChanged);
+        disconnect(m_nodeItem, &NodeItem::currentRowChanged, this, &NodeView::currentRowChanged);
+        disconnect(m_nodeItem, &NodeItem::currentColumnChanged, this, &NodeView::currentColumnChanged);
         disconnect(m_nodeItem, &NodeItem::modelChanged, this, &NodeView::modelChanged);
         disconnect(m_nodeItem, &NodeItem::selectionChanged, this, &NodeView::selectionChanged);
         disconnect(m_nodeItem, &NodeItem::selectionModeChanged, this, &NodeView::selectionModeChanged);
@@ -351,6 +369,8 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         connect(nodeItem, &NodeItem::countChanged, this, &NodeView::countChanged);
         connect(nodeItem, &NodeItem::rowsChanged, this, &NodeView::rowsChanged);
         connect(nodeItem, &NodeItem::columnsChanged, this, &NodeView::columnsChanged);
+        connect(nodeItem, &NodeItem::currentRowChanged, this, &NodeView::currentRowChanged);
+        connect(nodeItem, &NodeItem::currentColumnChanged, this, &NodeView::currentColumnChanged);
         connect(nodeItem, &NodeItem::modelChanged, this, &NodeView::modelChanged);
         connect(nodeItem, &NodeItem::selectionChanged, this, &NodeView::selectionChanged);
         connect(nodeItem, &NodeItem::selectionModeChanged, this, &NodeView::selectionModeChanged);
@@ -369,6 +389,8 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
     emit nodeItemChanged();
     emit countChanged();
     emit rowsChanged();
+    emit currentRowChanged();
+    emit currentColumnChanged();
     emit columnsChanged();
     emit modelChanged();
     emit selectionChanged();
@@ -380,6 +402,22 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
     emit nodeSpacingChanged();
     emit nodeScaleXChanged();
     emit nodeScaleYChanged();
+}
+
+void NodeView::setCurrent(int row, int column)
+{
+    if (!m_nodeItem)
+        return;
+
+    m_nodeItem->setCurrent(row, column);
+}
+
+void NodeView::clearCurrent()
+{
+    if (!m_nodeItem)
+        return;
+
+    m_nodeItem->clearCurrent();
 }
 
 void NodeView::selectAll()

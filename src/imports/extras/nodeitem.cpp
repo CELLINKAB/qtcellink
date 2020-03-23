@@ -112,6 +112,22 @@ void NodeItem::setColumns(int columns)
     columnsChange();
 }
 
+int NodeItem::currentRow() const
+{
+    if (!m_selectionModel)
+        return -1;
+
+    return m_selectionModel->currentIndex().row();
+}
+
+int NodeItem::currentColumn() const
+{
+    if (!m_selectionModel)
+        return -1;
+
+    return m_selectionModel->currentIndex().column();
+}
+
 QObject *NodeItem::model() const
 {
     return m_model;
@@ -385,6 +401,22 @@ QRectF NodeItem::nodeRect(int row, int column) const
     return QRectF(column * nw + column * hsp, row * nh + row * vsp, nw, nh);
 }
 
+void NodeItem::setCurrent(int row, int column)
+{
+    if (!m_selectionModel || !m_model)
+        return;
+
+    m_selectionModel->setCurrentIndex(m_model->index(row, column), QItemSelectionModel::Current);
+}
+
+void NodeItem::clearCurrent()
+{
+    if (!m_selectionModel)
+        return;
+
+    m_selectionModel->clearCurrentIndex();
+}
+
 void NodeItem::selectAll()
 {
     if (!m_selectionModel || !m_model)
@@ -412,8 +444,6 @@ void NodeItem::clearSelection()
 void NodeItem::cancelSelection()
 {
     setKeepMouseGrab(false);
-    if (m_selectionModel)
-        m_selectionModel->clearCurrentIndex();
     stopPressAndHold();
     setSelecting(false);
     setPressed(false);
@@ -710,6 +740,11 @@ void NodeItem::dataChange(const QModelIndex &topLeft, const QModelIndex &bottomR
 
 void NodeItem::currentChange(const QModelIndex &current, const QModelIndex &previous)
 {
+    if (current.row() != previous.row())
+        emit currentRowChanged();
+    if (current.column() != previous.column())
+        emit currentColumnChanged();
+
     updateArea(current, current);
     updateArea(previous, previous);
     m_current = current;

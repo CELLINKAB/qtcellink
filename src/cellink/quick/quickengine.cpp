@@ -49,16 +49,6 @@ QuickEngine::QuickEngine(QObject *parent) : QQmlApplicationEngine(parent)
     QLocale locale;
     locale.setNumberOptions(locale.numberOptions() | QLocale::OmitGroupSeparator);
     QLocale::setDefault(locale);
-
-#if !defined(Q_OS_MACOS)
-    QString appPath = QCoreApplication::applicationDirPath();
-    QStringList libraryPaths = QCoreApplication::libraryPaths();
-    QDir pluginDir(appPath);
-    if (pluginDir.cd("../plugins"))
-        libraryPaths.prepend(pluginDir.canonicalPath());
-    libraryPaths.prepend(appPath);
-    QCoreApplication::setLibraryPaths(libraryPaths);
-#endif
 }
 
 static inline QString organizationStylePath()

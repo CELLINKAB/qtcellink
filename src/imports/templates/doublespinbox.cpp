@@ -90,7 +90,7 @@ public:
     QValidator *validator = nullptr;
     mutable QJSValue textFromValue;
     mutable QJSValue valueFromText;
-    Qt::InputMethodHints inputMethodHints = Qt::ImhDigitsOnly;
+    Qt::InputMethodHints inputMethodHints = Qt::ImhDigitsOnly | Qt::ImhNoTextHandles;
 };
 
 class DoubleSpinButtonPrivate : public QObjectPrivate

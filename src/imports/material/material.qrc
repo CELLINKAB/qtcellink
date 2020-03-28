@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
     <qresource prefix="/qt-project.org/imports/QtCellink/Material">
-        <file alias="MaterialIcons-Regular.ttf">../../3rdparty/material-design-icons/iconfont/MaterialIcons-Regular.ttf</file>
+        <file alias="MaterialIcons-Regular.ttf">../../3rdparty/material-design-icons/dist/fonts/MaterialIcons-Regular.ttf</file>
     </qresource>
 </RCC>

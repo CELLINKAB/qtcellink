@@ -1,7 +1,7 @@
 FROM ubuntu:19.10
 
 ARG QT_VERSION=dev
-ARG QT_MODULES=qt3d,qtbase,qtdeclarative,qtgraphicaleffects,qtimageformats,qtmultimedia,qtquickcontrols2,qtserialport,qtsvg,qtvirtualkeyboard,qtxmlpatterns
+ARG QT_MODULES=qt3d,qtbase,qtdeclarative,qtgraphicaleffects,qtimageformats,qtmultimedia,qtquickcontrols2,qtserialport,qtsvg,qtvirtualkeyboard,qtxmlpatterns,uiplugin
 ARG QT_ADDONS=qtmqtt
 
 RUN echo "Building Qt ${QT_VERSION}"

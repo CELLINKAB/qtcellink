@@ -861,9 +861,6 @@ QColor ProgressDelegate::nodeColor(const QModelIndex &index, NodeItem *item) con
 
 QGradientStops ProgressDelegate::nodeGradientStops(const QModelIndex &index, NodeItem *item) const
 {
-    if (qFuzzyIsNull(radius()))
-        return QGradientStops();
-
     bool ok = false;
     qreal progress = std::clamp(index.data(m_progressRole).toReal(&ok), 0.0, 1.0);
     if (!ok || qFuzzyCompare(progress, 1.0))

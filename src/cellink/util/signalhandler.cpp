@@ -104,7 +104,7 @@ void SignalHandler::setup(std::function<void()> func)
 #ifdef Q_OS_UNIX
     const struct Signal {
         int num;
-        __sighandler_t handler;
+        sighandler_t handler;
     } handlers[] = {
         { SIGHUP, sigHupHandler },
         { SIGINT, sigIntHandler },

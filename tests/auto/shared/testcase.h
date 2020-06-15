@@ -47,14 +47,14 @@ public:
     explicit TestCase(QObject *parent = nullptr) : QObject(parent)
     {
         initTestApp();
-
-        QStringList libraryPaths = QCoreApplication::libraryPaths();
-        libraryPaths.prepend(PLUGIN_PATH);
-        QCoreApplication::setLibraryPaths(libraryPaths);
     }
 
     static void initTestApp()
     {
+        QStringList libraryPaths = QCoreApplication::libraryPaths();
+        libraryPaths.prepend(PLUGIN_PATH);
+        QCoreApplication::setLibraryPaths(libraryPaths);
+
         QStandardPaths::setTestModeEnabled(true);
         qAddPostRoutine(cleanupTestApp);
         cleanupTestApp();

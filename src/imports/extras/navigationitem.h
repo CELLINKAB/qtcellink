@@ -41,6 +41,7 @@ class NavigationItem : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
     Q_PROPERTY(bool confirm READ confirm WRITE setConfirm NOTIFY confirmChanged)
     Q_PROPERTY(bool fullScreen READ isFullScreen WRITE setFullScreen NOTIFY fullScreenChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -54,6 +55,9 @@ public:
 
     bool isEnabled() const;
     void setEnabled(bool enabled);
+
+    bool isVisible() const;
+    void setVisible(bool visible);
 
     bool confirm() const;
     void setConfirm(bool confirm);
@@ -81,6 +85,7 @@ public slots:
 
 signals:
     void enabledChanged();
+    void visibleChanged();
     void confirmChanged();
     void fullScreenChanged();
     void nameChanged();
@@ -92,6 +97,7 @@ signals:
 
 private:
     bool m_enabled = true;
+    bool m_visible = true;
     bool m_confirm = false;
     bool m_fullScreen = false;
     QString m_name;

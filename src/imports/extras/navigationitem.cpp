@@ -50,6 +50,20 @@ void NavigationItem::setEnabled(bool enabled)
     emit enabledChanged();
 }
 
+bool NavigationItem::isVisible() const
+{
+    return m_visible;
+}
+
+void NavigationItem::setVisible(bool visible)
+{
+    if (m_visible == visible)
+        return;
+
+    m_visible = visible;
+    emit visibleChanged();
+}
+
 bool NavigationItem::confirm() const
 {
     return m_confirm;

@@ -391,7 +391,7 @@ void DoubleSpinBox::setFrom(qreal from)
     d->from = from;
     emit fromChanged();
     if (isComponentComplete()) {
-        if (!d->setValue(d->value, /* allowWrap = */ false, /* modified = */ true)) {
+        if (!d->setValue(d->value, /* allowWrap = */ false, /* modified = */ false)) {
             d->updateUpEnabled();
             d->updateDownEnabled();
         }
@@ -413,7 +413,7 @@ void DoubleSpinBox::setTo(qreal to)
     d->to = to;
     emit toChanged();
     if (isComponentComplete()) {
-        if (!d->setValue(d->value, /* allowWrap = */ false, /* modified = */ true)) {
+        if (!d->setValue(d->value, /* allowWrap = */false, /* modified = */ false)) {
             d->updateUpEnabled();
             d->updateDownEnabled();
         }

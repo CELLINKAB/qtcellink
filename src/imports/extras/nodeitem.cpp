@@ -545,7 +545,7 @@ void NodeItem::itemChange(ItemChange change, const ItemChangeData &data)
 {
     QQuickItem::itemChange(change, data);
     if (change == ItemEnabledHasChanged)
-        update();
+        fullUpdate();
 }
 
 class QuickItemNode : public QSGTransformNode

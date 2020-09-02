@@ -76,9 +76,8 @@ static void initEngine(QQmlEngine *engine)
 {
     QQmlContext *context = engine->rootContext();
     context->setContextProperty("QT_VERSION_STR", QT_VERSION_STR);
-#ifdef BUILD_DATE
-    context->setContextProperty("BUILD_DATE", BUILD_DATE);
-#endif
+    context->setContextProperty("BUILD_DATE", __DATE__);
+    context->setContextProperty("BUILD_TIME", __TIME__);
 
     engine->addImportPath(":/qml");
 

@@ -6,6 +6,9 @@ DoubleSpinBox::DoubleSpinBox(QWidget *parent) : QDoubleSpinBox(parent)
         if (m_editing)
             emit valueEdited(value);
     });
+    connect(this, &QAbstractSpinBox::editingFinished, [=]() {
+        emit valueEdited(value());
+    });
 }
 
 void DoubleSpinBox::stepBy(int steps)

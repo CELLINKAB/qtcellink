@@ -6,6 +6,9 @@ SpinBox::SpinBox(QWidget *parent) : QSpinBox(parent)
         if (m_editing)
             emit valueEdited(value);
     });
+    connect(this, &QAbstractSpinBox::editingFinished, [=]() {
+        emit valueEdited(value());
+    });
 }
 
 void SpinBox::stepBy(int steps)

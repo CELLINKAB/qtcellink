@@ -51,6 +51,10 @@ public:
 
     int elapsed() const;
 
+signals:
+    void started();
+    void stopped();
+
 protected:
     void itemChange(ItemChange change, const ItemChangeData &data) override;
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *) override;

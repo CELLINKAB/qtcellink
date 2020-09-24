@@ -46,6 +46,8 @@ public:
 Q_SIGNALS:
     void runningChanged();
     void valueChanged();
+    void started();
+    void stopped();
 
 protected:
 #if QT_CONFIG(quicktemplates2_multitouch)
@@ -55,6 +57,8 @@ protected:
 #if QT_CONFIG(accessibility)
     QAccessible::Role accessibleRole() const override;
 #endif
+
+    void contentItemChange(QQuickItem *newItem, QQuickItem *oldItem) override;
 
 private:
     Q_DISABLE_COPY(ProgressIndicator)

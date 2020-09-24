@@ -253,8 +253,11 @@ QSGNode *ProgressIndicatorImpl::updatePaintNode(QSGNode *oldNode, UpdatePaintNod
 {
     ProgressIndicatorNode *node = static_cast<ProgressIndicatorNode *>(oldNode);
     if (isVisible() && width() > 0 && height() > 0) {
-        if (!node)
+        if (!node) {
             node = new ProgressIndicatorNode(this);
+            connect(node, &QQuickAnimatedNode::started, this, &ProgressIndicatorImpl::started);
+            connect(node, &QQuickAnimatedNode::stopped, this, &ProgressIndicatorImpl::stopped);
+        }
         if (m_running)
             node->start();
         else

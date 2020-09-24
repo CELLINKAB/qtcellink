@@ -67,6 +67,16 @@ void ProgressIndicator::setValue(qreal value)
     emit valueChanged();
 }
 
+void ProgressIndicator::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
+{
+    QQuickControl::contentItemChange(newItem, oldItem);
+
+    if (oldItem)
+        disconnect(oldItem, SIGNAL(started()), this, SIGNAL(started()));
+    if (newItem)
+        connect(newItem, SIGNAL(started()), this, SIGNAL(started()));
+}
+
 #if QT_CONFIG(quicktemplates2_multitouch)
 void ProgressIndicator::touchEvent(QTouchEvent *event)
 {

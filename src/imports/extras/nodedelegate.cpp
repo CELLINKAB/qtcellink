@@ -840,6 +840,129 @@ qreal OpacityDelegate::nodeOpacity(const QModelIndex &index, NodeItem *item) con
     return m_opacity;
 }
 
+AbstractScaleDelegate::AbstractScaleDelegate(QObject *parent) : NodeDelegate(parent)
+{
+}
+
+QSGNode *AbstractScaleDelegate::createNode(NodeItem *item)
+{
+    Q_UNUSED(item);
+    QSGTransformNode *scaleNode = new QSGTransformNode;
+    return scaleNode;
+}
+
+void AbstractScaleDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
+{
+    QSGTransformNode *scaleNode = static_cast<QSGTransformNode *>(node);
+    QRectF rect = nodeRect(index, item);
+    QMatrix4x4 matrix;
+    matrix.translate(rect.width() / 2.0, rect.height() / 2.0);
+    matrix.scale(nodeScale(index, item));
+    matrix.translate(-rect.width() / 2.0, -rect.height() / 2.0);
+    scaleNode->setMatrix(matrix);
+}
+
+ScaleDelegate::ScaleDelegate(QObject *parent) : AbstractScaleDelegate(parent)
+{
+}
+
+qreal ScaleDelegate::scale() const
+{
+    return m_scale;
+}
+
+void ScaleDelegate::setScale(qreal scale)
+{
+    if (qFuzzyCompare(m_scale, scale))
+        return;
+
+    m_scale = scale;
+    emit scaleChanged();
+    emit changed();
+}
+
+qreal ScaleDelegate::currentScale() const
+{
+    return m_currentScale;
+}
+
+void ScaleDelegate::setCurrentScale(qreal currentScale)
+{
+    if (qFuzzyCompare(m_currentScale, currentScale))
+        return;
+
+    m_currentScale = currentScale;
+    emit currentScaleChanged();
+    emit changed();
+}
+
+qreal ScaleDelegate::selectedScale() const
+{
+    return m_selectedScale;
+}
+
+void ScaleDelegate::setSelectedScale(qreal selectedScale)
+{
+    if (qFuzzyCompare(m_selectedScale, selectedScale))
+        return;
+
+    m_selectedScale = selectedScale;
+    emit selectedScaleChanged();
+    emit changed();
+}
+
+qreal ScaleDelegate::disabledScale() const
+{
+    return m_disabledScale;
+}
+
+void ScaleDelegate::setDisabledScale(qreal disabledScale)
+{
+    if (qFuzzyCompare(m_disabledScale, disabledScale))
+        return;
+
+    m_disabledScale = disabledScale;
+    emit disabledScaleChanged();
+    emit changed();
+}
+
+int ScaleDelegate::scaleRole() const
+{
+    return m_scaleRole;
+}
+
+void ScaleDelegate::setScaleRole(int scaleRole)
+{
+    if (m_scaleRole == scaleRole)
+        return;
+
+    m_scaleRole = scaleRole;
+    emit scaleRoleChanged();
+    emit changed();
+}
+
+static bool isValidScale(qreal scale)
+{
+    return qFuzzyIsNull(scale) || scale >= 0;
+}
+
+qreal ScaleDelegate::nodeScale(const QModelIndex &index, NodeItem *item) const
+{
+    if (m_scaleRole != -1) {
+        bool ok = false;
+        qreal scale = index.data(m_scaleRole).toReal(&ok);
+        if (ok && isValidScale(scale))
+            return scale;
+    }
+    if (isValidScale(m_disabledScale) && !item->isEnabled(index))
+        return m_disabledScale;
+    if (isValidScale(m_selectedScale) && item->isSelected(index))
+        return m_selectedScale;
+    if (isValidScale(m_currentScale) && item->isCurrent(index))
+        return m_currentScale;
+    return m_scale;
+}
+
 ProgressDelegate::ProgressDelegate(QObject *parent) : RectDelegate(parent)
 {
 }

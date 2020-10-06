@@ -84,6 +84,7 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterType<ProgressDelegate>(uri, 1, 0, "ProgressDelegate");
     qmlRegisterSingletonType<Rect>(uri, 1, 0, "Rect", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Rect(engine); });
     qmlRegisterType<RectDelegate>(uri, 1, 0, "RectDelegate");
+    qmlRegisterType<ScaleDelegate>(uri, 1, 0, "ScaleDelegate");
     qmlRegisterType<TextDelegate>(uri, 1, 0, "TextDelegate");
 
     qmlRegisterRevision<QQuickItem, QT_VERSION_MINOR>(uri, 1, 0);

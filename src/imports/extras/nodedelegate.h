@@ -404,6 +404,64 @@ private:
     qreal m_disabledOpacity = -1.0;
 };
 
+class AbstractScaleDelegate : public NodeDelegate
+{
+    Q_OBJECT
+
+public:
+    explicit AbstractScaleDelegate(QObject *parent = nullptr);
+
+    QSGNode *createNode(NodeItem *item) override;
+    void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) override;
+
+    virtual qreal nodeScale(const QModelIndex &index, NodeItem *item) const = 0;
+};
+
+class ScaleDelegate : public AbstractScaleDelegate
+{
+    Q_OBJECT
+    Q_PROPERTY(qreal scale READ scale WRITE setScale NOTIFY scaleChanged)
+    Q_PROPERTY(qreal currentScale READ currentScale WRITE setCurrentScale NOTIFY currentScaleChanged)
+    Q_PROPERTY(qreal selectedScale READ selectedScale WRITE setSelectedScale NOTIFY selectedScaleChanged)
+    Q_PROPERTY(qreal disabledScale READ disabledScale WRITE setDisabledScale NOTIFY disabledScaleChanged)
+    Q_PROPERTY(int scaleRole READ scaleRole WRITE setScaleRole NOTIFY scaleRoleChanged)
+
+public:
+    explicit ScaleDelegate(QObject *parent = nullptr);
+
+    qreal scale() const;
+    void setScale(qreal scale);
+
+    qreal currentScale() const;
+    void setCurrentScale(qreal currentScale);
+
+    qreal selectedScale() const;
+    void setSelectedScale(qreal selectedScale);
+
+    qreal disabledScale() const;
+    void setDisabledScale(qreal disabledScale);
+
+    int scaleRole() const;
+    void setScaleRole(int scaleRole);
+
+signals:
+    void scaleChanged();
+    void currentScaleChanged();
+    void selectedScaleChanged();
+    void disabledScaleChanged();
+    void scaleRoleChanged();
+
+protected:
+    qreal nodeScale(const QModelIndex &index, NodeItem *item) const override;
+
+private:
+    int m_scaleRole = -1;
+    qreal m_scale = 1.0;
+    qreal m_currentScale = -1.0;
+    qreal m_selectedScale = -1.0;
+    qreal m_disabledScale = -1.0;
+};
+
 class ProgressDelegate : public RectDelegate
 {
     Q_OBJECT

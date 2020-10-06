@@ -256,6 +256,9 @@ class TextDelegate : public AbstractTextDelegate
     Q_PROPERTY(QColor selectedColor READ selectedColor WRITE setSelectedColor NOTIFY selectedColorChanged)
     Q_PROPERTY(QColor disabledColor READ disabledColor WRITE setDisabledColor NOTIFY disabledColorChanged)
     Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY fontChanged)
+    Q_PROPERTY(QFont currentFont READ currentFont WRITE setCurrentFont NOTIFY currentFontChanged)
+    Q_PROPERTY(QFont selectedFont READ selectedFont WRITE setSelectedFont NOTIFY selectedFontChanged)
+    Q_PROPERTY(QFont disabledFont READ disabledFont WRITE setDisabledFont NOTIFY disabledFontChanged)
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment NOTIFY alignmentChanged)
 
 public:
@@ -279,6 +282,15 @@ public:
     QFont font() const;
     void setFont(const QFont &font);
 
+    QFont currentFont() const;
+    void setCurrentFont(const QFont &currentFont);
+
+    QFont selectedFont() const;
+    void setSelectedFont(const QFont &selectedFont);
+
+    QFont disabledFont() const;
+    void setDisabledFont(const QFont &disabledFont);
+
     Qt::Alignment alignment() const;
     void setAlignment(Qt::Alignment alignment);
 
@@ -289,6 +301,9 @@ signals:
     void selectedColorChanged();
     void disabledColorChanged();
     void fontChanged();
+    void currentFontChanged();
+    void selectedFontChanged();
+    void disabledFontChanged();
     void alignmentChanged();
 
 protected:
@@ -304,6 +319,9 @@ private:
     QColor m_selectedColor;
     QColor m_disabledColor;
     QFont m_font;
+    std::optional<QFont> m_currentFont;
+    std::optional<QFont> m_selectedFont;
+    std::optional<QFont> m_disabledFont;
     Qt::Alignment m_alignment = Qt::AlignCenter;
 };
 

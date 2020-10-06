@@ -593,6 +593,51 @@ void TextDelegate::setFont(const QFont &font)
     emit changed();
 }
 
+QFont TextDelegate::currentFont() const
+{
+    return m_currentFont.value_or(m_font);
+}
+
+void TextDelegate::setCurrentFont(const QFont &currentFont)
+{
+    if (m_currentFont == currentFont)
+        return;
+
+    m_currentFont = currentFont;
+    emit currentFontChanged();
+    emit changed();
+}
+
+QFont TextDelegate::selectedFont() const
+{
+    return m_selectedFont.value_or(m_font);
+}
+
+void TextDelegate::setSelectedFont(const QFont &selectedFont)
+{
+    if (m_selectedFont == selectedFont)
+        return;
+
+    m_selectedFont = selectedFont;
+    emit selectedFontChanged();
+    emit changed();
+}
+
+QFont TextDelegate::disabledFont() const
+{
+    return m_disabledFont.value_or(m_font);
+}
+
+void TextDelegate::setDisabledFont(const QFont &disabledFont)
+{
+    if (m_disabledFont == disabledFont)
+        return;
+
+    m_disabledFont = disabledFont;
+    emit disabledFontChanged();
+    emit changed();
+}
+
 Qt::Alignment TextDelegate::alignment() const
 {
     return m_alignment;
@@ -625,10 +670,20 @@ QColor TextDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
     return m_color;
 }
 
+static bool isValidFont(std::optional<QFont> font)
+{
+    return font.has_value();
+}
+
 QFont TextDelegate::nodeFont(const QModelIndex &index, NodeItem *item) const
 {
-    Q_UNUSED(index)
     QFont font = m_font;
+    if (isValidFont(m_disabledFont) && !item->isEnabled(index))
+        font = m_disabledFont.value().resolve(font);
+    if (isValidFont(m_selectedFont) && item->isSelected(index))
+        font = m_selectedFont.value().resolve(font);
+    if (isValidFont(m_currentFont) && item->isCurrent(index))
+        font = m_currentFont.value().resolve(font);
     font.setPixelSize(font.pixelSize() * item->nodeScale());
     return font;
 }

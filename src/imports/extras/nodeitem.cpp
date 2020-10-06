@@ -753,7 +753,7 @@ void NodeItem::currentChange(const QModelIndex &current, const QModelIndex &prev
 
 void NodeItem::selectionChange(const QItemSelection &selected, const QItemSelection &deselected)
 {
-    if (m_selectionModel) {
+    if (m_selectionModel && m_selectionMode == MultiSelection) {
         QItemSelectionRange range = m_selectionModel->selection().value(0);
         setSelection(QRect(range.left(), range.top(), range.right() - range.left() + 1, range.bottom() - range.top() + 1));
     }

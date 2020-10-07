@@ -485,21 +485,14 @@ void NodeItem::mouseMoveEvent(QMouseEvent *event)
     }
 
     QModelIndex index = nodeAt(event->pos());
-    if (isEnabled(index)) {
+    if (isEnabled(index) && keepMouseGrab()) {
         QModelIndex currentIndex = m_selectionModel->currentIndex();
-        if (index != currentIndex) {
-            stopPressAndHold();
-            if (!keepMouseGrab())
-                m_selectionModel->clearCurrentIndex();
-        }
-        if (index.isValid() && keepMouseGrab()) {
-            if (m_selectionMode == MultiSelection)
-                m_selectionModel->select(QItemSelection(topLeft(index, currentIndex), bottomRight(index, currentIndex)), QItemSelectionModel::ClearAndSelect);
-            else
-                m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
-            emit ensureVisible(nodeRect(index.row(), index.column()));
-            emit activated(index);
-        }
+        if (m_selectionMode == MultiSelection)
+            m_selectionModel->select(QItemSelection(topLeft(index, currentIndex), bottomRight(index, currentIndex)), QItemSelectionModel::ClearAndSelect);
+        else
+            m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+        emit ensureVisible(nodeRect(index.row(), index.column()));
+        emit activated(index);
     }
     event->accept();
 }

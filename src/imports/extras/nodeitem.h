@@ -48,6 +48,7 @@ class NodeItem : public QQuickItem
     Q_PROPERTY(int columns READ columns WRITE setColumns NOTIFY columnsChanged)
     Q_PROPERTY(int currentRow READ currentRow NOTIFY currentRowChanged)
     Q_PROPERTY(int currentColumn READ currentColumn NOTIFY currentColumnChanged)
+    Q_PROPERTY(QRectF currentRect READ currentRect NOTIFY currentRectChanged)
     Q_PROPERTY(QRect selection READ selection NOTIFY selectionChanged)
     Q_PROPERTY(QObject *model READ model WRITE setModel NOTIFY modelChanged)
     Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode NOTIFY selectionModeChanged)
@@ -74,6 +75,7 @@ public:
 
     int currentRow() const;
     int currentColumn() const;
+    QRectF currentRect() const;
 
     QRect selection() const;
     void setSelection(const QRect &selection);
@@ -138,6 +140,7 @@ signals:
     void columnsChanged();
     void currentRowChanged();
     void currentColumnChanged();
+    void currentRectChanged();
     void selectionChanged();
     void modelChanged();
     void selectionModeChanged();

@@ -128,6 +128,15 @@ int NodeItem::currentColumn() const
     return m_selectionModel->currentIndex().column();
 }
 
+QRectF NodeItem::currentRect() const
+{
+    if (!m_selectionModel)
+        return QRectF();
+
+    QModelIndex index = m_selectionModel->currentIndex();
+    return nodeRect(index.row(), index.column());
+}
+
 QObject *NodeItem::model() const
 {
     return m_model;
@@ -306,6 +315,7 @@ void NodeItem::setNodeScaleX(qreal nodeScaleX)
 
     m_nodeScaleX = nodeScaleX;
     emit nodeScaleXChanged();
+    emit currentRectChanged();
 }
 
 qreal NodeItem::nodeScaleY() const
@@ -324,6 +334,7 @@ void NodeItem::setNodeScaleY(qreal nodeScaleY)
 
     m_nodeScaleY = nodeScaleY;
     emit nodeScaleYChanged();
+    emit currentRectChanged();
 }
 
 QList<NodeDelegate *> NodeItem::delegateList() const
@@ -537,8 +548,10 @@ void NodeItem::timerEvent(QTimerEvent *event)
 void NodeItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
-    if (newGeometry.size() != oldGeometry.size())
+    if (newGeometry.size() != oldGeometry.size()) {
         relayout();
+        emit currentRectChanged();
+    }
 }
 
 void NodeItem::itemChange(ItemChange change, const ItemChangeData &data)
@@ -744,6 +757,7 @@ void NodeItem::currentChange(const QModelIndex &current, const QModelIndex &prev
         emit currentRowChanged();
     if (current.column() != previous.column())
         emit currentColumnChanged();
+    emit currentRectChanged();
 
     updateArea(current, current);
     updateArea(previous, previous);

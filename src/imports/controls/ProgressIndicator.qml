@@ -33,15 +33,35 @@ T.ProgressIndicator {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
 
-    contentItem: ProgressIndicatorImpl {
+    contentItem: Item {
         implicitWidth: 48
         implicitHeight: 48
-        color: control.palette.highlight
-        lineWidth: Math.max(4, Math.ceil(width / 24))
 
-        value: control.value
-        running: control.running
-        opacity: control.running || control.value ? 1 : 0
-        Behavior on opacity { OpacityAnimator { duration: 250 } }
+        signal started()
+
+        ProgressIndicatorImpl {
+            width: parent.width
+            height: parent.height
+
+            value: 1
+            opacity: 0.25
+            color: control.palette.midlight
+            lineWidth: Math.max(4, Math.ceil(width / 24))
+        }
+
+        ProgressIndicatorImpl {
+            width: parent.width
+            height: parent.height
+
+            color: control.palette.highlight
+            lineWidth: Math.max(4, Math.ceil(width / 24))
+
+            value: control.value
+            running: control.running
+            opacity: control.running || control.value ? 1 : 0
+            Behavior on opacity { OpacityAnimator { duration: 250 } }
+
+            onStarted: parent.started()
+        }
     }
 }

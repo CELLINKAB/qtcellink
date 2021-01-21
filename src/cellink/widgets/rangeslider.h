@@ -99,7 +99,6 @@ protected:
 private:
     Q_DISABLE_COPY(RangeSlider)
     Q_DECLARE_PRIVATE(RangeSlider)
-    Q_PRIVATE_SLOT(d_func(), void movePressedHandle())
     QScopedPointer<RangeSliderPrivate> d_ptr;
 };
 

@@ -68,7 +68,7 @@ public:
 void RangeSliderPrivate::init(RangeSlider *slider)
 {
     q_ptr = slider;
-    QObject::connect(slider, SIGNAL(sliderReleased()), slider, SLOT(movePressedHandle()));
+    QObject::connect(slider, &RangeSlider::sliderReleased, slider, [this]() { movePressedHandle(); });
 }
 
 void RangeSliderPrivate::initStyleOption(QStyleOptionSlider *option, RangeSlider::RangeHandle handle) const
@@ -586,5 +586,3 @@ void RangeSlider::sliderChange(SliderChange change)
         setValues(d->lower, d->upper); // force within the range
     QSlider::sliderChange(change);
 }
-
-#include "moc_rangeslider.cpp"

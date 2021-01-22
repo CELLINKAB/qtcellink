@@ -25,6 +25,7 @@
 
 #include "color.h"
 #include "colorimage.h"
+#include "componentmodel.h"
 #include "filtermodel.h"
 #include "iconimage.h"
 #include "iconlabel.h"
@@ -65,6 +66,7 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
 {
     qmlRegisterSingletonType<Color>(uri, 1, 0, "Color", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Color(engine); });
     qmlRegisterType<ColorImage>(uri, 1, 0, "ColorImage");
+    qmlRegisterType<ComponentModel>(uri, 1, 0, "ComponentModel");
     qmlRegisterType<FilterModel>(uri, 1, 0, "FilterModel");
     qmlRegisterType<HeaderDelegate>(uri, 1, 0, "HeaderDelegate");
     qmlRegisterType<IconImage>(uri, 1, 0, "IconImage");

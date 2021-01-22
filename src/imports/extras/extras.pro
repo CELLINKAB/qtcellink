@@ -13,6 +13,7 @@ OTHER_FILES += \
 HEADERS += \
     $$PWD/color.h \
     $$PWD/colorimage.h \
+    $$PWD/componentmodel.h \
     $$PWD/filtermodel.h \
     $$PWD/iconimage.h \
     $$PWD/iconimage_p.h \
@@ -34,6 +35,7 @@ HEADERS += \
 SOURCES += \
     $$PWD/color.cpp \
     $$PWD/colorimage.cpp \
+    $$PWD/componentmodel.cpp \
     $$PWD/filtermodel.cpp \
     $$PWD/iconimage.cpp \
     $$PWD/iconlabel.cpp \

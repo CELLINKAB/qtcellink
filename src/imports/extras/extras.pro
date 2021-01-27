@@ -20,7 +20,7 @@ HEADERS += \
     $$PWD/iconlabel.h \
     $$PWD/iconlabel_p.h \
     $$PWD/keyboard.h \
-    $$PWD/license.h \
+    $$PWD/licenseentry.h \
     $$PWD/licensemodel.h \
     $$PWD/mnemoniclabel.h \
     $$PWD/navigationgroup.h \

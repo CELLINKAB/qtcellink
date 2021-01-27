@@ -47,7 +47,7 @@ static const QString LicenseFile = QStringLiteral("generic_%1");
 LicenseModel::LicenseModel(QObject *parent) : QAbstractListModel(parent)
 {
     qRegisterMetaType<Status>("Status");
-    qRegisterMetaType<License>("License");
+    qRegisterMetaType<LicenseEntry>("LicenseEntry");
 }
 
 LicenseModel::Status LicenseModel::status() const
@@ -70,7 +70,7 @@ QString LicenseModel::manifest() const
     return m_manifest;
 }
 
-static License parseLicense(License license, const QString &value, const QStringList &licenses)
+static LicenseEntry parseLicense(LicenseEntry license, const QString &value, const QStringList &licenses)
 {
     license.licenses = licenses;
     const QStringList parts = value.split(QLatin1Char(' '), QString::SkipEmptyParts);
@@ -102,8 +102,8 @@ void LicenseModel::setManifest(const QString &manifest)
         }
 
         QString line;
-        License license;
-        QMap<QString, License> licenses;
+        LicenseEntry license;
+        QMap<QString, LicenseEntry> licenses;
         QTextStream stream(&file);
         while (!model.isNull() && stream.readLineInto(&line)) {
             int colon = line.indexOf(QLatin1Char(':'));
@@ -123,7 +123,7 @@ void LicenseModel::setManifest(const QString &manifest)
         }
 
         if (model) {
-            QMetaObject::invokeMethod(model.data(), "setLicenses", Qt::QueuedConnection, Q_ARG(QList<License>, licenses.values()));
+            QMetaObject::invokeMethod(model.data(), "setLicenses", Qt::QueuedConnection, Q_ARG(QList<LicenseEntry>, licenses.values()));
             QMetaObject::invokeMethod(model.data(), "setStatus", Qt::QueuedConnection, Q_ARG(Status, Ready));
         }
     }).detach();
@@ -153,7 +153,7 @@ QVariant LicenseModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    License license = m_licenses.value(index.row());
+    LicenseEntry license = m_licenses.value(index.row());
     switch (role) {
     case NameRole:
         return license.name;
@@ -168,7 +168,7 @@ QVariant LicenseModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-License LicenseModel::get(int index) const
+LicenseEntry LicenseModel::get(int index) const
 {
     return m_licenses.value(index);
 }
@@ -192,7 +192,7 @@ void LicenseModel::setStatus(Status status)
     emit statusChanged();
 }
 
-void LicenseModel::setLicenses(const QList<License> &licenses)
+void LicenseModel::setLicenses(const QList<LicenseEntry> &licenses)
 {
     if (m_licenses == licenses)
         return;

@@ -34,7 +34,7 @@
 #define LICENSEMODEL_H
 
 #include <QtCore/qabstractitemmodel.h>
-#include "license.h"
+#include "licenseentry.h"
 
 /*!
     \class LicenseModel
@@ -71,7 +71,7 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = NameRole) const override;
 
-    Q_INVOKABLE License get(int index) const;
+    Q_INVOKABLE LicenseEntry get(int index) const;
     Q_INVOKABLE QString read(const QString &name) const;
 
 signals:
@@ -82,12 +82,12 @@ signals:
 
 private slots:
     void setStatus(Status status);
-    void setLicenses(const QList<License> &licenses);
+    void setLicenses(const QList<LicenseEntry> &licenses);
 
 private:
     Status m_status = Null;
     QString m_manifest;
-    QList<License> m_licenses;
+    QList<LicenseEntry> m_licenses;
 };
 
 #endif // LICENSEMODEL_H

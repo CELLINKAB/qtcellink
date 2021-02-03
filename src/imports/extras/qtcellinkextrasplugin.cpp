@@ -31,7 +31,7 @@
 #include "iconlabel.h"
 #include "keyboard.h"
 #include "yoctolicense.h"
-#include "licensemodel.h"
+#include "yoctolicensemodel.h"
 #include "mnemoniclabel.h"
 #include "navigationgroup.h"
 #include "navigationitem.h"
@@ -73,7 +73,7 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterType<IconLabel>(uri, 1, 0, "IconLabel");
     qmlRegisterSingletonType<Keyboard>(uri, 1, 0, "Keyboard", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Keyboard(engine); });
     qRegisterMetaType<YoctoLicense>();
-    qmlRegisterType<LicenseModel>(uri, 1, 0, "LicenseModel");
+    qmlRegisterType<YoctoLicenseModel>(uri, 1, 0, "YoctoLicenseModel");
     qmlRegisterType<MnemonicLabel>(uri, 1, 0, "MnemonicLabel");
     qmlRegisterType<NavigationGroup>(uri, 1, 0, "NavigationGroup");
     qmlRegisterType<NavigationItem>(uri, 1, 0, "NavigationItem");

@@ -20,7 +20,6 @@ HEADERS += \
     $$PWD/iconlabel.h \
     $$PWD/iconlabel_p.h \
     $$PWD/keyboard.h \
-    $$PWD/licensemodel.h \
     $$PWD/mnemoniclabel.h \
     $$PWD/navigationgroup.h \
     $$PWD/navigationitem.h \
@@ -30,7 +29,8 @@ HEADERS += \
     $$PWD/nodeview.h \
     $$PWD/paddedrectangle.h \
     $$PWD/rect.h \
-    $$PWD/yoctolicense.h
+    $$PWD/yoctolicense.h \
+    $$PWD/yoctolicensemodel.h
 
 SOURCES += \
     $$PWD/color.cpp \
@@ -40,7 +40,6 @@ SOURCES += \
     $$PWD/iconimage.cpp \
     $$PWD/iconlabel.cpp \
     $$PWD/keyboard.cpp \
-    $$PWD/licensemodel.cpp \
     $$PWD/mnemoniclabel.cpp \
     $$PWD/navigationgroup.cpp \
     $$PWD/navigationitem.cpp \
@@ -50,7 +49,8 @@ SOURCES += \
     $$PWD/nodeview.cpp \
     $$PWD/paddedrectangle.cpp \
     $$PWD/qtcellinkextrasplugin.cpp \
-    $$PWD/rect.cpp
+    $$PWD/rect.cpp \
+    $$PWD/yoctolicensemodel.cpp
 
 CONFIG += no_cxx_module
 load(qml_plugin)

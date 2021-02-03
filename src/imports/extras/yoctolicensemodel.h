@@ -30,20 +30,20 @@
 **
 ****************************************************************************/
 
-#ifndef LICENSEMODEL_H
-#define LICENSEMODEL_H
+#ifndef YOCTOLICENSEMODEL_H
+#define YOCTOLICENSEMODEL_H
 
 #include <QtCore/qabstractitemmodel.h>
 #include "yoctolicense.h"
 
 /*!
-    \class LicenseModel
+    \class YoctoLicenseModel
     \ingroup license-qml
     \brief Indexes Yocto licenses
 
     ...
 */
-class LicenseModel : public QAbstractListModel
+class YoctoLicenseModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
@@ -52,7 +52,7 @@ class LicenseModel : public QAbstractListModel
     Q_PROPERTY(QString manifest READ manifest WRITE setManifest NOTIFY manifestChanged)
 
 public:
-    explicit LicenseModel(QObject *parent = nullptr);
+    explicit YoctoLicenseModel(QObject *parent = nullptr);
 
     enum Status { Null, Ready, Loading, Error };
     Q_ENUM(Status)
@@ -90,4 +90,4 @@ private:
     QList<YoctoLicense> m_licenses;
 };
 
-#endif // LICENSEMODEL_H
+#endif // YOCTOLICENSEMODEL_H

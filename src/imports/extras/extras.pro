@@ -20,7 +20,6 @@ HEADERS += \
     $$PWD/iconlabel.h \
     $$PWD/iconlabel_p.h \
     $$PWD/keyboard.h \
-    $$PWD/licenseentry.h \
     $$PWD/licensemodel.h \
     $$PWD/mnemoniclabel.h \
     $$PWD/navigationgroup.h \
@@ -30,7 +29,8 @@ HEADERS += \
     $$PWD/nodeitem.h \
     $$PWD/nodeview.h \
     $$PWD/paddedrectangle.h \
-    $$PWD/rect.h
+    $$PWD/rect.h \
+    $$PWD/yoctolicense.h
 
 SOURCES += \
     $$PWD/color.cpp \

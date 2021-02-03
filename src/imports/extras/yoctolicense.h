@@ -30,21 +30,21 @@
 **
 ****************************************************************************/
 
-#ifndef LICENSEENTRY_H
-#define LICENSEENTRY_H
+#ifndef YOCTOLICENSE_H
+#define YOCTOLICENSE_H
 
 #include <QtCore/qdebug.h>
 #include <QtCore/qobjectdefs.h>
 #include <QtCore/qstringlist.h>
 
 /*!
-    \struct LicenseEntry
+    \struct YoctoLicense
     \ingroup license-qml
     \brief Presents a Yocto license
 
     ...
 */
-struct LicenseEntry
+struct YoctoLicense
 {
     Q_GADGET
     Q_PROPERTY(QString name MEMBER name)
@@ -52,15 +52,15 @@ struct LicenseEntry
     Q_PROPERTY(QStringList licenses MEMBER licenses)
 
 public:
-    LicenseEntry(const QString &name = QString()) : name(name) { }
+    YoctoLicense(const QString &name = QString()) : name(name) { }
 
-    bool operator==(const LicenseEntry &other) const { return name == other.name && version == other.version && licenses == other.licenses; }
+    bool operator==(const YoctoLicense &other) const { return name == other.name && version == other.version && licenses == other.licenses; }
 
     QString name;
     QString version;
     QStringList licenses;
 };
 
-Q_DECLARE_METATYPE(LicenseEntry)
+Q_DECLARE_METATYPE(YoctoLicense)
 
-#endif // LICENSEENTRY_H
+#endif // YOCTOLICENSE_H

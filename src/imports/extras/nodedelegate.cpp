@@ -1030,25 +1030,24 @@ void ProgressDelegate::setLayoutDirection(Qt::LayoutDirection layoutDirection)
     emit changed();
 }
 
-QColor ProgressDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
+QColor ProgressDelegate::progressColor(const QModelIndex &index, NodeItem *item) const
 {
+    Q_UNUSED(item);
     if (m_colorRole != -1) {
         QColor color = index.data(m_colorRole).value<QColor>();
         if (color.isValid())
             return color;
     }
-    return RectDelegate::nodeColor(index, item);
+    return Qt::transparent;
 }
 
 QGradientStops ProgressDelegate::nodeGradientStops(const QModelIndex &index, NodeItem *item) const
 {
     bool ok = false;
     qreal progress = std::clamp(index.data(m_progressRole).toReal(&ok), 0.0, 1.0);
-    if (!ok || qFuzzyCompare(progress, 1.0))
-        return QGradientStops();
 
-    QColor color1 = nodeColor(index, item);
-    QColor color2 = Qt::transparent;
+    QColor color1 = progressColor(index, item);
+    QColor color2 = nodeColor(index, item);
     if (m_orientation == Qt::Vertical || m_layoutDirection == Qt::RightToLeft) {
         progress = 1.0 - progress;
         std::swap(color1, color2);

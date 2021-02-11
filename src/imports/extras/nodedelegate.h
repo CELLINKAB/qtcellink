@@ -492,7 +492,7 @@ signals:
     void layoutDirectionChanged();
 
 protected:
-    QColor nodeColor(const QModelIndex &index, NodeItem *item) const override;
+    QColor progressColor(const QModelIndex &index, NodeItem *item) const;
     QGradientStops nodeGradientStops(const QModelIndex &index, NodeItem *item) const override;
     Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const override;
 

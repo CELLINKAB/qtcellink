@@ -585,6 +585,9 @@ public:
         }
     }
 
+    int rows() const { return m_rows; }
+    int columns() const { return m_columns; }
+
     QuickItemNode *itemNode(int row, int column) const
     {
         return m_nodes.value(column + row * m_columns);
@@ -635,6 +638,9 @@ typedef void (*StackFunc)(QSGNode *node);
 static void restackNodes(QuickViewNode *viewNode, const QItemSelection &selection, StackFunc stackFunc)
 {
     for (const QItemSelectionRange &range : selection) {
+        if (range.width() == viewNode->columns() && range.height() == viewNode->rows())
+            return;
+
         const QList<QModelIndex> indexes = range.indexes();
         for (const QModelIndex &index : indexes)
             stackFunc(viewNode->itemNode(index.row(), index.column()));

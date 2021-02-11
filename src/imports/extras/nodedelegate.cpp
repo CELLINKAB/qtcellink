@@ -412,7 +412,10 @@ void RectDelegate::resetSelectedBorderColor()
 qreal RectDelegate::nodeRadius(const QModelIndex &index, NodeItem *item) const
 {
     Q_UNUSED(index)
-    return m_radius * item->nodeScale();
+    qreal radius = m_radius * item->nodeScale();
+    if (radius <= 1.0)
+        return 0.0;
+    return radius;
 }
 
 QColor RectDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const

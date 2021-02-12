@@ -202,6 +202,7 @@ private:
     int m_rows = 1;
     int m_columns = 1;
     int m_pressTimer = 0;
+    int m_selectionTimer = 0;
     qreal m_nodeWidth = 10;
     qreal m_nodeHeight = 10;
     qreal m_nodeSpacing = 0;

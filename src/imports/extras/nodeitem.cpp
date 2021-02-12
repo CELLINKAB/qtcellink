@@ -535,6 +535,10 @@ void NodeItem::timerEvent(QTimerEvent *event)
                 emit activated(index);
             }
         }
+    } else if (event->timerId() == m_selectionTimer) {
+        killTimer(m_selectionTimer);
+        m_selectionTimer = 0;
+        update();
     }
 }
 
@@ -775,7 +779,14 @@ void NodeItem::selectionChange(const QItemSelection &selected, const QItemSelect
     updateSelection(deselected);
     m_deselected = deselected;
     m_selected = selected;
-    update();
+
+    if (m_selectionMode == NoSelection) {
+        update();
+    } else {
+        if (m_selectionTimer >= 0)
+            killTimer(m_selectionTimer);
+        m_selectionTimer = startTimer(100);
+    }
 }
 
 void NodeItem::rebuild()

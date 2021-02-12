@@ -33,6 +33,7 @@
 #include "nodedelegate.h"
 #include "nodeitem.h"
 
+#include <QtCore/qcache.h>
 #include <QtGui/qtextlayout.h>
 #include <QtQuick/qsgimagenode.h>
 #include <QtQuick/qquickwindow.h>
@@ -162,9 +163,12 @@ void AbstractRectDelegate::updateNode(QSGNode *node, const QModelIndex &index, N
     QSGInternalRectangleNode *rectNode = static_cast<QSGInternalRectangleNode *>(node);
     rectNode->setRect(nodeRect(index, item));
     rectNode->setRadius(nodeRadius(index, item));
-    rectNode->setColor(nodeColor(index, item));
-    rectNode->setGradientStops(nodeGradientStops(index, item));
-    rectNode->setGradientVertical(nodeGradientOrientation(index, item) == Qt::Vertical);
+    if (QGradientStops *stops = nodeGradientStops(index, item)) {
+        rectNode->setGradientStops(*stops);
+    } else {
+        rectNode->setGradientVertical(nodeGradientOrientation(index, item) == Qt::Vertical);
+        rectNode->setColor(nodeColor(index, item));
+    }
     rectNode->setPenColor(nodeBorderColor(index, item));
     rectNode->setPenWidth(nodeBorderWidth(index, item));
     rectNode->update();
@@ -431,9 +435,9 @@ QColor RectDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
     return Qt::transparent;
 }
 
-QGradientStops RectDelegate::nodeGradientStops(const QModelIndex &, NodeItem *) const
+QGradientStops *RectDelegate::nodeGradientStops(const QModelIndex &, NodeItem *) const
 {
-    return QGradientStops();
+    return nullptr;
 }
 
 Qt::Orientation RectDelegate::nodeGradientOrientation(const QModelIndex &, NodeItem *) const
@@ -1041,10 +1045,12 @@ QColor ProgressDelegate::progressColor(const QModelIndex &index, NodeItem *item)
     return Qt::transparent;
 }
 
-QGradientStops ProgressDelegate::nodeGradientStops(const QModelIndex &index, NodeItem *item) const
+QGradientStops *ProgressDelegate::nodeGradientStops(const QModelIndex &index, NodeItem *item) const
 {
     bool ok = false;
     qreal progress = std::clamp(index.data(m_progressRole).toReal(&ok), 0.0, 1.0);
+    if (!ok || progress == 0)
+        return nullptr;
 
     QColor color1 = progressColor(index, item);
     QColor color2 = nodeColor(index, item);
@@ -1053,12 +1059,16 @@ QGradientStops ProgressDelegate::nodeGradientStops(const QModelIndex &index, Nod
         std::swap(color1, color2);
     }
 
-    QGradientStops stops;
-    stops += qMakePair(0.0, color1);
-    stops += qMakePair(progress, color1);
-    stops += qMakePair(progress, color2);
-    stops += qMakePair(1.0, color2);
-    return stops;
+    static QCache<qreal, QGradientStops> cache;
+    if (!cache.contains(progress)) {
+        QGradientStops *stops = new QGradientStops;
+        stops->append(qMakePair(0.0, color1));
+        stops->append(qMakePair(progress, color1));
+        stops->append(qMakePair(progress, color2));
+        stops->append(qMakePair(1.0, color2));
+        cache.insert(progress, stops);
+    }
+    return cache[progress];
 }
 
 Qt::Orientation ProgressDelegate::nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const

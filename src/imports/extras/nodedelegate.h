@@ -119,7 +119,7 @@ public:
 
     virtual qreal nodeRadius(const QModelIndex &index, NodeItem *item) const = 0;
     virtual QColor nodeColor(const QModelIndex &index, NodeItem *item) const = 0;
-    virtual QGradientStops nodeGradientStops(const QModelIndex &index, NodeItem *item) const = 0;
+    virtual QGradientStops *nodeGradientStops(const QModelIndex &index, NodeItem *item) const = 0;
     virtual Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const = 0;
     virtual QColor nodeBorderColor(const QModelIndex &index, NodeItem *item) const = 0;
     virtual qreal nodeBorderWidth(const QModelIndex &index, NodeItem *item) const = 0;
@@ -210,7 +210,7 @@ signals:
 protected:
     qreal nodeRadius(const QModelIndex &index, NodeItem *item) const override;
     QColor nodeColor(const QModelIndex &index, NodeItem *item) const override;
-    QGradientStops nodeGradientStops(const QModelIndex &index, NodeItem *item) const override;
+    QGradientStops *nodeGradientStops(const QModelIndex &index, NodeItem *item) const override;
     Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const override;
     QColor nodeBorderColor(const QModelIndex &index, NodeItem *item) const override;
     qreal nodeBorderWidth(const QModelIndex &index, NodeItem *item) const override;
@@ -493,7 +493,7 @@ signals:
 
 protected:
     QColor progressColor(const QModelIndex &index, NodeItem *item) const;
-    QGradientStops nodeGradientStops(const QModelIndex &index, NodeItem *item) const override;
+    QGradientStops *nodeGradientStops(const QModelIndex &index, NodeItem *item) const override;
     Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const override;
 
 private:

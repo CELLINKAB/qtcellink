@@ -60,6 +60,7 @@ class NodeItem : public QQuickItem
     Q_PROPERTY(qreal nodeSpacing READ nodeSpacing WRITE setNodeSpacing NOTIFY nodeSpacingChanged)
     Q_PROPERTY(qreal nodeScaleX READ nodeScaleX WRITE setNodeScaleX NOTIFY nodeScaleXChanged)
     Q_PROPERTY(qreal nodeScaleY READ nodeScaleY WRITE setNodeScaleY NOTIFY nodeScaleYChanged)
+    Q_PROPERTY(int selectionDelay READ selectionDelay WRITE setSelectionDelay NOTIFY selectionDelayChanged)
     Q_PROPERTY(QQmlListProperty<NodeDelegate> delegates READ delegates)
 
 public:
@@ -115,6 +116,9 @@ public:
     qreal nodeScaleY() const;
     void setNodeScaleY(qreal nodeScaleY);
 
+    int selectionDelay() const;
+    void setSelectionDelay(int selectionDelay);
+
     QList<NodeDelegate *> delegateList() const;
     QQmlListProperty<NodeDelegate> delegates();
 
@@ -152,6 +156,7 @@ signals:
     void nodeSpacingChanged();
     void nodeScaleXChanged();
     void nodeScaleYChanged();
+    void selectionDelayChanged();
     void pressed(const QModelIndex &index);
     void released(const QModelIndex &index);
     void activated(const QModelIndex &index);
@@ -203,6 +208,7 @@ private:
     int m_columns = 1;
     int m_pressTimer = 0;
     int m_selectionTimer = 0;
+    int m_selectionDelay = 0;
     qreal m_nodeWidth = 10;
     qreal m_nodeHeight = 10;
     qreal m_nodeSpacing = 0;

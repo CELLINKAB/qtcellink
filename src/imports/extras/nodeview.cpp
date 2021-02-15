@@ -270,6 +270,22 @@ void NodeView::setNodeScaleY(qreal nodeScaleY)
     m_nodeItem->setNodeScaleY(nodeScaleY);
 }
 
+int NodeView::selectionDelay() const
+{
+    if (!m_nodeItem)
+        return 0;
+
+    return m_nodeItem->selectionDelay();
+}
+
+void NodeView::setSelectionDelay(int selectionDelay)
+{
+    if (!m_nodeItem)
+        return;
+
+    m_nodeItem->setSelectionDelay(selectionDelay);
+}
+
 QQmlListProperty<NodeDelegate> NodeView::delegates()
 {
     if (!m_nodeItem)

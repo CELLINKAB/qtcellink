@@ -337,6 +337,20 @@ void NodeItem::setNodeScaleY(qreal nodeScaleY)
     emit currentRectChanged();
 }
 
+int NodeItem::selectionDelay() const
+{
+    return m_selectionDelay;
+}
+
+void NodeItem::setSelectionDelay(int selectionDelay)
+{
+    if (m_selectionDelay == selectionDelay)
+        return;
+
+    m_selectionDelay = selectionDelay;
+    emit selectionDelayChanged();
+}
+
 QList<NodeDelegate *> NodeItem::delegateList() const
 {
     return m_delegates;
@@ -785,7 +799,7 @@ void NodeItem::selectionChange(const QItemSelection &selected, const QItemSelect
     } else {
         if (m_selectionTimer >= 0)
             killTimer(m_selectionTimer);
-        m_selectionTimer = startTimer(100);
+        m_selectionTimer = startTimer(m_selectionDelay);
     }
 }
 

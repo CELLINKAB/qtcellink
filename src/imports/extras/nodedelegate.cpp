@@ -1059,16 +1059,18 @@ QGradientStops *ProgressDelegate::nodeGradientStops(const QModelIndex &index, No
         std::swap(color1, color2);
     }
 
-    static QCache<qreal, QGradientStops> cache;
-    if (!cache.contains(progress)) {
+    static QCache<QVector<uint>, QGradientStops> cache;
+    uint p = static_cast<uint>(std::lround(progress * 1000));
+    QVector<uint> key = { p, color1.rgba(), color2.rgba() };
+    if (!cache.contains(key)) {
         QGradientStops *stops = new QGradientStops;
         stops->append(qMakePair(0.0, color1));
         stops->append(qMakePair(progress, color1));
         stops->append(qMakePair(progress, color2));
         stops->append(qMakePair(1.0, color2));
-        cache.insert(progress, stops);
+        cache.insert(key, stops);
     }
-    return cache[progress];
+    return cache[key];
 }
 
 Qt::Orientation ProgressDelegate::nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const

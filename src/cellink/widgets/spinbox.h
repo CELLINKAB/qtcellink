@@ -7,9 +7,13 @@
 class Q_CELLINK_EXPORT SpinBox : public QSpinBox
 {
     Q_OBJECT
+    Q_PROPERTY(bool invertedControls READ invertedControls WRITE setInvertedControls)
 
 public:
     explicit SpinBox(QWidget *parent = nullptr);
+
+    bool invertedControls() const;
+    void setInvertedControls(bool invert);
 
     void stepBy(int steps) override;
 
@@ -18,6 +22,7 @@ signals:
 
 private:
     bool m_editing = false;
+    bool m_inverted = false;
 };
 
 #endif // SPINBOX_H

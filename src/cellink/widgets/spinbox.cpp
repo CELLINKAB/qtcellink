@@ -11,9 +11,19 @@ SpinBox::SpinBox(QWidget *parent) : QSpinBox(parent)
     });
 }
 
+bool SpinBox::invertedControls() const
+{
+    return m_inverted;
+}
+
+void SpinBox::setInvertedControls(bool invert)
+{
+    m_inverted = invert;
+}
+
 void SpinBox::stepBy(int steps)
 {
     m_editing =  true;
-    QSpinBox::stepBy(steps);
+    QSpinBox::stepBy(m_inverted ? -steps : steps);
     m_editing = false;
 }

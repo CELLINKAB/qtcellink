@@ -493,6 +493,7 @@ signals:
 
 protected:
     QColor progressColor(const QModelIndex &index, NodeItem *item) const;
+    QColor nodeColor(const QModelIndex &index, NodeItem *item) const override;
     QGradientStops *nodeGradientStops(const QModelIndex &index, NodeItem *item) const override;
     Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const override;
 

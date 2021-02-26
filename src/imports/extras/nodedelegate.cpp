@@ -1045,6 +1045,16 @@ QColor ProgressDelegate::progressColor(const QModelIndex &index, NodeItem *item)
     return Qt::transparent;
 }
 
+QColor ProgressDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
+{
+    if (m_colorRole != -1) {
+        QColor color = index.data(m_colorRole).value<QColor>();
+        if (color.isValid())
+            return color;
+    }
+    return RectDelegate::nodeColor(index, item);
+}
+
 QGradientStops *ProgressDelegate::nodeGradientStops(const QModelIndex &index, NodeItem *item) const
 {
     bool ok = false;

@@ -116,7 +116,6 @@ void QuickEngine::setFont(const QString &family, int pixelSize)
     QGuiApplication::setFont(font);
 }
 
-
 void externalRegistrationHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     if (type == QtWarningMsg && msg.startsWith("Module '")) {

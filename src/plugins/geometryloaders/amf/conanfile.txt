@@ -1,0 +1,12 @@
+[requires]
+assimp/5.0.1
+
+[generators]
+cmake
+
+[options]
+assimp:shared=True
+
+[imports]
+bin, *.dll -> ./bin # Copies all dll files from packages bin folder to my "bin" folder
+lib, *.dylib* -> ./bin # Copies all dylib files from packages lib folder to my "bin" folder

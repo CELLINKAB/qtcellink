@@ -503,6 +503,9 @@ void DoubleSpinBox::setValidator(QValidator *validator)
         return;
 
     d->validator = validator;
+    if (QQuickTextInput *textInput = qobject_cast<QQuickTextInput *>(contentItem()))
+        textInput->setValidator(validator);
+
     emit validatorChanged();
 }
 
@@ -861,6 +864,8 @@ void DoubleSpinBox::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
         if (QQuickTextInput *newInput = qobject_cast<QQuickTextInput *>(newItem)) {
             QObjectPrivate::connect(newInput, &QQuickTextInput::accepted, d, &DoubleSpinBoxPrivate::accept);
             connect(newInput, &QQuickTextInput::inputMethodComposingChanged, this, &DoubleSpinBox::inputMethodComposingChanged);
+
+            newInput->setValidator(d->validator);
         }
     }
 }

@@ -167,6 +167,7 @@ void AbstractRectDelegate::updateNode(QSGNode *node, const QModelIndex &index, N
         rectNode->setGradientStops(*stops);
         rectNode->setGradientVertical(nodeGradientOrientation(index, item) == Qt::Vertical);
     } else {
+        rectNode->setGradientStops(QGradientStops());
         rectNode->setColor(nodeColor(index, item));
     }
     rectNode->setPenColor(nodeBorderColor(index, item));

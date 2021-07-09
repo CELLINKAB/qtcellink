@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/cellinkwidgets">
+        <file>images/video-slash.svg</file>
+    </qresource>
+</RCC>

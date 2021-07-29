@@ -22,10 +22,14 @@
 #include "amfgeometryloader.h"
 
 #include <QtCore/qiodevice.h>
+#include <QtDebug>
+#include <QtCore/qloggingcategory.h>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/mesh.h>
+
+Q_LOGGING_CATEGORY(lc3DGeometry, "cellink.3DGeometry")
 
 static QVector3D toQVector3D(const aiVector3D &v)
 {
@@ -45,9 +49,11 @@ bool AmfGeometryLoader::doLoad(QIODevice *device, const QString &subMesh)
     const QByteArray buffer = device->readAll();
 
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFileFromMemory(buffer, buffer.size(), 0, nullptr);
-    if (!scene)
+    const aiScene *scene = importer.ReadFileFromMemory(buffer, buffer.size(), 0, "amf");
+    if (!scene) {
+        qCDebug(lc3DGeometry()) << QString("Failed to read model error: %1").arg(importer.GetErrorString());
         return false;
+    }
 
     const aiNode *node = nullptr;
     if (!subMesh.isEmpty()) {

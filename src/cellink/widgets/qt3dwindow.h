@@ -53,7 +53,8 @@
 
 #include <Qt3DExtras/qt3dextras_global.h>
 #include <QtGui/QWindow>
-#include <QtCellink/cellink.h>
+
+#include "qtcellink/src/cellink/core/cellink.h"
 
 QT_BEGIN_NAMESPACE
 

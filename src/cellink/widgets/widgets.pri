@@ -15,3 +15,7 @@ SOURCES += \
     $$PWD/progressindicator.cpp \
     $$PWD/rangeslider.cpp \
     $$PWD/spinbox.cpp
+
+include($$PWD/../core/global.pri)
+INCLUDEPATH += \
+    $$PWD/../../../..

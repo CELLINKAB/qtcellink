@@ -8,3 +8,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/qt3dwindow.cpp
+
+include($$PWD/../core/global.pri)
+INCLUDEPATH += \
+    $$PWD/../../../..

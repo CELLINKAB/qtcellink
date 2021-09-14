@@ -1,8 +1,9 @@
 #ifndef DOUBLESPINBOX_H
 #define DOUBLESPINBOX_H
 
-#include <QtCellink/cellink.h>
 #include <QtWidgets/qspinbox.h>
+
+#include "qtcellink/src/cellink/core/cellink.h"
 
 class Q_CELLINK_EXPORT DoubleSpinBox : public QDoubleSpinBox
 {

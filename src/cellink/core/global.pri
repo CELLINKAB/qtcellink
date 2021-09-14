@@ -1,5 +1,7 @@
-INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/cellink.h
+
+DEFINES += \
+    QT_BUILD_CELLINK_LIB

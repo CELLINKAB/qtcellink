@@ -27,7 +27,7 @@
 #define RANGESLIDER_H
 
 #include <QtWidgets/qslider.h>
-#include <QtCellink/cellink.h>
+#include "qtcellink/src/cellink/core/cellink.h"
 
 class RangeSliderPrivate;
 

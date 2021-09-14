@@ -39,7 +39,7 @@
 #define CODEEDITOR_H
 
 #include <QtWidgets/qplaintextedit.h>
-#include <QtCellink/cellink.h>
+#include "qtcellink/src/cellink/core/cellink.h"
 
 QT_FORWARD_DECLARE_CLASS(QCompleter)
 

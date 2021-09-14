@@ -1,8 +1,8 @@
 #ifndef SPINBOX_H
 #define SPINBOX_H
 
-#include <QtCellink/cellink.h>
 #include <QtWidgets/qspinbox.h>
+#include "qtcellink/src/cellink/core/cellink.h"
 
 class Q_CELLINK_EXPORT SpinBox : public QSpinBox
 {

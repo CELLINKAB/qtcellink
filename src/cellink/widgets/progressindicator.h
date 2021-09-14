@@ -28,7 +28,7 @@
 
 #include <QColor>
 #include <QWidget>
-#include <QtCellink/cellink.h>
+#include "qtcellink/src/cellink/core/cellink.h"
 
 /*!
     \class QProgressIndicator

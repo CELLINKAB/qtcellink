@@ -103,6 +103,7 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent), m_lineNumberBa
     connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumbers);
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateViewportMargins);
+    connect(this, &CodeEditor::highlightLineColorAlphaChanged, this, &CodeEditor::highlightCurrentLine);
 
     updateViewportMargins();
     highlightCurrentLine();
@@ -127,6 +128,16 @@ void CodeEditor::setCompleter(QCompleter *completer)
     m_completer->setCompletionMode(QCompleter::PopupCompletion);
     m_completer->setCaseSensitivity(Qt::CaseInsensitive);
     QObject::connect(m_completer, QOverload<const QString &>::of(&QCompleter::activated), this, &CodeEditor::insertCompletion);
+}
+
+void CodeEditor::setHighlightLineColorAlpha(qreal alpha)
+{
+    if (m_highlightLineColorAlpha == alpha) {
+        return;
+    }
+
+    m_highlightLineColorAlpha = alpha;
+    emit highlightLineColorAlphaChanged(alpha);
 }
 
 void CodeEditor::focusInEvent(QFocusEvent *event)
@@ -200,7 +211,7 @@ void CodeEditor::highlightCurrentLine()
         QTextEdit::ExtraSelection selection;
 
         QColor lineColor = palette().color(QPalette::Highlight);
-        lineColor.setAlphaF(0.2);
+        lineColor.setAlphaF(m_highlightLineColorAlpha);
 
         selection.format.setBackground(lineColor);
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);

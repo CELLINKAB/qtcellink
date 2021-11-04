@@ -46,6 +46,7 @@ QT_FORWARD_DECLARE_CLASS(QCompleter)
 class Q_CELLINK_EXPORT CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
+    Q_PROPERTY(qreal highlightLineColorAlpha READ highlightLineColorAlpha WRITE setHighlightLineColorAlpha NOTIFY highlightLineColorAlphaChanged)
 
 public:
     explicit CodeEditor(QWidget *parent = nullptr);
@@ -53,12 +54,22 @@ public:
     QCompleter *completer() const;
     void setCompleter(QCompleter *completer);
 
+    qreal highlightLineColorAlpha() const
+    {
+        return m_highlightLineColorAlpha;
+    }
+
+    void setHighlightLineColorAlpha(qreal alpha);
+
 protected:
     void focusInEvent(QFocusEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
     virtual void complete(const QString &prefix);
+
+signals:
+    void highlightLineColorAlphaChanged(qreal alpha);
 
 private slots:
     void highlightCurrentLine();
@@ -73,6 +84,7 @@ private:
     friend class LineNumberBar;
     QWidget *m_lineNumberBar = nullptr;
     QCompleter *m_completer = nullptr;
+    qreal m_highlightLineColorAlpha = 0.2;
 };
 
 #endif // CODEEDITOR_H

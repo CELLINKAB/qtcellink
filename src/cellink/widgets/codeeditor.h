@@ -41,17 +41,54 @@
 #include <QtWidgets/qplaintextedit.h>
 #include "qtcellink/src/cellink/core/cellink.h"
 
-QT_FORWARD_DECLARE_CLASS(QCompleter)
+class QCompleter;
+class CodeEditor;
+
+class Q_CELLINK_EXPORT LineNumberBar : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(int hzMargin READ hzMargin WRITE setHzMargin NOTIFY hzMarginChanged)
+public:
+    explicit LineNumberBar(CodeEditor *editor);
+
+    void setHzMargin(int margin);
+
+    int hzMargin() const
+    {
+        return m_hzMargin;
+    }
+
+    QSize sizeHint() const override
+    {
+        return m_size;
+    }
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
+signals:
+    void hzMarginChanged(int margin);
+
+private:
+    void updateSize(int blockCount);
+
+    QSize m_size;
+    CodeEditor* const m_codeEditor = nullptr;
+    int m_hzMargin = 4;
+};
 
 class Q_CELLINK_EXPORT CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
     Q_PROPERTY(qreal highlightLineColorAlpha READ highlightLineColorAlpha WRITE setHighlightLineColorAlpha NOTIFY highlightLineColorAlphaChanged)
-
 public:
     explicit CodeEditor(QWidget *parent = nullptr);
 
-    QCompleter *completer() const;
+    QCompleter *completer() const
+    {
+        return m_completer;
+    }
+
     void setCompleter(QCompleter *completer);
 
     qreal highlightLineColorAlpha() const
@@ -60,6 +97,11 @@ public:
     }
 
     void setHighlightLineColorAlpha(qreal alpha);
+
+    LineNumberBar& lineNumberBar()
+    {
+        return m_lineNumberBar;
+    }
 
 protected:
     void focusInEvent(QFocusEvent *event) override;
@@ -82,7 +124,7 @@ private:
     void paintLineNumbers(QPainter *painter, const QRect &rect);
 
     friend class LineNumberBar;
-    QWidget *m_lineNumberBar = nullptr;
+    LineNumberBar m_lineNumberBar {this};
     QCompleter *m_completer = nullptr;
     qreal m_highlightLineColorAlpha = 0.2;
 };

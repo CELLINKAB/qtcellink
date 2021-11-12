@@ -42,6 +42,7 @@
 
 #include <QtWidgets/qplaintextedit.h>
 
+
 class QCompleter;
 class CodeEditor;
 
@@ -81,11 +82,9 @@ public:
     explicit CodeEditor(QWidget* parent = nullptr);
 
     QCompleter* completer() const { return m_completer; }
-
     void setCompleter(QCompleter* completer);
 
     qreal highlightLineColorAlpha() const { return m_highlightLineColorAlpha; }
-
     void setHighlightLineColorAlpha(qreal alpha);
 
     LineNumberBar& lineNumberBar() { return m_lineNumberBar; }
@@ -111,6 +110,7 @@ private:
     void paintLineNumbers(QPainter* painter, const QRect& rect);
 
     friend class LineNumberBar;
+    
     LineNumberBar m_lineNumberBar{this};
     QCompleter* m_completer = nullptr;
     qreal m_highlightLineColorAlpha = 0.2;

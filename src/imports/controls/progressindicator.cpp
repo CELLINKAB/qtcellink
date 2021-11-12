@@ -22,11 +22,11 @@
 
 #include "progressindicator.h"
 
-#include <QtCore/qmath.h>
 #include <QtCore/qeasingcurve.h>
+#include <QtCore/qmath.h>
 #include <QtGui/qpainter.h>
-#include <QtQuick/qsgimagenode.h>
 #include <QtQuick/qquickwindow.h>
+#include <QtQuick/qsgimagenode.h>
 #include <QtQuickControls2/private/qquickanimatednode_p.h>
 
 /*
@@ -53,9 +53,9 @@ static const qreal MaxSweepSpan = 300 * OneDegree;
 class ProgressIndicatorNode : public QQuickAnimatedNode
 {
 public:
-    ProgressIndicatorNode(ProgressIndicatorImpl *item);
+    ProgressIndicatorNode(ProgressIndicatorImpl* item);
 
-    void sync(QQuickItem *item) override;
+    void sync(QQuickItem* item) override;
 
 protected:
     void updateProgress(qreal progress);
@@ -71,13 +71,14 @@ private:
     int m_lineWidth = 0;
 };
 
-ProgressIndicatorNode::ProgressIndicatorNode(ProgressIndicatorImpl *item) : QQuickAnimatedNode(item)
+ProgressIndicatorNode::ProgressIndicatorNode(ProgressIndicatorImpl* item)
+    : QQuickAnimatedNode(item)
 {
     setLoopCount(Infinite);
     setCurrentTime(item->elapsed());
     setDuration(RotationAnimationDuration);
 
-    QSGImageNode *textureNode = item->window()->createImageNode();
+    QSGImageNode* textureNode = item->window()->createImageNode();
     textureNode->setOwnsTexture(true);
     appendChildNode(textureNode);
 
@@ -96,7 +97,9 @@ void ProgressIndicatorNode::updateProgress(qreal progress)
     const qreal dx = (w - size) / 2;
     const qreal dy = (h - size) / 2;
 
-    QImage image(size * m_devicePixelRatio, size * m_devicePixelRatio, QImage::Format_ARGB32_Premultiplied);
+    QImage image(size * m_devicePixelRatio,
+                 size * m_devicePixelRatio,
+                 QImage::Format_ARGB32_Premultiplied);
     image.fill(Qt::transparent);
 
     QPainter painter(&image);
@@ -104,18 +107,20 @@ void ProgressIndicatorNode::updateProgress(qreal progress)
     painter.setBrush(m_color);
 
     QPen pen;
-    QSGImageNode *textureNode = static_cast<QSGImageNode *>(firstChild());
+    QSGImageNode* textureNode = static_cast<QSGImageNode*>(firstChild());
     pen.setColor(m_color);
     pen.setWidth(m_lineWidth * m_devicePixelRatio);
     painter.setPen(pen);
 
-    const QRectF arcBounds = QRectF(pen.width() / 2 + 1, pen.width() / 2 + 1,
+    const QRectF arcBounds = QRectF(pen.width() / 2 + 1,
+                                    pen.width() / 2 + 1,
                                     m_devicePixelRatio * size - pen.width() - 1,
                                     m_devicePixelRatio * size - pen.width() - 1);
 
     if (isRunning()) {
         int time = progress * RotationAnimationDuration;
-        const qreal spanPercentageComplete = (time % SpanAnimationDuration) / qreal(SpanAnimationDuration);
+        const qreal spanPercentageComplete = (time % SpanAnimationDuration)
+                                             / qreal(SpanAnimationDuration);
         const int iteration = time / SpanAnimationDuration;
         qreal startAngle = 0;
         qreal endAngle = 0;
@@ -160,9 +165,9 @@ void ProgressIndicatorNode::updateCurrentTime(int time)
     updateProgress(time / qreal(RotationAnimationDuration));
 }
 
-void ProgressIndicatorNode::sync(QQuickItem *item)
+void ProgressIndicatorNode::sync(QQuickItem* item)
 {
-    ProgressIndicatorImpl *indicator = static_cast<ProgressIndicatorImpl *>(item);
+    ProgressIndicatorImpl* indicator = static_cast<ProgressIndicatorImpl*>(item);
     m_color = indicator->color();
     m_width = indicator->width();
     m_height = indicator->height();
@@ -176,7 +181,8 @@ void ProgressIndicatorNode::sync(QQuickItem *item)
     }
 }
 
-ProgressIndicatorImpl::ProgressIndicatorImpl(QQuickItem *parent) : QQuickItem(parent)
+ProgressIndicatorImpl::ProgressIndicatorImpl(QQuickItem* parent)
+    : QQuickItem(parent)
 {
     setFlag(ItemHasContents);
 }
@@ -242,16 +248,17 @@ int ProgressIndicatorImpl::elapsed() const
     return m_elapsed;
 }
 
-void ProgressIndicatorImpl::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &data)
+void ProgressIndicatorImpl::itemChange(QQuickItem::ItemChange change,
+                                       const QQuickItem::ItemChangeData& data)
 {
     QQuickItem::itemChange(change, data);
     if (change == ItemVisibleHasChanged)
         update();
 }
 
-QSGNode *ProgressIndicatorImpl::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+QSGNode* ProgressIndicatorImpl::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*)
 {
-    ProgressIndicatorNode *node = static_cast<ProgressIndicatorNode *>(oldNode);
+    ProgressIndicatorNode* node = static_cast<ProgressIndicatorNode*>(oldNode);
     if (isVisible() && width() > 0 && height() > 0) {
         if (!node) {
             node = new ProgressIndicatorNode(this);

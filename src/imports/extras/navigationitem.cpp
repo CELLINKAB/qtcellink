@@ -32,9 +32,9 @@
 
 #include "navigationitem.h"
 
-NavigationItem::NavigationItem(QObject *parent) : QObject(parent)
-{
-}
+NavigationItem::NavigationItem(QObject* parent)
+    : QObject(parent)
+{}
 
 bool NavigationItem::isEnabled() const
 {
@@ -97,7 +97,7 @@ QString NavigationItem::name() const
     return m_name;
 }
 
-void NavigationItem::setName(const QString &name)
+void NavigationItem::setName(const QString& name)
 {
     if (m_name == name)
         return;
@@ -111,7 +111,7 @@ QString NavigationItem::title() const
     return m_title;
 }
 
-void NavigationItem::setTitle(const QString &title)
+void NavigationItem::setTitle(const QString& title)
 {
     if (m_title == title)
         return;
@@ -125,7 +125,7 @@ QString NavigationItem::icon() const
     return m_icon;
 }
 
-void NavigationItem::setIcon(const QString &icon)
+void NavigationItem::setIcon(const QString& icon)
 {
     if (m_icon == icon)
         return;
@@ -139,7 +139,7 @@ QString NavigationItem::url() const
     return m_url;
 }
 
-void NavigationItem::setUrl(const QString &url)
+void NavigationItem::setUrl(const QString& url)
 {
     if (m_url == url)
         return;
@@ -153,7 +153,7 @@ QJSValue NavigationItem::properties() const
     return m_properties;
 }
 
-void NavigationItem::setProperties(const QJSValue &properties)
+void NavigationItem::setProperties(const QJSValue& properties)
 {
     if (m_properties.equals(properties))
         return;

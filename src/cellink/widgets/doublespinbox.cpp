@@ -1,14 +1,13 @@
 #include "doublespinbox.h"
 
-DoubleSpinBox::DoubleSpinBox(QWidget *parent) : QDoubleSpinBox(parent)
+DoubleSpinBox::DoubleSpinBox(QWidget* parent)
+    : QDoubleSpinBox(parent)
 {
     connect(this, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=](double value) {
         if (m_editing)
             emit valueEdited(value);
     });
-    connect(this, &QAbstractSpinBox::editingFinished, [=]() {
-        emit valueEdited(value());
-    });
+    connect(this, &QAbstractSpinBox::editingFinished, [=]() { emit valueEdited(value()); });
 }
 
 bool DoubleSpinBox::invertedControls() const
@@ -23,7 +22,7 @@ void DoubleSpinBox::setInvertedControls(bool invert)
 
 void DoubleSpinBox::stepBy(int steps)
 {
-    m_editing =  true;
+    m_editing = true;
     QDoubleSpinBox::stepBy(m_inverted ? -steps : steps);
     m_editing = false;
 }

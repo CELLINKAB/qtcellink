@@ -21,30 +21,30 @@
 ****************************************************************************/
 
 #include "nativemenu.h"
-#include "nativemenubar.h"
-#include "nativemenuitem.h"
-#include "iconloader.h"
 
 #include <QtCore/qloggingcategory.h>
-#include <QtGui/qicon.h>
-#include <QtGui/qcursor.h>
-#include <QtGui/qpa/qplatformtheme.h>
 #include <QtGui/private/qguiapplication_p.h>
 #include <QtGui/private/qhighdpiscaling_p.h>
+#include <QtGui/qcursor.h>
+#include <QtGui/qicon.h>
+#include <QtGui/qpa/qplatformtheme.h>
 #include <QtQml/private/qqmlengine_p.h>
-#include <QtQml/private/qv4scopedvalue_p.h>
 #include <QtQml/private/qv4qobjectwrapper_p.h>
+#include <QtQml/private/qv4scopedvalue_p.h>
+#include <QtQuick/qquickitem.h>
 #include <QtQuick/qquickrendercontrol.h>
 #include <QtQuick/qquickwindow.h>
-#include <QtQuick/qquickitem.h>
 #include <QtQuickTemplates2/private/qquickaction_p.h>
+
+#include "iconloader.h"
+#include "nativemenubar.h"
+#include "nativemenuitem.h"
 
 Q_DECLARE_LOGGING_CATEGORY(lcMenus)
 
-NativeMenu::NativeMenu(QObject *parent)
+NativeMenu::NativeMenu(QObject* parent)
     : QObject(parent)
-{
-}
+{}
 
 NativeMenu::~NativeMenu()
 {
@@ -63,19 +63,19 @@ NativeMenu::~NativeMenu()
 
 void NativeMenu::unparentSubmenus()
 {
-    for (NativeMenuItem *item : qAsConst(m_items)) {
-        if (NativeMenu *subMenu = item->subMenu())
+    for (NativeMenuItem* item : qAsConst(m_items)) {
+        if (NativeMenu* subMenu = item->subMenu())
             subMenu->setParentMenu(nullptr);
         item->setMenu(nullptr);
     }
 }
 
-QPlatformMenu *NativeMenu::handle() const
+QPlatformMenu* NativeMenu::handle() const
 {
     return m_handle;
 }
 
-QPlatformMenu * NativeMenu::create()
+QPlatformMenu* NativeMenu::create()
 {
     if (!m_handle) {
         if (m_menuBar && m_menuBar->handle())
@@ -98,11 +98,11 @@ QPlatformMenu * NativeMenu::create()
             connect(m_handle, &QPlatformMenu::aboutToShow, this, &NativeMenu::opened);
             connect(m_handle, &QPlatformMenu::aboutToHide, this, &NativeMenu::closed);
 
-            for (NativeMenuItem *item : qAsConst(m_items))
+            for (NativeMenuItem* item : qAsConst(m_items))
                 m_handle->insertMenuItem(item->create(), nullptr);
 
             if (m_menuItem) {
-                if (QPlatformMenuItem *handle = m_menuItem->create())
+                if (QPlatformMenuItem* handle = m_menuItem->create())
                     handle->setMenu(m_handle);
             }
         }
@@ -137,7 +137,7 @@ void NativeMenu::sync()
     if (m_menuBar && m_menuBar->handle())
         m_menuBar->handle()->syncMenu(m_handle);
 
-    for (NativeMenuItem *item : qAsConst(m_items))
+    for (NativeMenuItem* item : qAsConst(m_items))
         item->sync();
 }
 
@@ -148,15 +148,20 @@ QQmlListProperty<QObject> NativeMenu::data()
 
 QQmlListProperty<NativeMenuItem> NativeMenu::items()
 {
-    return QQmlListProperty<NativeMenuItem>(this, nullptr, items_append, items_count, items_at, items_clear);
+    return QQmlListProperty<NativeMenuItem>(this,
+                                            nullptr,
+                                            items_append,
+                                            items_count,
+                                            items_at,
+                                            items_clear);
 }
 
-NativeMenuBar *NativeMenu::menuBar() const
+NativeMenuBar* NativeMenu::menuBar() const
 {
     return m_menuBar;
 }
 
-void NativeMenu::setMenuBar(NativeMenuBar *menuBar)
+void NativeMenu::setMenuBar(NativeMenuBar* menuBar)
 {
     if (m_menuBar == menuBar)
         return;
@@ -166,12 +171,12 @@ void NativeMenu::setMenuBar(NativeMenuBar *menuBar)
     emit menuBarChanged();
 }
 
-NativeMenu *NativeMenu::parentMenu() const
+NativeMenu* NativeMenu::parentMenu() const
 {
     return m_parentMenu;
 }
 
-void NativeMenu::setParentMenu(NativeMenu *menu)
+void NativeMenu::setParentMenu(NativeMenu* menu)
 {
     if (m_parentMenu == menu)
         return;
@@ -181,10 +186,10 @@ void NativeMenu::setParentMenu(NativeMenu *menu)
     emit parentMenuChanged();
 }
 
-NativeMenuItem *NativeMenu::menuItem() const
+NativeMenuItem* NativeMenu::menuItem() const
 {
     if (!m_menuItem) {
-        NativeMenu *that = const_cast<NativeMenu *>(this);
+        NativeMenu* that = const_cast<NativeMenu*>(this);
         m_menuItem = new NativeMenuItem(that);
         m_menuItem->setSubMenu(that);
         m_menuItem->setText(m_title);
@@ -252,7 +257,7 @@ QString NativeMenu::title() const
     return m_title;
 }
 
-void NativeMenu::setTitle(const QString &title)
+void NativeMenu::setTitle(const QString& title)
 {
     if (m_title == title)
         return;
@@ -288,7 +293,7 @@ QQuickIcon NativeMenu::icon() const
     return iconLoader()->icon();
 }
 
-void NativeMenu::setIcon(const QQuickIcon &icon)
+void NativeMenu::setIcon(const QQuickIcon& icon)
 {
     if (iconLoader()->icon() == icon)
         return;
@@ -300,12 +305,12 @@ void NativeMenu::setIcon(const QQuickIcon &icon)
     emit iconChanged();
 }
 
-void NativeMenu::addItem(NativeMenuItem *item)
+void NativeMenu::addItem(NativeMenuItem* item)
 {
     insertItem(m_items.count(), item);
 }
 
-void NativeMenu::insertItem(int index, NativeMenuItem *item)
+void NativeMenu::insertItem(int index, NativeMenuItem* item)
 {
     if (!item || m_items.contains(item))
         return;
@@ -314,14 +319,14 @@ void NativeMenu::insertItem(int index, NativeMenuItem *item)
     m_data.append(item);
     item->setMenu(this);
     if (m_handle && item->create()) {
-        NativeMenuItem *before = m_items.value(index + 1);
+        NativeMenuItem* before = m_items.value(index + 1);
         m_handle->insertMenuItem(item->handle(), before ? before->create() : nullptr);
     }
     sync();
     emit itemsChanged();
 }
 
-void NativeMenu::removeItem(NativeMenuItem *item)
+void NativeMenu::removeItem(NativeMenuItem* item)
 {
     if (!item || !m_items.removeOne(item))
         return;
@@ -334,12 +339,12 @@ void NativeMenu::removeItem(NativeMenuItem *item)
     emit itemsChanged();
 }
 
-void NativeMenu::addMenu(NativeMenu *menu)
+void NativeMenu::addMenu(NativeMenu* menu)
 {
     insertMenu(m_items.count(), menu);
 }
 
-void NativeMenu::insertMenu(int index, NativeMenu *menu)
+void NativeMenu::insertMenu(int index, NativeMenu* menu)
 {
     if (!menu)
         return;
@@ -348,7 +353,7 @@ void NativeMenu::insertMenu(int index, NativeMenu *menu)
     insertItem(index, menu->menuItem());
 }
 
-void NativeMenu::removeMenu(NativeMenu *menu)
+void NativeMenu::removeMenu(NativeMenu* menu)
 {
     if (!menu)
         return;
@@ -357,30 +362,30 @@ void NativeMenu::removeMenu(NativeMenu *menu)
     removeItem(menu->menuItem());
 }
 
-void NativeMenu::addAction(QQuickAction *action)
+void NativeMenu::addAction(QQuickAction* action)
 {
     insertAction(m_items.count(), action);
 }
 
-void NativeMenu::insertAction(int index, QQuickAction *action)
+void NativeMenu::insertAction(int index, QQuickAction* action)
 {
     if (!action)
         return;
 
-    NativeMenuItem *item = new NativeMenuItem(this);
+    NativeMenuItem* item = new NativeMenuItem(this);
     item->setAction(action);
     item->componentComplete();
     insertItem(index, item);
 }
 
-void NativeMenu::removeAction(QQuickAction *action)
+void NativeMenu::removeAction(QQuickAction* action)
 {
     if (!action)
         return;
 
     const int count = m_items.count();
     for (int i = 0; i < count; ++i) {
-        NativeMenuItem *item = qobject_cast<NativeMenuItem *>(m_items.at(i));
+        NativeMenuItem* item = qobject_cast<NativeMenuItem*>(m_items.at(i));
         if (!item || item->action() != action)
             continue;
 
@@ -396,7 +401,7 @@ void NativeMenu::clear()
     if (m_items.isEmpty())
         return;
 
-    for (NativeMenuItem *item : qAsConst(m_items)) {
+    for (NativeMenuItem* item : qAsConst(m_items)) {
         m_data.removeOne(item);
         if (m_handle)
             m_handle->removeMenuItem(item->handle());
@@ -409,7 +414,7 @@ void NativeMenu::clear()
     emit itemsChanged();
 }
 
-void NativeMenu::popup(QQmlV4Function *args)
+void NativeMenu::popup(QQmlV4Function* args)
 {
     if (!m_handle)
         return;
@@ -419,27 +424,27 @@ void NativeMenu::popup(QQmlV4Function *args)
         return;
     }
 
-    QV4::ExecutionEngine *v4 = args->v4engine();
+    QV4::ExecutionEngine* v4 = args->v4engine();
     QV4::Scope scope(v4);
 
-    QQuickItem *targetItem = nullptr;
+    QQuickItem* targetItem = nullptr;
     if (args->length() > 0) {
         QV4::ScopedValue value(scope, (*args)[0]);
         QV4::Scoped<QV4::QObjectWrapper> object(scope, value->as<QV4::QObjectWrapper>());
         if (object)
-            targetItem = qobject_cast<QQuickItem *>(object->object());
+            targetItem = qobject_cast<QQuickItem*>(object->object());
     }
 
-    NativeMenuItem *menuItem = nullptr;
+    NativeMenuItem* menuItem = nullptr;
     if (args->length() > 1) {
         QV4::ScopedValue value(scope, (*args)[1]);
         QV4::Scoped<QV4::QObjectWrapper> object(scope, value->as<QV4::QObjectWrapper>());
         if (object)
-            menuItem = qobject_cast<NativeMenuItem *>(object->object());
+            menuItem = qobject_cast<NativeMenuItem*>(object->object());
     }
 
     QPoint offset;
-    QWindow *window = findWindow(targetItem, &offset);
+    QWindow* window = findWindow(targetItem, &offset);
 
     QRect targetRect;
     if (targetItem) {
@@ -464,9 +469,7 @@ void NativeMenu::close()
         m_handle->dismiss();
 }
 
-void NativeMenu::classBegin()
-{
-}
+void NativeMenu::classBegin() {}
 
 void NativeMenu::componentComplete()
 {
@@ -476,10 +479,10 @@ void NativeMenu::componentComplete()
     sync();
 }
 
-IconLoader *NativeMenu::iconLoader() const
+IconLoader* NativeMenu::iconLoader() const
 {
     if (!m_iconLoader) {
-        NativeMenu *that = const_cast<NativeMenu *>(this);
+        NativeMenu* that = const_cast<NativeMenu*>(this);
         static int slot = staticMetaObject.indexOfSlot("updateIcon()");
         m_iconLoader = new IconLoader(slot, that);
         m_iconLoader->setEnabled(m_complete);
@@ -487,18 +490,18 @@ IconLoader *NativeMenu::iconLoader() const
     return m_iconLoader;
 }
 
-static QWindow *effectiveWindow(QWindow *window, QPoint *offset)
+static QWindow* effectiveWindow(QWindow* window, QPoint* offset)
 {
-    QQuickWindow *quickWindow = qobject_cast<QQuickWindow *>(window);
+    QQuickWindow* quickWindow = qobject_cast<QQuickWindow*>(window);
     if (quickWindow) {
-        QWindow *renderWindow = QQuickRenderControl::renderWindowFor(quickWindow, offset);
+        QWindow* renderWindow = QQuickRenderControl::renderWindowFor(quickWindow, offset);
         if (renderWindow)
             return renderWindow;
     }
     return window;
 }
 
-QWindow *NativeMenu::findWindow(QQuickItem *target, QPoint *offset) const
+QWindow* NativeMenu::findWindow(QQuickItem* target, QPoint* offset) const
 {
     if (target)
         return effectiveWindow(target->window(), offset);
@@ -506,13 +509,13 @@ QWindow *NativeMenu::findWindow(QQuickItem *target, QPoint *offset) const
     if (m_menuBar && m_menuBar->window())
         return effectiveWindow(m_menuBar->window(), offset);
 
-    QObject *obj = parent();
+    QObject* obj = parent();
     while (obj) {
-        QWindow *window = qobject_cast<QWindow *>(obj);
+        QWindow* window = qobject_cast<QWindow*>(obj);
         if (window)
             return effectiveWindow(window, offset);
 
-        QQuickItem *item = qobject_cast<QQuickItem *>(obj);
+        QQuickItem* item = qobject_cast<QQuickItem*>(obj);
         if (item && item->window())
             return effectiveWindow(item->window(), offset);
 
@@ -521,58 +524,58 @@ QWindow *NativeMenu::findWindow(QQuickItem *target, QPoint *offset) const
     return nullptr;
 }
 
-void NativeMenu::data_append(QQmlListProperty<QObject> *property, QObject *object)
+void NativeMenu::data_append(QQmlListProperty<QObject>* property, QObject* object)
 {
-    NativeMenu *menu = static_cast<NativeMenu *>(property->object);
-    if (NativeMenuItem *item = qobject_cast<NativeMenuItem *>(object))
+    NativeMenu* menu = static_cast<NativeMenu*>(property->object);
+    if (NativeMenuItem* item = qobject_cast<NativeMenuItem*>(object))
         menu->addItem(item);
-    else if (NativeMenu *subMenu = qobject_cast<NativeMenu *>(object))
+    else if (NativeMenu* subMenu = qobject_cast<NativeMenu*>(object))
         menu->addMenu(subMenu);
-    else if (QQuickAction *action = qobject_cast<QQuickAction *>(object))
+    else if (QQuickAction* action = qobject_cast<QQuickAction*>(object))
         menu->addAction(action);
     else
         menu->m_data.append(object);
 }
 
-int NativeMenu::data_count(QQmlListProperty<QObject> *property)
+int NativeMenu::data_count(QQmlListProperty<QObject>* property)
 {
-    NativeMenu *menu = static_cast<NativeMenu *>(property->object);
+    NativeMenu* menu = static_cast<NativeMenu*>(property->object);
     return menu->m_data.count();
 }
 
-QObject *NativeMenu::data_at(QQmlListProperty<QObject> *property, int index)
+QObject* NativeMenu::data_at(QQmlListProperty<QObject>* property, int index)
 {
-    NativeMenu *menu = static_cast<NativeMenu *>(property->object);
+    NativeMenu* menu = static_cast<NativeMenu*>(property->object);
     return menu->m_data.value(index);
 }
 
-void NativeMenu::data_clear(QQmlListProperty<QObject> *property)
+void NativeMenu::data_clear(QQmlListProperty<QObject>* property)
 {
-    NativeMenu *menu = static_cast<NativeMenu *>(property->object);
+    NativeMenu* menu = static_cast<NativeMenu*>(property->object);
     menu->m_data.clear();
 }
 
-void NativeMenu::items_append(QQmlListProperty<NativeMenuItem> *property, NativeMenuItem *item)
+void NativeMenu::items_append(QQmlListProperty<NativeMenuItem>* property, NativeMenuItem* item)
 {
-    NativeMenu *menu = static_cast<NativeMenu *>(property->object);
+    NativeMenu* menu = static_cast<NativeMenu*>(property->object);
     menu->addItem(item);
 }
 
-int NativeMenu::items_count(QQmlListProperty<NativeMenuItem> *property)
+int NativeMenu::items_count(QQmlListProperty<NativeMenuItem>* property)
 {
-    NativeMenu *menu = static_cast<NativeMenu *>(property->object);
+    NativeMenu* menu = static_cast<NativeMenu*>(property->object);
     return menu->m_items.count();
 }
 
-NativeMenuItem *NativeMenu::items_at(QQmlListProperty<NativeMenuItem> *property, int index)
+NativeMenuItem* NativeMenu::items_at(QQmlListProperty<NativeMenuItem>* property, int index)
 {
-    NativeMenu *menu = static_cast<NativeMenu *>(property->object);
+    NativeMenu* menu = static_cast<NativeMenu*>(property->object);
     return menu->m_items.value(index);
 }
 
-void NativeMenu::items_clear(QQmlListProperty<NativeMenuItem> *property)
+void NativeMenu::items_clear(QQmlListProperty<NativeMenuItem>* property)
 {
-    NativeMenu *menu = static_cast<NativeMenu *>(property->object);
+    NativeMenu* menu = static_cast<NativeMenu*>(property->object);
     menu->clear();
 }
 

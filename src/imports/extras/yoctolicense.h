@@ -52,9 +52,14 @@ struct YoctoLicense
     Q_PROPERTY(QStringList licenses MEMBER licenses)
 
 public:
-    YoctoLicense(const QString &name = QString()) : name(name) { }
+    YoctoLicense(const QString& name = QString())
+        : name(name)
+    {}
 
-    bool operator==(const YoctoLicense &other) const { return name == other.name && version == other.version && licenses == other.licenses; }
+    bool operator==(const YoctoLicense& other) const
+    {
+        return name == other.name && version == other.version && licenses == other.licenses;
+    }
 
     QString name;
     QString version;

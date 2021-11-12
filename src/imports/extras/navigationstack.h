@@ -33,37 +33,38 @@
 #ifndef NAVIGATIONSTACK_H
 #define NAVIGATIONSTACK_H
 
-#include "navigationgroup.h"
 #include <QtQml/qjsvalue.h>
 #include <QtQml/qqmlparserstatus.h>
+
+#include "navigationgroup.h"
 
 class NavigationStack : public NavigationGroup, public QQmlParserStatus
 {
     Q_OBJECT
-    Q_PROPERTY(NavigationItem *currentItem READ currentItem NOTIFY currentChanged)
+    Q_PROPERTY(NavigationItem* currentItem READ currentItem NOTIFY currentChanged)
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentChanged)
     Q_PROPERTY(QString currentName READ currentName WRITE setCurrentName NOTIFY currentChanged)
     Q_INTERFACES(QQmlParserStatus)
 
 public:
-    explicit NavigationStack(QObject *parent = nullptr);
+    explicit NavigationStack(QObject* parent = nullptr);
 
-    NavigationItem *currentItem() const;
+    NavigationItem* currentItem() const;
 
     int currentIndex() const;
     void setCurrentIndex(int currentIndex);
 
     QString currentName() const;
-    void setCurrentName(const QString &currentName);
+    void setCurrentName(const QString& currentName);
 
 public slots:
     void navigateAt(int index);
-    void navigateTo(const QString &name);
+    void navigateTo(const QString& name);
 
 signals:
     void currentChanged();
-    void push(const QString &url, const QJSValue &properties);
-    void pop(const QString &url, const QJSValue &properties);
+    void push(const QString& url, const QJSValue& properties);
+    void pop(const QString& url, const QJSValue& properties);
 
 protected:
     void classBegin() override;

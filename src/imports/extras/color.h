@@ -31,11 +31,11 @@ class Color : public QObject
     Q_OBJECT
 
 public:
-    explicit Color(QObject *parent = nullptr);
+    explicit Color(QObject* parent = nullptr);
 
-    Q_INVOKABLE QColor transparent(const QColor &color, qreal opacity) const;
-    Q_INVOKABLE QColor blend(const QColor &a, const QColor &b, qreal factor) const;
-    Q_INVOKABLE QColor hue(const QColor &color, qreal factor) const;
+    Q_INVOKABLE QColor transparent(const QColor& color, qreal opacity) const;
+    Q_INVOKABLE QColor blend(const QColor& a, const QColor& b, qreal factor) const;
+    Q_INVOKABLE QColor hue(const QColor& color, qreal factor) const;
 };
 
 #endif // COLOR_H

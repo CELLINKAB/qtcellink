@@ -33,11 +33,12 @@
 #ifndef NODEVIEW_H
 #define NODEVIEW_H
 
-#include <QtQuick/private/qquickflickable_p.h>
+#include <climits>
+
 #include <QtCore/qabstractitemmodel.h>
 #include <QtCore/qitemselectionmodel.h>
 #include <QtQml/qqmllist.h>
-#include <climits>
+#include <QtQuick/private/qquickflickable_p.h>
 
 class NodeItem;
 class NodeDelegate;
@@ -50,10 +51,12 @@ class NodeView : public QQuickFlickable
     Q_PROPERTY(int columns READ columns WRITE setColumns NOTIFY columnsChanged)
     Q_PROPERTY(int currentRow READ currentRow NOTIFY currentRowChanged)
     Q_PROPERTY(int currentColumn READ currentColumn NOTIFY currentColumnChanged)
-    Q_PROPERTY(QObject *model READ model WRITE setModel NOTIFY modelChanged)
+    Q_PROPERTY(QObject* model READ model WRITE setModel NOTIFY modelChanged)
     Q_PROPERTY(QRect selection READ selection NOTIFY selectionChanged)
-    Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode NOTIFY selectionModeChanged)
-    Q_PROPERTY(QItemSelectionModel *selectionModel READ selectionModel WRITE setSelectionModel NOTIFY selectionModelChanged)
+    Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode NOTIFY
+                   selectionModeChanged)
+    Q_PROPERTY(QItemSelectionModel* selectionModel READ selectionModel WRITE setSelectionModel
+                   NOTIFY selectionModelChanged)
     Q_PROPERTY(bool pressed READ isPressed NOTIFY pressedChanged)
     Q_PROPERTY(bool selecting READ isSelecting NOTIFY selectingChanged)
     Q_PROPERTY(qreal nodeWidth READ nodeWidth WRITE setNodeWidth NOTIFY nodeWidthChanged)
@@ -61,16 +64,19 @@ class NodeView : public QQuickFlickable
     Q_PROPERTY(qreal nodeSpacing READ nodeSpacing WRITE setNodeSpacing NOTIFY nodeSpacingChanged)
     Q_PROPERTY(qreal nodeScaleX READ nodeScaleX WRITE setNodeScaleX NOTIFY nodeScaleXChanged)
     Q_PROPERTY(qreal nodeScaleY READ nodeScaleY WRITE setNodeScaleY NOTIFY nodeScaleYChanged)
-    Q_PROPERTY(int selectionDelay READ selectionDelay WRITE setSelectionDelay NOTIFY selectionDelayChanged)
+    Q_PROPERTY(
+        int selectionDelay READ selectionDelay WRITE setSelectionDelay NOTIFY selectionDelayChanged)
     Q_PROPERTY(QQmlListProperty<NodeDelegate> delegates READ delegates)
     Q_PROPERTY(qreal zoomFactor READ zoomFactor NOTIFY zoomChanged)
     Q_PROPERTY(QPointF zoomPoint READ zoomPoint NOTIFY zoomChanged)
-    Q_PROPERTY(qreal minimumZoomFactor READ minimumZoomFactor WRITE setMinimumZoomFactor NOTIFY minimumZoomFactorChanged)
-    Q_PROPERTY(qreal maximumZoomFactor READ maximumZoomFactor WRITE setMaximumZoomFactor NOTIFY maximumZoomFactorChanged)
-    Q_PROPERTY(NodeItem *nodeItem READ nodeItem WRITE setNodeItem NOTIFY nodeItemChanged)
+    Q_PROPERTY(qreal minimumZoomFactor READ minimumZoomFactor WRITE setMinimumZoomFactor NOTIFY
+                   minimumZoomFactorChanged)
+    Q_PROPERTY(qreal maximumZoomFactor READ maximumZoomFactor WRITE setMaximumZoomFactor NOTIFY
+                   maximumZoomFactorChanged)
+    Q_PROPERTY(NodeItem* nodeItem READ nodeItem WRITE setNodeItem NOTIFY nodeItemChanged)
 
 public:
-    explicit NodeView(QQuickItem *parent = nullptr);
+    explicit NodeView(QQuickItem* parent = nullptr);
 
     int count() const;
 
@@ -83,19 +89,24 @@ public:
     int currentRow() const;
     int currentColumn() const;
 
-    QObject *model() const;
-    void setModel(QObject *model);
+    QObject* model() const;
+    void setModel(QObject* model);
 
     QRect selection() const;
 
-    enum SelectionMode { NoSelection, SingleSelection, MultiSelection };
+    enum SelectionMode
+    {
+        NoSelection,
+        SingleSelection,
+        MultiSelection
+    };
     Q_ENUM(SelectionMode)
 
     SelectionMode selectionMode() const;
     void setSelectionMode(SelectionMode selectionMode);
 
-    QItemSelectionModel *selectionModel() const;
-    void setSelectionModel(QItemSelectionModel *selectionModel);
+    QItemSelectionModel* selectionModel() const;
+    void setSelectionModel(QItemSelectionModel* selectionModel);
 
     bool isPressed() const;
     void setPressed(bool pressed);
@@ -132,18 +143,18 @@ public:
     qreal maximumZoomFactor() const;
     void setMaximumZoomFactor(qreal factor);
 
-    NodeItem *nodeItem() const;
-    void setNodeItem(NodeItem *nodeItem);
+    NodeItem* nodeItem() const;
+    void setNodeItem(NodeItem* nodeItem);
 
 public slots:
     void setCurrent(int row, int column);
     void clearCurrent();
     void selectAll();
-    void select(const QRect &selection);
+    void select(const QRect& selection);
     void clearSelection();
     void cancelSelection();
-    void ensureVisible(const QRectF &rect);
-    void zoom(qreal factor, const QPointF &point);
+    void ensureVisible(const QRectF& rect);
+    void zoom(qreal factor, const QPointF& point);
     void zoomIn(qreal factor = 0.1);
     void zoomOut(qreal factor = 0.1);
 
@@ -168,18 +179,18 @@ signals:
     void nodeItemChanged();
     void minimumZoomFactorChanged();
     void maximumZoomFactorChanged();
-    void pressed(const QModelIndex &index);
-    void released(const QModelIndex &index);
-    void activated(const QModelIndex &index);
-    void clicked(const QModelIndex &index);
-    void zoomChanged(qreal factor, const QPointF &point);
+    void pressed(const QModelIndex& index);
+    void released(const QModelIndex& index);
+    void activated(const QModelIndex& index);
+    void clicked(const QModelIndex& index);
+    void zoomChanged(qreal factor, const QPointF& point);
 
 protected slots:
     void resizeNodeItem();
     void updateContentSize();
 
 protected:
-    void wheelEvent(QWheelEvent *event) override;
+    void wheelEvent(QWheelEvent* event) override;
 
 private:
     QRectF viewportArea() const;
@@ -189,7 +200,7 @@ private:
     qreal m_minimumZoomFactor = 1.0;
     qreal m_maximumZoomFactor = std::numeric_limits<qreal>::max();
     QPointF m_zoomPoint;
-    NodeItem *m_nodeItem = nullptr;
+    NodeItem* m_nodeItem = nullptr;
 };
 
 #endif // NODEVIEW_H

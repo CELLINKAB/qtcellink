@@ -31,25 +31,27 @@
 ****************************************************************************/
 
 #include "nodeitem.h"
-#include "nodedelegate.h"
+
+#include <cmath>
 
 #include <QtGui/qguiapplication.h>
 #include <QtGui/qstylehints.h>
 #include <QtQuick/qsgnode.h>
 
-#include <cmath>
+#include "nodedelegate.h"
 
-static QModelIndex topLeft(const QModelIndex &a, const QModelIndex &b)
+static QModelIndex topLeft(const QModelIndex& a, const QModelIndex& b)
 {
     return a.sibling(std::min(a.row(), b.row()), std::min(a.column(), b.column()));
 }
 
-static QModelIndex bottomRight(const QModelIndex &a, const QModelIndex &b)
+static QModelIndex bottomRight(const QModelIndex& a, const QModelIndex& b)
 {
     return a.sibling(std::max(a.row(), b.row()), std::max(a.column(), b.column()));
 }
 
-NodeItem::NodeItem(QQuickItem *parent) : QQuickItem(parent)
+NodeItem::NodeItem(QQuickItem* parent)
+    : QQuickItem(parent)
 {
     setFlag(ItemHasContents);
     setAcceptedMouseButtons(Qt::LeftButton);
@@ -84,7 +86,7 @@ QRect NodeItem::selection() const
     return m_selection;
 }
 
-void NodeItem::setSelection(const QRect &selection)
+void NodeItem::setSelection(const QRect& selection)
 {
     if (m_selection == selection)
         return;
@@ -137,12 +139,12 @@ QRectF NodeItem::currentRect() const
     return nodeRect(index.row(), index.column());
 }
 
-QObject *NodeItem::model() const
+QObject* NodeItem::model() const
 {
     return m_model;
 }
 
-void NodeItem::setModel(QObject *model)
+void NodeItem::setModel(QObject* model)
 {
     if (m_model == model)
         return;
@@ -156,7 +158,7 @@ void NodeItem::setModel(QObject *model)
         disconnect(m_model, &QAbstractItemModel::modelReset, this, &NodeItem::modelReset);
     }
 
-    QAbstractItemModel *aim = qobject_cast<QAbstractItemModel *>(model);
+    QAbstractItemModel* aim = qobject_cast<QAbstractItemModel*>(model);
     if (aim) {
         connect(aim, &QAbstractItemModel::dataChanged, this, &NodeItem::dataChange);
         connect(aim, &QAbstractItemModel::rowsInserted, this, &NodeItem::rowsChange);
@@ -189,25 +191,37 @@ void NodeItem::setSelectionMode(SelectionMode selectionMode)
     emit selectionModeChanged();
 }
 
-QItemSelectionModel *NodeItem::selectionModel() const
+QItemSelectionModel* NodeItem::selectionModel() const
 {
     return m_selectionModel;
 }
 
-void NodeItem::setSelectionModel(QItemSelectionModel *selectionModel)
+void NodeItem::setSelectionModel(QItemSelectionModel* selectionModel)
 {
     if (m_selectionModel == selectionModel)
         return;
 
     if (m_selectionModel) {
-        disconnect(m_selectionModel, &QItemSelectionModel::currentChanged, this, &NodeItem::currentChange);
-        disconnect(m_selectionModel, &QItemSelectionModel::selectionChanged, this, &NodeItem::selectionChange);
+        disconnect(m_selectionModel,
+                   &QItemSelectionModel::currentChanged,
+                   this,
+                   &NodeItem::currentChange);
+        disconnect(m_selectionModel,
+                   &QItemSelectionModel::selectionChanged,
+                   this,
+                   &NodeItem::selectionChange);
     }
 
     if (selectionModel) {
         selectionModel->setModel(m_model);
-        connect(selectionModel, &QItemSelectionModel::currentChanged, this, &NodeItem::currentChange);
-        connect(selectionModel, &QItemSelectionModel::selectionChanged, this, &NodeItem::selectionChange);
+        connect(selectionModel,
+                &QItemSelectionModel::currentChanged,
+                this,
+                &NodeItem::currentChange);
+        connect(selectionModel,
+                &QItemSelectionModel::selectionChanged,
+                this,
+                &NodeItem::selectionChange);
     }
 
     m_selectionModel = selectionModel;
@@ -351,17 +365,22 @@ void NodeItem::setSelectionDelay(int selectionDelay)
     emit selectionDelayChanged();
 }
 
-QList<NodeDelegate *> NodeItem::delegateList() const
+QList<NodeDelegate*> NodeItem::delegateList() const
 {
     return m_delegates;
 }
 
 QQmlListProperty<NodeDelegate> NodeItem::delegates()
 {
-    return QQmlListProperty<NodeDelegate>(this, nullptr, delegates_append, delegates_count, delegates_at, delegates_clear);
+    return QQmlListProperty<NodeDelegate>(this,
+                                          nullptr,
+                                          delegates_append,
+                                          delegates_count,
+                                          delegates_at,
+                                          delegates_clear);
 }
 
-bool NodeItem::isEnabled(const QModelIndex &index) const
+bool NodeItem::isEnabled(const QModelIndex& index) const
 {
     if (!m_model || !QQuickItem::isEnabled())
         return false;
@@ -369,7 +388,7 @@ bool NodeItem::isEnabled(const QModelIndex &index) const
     return m_model->flags(index).testFlag(Qt::ItemIsEnabled);
 }
 
-bool NodeItem::isCurrent(const QModelIndex &index) const
+bool NodeItem::isCurrent(const QModelIndex& index) const
 {
     if (!m_selectionModel)
         return false;
@@ -377,7 +396,7 @@ bool NodeItem::isCurrent(const QModelIndex &index) const
     return index == m_selectionModel->currentIndex();
 }
 
-bool NodeItem::isSelected(const QModelIndex &index) const
+bool NodeItem::isSelected(const QModelIndex& index) const
 {
     if (!m_selectionModel)
         return false;
@@ -385,7 +404,7 @@ bool NodeItem::isSelected(const QModelIndex &index) const
     return m_selectionModel->isSelected(index);
 }
 
-QModelIndex NodeItem::nodeAt(const QPointF &pos) const
+QModelIndex NodeItem::nodeAt(const QPointF& pos) const
 {
     if (count() <= 0)
         return QModelIndex();
@@ -447,15 +466,20 @@ void NodeItem::selectAll()
     if (!m_selectionModel || !m_model)
         return;
 
-    m_selectionModel->select(QItemSelection(m_model->index(0, 0), m_model->index(m_model->rowCount() - 1, m_model->columnCount() - 1)), QItemSelectionModel::Select);
+    m_selectionModel->select(QItemSelection(m_model->index(0, 0),
+                                            m_model->index(m_model->rowCount() - 1,
+                                                           m_model->columnCount() - 1)),
+                             QItemSelectionModel::Select);
 }
 
-void NodeItem::select(const QRect &selection)
+void NodeItem::select(const QRect& selection)
 {
     if (!m_selectionModel || !m_model)
         return;
 
-    m_selectionModel->select(QItemSelection(m_model->index(selection.top(), selection.left()), m_model->index(selection.bottom(), selection.right())), QItemSelectionModel::ClearAndSelect);
+    m_selectionModel->select(QItemSelection(m_model->index(selection.top(), selection.left()),
+                                            m_model->index(selection.bottom(), selection.right())),
+                             QItemSelectionModel::ClearAndSelect);
 }
 
 void NodeItem::clearSelection()
@@ -474,7 +498,7 @@ void NodeItem::cancelSelection()
     setPressed(false);
 }
 
-void NodeItem::mousePressEvent(QMouseEvent *event)
+void NodeItem::mousePressEvent(QMouseEvent* event)
 {
     if (m_selectionMode == NoSelection || !m_selectionModel) {
         event->ignore();
@@ -491,7 +515,7 @@ void NodeItem::mousePressEvent(QMouseEvent *event)
     event->accept();
 }
 
-void NodeItem::mouseMoveEvent(QMouseEvent *event)
+void NodeItem::mouseMoveEvent(QMouseEvent* event)
 {
     if (m_selectionMode == NoSelection || !m_selectionModel) {
         event->ignore();
@@ -502,7 +526,9 @@ void NodeItem::mouseMoveEvent(QMouseEvent *event)
     if (isEnabled(index) && keepMouseGrab()) {
         QModelIndex currentIndex = m_selectionModel->currentIndex();
         if (m_selectionMode == MultiSelection)
-            m_selectionModel->select(QItemSelection(topLeft(index, currentIndex), bottomRight(index, currentIndex)), QItemSelectionModel::ClearAndSelect);
+            m_selectionModel->select(QItemSelection(topLeft(index, currentIndex),
+                                                    bottomRight(index, currentIndex)),
+                                     QItemSelectionModel::ClearAndSelect);
         else
             m_selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
         emit ensureVisible(nodeRect(index.row(), index.column()));
@@ -511,7 +537,7 @@ void NodeItem::mouseMoveEvent(QMouseEvent *event)
     event->accept();
 }
 
-void NodeItem::mouseReleaseEvent(QMouseEvent *event)
+void NodeItem::mouseReleaseEvent(QMouseEvent* event)
 {
     if (m_selectionMode != NoSelection && m_selectionModel && !keepMouseGrab()) {
         QModelIndex index = nodeAt(event->pos());
@@ -535,7 +561,7 @@ void NodeItem::mouseUngrabEvent()
     cancelSelection();
 }
 
-void NodeItem::timerEvent(QTimerEvent *event)
+void NodeItem::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == m_pressTimer) {
         setSelecting(true);
@@ -544,7 +570,9 @@ void NodeItem::timerEvent(QTimerEvent *event)
         if (m_selectionModel) {
             QModelIndex index = m_selectionModel->currentIndex();
             if (isEnabled(index)) {
-                m_selectionModel->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Clear);
+                m_selectionModel->select(index,
+                                         QItemSelectionModel::SelectCurrent
+                                             | QItemSelectionModel::Clear);
                 emit ensureVisible(nodeRect(index.row(), index.column()));
                 emit activated(index);
             }
@@ -556,7 +584,7 @@ void NodeItem::timerEvent(QTimerEvent *event)
     }
 }
 
-void NodeItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void NodeItem::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
     if (newGeometry.size() != oldGeometry.size()) {
@@ -565,7 +593,7 @@ void NodeItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeome
     }
 }
 
-void NodeItem::itemChange(ItemChange change, const ItemChangeData &data)
+void NodeItem::itemChange(ItemChange change, const ItemChangeData& data)
 {
     QQuickItem::itemChange(change, data);
     if (change == ItemEnabledHasChanged)
@@ -575,23 +603,26 @@ void NodeItem::itemChange(ItemChange change, const ItemChangeData &data)
 class QuickItemNode : public QSGTransformNode
 {
 public:
-    QList<QSGNode *> nodes;
+    QList<QSGNode*> nodes;
 };
 
 class QuickViewNode : public QSGTransformNode
 {
 public:
-    QuickViewNode(NodeItem *nodeItem) : m_rows(nodeItem->rows()), m_columns(nodeItem->columns()), m_nodes(nodeItem->count())
+    QuickViewNode(NodeItem* nodeItem)
+        : m_rows(nodeItem->rows())
+        , m_columns(nodeItem->columns())
+        , m_nodes(nodeItem->count())
     {
-        const QList<NodeDelegate *> delegates = nodeItem->delegateList();
+        const QList<NodeDelegate*> delegates = nodeItem->delegateList();
         for (int row = 0; row < m_rows; ++row) {
             for (int column = 0; column < m_columns; ++column) {
-                QuickItemNode *itemNode = new QuickItemNode;
+                QuickItemNode* itemNode = new QuickItemNode;
                 appendChildNode(itemNode);
 
-                QSGNode *parentNode = itemNode;
-                for (NodeDelegate *delegate : delegates) {
-                    QSGNode *node = delegate->createNode(nodeItem);
+                QSGNode* parentNode = itemNode;
+                for (NodeDelegate* delegate : delegates) {
+                    QSGNode* node = delegate->createNode(nodeItem);
                     Q_ASSERT(node);
                     itemNode->nodes += node;
                     parentNode->appendChildNode(node);
@@ -606,16 +637,16 @@ public:
     int rows() const { return m_rows; }
     int columns() const { return m_columns; }
 
-    QuickItemNode *itemNode(int row, int column) const
+    QuickItemNode* itemNode(int row, int column) const
     {
         return m_nodes.value(column + row * m_columns);
     }
 
-    void relayout(NodeItem *nodeItem)
+    void relayout(NodeItem* nodeItem)
     {
         for (int row = 0; row < m_rows; ++row) {
             for (int column = 0; column < m_columns; ++column) {
-                QuickItemNode *node = itemNode(row, column);
+                QuickItemNode* node = itemNode(row, column);
                 if (!node)
                     continue;
 
@@ -628,50 +659,52 @@ public:
 private:
     int m_rows = 0;
     int m_columns = 0;
-    QVector<QuickItemNode *> m_nodes;
+    QVector<QuickItemNode*> m_nodes;
 };
 
-static void raiseNode(QSGNode *node)
+static void raiseNode(QSGNode* node)
 {
     if (!node || !node->parent())
         return;
 
-    QSGNode *parentNode = node->parent();
+    QSGNode* parentNode = node->parent();
     parentNode->removeChildNode(node);
     parentNode->appendChildNode(node);
 }
 
-static void lowerNode(QSGNode *node)
+static void lowerNode(QSGNode* node)
 {
     if (!node || !node->parent())
         return;
 
-    QSGNode *parentNode = node->parent();
+    QSGNode* parentNode = node->parent();
     parentNode->removeChildNode(node);
     parentNode->prependChildNode(node);
 }
 
-typedef void (*StackFunc)(QSGNode *node);
+typedef void (*StackFunc)(QSGNode* node);
 
-static void restackNodes(QuickViewNode *viewNode, const QItemSelection &selection, StackFunc stackFunc)
+static void restackNodes(QuickViewNode* viewNode,
+                         const QItemSelection& selection,
+                         StackFunc stackFunc)
 {
-    for (const QItemSelectionRange &range : selection) {
+    for (const QItemSelectionRange& range : selection) {
         if (range.width() == viewNode->columns() && range.height() == viewNode->rows())
             return;
 
         const QList<QModelIndex> indexes = range.indexes();
-        for (const QModelIndex &index : indexes)
+        for (const QModelIndex& index : indexes)
             stackFunc(viewNode->itemNode(index.row(), index.column()));
     }
 }
 
-static void updateNodes(QuickViewNode *viewNode, const QItemSelection &selection, NodeItem *nodeItem)
+static void updateNodes(QuickViewNode* viewNode, const QItemSelection& selection, NodeItem* nodeItem)
 {
-    const QList<NodeDelegate *> delegates = nodeItem->delegateList();
-    for (const QItemSelectionRange &range : selection) {
+    const QList<NodeDelegate*> delegates = nodeItem->delegateList();
+    for (const QItemSelectionRange& range : selection) {
         for (int row = range.top(); row <= range.bottom(); ++row) {
             for (int column = range.left(); column <= range.right(); ++column) {
-                QuickItemNode *itemNode = viewNode->itemNode(row, column);
+                QuickItemNode* itemNode = viewNode->itemNode(row, column);
                 if (!itemNode || itemNode->nodes.count() != delegates.count())
                     continue;
 
@@ -680,7 +713,7 @@ static void updateNodes(QuickViewNode *viewNode, const QItemSelection &selection
                     lowerNode(itemNode);
 
                 for (int i = 0; i < delegates.count(); ++i) {
-                    NodeDelegate *delegate = delegates.at(i);
+                    NodeDelegate* delegate = delegates.at(i);
                     delegate->updateNode(itemNode->nodes.at(i), index, nodeItem);
                 }
             }
@@ -688,13 +721,13 @@ static void updateNodes(QuickViewNode *viewNode, const QItemSelection &selection
     }
 }
 
-QSGNode *NodeItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+QSGNode* NodeItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*)
 {
     int count = NodeItem::count();
     int rows = NodeItem::rows();
     int columns = NodeItem::columns();
 
-    QuickViewNode *viewNode = static_cast<QuickViewNode *>(oldNode);
+    QuickViewNode* viewNode = static_cast<QuickViewNode*>(oldNode);
 
     if (m_rebuild) {
         delete viewNode;
@@ -762,13 +795,13 @@ void NodeItem::columnsChange()
     emit countChanged();
 }
 
-void NodeItem::dataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void NodeItem::dataChange(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     updateArea(topLeft, bottomRight);
     update();
 }
 
-void NodeItem::currentChange(const QModelIndex &current, const QModelIndex &previous)
+void NodeItem::currentChange(const QModelIndex& current, const QModelIndex& previous)
 {
     if (current.row() != previous.row())
         emit currentRowChanged();
@@ -782,11 +815,14 @@ void NodeItem::currentChange(const QModelIndex &current, const QModelIndex &prev
     update();
 }
 
-void NodeItem::selectionChange(const QItemSelection &selected, const QItemSelection &deselected)
+void NodeItem::selectionChange(const QItemSelection& selected, const QItemSelection& deselected)
 {
     if (m_selectionModel && m_selectionMode == MultiSelection) {
         QItemSelectionRange range = m_selectionModel->selection().value(0);
-        setSelection(QRect(range.left(), range.top(), range.right() - range.left() + 1, range.bottom() - range.top() + 1));
+        setSelection(QRect(range.left(),
+                           range.top(),
+                           range.right() - range.left() + 1,
+                           range.bottom() - range.top() + 1));
     }
 
     updateSelection(selected);
@@ -826,7 +862,8 @@ void NodeItem::fullUpdate()
     if (!m_model)
         return;
 
-    m_updates = QItemSelection(m_model->index(0, 0), m_model->index(m_model->rowCount() - 1, m_model->columnCount() - 1));
+    m_updates = QItemSelection(m_model->index(0, 0),
+                               m_model->index(m_model->rowCount() - 1, m_model->columnCount() - 1));
     update();
 }
 
@@ -850,16 +887,16 @@ void NodeItem::updateImplicitSize()
     int rows = NodeItem::rows();
     int columns = NodeItem::columns();
     setImplicitSize(m_nodeWidth * columns + m_nodeSpacing * (columns - 1),
-                    m_nodeHeight * rows + m_nodeSpacing * (rows -1 ));
+                    m_nodeHeight * rows + m_nodeSpacing * (rows - 1));
 }
 
-void NodeItem::updateSelection(const QItemSelection &selection)
+void NodeItem::updateSelection(const QItemSelection& selection)
 {
-    for (const QItemSelectionRange &range : selection)
+    for (const QItemSelectionRange& range : selection)
         updateArea(range.topLeft(), range.bottomRight());
 }
 
-static QModelIndex clamp(const QModelIndex &index, int rows, int columns)
+static QModelIndex clamp(const QModelIndex& index, int rows, int columns)
 {
     if (!index.isValid())
         return index;
@@ -867,36 +904,37 @@ static QModelIndex clamp(const QModelIndex &index, int rows, int columns)
     return index.sibling(std::min(index.row(), rows - 1), std::min(index.column(), columns - 1));
 }
 
-void NodeItem::updateArea(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void NodeItem::updateArea(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     int rows = NodeItem::rows();
     int columns = NodeItem::columns();
-    m_updates.merge(QItemSelection(clamp(topLeft, rows, columns), clamp(bottomRight, rows, columns)), QItemSelectionModel::Select);
+    m_updates.merge(QItemSelection(clamp(topLeft, rows, columns), clamp(bottomRight, rows, columns)),
+                    QItemSelectionModel::Select);
 }
 
-void NodeItem::delegates_append(QQmlListProperty<NodeDelegate> *property, NodeDelegate *delegate)
+void NodeItem::delegates_append(QQmlListProperty<NodeDelegate>* property, NodeDelegate* delegate)
 {
-    NodeItem *item = static_cast<NodeItem *>(property->object);
+    NodeItem* item = static_cast<NodeItem*>(property->object);
     connect(delegate, &NodeDelegate::changed, item, &NodeItem::fullUpdate);
     item->m_delegates.append(delegate);
 }
 
-int NodeItem::delegates_count(QQmlListProperty<NodeDelegate> *property)
+int NodeItem::delegates_count(QQmlListProperty<NodeDelegate>* property)
 {
-    NodeItem *item = static_cast<NodeItem *>(property->object);
+    NodeItem* item = static_cast<NodeItem*>(property->object);
     return item->m_delegates.count();
 }
 
-NodeDelegate *NodeItem::delegates_at(QQmlListProperty<NodeDelegate> *property, int index)
+NodeDelegate* NodeItem::delegates_at(QQmlListProperty<NodeDelegate>* property, int index)
 {
-    NodeItem *item = static_cast<NodeItem *>(property->object);
+    NodeItem* item = static_cast<NodeItem*>(property->object);
     return item->m_delegates.value(index);
 }
 
-void NodeItem::delegates_clear(QQmlListProperty<NodeDelegate> *property)
+void NodeItem::delegates_clear(QQmlListProperty<NodeDelegate>* property)
 {
-    NodeItem *item = static_cast<NodeItem *>(property->object);
-    for (NodeDelegate *delegate : qAsConst(item->m_delegates))
+    NodeItem* item = static_cast<NodeItem*>(property->object);
+    for (NodeDelegate* delegate : qAsConst(item->m_delegates))
         disconnect(delegate, &NodeDelegate::changed, item, &NodeItem::fullUpdate);
     item->m_delegates.clear();
 }

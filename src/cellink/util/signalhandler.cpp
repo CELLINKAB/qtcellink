@@ -34,20 +34,21 @@
 ****************************************************************************/
 
 #include "signalhandler.h"
+
 #include <QtCore/qdebug.h>
 #include <QtCore/qsocketnotifier.h>
 
 #ifdef Q_OS_UNIX
 #include <signal.h>
-#include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 namespace {
 int sigIntFd[2];
 int sigHupFd[2];
 int sigTermFd[2];
-}
+} // namespace
 
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_GCC("-Wunused-result")
@@ -74,7 +75,8 @@ QT_WARNING_POP
 
 #endif
 
-SignalHandler::SignalHandler(QObject *parent) : QObject(parent)
+SignalHandler::SignalHandler(QObject* parent)
+    : QObject(parent)
 {
 #ifdef Q_OS_UNIX
     if (::socketpair(AF_UNIX, SOCK_STREAM, 0, sigIntFd))
@@ -87,13 +89,19 @@ SignalHandler::SignalHandler(QObject *parent) : QObject(parent)
         qFatal("Couldn't create SIGTERM socketpair");
 
     sigHupNotifier = new QSocketNotifier(sigHupFd[1], QSocketNotifier::Read, this);
-    connect(sigHupNotifier, &QSocketNotifier::activated, [&]() { handleSignal(sigHupFd[1], sigHupNotifier); });
+    connect(sigHupNotifier, &QSocketNotifier::activated, [&]() {
+        handleSignal(sigHupFd[1], sigHupNotifier);
+    });
 
     sigIntNotifier = new QSocketNotifier(sigIntFd[1], QSocketNotifier::Read, this);
-    connect(sigIntNotifier, &QSocketNotifier::activated, [&]() { handleSignal(sigIntFd[1], sigIntNotifier); });
+    connect(sigIntNotifier, &QSocketNotifier::activated, [&]() {
+        handleSignal(sigIntFd[1], sigIntNotifier);
+    });
 
     sigTermNotifier = new QSocketNotifier(sigTermFd[1], QSocketNotifier::Read, this);
-    connect(sigTermNotifier, &QSocketNotifier::activated, [&]() { handleSignal(sigTermFd[1], sigTermNotifier); });
+    connect(sigTermNotifier, &QSocketNotifier::activated, [&]() {
+        handleSignal(sigTermFd[1], sigTermNotifier);
+    });
 #endif
 }
 
@@ -102,14 +110,11 @@ void SignalHandler::setup(std::function<void()> func)
     callback = func;
 
 #ifdef Q_OS_UNIX
-    const struct Signal {
+    const struct Signal
+    {
         int num;
         sighandler_t handler;
-    } handlers[] = {
-        { SIGHUP, sigHupHandler },
-        { SIGINT, sigIntHandler },
-        { SIGTERM, sigTermHandler }
-    };
+    } handlers[] = {{SIGHUP, sigHupHandler}, {SIGINT, sigIntHandler}, {SIGTERM, sigTermHandler}};
 
     for (const Signal sig : handlers) {
         struct sigaction act;
@@ -117,7 +122,7 @@ void SignalHandler::setup(std::function<void()> func)
         sigemptyset(&act.sa_mask);
         act.sa_flags |= SA_RESTART;
         if (sigaction(sig.num, &act, 0))
-           qWarning() << "SignalHandler: failed to register" << sig.num;
+            qWarning() << "SignalHandler: failed to register" << sig.num;
     }
 #endif
 }
@@ -125,7 +130,7 @@ void SignalHandler::setup(std::function<void()> func)
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_GCC("-Wunused-result")
 
-void SignalHandler::handleSignal(int fd, QSocketNotifier *socket)
+void SignalHandler::handleSignal(int fd, QSocketNotifier* socket)
 {
 #ifdef Q_OS_UNIX
     socket->setEnabled(false);

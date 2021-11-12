@@ -21,46 +21,42 @@
 
 #include "layoutgroup.h"
 
-#include <QtQuick/qquickitem.h>
 #include <QtQuick/private/qquickitem_p.h>
 #include <QtQuick/private/qquickitemchangelistener_p.h>
+#include <QtQuick/qquickitem.h>
 
-static const QQuickItemPrivate::ChangeTypes LayoutChanges = QQuickItemPrivate::ImplicitWidth | QQuickItemPrivate::ImplicitHeight | QQuickItemPrivate::Destroyed;
+static const QQuickItemPrivate::ChangeTypes LayoutChanges = QQuickItemPrivate::ImplicitWidth
+                                                            | QQuickItemPrivate::ImplicitHeight
+                                                            | QQuickItemPrivate::Destroyed;
 
 class LayoutGroupPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(LayoutGroup)
 
 public:
-    static LayoutGroupPrivate *get(LayoutGroup *group)
-    {
-        return group->d_func();
-    }
+    static LayoutGroupPrivate* get(LayoutGroup* group) { return group->d_func(); }
 
     void update(Qt::Orientations orientations = Qt::Horizontal | Qt::Vertical);
 
-    void addItem(LayoutGroupItem *item);
-    void removeItem(LayoutGroupItem *item);
+    void addItem(LayoutGroupItem* item);
+    void removeItem(LayoutGroupItem* item);
     void clear();
 
     qreal implicitWidth = 0;
     qreal implicitHeight = 0;
-    QList<LayoutGroupItem *> items;
+    QList<LayoutGroupItem*> items;
 };
 
 class LayoutGroupItemPrivate : public QObjectPrivate, public QQuickItemChangeListener
 {
 public:
-    static LayoutGroupItemPrivate *get(LayoutGroupItem *layoutItem)
-    {
-        return layoutItem->d_func();
-    }
+    static LayoutGroupItemPrivate* get(LayoutGroupItem* layoutItem) { return layoutItem->d_func(); }
 
     void reset();
 
-    void itemImplicitWidthChanged(QQuickItem *item) override;
-    void itemImplicitHeightChanged(QQuickItem *item) override;
-    void itemDestroyed(QQuickItem *item) override;
+    void itemImplicitWidthChanged(QQuickItem* item) override;
+    void itemImplicitHeightChanged(QQuickItem* item) override;
+    void itemDestroyed(QQuickItem* item) override;
 
     bool hasImplicitWidth = false;
     bool hasImplicitHeight = false;
@@ -69,23 +65,23 @@ public:
     QPointer<LayoutGroup> group;
 };
 
-static qreal getImplicitWidth(LayoutGroupItem *layoutItem)
+static qreal getImplicitWidth(LayoutGroupItem* layoutItem)
 {
-    LayoutGroupItemPrivate *p = LayoutGroupItemPrivate::get(layoutItem);
+    LayoutGroupItemPrivate* p = LayoutGroupItemPrivate::get(layoutItem);
     if (p->hasImplicitWidth)
         return std::ceil(p->implicitWidth);
-    QQuickItem *item = qobject_cast<QQuickItem *>(layoutItem->parent());
+    QQuickItem* item = qobject_cast<QQuickItem*>(layoutItem->parent());
     if (!item)
         return 0;
     return std::ceil(item->implicitWidth());
 }
 
-static qreal getImplicitHeight(LayoutGroupItem *layoutItem)
+static qreal getImplicitHeight(LayoutGroupItem* layoutItem)
 {
-    LayoutGroupItemPrivate *p = LayoutGroupItemPrivate::get(layoutItem);
+    LayoutGroupItemPrivate* p = LayoutGroupItemPrivate::get(layoutItem);
     if (p->hasImplicitHeight)
         return std::ceil(p->implicitHeight);
-    QQuickItem *item = qobject_cast<QQuickItem *>(layoutItem->parent());
+    QQuickItem* item = qobject_cast<QQuickItem*>(layoutItem->parent());
     if (!item)
         return 0;
     return std::ceil(item->implicitHeight());
@@ -101,14 +97,14 @@ void LayoutGroupPrivate::update(Qt::Orientations orientations)
     const bool ver = orientations & Qt::Vertical;
 
     if (!items.isEmpty()) {
-        LayoutGroupItem *item = items.first();
+        LayoutGroupItem* item = items.first();
         if (hor)
             maxWidth = getImplicitWidth(item);
         if (ver)
             maxHeight = getImplicitHeight(item);
 
         for (int i = 1; i < items.count(); ++i) {
-            LayoutGroupItem *item = items.at(i);
+            LayoutGroupItem* item = items.at(i);
             if (hor)
                 maxWidth = std::max(maxWidth, getImplicitWidth(item));
             if (ver)
@@ -130,7 +126,7 @@ void LayoutGroupPrivate::update(Qt::Orientations orientations)
         emit q->implicitHeightChanged();
 }
 
-void LayoutGroupPrivate::addItem(LayoutGroupItem *item)
+void LayoutGroupPrivate::addItem(LayoutGroupItem* item)
 {
     if (!item || items.contains(item))
         return;
@@ -139,7 +135,7 @@ void LayoutGroupPrivate::addItem(LayoutGroupItem *item)
     update();
 }
 
-void LayoutGroupPrivate::removeItem(LayoutGroupItem *item)
+void LayoutGroupPrivate::removeItem(LayoutGroupItem* item)
 {
     if (!item || !items.contains(item))
         return;
@@ -148,10 +144,9 @@ void LayoutGroupPrivate::removeItem(LayoutGroupItem *item)
     update();
 }
 
-LayoutGroup::LayoutGroup(QObject *parent)
+LayoutGroup::LayoutGroup(QObject* parent)
     : QObject(*(new LayoutGroupPrivate), parent)
-{
-}
+{}
 
 qreal LayoutGroup::implicitWidth() const
 {
@@ -165,25 +160,26 @@ qreal LayoutGroup::implicitHeight() const
     return d->implicitHeight;
 }
 
-LayoutGroupItem *LayoutGroup::qmlAttachedProperties(QObject *object)
+LayoutGroupItem* LayoutGroup::qmlAttachedProperties(QObject* object)
 {
     return new LayoutGroupItem(object);
 }
 
-void LayoutGroup::addItem(QQuickItem *item)
+void LayoutGroup::addItem(QQuickItem* item)
 {
     Q_D(LayoutGroup);
     if (!item)
         return;
-    d->addItem(static_cast<LayoutGroupItem *>(qmlAttachedPropertiesObject<LayoutGroup>(item, true)));
+    d->addItem(static_cast<LayoutGroupItem*>(qmlAttachedPropertiesObject<LayoutGroup>(item, true)));
 }
 
-void LayoutGroup::removeItem(QQuickItem *item)
+void LayoutGroup::removeItem(QQuickItem* item)
 {
     Q_D(LayoutGroup);
     if (!item)
         return;
-    d->removeItem(static_cast<LayoutGroupItem *>(qmlAttachedPropertiesObject<LayoutGroup>(item, true)));
+    d->removeItem(
+        static_cast<LayoutGroupItem*>(qmlAttachedPropertiesObject<LayoutGroup>(item, true)));
 }
 
 void LayoutGroupItemPrivate::reset()
@@ -197,7 +193,7 @@ void LayoutGroupItemPrivate::reset()
         LayoutGroupPrivate::get(group)->update();
 }
 
-void LayoutGroupItemPrivate::itemImplicitWidthChanged(QQuickItem *)
+void LayoutGroupItemPrivate::itemImplicitWidthChanged(QQuickItem*)
 {
     if (!group)
         return;
@@ -205,7 +201,7 @@ void LayoutGroupItemPrivate::itemImplicitWidthChanged(QQuickItem *)
     LayoutGroupPrivate::get(group)->update(Qt::Horizontal);
 }
 
-void LayoutGroupItemPrivate::itemImplicitHeightChanged(QQuickItem *)
+void LayoutGroupItemPrivate::itemImplicitHeightChanged(QQuickItem*)
 {
     if (!group)
         return;
@@ -213,23 +209,23 @@ void LayoutGroupItemPrivate::itemImplicitHeightChanged(QQuickItem *)
     LayoutGroupPrivate::get(group)->update(Qt::Vertical);
 }
 
-void LayoutGroupItemPrivate::itemDestroyed(QQuickItem *)
+void LayoutGroupItemPrivate::itemDestroyed(QQuickItem*)
 {
     reset();
 }
 
-LayoutGroupItem::LayoutGroupItem(QObject *parent)
+LayoutGroupItem::LayoutGroupItem(QObject* parent)
     : QObject(*(new LayoutGroupItemPrivate), parent)
 {
     Q_D(LayoutGroupItem);
-    if (QQuickItem *item = qobject_cast<QQuickItem *>(parent))
+    if (QQuickItem* item = qobject_cast<QQuickItem*>(parent))
         QQuickItemPrivate::get(item)->addItemChangeListener(d, LayoutChanges);
 }
 
 LayoutGroupItem::~LayoutGroupItem()
 {
     Q_D(LayoutGroupItem);
-    if (QQuickItem *item = qobject_cast<QQuickItem *>(parent()))
+    if (QQuickItem* item = qobject_cast<QQuickItem*>(parent()))
         QQuickItemPrivate::get(item)->removeItemChangeListener(d, LayoutChanges);
     setGroup(nullptr);
 }
@@ -272,13 +268,13 @@ void LayoutGroupItem::setImplicitHeight(qreal height)
     emit implicitHeightChanged();
 }
 
-LayoutGroup *LayoutGroupItem::group() const
+LayoutGroup* LayoutGroupItem::group() const
 {
     Q_D(const LayoutGroupItem);
     return d->group;
 }
 
-void LayoutGroupItem::setGroup(LayoutGroup *group)
+void LayoutGroupItem::setGroup(LayoutGroup* group)
 {
     Q_D(LayoutGroupItem);
     if (d->group == group)

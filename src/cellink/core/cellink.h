@@ -26,15 +26,15 @@
 #include <QtCore/qglobal.h>
 
 #ifndef Q_CELLINK_EXPORT
-#  ifndef QT_STATIC
-#    if defined(QT_BUILD_CELLINK_LIB)
-#      define Q_CELLINK_EXPORT Q_DECL_EXPORT
-#    else
-#      define Q_CELLINK_EXPORT Q_DECL_IMPORT
-#    endif
-#  else
-#    define Q_CELLINK_EXPORT
-#  endif
+#ifndef QT_STATIC
+#if defined(QT_BUILD_CELLINK_LIB)
+#define Q_CELLINK_EXPORT Q_DECL_EXPORT
+#else
+#define Q_CELLINK_EXPORT Q_DECL_IMPORT
+#endif
+#else
+#define Q_CELLINK_EXPORT
+#endif
 #endif
 
 #endif // CELLINK_H

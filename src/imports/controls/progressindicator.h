@@ -23,8 +23,8 @@
 #ifndef PROGRESSINDICATOR_H
 #define PROGRESSINDICATOR_H
 
-#include <QtQuick/qquickitem.h>
 #include <QtGui/qcolor.h>
+#include <QtQuick/qquickitem.h>
 
 class ProgressIndicatorImpl : public QQuickItem
 {
@@ -35,7 +35,7 @@ class ProgressIndicatorImpl : public QQuickItem
     Q_PROPERTY(qreal value READ value WRITE setValue FINAL)
 
 public:
-    explicit ProgressIndicatorImpl(QQuickItem *parent = nullptr);
+    explicit ProgressIndicatorImpl(QQuickItem* parent = nullptr);
 
     QColor color() const;
     void setColor(QColor color);
@@ -56,8 +56,8 @@ signals:
     void stopped();
 
 protected:
-    void itemChange(ItemChange change, const ItemChangeData &data) override;
-    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *) override;
+    void itemChange(ItemChange change, const ItemChangeData& data) override;
+    QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*) override;
 
 private:
     bool m_running = false;

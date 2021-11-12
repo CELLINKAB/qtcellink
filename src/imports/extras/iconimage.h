@@ -34,15 +34,15 @@ class IconImage : public QQuickImage
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged FINAL)
 
 public:
-    explicit IconImage(QQuickItem *parent = nullptr);
+    explicit IconImage(QQuickItem* parent = nullptr);
 
     QString name() const;
-    void setName(const QString &name);
+    void setName(const QString& name);
 
     QColor color() const;
-    void setColor(const QColor &color);
+    void setColor(const QColor& color);
 
-    void setSource(const QUrl &url) override;
+    void setSource(const QUrl& url) override;
 
 Q_SIGNALS:
     void nameChanged();
@@ -50,8 +50,8 @@ Q_SIGNALS:
 
 protected:
     void componentComplete() override;
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
-    void itemChange(ItemChange change, const ItemChangeData &value) override;
+    void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
+    void itemChange(ItemChange change, const ItemChangeData& value) override;
     void pixmapChange() override;
 
 private:

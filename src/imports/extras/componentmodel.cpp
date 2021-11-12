@@ -35,9 +35,9 @@
 #include <QtQml/qqmlcomponent.h>
 #include <QtQml/qqmlcontext.h>
 
-ComponentModel::ComponentModel(QObject *parent) : QQmlObjectModel(parent)
-{
-}
+ComponentModel::ComponentModel(QObject* parent)
+    : QQmlObjectModel(parent)
+{}
 
 bool ComponentModel::isActive() const
 {
@@ -59,7 +59,7 @@ QVariantMap ComponentModel::properties() const
     return m_properties;
 }
 
-void ComponentModel::setProperties(const QVariantMap &properties)
+void ComponentModel::setProperties(const QVariantMap& properties)
 {
     if (m_properties == properties)
         return;
@@ -70,7 +70,12 @@ void ComponentModel::setProperties(const QVariantMap &properties)
 
 QQmlListProperty<QQmlComponent> ComponentModel::components()
 {
-    return QQmlListProperty<QQmlComponent>(this, nullptr, components_append, components_count, components_at, components_clear);
+    return QQmlListProperty<QQmlComponent>(this,
+                                           nullptr,
+                                           components_append,
+                                           components_count,
+                                           components_at,
+                                           components_clear);
 }
 
 void ComponentModel::reload()
@@ -87,7 +92,7 @@ void ComponentModel::reload()
     if (!m_active)
         return;
 
-    for (QQmlComponent *component : qAsConst(m_components))
+    for (QQmlComponent* component : qAsConst(m_components))
         append(create(component));
 }
 
@@ -111,43 +116,44 @@ void ComponentModel::reloadLater()
     m_reloading = QMetaObject::invokeMethod(this, &ComponentModel::reload, Qt::QueuedConnection);
 }
 
-QObject *ComponentModel::create(QQmlComponent *component)
+QObject* ComponentModel::create(QQmlComponent* component)
 {
-    QQmlContext *creationContext = component->creationContext();
+    QQmlContext* creationContext = component->creationContext();
     if (!creationContext)
         creationContext = qmlContext(this);
-    QQmlContext *context = new QQmlContext(creationContext, this);
+    QQmlContext* context = new QQmlContext(creationContext, this);
     for (auto it = m_properties.cbegin(); it != m_properties.cend(); ++it)
         context->setContextProperty(it.key(), it.value());
     return component->create(context);
 }
 
-void ComponentModel::components_append(QQmlListProperty<QQmlComponent> *property, QQmlComponent *component)
+void ComponentModel::components_append(QQmlListProperty<QQmlComponent>* property,
+                                       QQmlComponent* component)
 {
     if (!component)
         return;
 
-    ComponentModel *model = qobject_cast<ComponentModel *>(property->object);
+    ComponentModel* model = qobject_cast<ComponentModel*>(property->object);
     model->m_components.append(component);
     if (model->m_active && model->m_complete)
         model->append(model->create(component));
 }
 
-QQmlComponent *ComponentModel::components_at(QQmlListProperty<QQmlComponent> *property, int index)
+QQmlComponent* ComponentModel::components_at(QQmlListProperty<QQmlComponent>* property, int index)
 {
-    ComponentModel *model = qobject_cast<ComponentModel *>(property->object);
+    ComponentModel* model = qobject_cast<ComponentModel*>(property->object);
     return model->m_components.value(index);
 }
 
-void ComponentModel::components_clear(QQmlListProperty<QQmlComponent> *property)
+void ComponentModel::components_clear(QQmlListProperty<QQmlComponent>* property)
 {
-    ComponentModel *model = qobject_cast<ComponentModel *>(property->object);
+    ComponentModel* model = qobject_cast<ComponentModel*>(property->object);
     model->m_components.clear();
     model->reload();
 }
 
-int ComponentModel::components_count(QQmlListProperty<QQmlComponent> *property)
+int ComponentModel::components_count(QQmlListProperty<QQmlComponent>* property)
 {
-    ComponentModel *model = qobject_cast<ComponentModel *>(property->object);
+    ComponentModel* model = qobject_cast<ComponentModel*>(property->object);
     return model->m_components.count();
 }

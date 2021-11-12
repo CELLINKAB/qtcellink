@@ -36,9 +36,10 @@
 #ifndef SIGNALHANDLER_H
 #define SIGNALHANDLER_H
 
-#include <QtCore/qobject.h>
-#include <QtCellink/cellink.h>
 #include <functional>
+
+#include <QtCellink/cellink.h>
+#include <QtCore/qobject.h>
 
 QT_FORWARD_DECLARE_CLASS(QSocketNotifier)
 
@@ -47,18 +48,18 @@ class Q_CELLINK_EXPORT SignalHandler : public QObject
     Q_OBJECT
 
 public:
-    explicit SignalHandler(QObject *parent = nullptr);
+    explicit SignalHandler(QObject* parent = nullptr);
 
 public slots:
     void setup(std::function<void()> callback);
 
 private:
-    void handleSignal(int fd, QSocketNotifier *socket);
+    void handleSignal(int fd, QSocketNotifier* socket);
 
     std::function<void()> callback = nullptr;
-    QSocketNotifier *sigIntNotifier = nullptr;
-    QSocketNotifier *sigHupNotifier = nullptr;
-    QSocketNotifier *sigTermNotifier = nullptr;
+    QSocketNotifier* sigIntNotifier = nullptr;
+    QSocketNotifier* sigHupNotifier = nullptr;
+    QSocketNotifier* sigTermNotifier = nullptr;
 };
 
 #endif // SIGNALHANDLER_H

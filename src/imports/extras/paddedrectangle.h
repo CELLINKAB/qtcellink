@@ -28,14 +28,19 @@
 class PaddedRectangle : public QQuickRectangle
 {
     Q_OBJECT
-    Q_PROPERTY(qreal padding READ padding WRITE setPadding RESET resetPadding NOTIFY paddingChanged FINAL)
-    Q_PROPERTY(qreal topPadding READ topPadding WRITE setTopPadding RESET resetTopPadding NOTIFY topPaddingChanged FINAL)
-    Q_PROPERTY(qreal leftPadding READ leftPadding WRITE setLeftPadding RESET resetLeftPadding NOTIFY leftPaddingChanged FINAL)
-    Q_PROPERTY(qreal rightPadding READ rightPadding WRITE setRightPadding RESET resetRightPadding NOTIFY rightPaddingChanged FINAL)
-    Q_PROPERTY(qreal bottomPadding READ bottomPadding WRITE setBottomPadding RESET resetBottomPadding NOTIFY bottomPaddingChanged FINAL)
+    Q_PROPERTY(
+        qreal padding READ padding WRITE setPadding RESET resetPadding NOTIFY paddingChanged FINAL)
+    Q_PROPERTY(qreal topPadding READ topPadding WRITE setTopPadding RESET resetTopPadding NOTIFY
+                   topPaddingChanged FINAL)
+    Q_PROPERTY(qreal leftPadding READ leftPadding WRITE setLeftPadding RESET resetLeftPadding NOTIFY
+                   leftPaddingChanged FINAL)
+    Q_PROPERTY(qreal rightPadding READ rightPadding WRITE setRightPadding RESET resetRightPadding
+                   NOTIFY rightPaddingChanged FINAL)
+    Q_PROPERTY(qreal bottomPadding READ bottomPadding WRITE setBottomPadding RESET
+                   resetBottomPadding NOTIFY bottomPaddingChanged FINAL)
 
 public:
-    explicit PaddedRectangle(QQuickItem *parent = nullptr);
+    explicit PaddedRectangle(QQuickItem* parent = nullptr);
 
     qreal padding() const;
     void setPadding(qreal padding);
@@ -65,7 +70,7 @@ Q_SIGNALS:
     void bottomPaddingChanged();
 
 protected:
-    QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *) override;
+    QSGNode* updatePaintNode(QSGNode*, UpdatePaintNodeData*) override;
 
 private:
     void setTopPadding(qreal padding, bool has);

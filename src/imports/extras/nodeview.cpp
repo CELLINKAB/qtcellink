@@ -31,11 +31,12 @@
 ****************************************************************************/
 
 #include "nodeview.h"
-#include "nodeitem.h"
 
 #include <cmath>
 
-NodeView::NodeView(QQuickItem *parent)
+#include "nodeitem.h"
+
+NodeView::NodeView(QQuickItem* parent)
     : QQuickFlickable(parent)
 {
     setFlickableDirection(AutoFlickIfNeeded);
@@ -102,7 +103,7 @@ int NodeView::currentColumn() const
     return m_nodeItem->currentColumn();
 }
 
-QObject *NodeView::model() const
+QObject* NodeView::model() const
 {
     if (!m_nodeItem)
         return nullptr;
@@ -110,7 +111,7 @@ QObject *NodeView::model() const
     return m_nodeItem->model();
 }
 
-void NodeView::setModel(QObject *model)
+void NodeView::setModel(QObject* model)
 {
     if (!m_nodeItem)
         return;
@@ -142,7 +143,7 @@ void NodeView::setSelectionMode(SelectionMode selectionMode)
     m_nodeItem->setSelectionMode(static_cast<NodeItem::SelectionMode>(selectionMode));
 }
 
-QItemSelectionModel *NodeView::selectionModel() const
+QItemSelectionModel* NodeView::selectionModel() const
 {
     if (!m_nodeItem)
         return nullptr;
@@ -150,7 +151,7 @@ QItemSelectionModel *NodeView::selectionModel() const
     return m_nodeItem->selectionModel();
 }
 
-void NodeView::setSelectionModel(QItemSelectionModel *selectionModel)
+void NodeView::setSelectionModel(QItemSelectionModel* selectionModel)
 {
     if (!m_nodeItem)
         return;
@@ -336,20 +337,26 @@ void NodeView::setMaximumZoomFactor(qreal factor)
     emit maximumZoomFactorChanged();
 }
 
-NodeItem *NodeView::nodeItem() const
+NodeItem* NodeView::nodeItem() const
 {
     return m_nodeItem;
 }
 
-void NodeView::setNodeItem(NodeItem *nodeItem)
+void NodeView::setNodeItem(NodeItem* nodeItem)
 {
     if (m_nodeItem == nodeItem)
         return;
 
     if (m_nodeItem) {
         m_nodeItem->setParentItem(nullptr);
-        disconnect(m_nodeItem, &QQuickItem::implicitWidthChanged, this, &NodeView::updateContentSize);
-        disconnect(m_nodeItem, &QQuickItem::implicitHeightChanged, this, &NodeView::updateContentSize);
+        disconnect(m_nodeItem,
+                   &QQuickItem::implicitWidthChanged,
+                   this,
+                   &NodeView::updateContentSize);
+        disconnect(m_nodeItem,
+                   &QQuickItem::implicitHeightChanged,
+                   this,
+                   &NodeView::updateContentSize);
         disconnect(m_nodeItem, &NodeItem::pressed, this, &NodeView::pressed);
         disconnect(m_nodeItem, &NodeItem::released, this, &NodeView::released);
         disconnect(m_nodeItem, &NodeItem::activated, this, &NodeView::activated);
@@ -359,11 +366,20 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         disconnect(m_nodeItem, &NodeItem::rowsChanged, this, &NodeView::rowsChanged);
         disconnect(m_nodeItem, &NodeItem::columnsChanged, this, &NodeView::columnsChanged);
         disconnect(m_nodeItem, &NodeItem::currentRowChanged, this, &NodeView::currentRowChanged);
-        disconnect(m_nodeItem, &NodeItem::currentColumnChanged, this, &NodeView::currentColumnChanged);
+        disconnect(m_nodeItem,
+                   &NodeItem::currentColumnChanged,
+                   this,
+                   &NodeView::currentColumnChanged);
         disconnect(m_nodeItem, &NodeItem::modelChanged, this, &NodeView::modelChanged);
         disconnect(m_nodeItem, &NodeItem::selectionChanged, this, &NodeView::selectionChanged);
-        disconnect(m_nodeItem, &NodeItem::selectionModeChanged, this, &NodeView::selectionModeChanged);
-        disconnect(m_nodeItem, &NodeItem::selectionModelChanged, this, &NodeView::selectionModelChanged);
+        disconnect(m_nodeItem,
+                   &NodeItem::selectionModeChanged,
+                   this,
+                   &NodeView::selectionModeChanged);
+        disconnect(m_nodeItem,
+                   &NodeItem::selectionModelChanged,
+                   this,
+                   &NodeView::selectionModelChanged);
         disconnect(m_nodeItem, &NodeItem::pressedChanged, this, &NodeView::pressedChanged);
         disconnect(m_nodeItem, &NodeItem::selectingChanged, this, &NodeView::selectingChanged);
         disconnect(m_nodeItem, &NodeItem::nodeWidthChanged, this, &NodeView::nodeWidthChanged);
@@ -444,7 +460,7 @@ void NodeView::selectAll()
     m_nodeItem->selectAll();
 }
 
-void NodeView::select(const QRect &selection)
+void NodeView::select(const QRect& selection)
 {
     if (!m_nodeItem)
         return;
@@ -476,7 +492,7 @@ static qreal calculateVelocity(qreal dist, qreal decel)
     return velocity;
 }
 
-void NodeView::ensureVisible(const QRectF &rect)
+void NodeView::ensureVisible(const QRectF& rect)
 {
     int scrollMargin = 32;
 
@@ -485,15 +501,17 @@ void NodeView::ensureVisible(const QRectF &rect)
         if (cx >= rect.x() - scrollMargin)
             cx = std::max(0.0, rect.x() - scrollMargin);
         else if (cx + width() <= rect.x() + rect.width())
-            cx = std::min(contentWidth() - width(), rect.x() + rect.width() - width() + scrollMargin);
+            cx = std::min(contentWidth() - width(),
+                          rect.x() + rect.width() - width() + scrollMargin);
     }
 
     qreal cy = contentY();
     if (contentHeight() > height()) {
         if (cy >= rect.y() - scrollMargin)
-            cy = std::max(0.0, rect.y()  - scrollMargin);
-        else if (cy + height() <= rect.y()  + rect.height() + scrollMargin)
-            cy = std::min(contentHeight() - height(), rect.y() + rect.height() - height() + scrollMargin);
+            cy = std::max(0.0, rect.y() - scrollMargin);
+        else if (cy + height() <= rect.y() + rect.height() + scrollMargin)
+            cy = std::min(contentHeight() - height(),
+                          rect.y() + rect.height() - height() + scrollMargin);
     }
 
     qreal vx = calculateVelocity(contentX() - cx, flickDeceleration());
@@ -501,7 +519,7 @@ void NodeView::ensureVisible(const QRectF &rect)
     flick(vx, vy);
 }
 
-void NodeView::zoom(qreal factor, const QPointF &point)
+void NodeView::zoom(qreal factor, const QPointF& point)
 {
     factor = std::clamp(factor, m_minimumZoomFactor, m_maximumZoomFactor);
     if (qFuzzyCompare(m_zoomFactor, factor) && m_zoomPoint == point)
@@ -510,7 +528,9 @@ void NodeView::zoom(qreal factor, const QPointF &point)
     m_zoomFactor = factor;
     m_zoomPoint = point;
 
-    resizeContent(factor * m_nodeItem->implicitWidth(), factor * m_nodeItem->implicitHeight(), point);
+    resizeContent(factor * m_nodeItem->implicitWidth(),
+                  factor * m_nodeItem->implicitHeight(),
+                  point);
     returnToBounds();
     emit zoomChanged(factor, point);
 }
@@ -565,13 +585,14 @@ void NodeView::updateContentSize()
     setContentHeight(m_nodeItem->implicitHeight());
 }
 
-void NodeView::wheelEvent(QWheelEvent *event)
+void NodeView::wheelEvent(QWheelEvent* event)
 {
     if (!isInteractive())
         return;
 
     const qreal deltasPerStep = QWheelEvent::DefaultDeltasPerStep;
-    zoom(m_zoomFactor + event->angleDelta().y() / deltasPerStep, mapToItem(m_nodeItem, event->posF()));
+    zoom(m_zoomFactor + event->angleDelta().y() / deltasPerStep,
+         mapToItem(m_nodeItem, event->posF()));
 }
 
 QRectF NodeView::viewportArea() const
@@ -581,10 +602,11 @@ QRectF NodeView::viewportArea() const
 
 QRectF NodeView::selectionArea() const
 {
-    QItemSelectionModel *selectionModel = NodeView::selectionModel();
+    QItemSelectionModel* selectionModel = NodeView::selectionModel();
     if (!selectionModel || !selectionModel->hasSelection())
         return QRectF();
 
     QItemSelectionRange range = selectionModel->selection().value(0);
-    return QRectF(m_nodeItem->nodeRect(range.top(), range.left()).topLeft(), m_nodeItem->nodeRect(range.bottom(), range.right()).bottomRight());
+    return QRectF(m_nodeItem->nodeRect(range.top(), range.left()).topLeft(),
+                  m_nodeItem->nodeRect(range.bottom(), range.right()).bottomRight());
 }

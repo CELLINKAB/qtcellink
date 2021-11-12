@@ -22,13 +22,13 @@
 
 #include "iconloader.h"
 
-#include <QtCore/qobject.h>
 #include <QtCore/qmetaobject.h>
+#include <QtCore/qobject.h>
 #include <QtQml/qqml.h>
 
-IconLoader::IconLoader(int slot, QObject *parent)
-    : m_parent(parent),
-      m_slot(slot)
+IconLoader::IconLoader(int slot, QObject* parent)
+    : m_parent(parent)
+    , m_slot(slot)
 {
     Q_ASSERT(slot != -1 && parent);
 }

@@ -34,9 +34,9 @@
 #define COMPONENTMODEL_H
 
 #include <QtCore/qglobal.h>
-#include <QtQmlModels/private/qqmlobjectmodel_p.h>
-#include <QtQml/qqmlparserstatus.h>
 #include <QtQml/qqmllist.h>
+#include <QtQml/qqmlparserstatus.h>
+#include <QtQmlModels/private/qqmlobjectmodel_p.h>
 
 class QQmlComponent;
 class QQmlContext;
@@ -58,13 +58,13 @@ class ComponentModel : public QQmlObjectModel, public QQmlParserStatus
     Q_INTERFACES(QQmlParserStatus)
 
 public:
-    explicit ComponentModel(QObject *parent = nullptr);
+    explicit ComponentModel(QObject* parent = nullptr);
 
     bool isActive() const;
     void setActive(bool active);
 
     QVariantMap properties() const;
-    void setProperties(const QVariantMap &properties);
+    void setProperties(const QVariantMap& properties);
 
     QQmlListProperty<QQmlComponent> components();
 
@@ -82,18 +82,19 @@ private slots:
     void reloadLater();
 
 private:
-    QObject *create(QQmlComponent *component);
+    QObject* create(QQmlComponent* component);
 
-    static void components_append(QQmlListProperty<QQmlComponent> *property, QQmlComponent *component);
-    static QQmlComponent *components_at(QQmlListProperty<QQmlComponent> *property, int index);
-    static void components_clear(QQmlListProperty<QQmlComponent> *property);
-    static int components_count(QQmlListProperty<QQmlComponent> *property);
+    static void components_append(QQmlListProperty<QQmlComponent>* property,
+                                  QQmlComponent* component);
+    static QQmlComponent* components_at(QQmlListProperty<QQmlComponent>* property, int index);
+    static void components_clear(QQmlListProperty<QQmlComponent>* property);
+    static int components_count(QQmlListProperty<QQmlComponent>* property);
 
     bool m_active = true;
     bool m_complete = true;
     bool m_reloading = false;
     QVariantMap m_properties;
-    QList<QQmlComponent *> m_components;
+    QList<QQmlComponent*> m_components;
 };
 
 #endif // COMPONENTMODEL_H

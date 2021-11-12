@@ -21,12 +21,13 @@
 ****************************************************************************/
 
 #include "buttonrow.h"
-#include "rowbutton.h"
 
 #include <QtCore/qmath.h>
 #include <QtGui/qfontinfo.h>
 #include <QtQuickTemplates2/private/qquickcontainer_p_p.h>
 #include <QtQuickTemplates2/private/qquicktheme_p.h>
+
+#include "rowbutton.h"
 
 class ButtonRowPrivate : public QQuickContainerPrivate
 {
@@ -42,9 +43,11 @@ public:
     qreal getContentWidth() const override;
     qreal getContentHeight() const override;
 
-    void itemGeometryChanged(QQuickItem *item, QQuickGeometryChange change, const QRectF &diff) override;
-    void itemImplicitWidthChanged(QQuickItem *item) override;
-    void itemImplicitHeightChanged(QQuickItem *item) override;
+    void itemGeometryChanged(QQuickItem* item,
+                             QQuickGeometryChange change,
+                             const QRectF& diff) override;
+    void itemImplicitWidthChanged(QQuickItem* item) override;
+    void itemImplicitHeightChanged(QQuickItem* item) override;
 
     bool exclusive = true;
     bool updatingLayout = false;
@@ -55,23 +58,20 @@ class ButtonRowAttachedPrivate : public QObjectPrivate
     Q_DECLARE_PUBLIC(ButtonRowAttached)
 
 public:
-    static ButtonRowAttachedPrivate *get(ButtonRowAttached *attached)
-    {
-        return attached->d_func();
-    }
+    static ButtonRowAttachedPrivate* get(ButtonRowAttached* attached) { return attached->d_func(); }
 
-    void update(ButtonRow *buttonRow, int index);
+    void update(ButtonRow* buttonRow, int index);
 
     int index = -1;
     bool isLastItem = true;
     bool isFirstItem = true;
-    ButtonRow *buttonRow = nullptr;
+    ButtonRow* buttonRow = nullptr;
 };
 
 void ButtonRowPrivate::activate()
 {
     Q_Q(ButtonRow);
-    RowButton *button = qobject_cast<RowButton *>(q->sender());
+    RowButton* button = qobject_cast<RowButton*>(q->sender());
     if (button)
         emit q->activated(contentModel->indexOf(button, nullptr));
 }
@@ -81,9 +81,10 @@ void ButtonRowPrivate::updateAttachedProperties()
     Q_Q(ButtonRow);
     const int count = contentModel->count();
     for (int i = 0; i < count; ++i) {
-        RowButton *button = qobject_cast<RowButton *>(q->itemAt(i));
+        RowButton* button = qobject_cast<RowButton*>(q->itemAt(i));
         if (button) {
-            ButtonRowAttached *attached = qobject_cast<ButtonRowAttached *>(qmlAttachedPropertiesObject<ButtonRow>(button));
+            ButtonRowAttached* attached = qobject_cast<ButtonRowAttached*>(
+                qmlAttachedPropertiesObject<ButtonRow>(button));
             if (attached)
                 ButtonRowAttachedPrivate::get(attached)->update(q, i);
         }
@@ -96,13 +97,13 @@ void ButtonRowPrivate::updateCurrentItem()
     if (!exclusive)
         return;
 
-    RowButton *button = qobject_cast<RowButton *>(contentModel->get(currentIndex));
+    RowButton* button = qobject_cast<RowButton*>(contentModel->get(currentIndex));
     if (button) {
         button->setChecked(true);
     } else {
         const int count = contentModel->count();
         for (int i = 0; i < count; ++i) {
-            RowButton *button = qobject_cast<RowButton *>(q->itemAt(i));
+            RowButton* button = qobject_cast<RowButton*>(q->itemAt(i));
             if (button)
                 button->setChecked(false);
         }
@@ -115,7 +116,7 @@ void ButtonRowPrivate::updateCurrentIndex()
     if (!exclusive)
         return;
 
-    RowButton *button = qobject_cast<RowButton *>(q->sender());
+    RowButton* button = qobject_cast<RowButton*>(q->sender());
     if (button && button->isChecked())
         q->setCurrentIndex(contentModel->indexOf(button, nullptr));
 }
@@ -132,7 +133,7 @@ void ButtonRowPrivate::updateLayout()
 
     updatingLayout = true;
     for (int i = 0; i < count; ++i) {
-        QQuickItem *item = q->itemAt(i);
+        QQuickItem* item = q->itemAt(i);
         if (item)
             item->setSize(QSizeF(itemWidth, contentHeight));
     }
@@ -145,7 +146,7 @@ qreal ButtonRowPrivate::getContentWidth() const
     const int count = contentModel->count();
     qreal maxWidth = 0;
     for (int i = 0; i < count; ++i) {
-        QQuickItem *item = q->itemAt(i);
+        QQuickItem* item = q->itemAt(i);
         if (item)
             maxWidth = qMax<qreal>(maxWidth, qCeil(item->implicitWidth()));
     }
@@ -158,14 +159,16 @@ qreal ButtonRowPrivate::getContentHeight() const
     const int count = contentModel->count();
     qreal maxHeight = 0;
     for (int i = 0; i < count; ++i) {
-        QQuickItem *item = q->itemAt(i);
+        QQuickItem* item = q->itemAt(i);
         if (item)
             maxHeight = qMax<qreal>(maxHeight, qCeil(item->implicitHeight()));
     }
     return maxHeight;
 }
 
-void ButtonRowPrivate::itemGeometryChanged(QQuickItem *item, QQuickGeometryChange change, const QRectF &diff)
+void ButtonRowPrivate::itemGeometryChanged(QQuickItem* item,
+                                           QQuickGeometryChange change,
+                                           const QRectF& diff)
 {
     QQuickContainerPrivate::itemGeometryChanged(item, change, diff);
     if (!updatingLayout) {
@@ -175,27 +178,31 @@ void ButtonRowPrivate::itemGeometryChanged(QQuickItem *item, QQuickGeometryChang
     }
 }
 
-void ButtonRowPrivate::itemImplicitWidthChanged(QQuickItem *item)
+void ButtonRowPrivate::itemImplicitWidthChanged(QQuickItem* item)
 {
     QQuickContainerPrivate::itemImplicitWidthChanged(item);
     if (item != contentItem)
         updateImplicitContentWidth();
 }
 
-void ButtonRowPrivate::itemImplicitHeightChanged(QQuickItem *item)
+void ButtonRowPrivate::itemImplicitHeightChanged(QQuickItem* item)
 {
     QQuickContainerPrivate::itemImplicitHeightChanged(item);
     if (item != contentItem)
         updateImplicitContentHeight();
 }
 
-ButtonRow::ButtonRow(QQuickItem *parent)
+ButtonRow::ButtonRow(QQuickItem* parent)
     : QQuickContainer(*(new ButtonRowPrivate), parent)
 {
     Q_D(ButtonRow);
-    d->changeTypes |= QQuickItemPrivate::Geometry | QQuickItemPrivate::ImplicitWidth | QQuickItemPrivate::ImplicitHeight;
+    d->changeTypes |= QQuickItemPrivate::Geometry | QQuickItemPrivate::ImplicitWidth
+                      | QQuickItemPrivate::ImplicitHeight;
     setFlag(ItemIsFocusScope);
-    QObjectPrivate::connect(this, &ButtonRow::currentIndexChanged, d, &ButtonRowPrivate::updateCurrentItem);
+    QObjectPrivate::connect(this,
+                            &ButtonRow::currentIndexChanged,
+                            d,
+                            &ButtonRowPrivate::updateCurrentItem);
 }
 
 bool ButtonRow::isExclusive() const
@@ -213,14 +220,14 @@ void ButtonRow::setExclusive(bool exclusive)
     d->exclusive = exclusive;
     const int count = d->contentModel->count();
     for (int i = 0; i < count; ++i) {
-        RowButton *button = qobject_cast<RowButton *>(itemAt(i));
+        RowButton* button = qobject_cast<RowButton*>(itemAt(i));
         if (button)
             button->setAutoExclusive(exclusive);
     }
     emit exclusiveChanged();
 }
 
-ButtonRowAttached *ButtonRow::qmlAttachedProperties(QObject *object)
+ButtonRowAttached* ButtonRow::qmlAttachedProperties(QObject* object)
 {
     return new ButtonRowAttached(object);
 }
@@ -240,27 +247,30 @@ void ButtonRow::componentComplete()
     d->updateLayout();
 }
 
-void ButtonRow::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void ButtonRow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     Q_D(ButtonRow);
     QQuickContainer::geometryChanged(newGeometry, oldGeometry);
     d->updateLayout();
 }
 
-bool ButtonRow::isContent(QQuickItem *item) const
+bool ButtonRow::isContent(QQuickItem* item) const
 {
-    return qobject_cast<RowButton *>(item);
+    return qobject_cast<RowButton*>(item);
 }
 
-void ButtonRow::itemAdded(int index, QQuickItem *item)
+void ButtonRow::itemAdded(int index, QQuickItem* item)
 {
     Q_D(ButtonRow);
     Q_UNUSED(index);
     QQuickItemPrivate::get(item)->setCulled(true); // QTBUG-55129
-    if (RowButton *button = qobject_cast<RowButton *>(item)) {
+    if (RowButton* button = qobject_cast<RowButton*>(item)) {
         button->setAutoExclusive(d->exclusive);
         QObjectPrivate::connect(button, &RowButton::toggled, d, &ButtonRowPrivate::activate);
-        QObjectPrivate::connect(button, &RowButton::checkedChanged, d, &ButtonRowPrivate::updateCurrentIndex);
+        QObjectPrivate::connect(button,
+                                &RowButton::checkedChanged,
+                                d,
+                                &ButtonRowPrivate::updateCurrentIndex);
     }
     d->updateAttachedProperties();
     d->updateImplicitContentSize();
@@ -268,7 +278,7 @@ void ButtonRow::itemAdded(int index, QQuickItem *item)
         polish();
 }
 
-void ButtonRow::itemMoved(int index, QQuickItem *item)
+void ButtonRow::itemMoved(int index, QQuickItem* item)
 {
     Q_D(ButtonRow);
     Q_UNUSED(index)
@@ -276,16 +286,20 @@ void ButtonRow::itemMoved(int index, QQuickItem *item)
     d->updateAttachedProperties();
 }
 
-void ButtonRow::itemRemoved(int index, QQuickItem *item)
+void ButtonRow::itemRemoved(int index, QQuickItem* item)
 {
     Q_D(ButtonRow);
     Q_UNUSED(index);
-    if (RowButton *button = qobject_cast<RowButton *>(item)) {
+    if (RowButton* button = qobject_cast<RowButton*>(item)) {
         QObjectPrivate::disconnect(button, &RowButton::clicked, d, &ButtonRowPrivate::activate);
-        QObjectPrivate::disconnect(button, &RowButton::checkedChanged, d, &ButtonRowPrivate::updateCurrentIndex);
+        QObjectPrivate::disconnect(button,
+                                   &RowButton::checkedChanged,
+                                   d,
+                                   &ButtonRowPrivate::updateCurrentIndex);
     }
     d->updateAttachedProperties();
-    ButtonRowAttached *attached = qobject_cast<ButtonRowAttached *>(qmlAttachedPropertiesObject<ButtonRow>(item));
+    ButtonRowAttached* attached = qobject_cast<ButtonRowAttached*>(
+        qmlAttachedPropertiesObject<ButtonRow>(item));
     if (attached)
         ButtonRowAttachedPrivate::get(attached)->update(nullptr, -1);
     d->updateImplicitContentSize();
@@ -311,11 +325,11 @@ QAccessible::Role ButtonRow::accessibleRole() const
 }
 #endif
 
-void ButtonRowAttachedPrivate::update(ButtonRow *newButtonRow, int newIndex)
+void ButtonRowAttachedPrivate::update(ButtonRow* newButtonRow, int newIndex)
 {
     Q_Q(ButtonRowAttached);
     const int oldIndex = index;
-    const ButtonRow *oldButtonRow = buttonRow;
+    const ButtonRow* oldButtonRow = buttonRow;
     const bool oldIsLastItem = isLastItem;
     const bool oldIsFirstItem = isFirstItem;
 
@@ -336,10 +350,9 @@ void ButtonRowAttachedPrivate::update(ButtonRow *newButtonRow, int newIndex)
         emit q->isFirstItemChanged();
 }
 
-ButtonRowAttached::ButtonRowAttached(QObject *parent)
+ButtonRowAttached::ButtonRowAttached(QObject* parent)
     : QObject(*(new ButtonRowAttachedPrivate), parent)
-{
-}
+{}
 
 int ButtonRowAttached::index() const
 {
@@ -359,7 +372,7 @@ bool ButtonRowAttached::isFirstItem() const
     return d->isFirstItem;
 }
 
-ButtonRow *ButtonRowAttached::buttonRow() const
+ButtonRow* ButtonRowAttached::buttonRow() const
 {
     Q_D(const ButtonRowAttached);
     return d->buttonRow;

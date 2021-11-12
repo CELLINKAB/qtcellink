@@ -26,24 +26,33 @@
 #include "rangeslider.h"
 
 #include <QtGui/qevent.h>
-#include <QtWidgets/qstylepainter.h>
 #include <QtWidgets/qstyleoption.h>
+#include <QtWidgets/qstylepainter.h>
 
 class RangeSliderPrivate
 {
     Q_DECLARE_PUBLIC(RangeSlider)
 
 public:
-    void init(RangeSlider *slider);
-    void initStyleOption(QStyleOptionSlider* option, RangeSlider::RangeHandle handle = RangeSlider::UpperHandle) const;
+    void init(RangeSlider* slider);
+    void initStyleOption(QStyleOptionSlider* option,
+                         RangeSlider::RangeHandle handle = RangeSlider::UpperHandle) const;
     int pick(const QPoint& pt) const
     {
         return q_func()->orientation() == Qt::Horizontal ? pt.x() : pt.y();
     }
     int pixelPosToRangeValue(int pos) const;
-    void handleMousePress(const QPoint& pos, QStyle::SubControl& control, int value, RangeSlider::RangeHandle handle);
+    void handleMousePress(const QPoint& pos,
+                          QStyle::SubControl& control,
+                          int value,
+                          RangeSlider::RangeHandle handle);
     void drawHandle(QStylePainter* painter, RangeSlider::RangeHandle handle) const;
-    void setupPainter(QPainter* painter, Qt::Orientation orientation, qreal x1, qreal y1, qreal x2, qreal y2) const;
+    void setupPainter(QPainter* painter,
+                      Qt::Orientation orientation,
+                      qreal x1,
+                      qreal y1,
+                      qreal x2,
+                      qreal y2) const;
     void drawRange(QStylePainter* painter, const QRect& rect) const;
     void triggerAction(QAbstractSlider::SliderAction action, bool main);
     void swapControls();
@@ -62,16 +71,19 @@ public:
     QStyle::SubControl lowerPressed = QStyle::SC_None;
     QStyle::SubControl upperPressed = QStyle::SC_None;
     RangeSlider::HandleMovementMode movement = RangeSlider::FreeMovement;
-    RangeSlider *q_ptr = nullptr;
+    RangeSlider* q_ptr = nullptr;
 };
 
-void RangeSliderPrivate::init(RangeSlider *slider)
+void RangeSliderPrivate::init(RangeSlider* slider)
 {
     q_ptr = slider;
-    QObject::connect(slider, &RangeSlider::sliderReleased, slider, [this]() { movePressedHandle(); });
+    QObject::connect(slider, &RangeSlider::sliderReleased, slider, [this]() {
+        movePressedHandle();
+    });
 }
 
-void RangeSliderPrivate::initStyleOption(QStyleOptionSlider *option, RangeSlider::RangeHandle handle) const
+void RangeSliderPrivate::initStyleOption(QStyleOptionSlider* option,
+                                         RangeSlider::RangeHandle handle) const
 {
     Q_Q(const RangeSlider);
     q->initStyleOption(option);
@@ -99,10 +111,17 @@ int RangeSliderPrivate::pixelPosToRangeValue(int pos) const
         sliderMin = gr.y();
         sliderMax = gr.bottom() - sliderLength + 1;
     }
-    return QStyle::sliderValueFromPosition(q->minimum(), q->maximum(), pos - sliderMin, sliderMax - sliderMin, opt.upsideDown);
+    return QStyle::sliderValueFromPosition(q->minimum(),
+                                           q->maximum(),
+                                           pos - sliderMin,
+                                           sliderMax - sliderMin,
+                                           opt.upsideDown);
 }
 
-void RangeSliderPrivate::handleMousePress(const QPoint &pos, QStyle::SubControl &control, int value, RangeSlider::RangeHandle handle)
+void RangeSliderPrivate::handleMousePress(const QPoint& pos,
+                                          QStyle::SubControl& control,
+                                          int value,
+                                          RangeSlider::RangeHandle handle)
 {
     Q_Q(RangeSlider);
     QStyleOptionSlider opt;
@@ -121,7 +140,8 @@ void RangeSliderPrivate::handleMousePress(const QPoint &pos, QStyle::SubControl 
         q->update(sr);
 }
 
-void RangeSliderPrivate::setupPainter(QPainter *painter, Qt::Orientation orientation, qreal x1, qreal y1, qreal x2, qreal y2) const
+void RangeSliderPrivate::setupPainter(
+    QPainter* painter, Qt::Orientation orientation, qreal x1, qreal y1, qreal x2, qreal y2) const
 {
     Q_Q(const RangeSlider);
     QColor highlight = q->palette().color(QPalette::Highlight);
@@ -136,7 +156,7 @@ void RangeSliderPrivate::setupPainter(QPainter *painter, Qt::Orientation orienta
         painter->setPen(QPen(highlight.darker(150), 0));
 }
 
-void RangeSliderPrivate::drawRange(QStylePainter *painter, const QRect &rect) const
+void RangeSliderPrivate::drawRange(QStylePainter* painter, const QRect& rect) const
 {
     Q_Q(const RangeSlider);
     QStyleOptionSlider opt;
@@ -152,15 +172,25 @@ void RangeSliderPrivate::drawRange(QStylePainter *painter, const QRect &rect) co
     // pen  &brush
     painter->setPen(QPen(q->palette().color(QPalette::Dark).lighter(110), 0));
     if (opt.orientation == Qt::Horizontal)
-        setupPainter(painter, opt.orientation, groove.center().x(), groove.top(), groove.center().x(), groove.bottom());
+        setupPainter(painter,
+                     opt.orientation,
+                     groove.center().x(),
+                     groove.top(),
+                     groove.center().x(),
+                     groove.bottom());
     else
-        setupPainter(painter, opt.orientation, groove.left(), groove.center().y(), groove.right(), groove.center().y());
+        setupPainter(painter,
+                     opt.orientation,
+                     groove.left(),
+                     groove.center().y(),
+                     groove.right(),
+                     groove.center().y());
 
     // draw groove
     painter->drawRect(rect.intersected(groove));
 }
 
-void RangeSliderPrivate::drawHandle(QStylePainter *painter, RangeSlider::RangeHandle handle) const
+void RangeSliderPrivate::drawHandle(QStylePainter* painter, RangeSlider::RangeHandle handle) const
 {
     QStyleOptionSlider opt;
     initStyleOption(&opt, handle);
@@ -181,13 +211,16 @@ void RangeSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, boo
     bool up = false;
     const int min = q->minimum();
     const int max = q->maximum();
-    const RangeSlider::RangeHandle altControl = (mainControl == RangeSlider::LowerHandle ? RangeSlider::UpperHandle : RangeSlider::LowerHandle);
+    const RangeSlider::RangeHandle altControl = (mainControl == RangeSlider::LowerHandle
+                                                     ? RangeSlider::UpperHandle
+                                                     : RangeSlider::LowerHandle);
 
     blockTracking = true;
 
     switch (action) {
     case QAbstractSlider::SliderSingleStepAdd:
-        if ((main && mainControl == RangeSlider::UpperHandle) || (!main && altControl == RangeSlider::UpperHandle)) {
+        if ((main && mainControl == RangeSlider::UpperHandle)
+            || (!main && altControl == RangeSlider::UpperHandle)) {
             value = qBound(min, upper + q->singleStep(), max);
             up = true;
             break;
@@ -195,7 +228,8 @@ void RangeSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, boo
         value = qBound(min, lower + q->singleStep(), max);
         break;
     case QAbstractSlider::SliderSingleStepSub:
-        if ((main && mainControl == RangeSlider::UpperHandle) || (!main && altControl == RangeSlider::UpperHandle)) {
+        if ((main && mainControl == RangeSlider::UpperHandle)
+            || (!main && altControl == RangeSlider::UpperHandle)) {
             value = qBound(min, upper - q->singleStep(), max);
             up = true;
             break;
@@ -204,16 +238,19 @@ void RangeSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, boo
         break;
     case QAbstractSlider::SliderToMinimum:
         value = min;
-        if ((main && mainControl == RangeSlider::UpperHandle) || (!main && altControl == RangeSlider::UpperHandle))
+        if ((main && mainControl == RangeSlider::UpperHandle)
+            || (!main && altControl == RangeSlider::UpperHandle))
             up = true;
         break;
     case QAbstractSlider::SliderToMaximum:
         value = max;
-        if ((main && mainControl == RangeSlider::UpperHandle) || (!main && altControl == RangeSlider::UpperHandle))
+        if ((main && mainControl == RangeSlider::UpperHandle)
+            || (!main && altControl == RangeSlider::UpperHandle))
             up = true;
         break;
     case QAbstractSlider::SliderMove:
-        if ((main && mainControl == RangeSlider::UpperHandle) || (!main && altControl == RangeSlider::UpperHandle))
+        if ((main && mainControl == RangeSlider::UpperHandle)
+            || (!main && altControl == RangeSlider::UpperHandle))
             up = true;
         Q_FALLTHROUGH();
     case QAbstractSlider::SliderNoAction:
@@ -259,45 +296,49 @@ void RangeSliderPrivate::swapControls()
 {
     qSwap(lower, upper);
     qSwap(lowerPressed, upperPressed);
-    lastPressed = (lastPressed == RangeSlider::LowerHandle ? RangeSlider::UpperHandle : RangeSlider::LowerHandle);
-    mainControl = (mainControl == RangeSlider::LowerHandle ? RangeSlider::UpperHandle : RangeSlider::LowerHandle);
+    lastPressed = (lastPressed == RangeSlider::LowerHandle ? RangeSlider::UpperHandle
+                                                           : RangeSlider::LowerHandle);
+    mainControl = (mainControl == RangeSlider::LowerHandle ? RangeSlider::UpperHandle
+                                                           : RangeSlider::LowerHandle);
 }
 
 void RangeSliderPrivate::movePressedHandle()
 {
     switch (lastPressed) {
-        case RangeSlider::LowerHandle:
-            if (lowerPos != lower) {
-                bool main = (mainControl == RangeSlider::LowerHandle);
-                triggerAction(QAbstractSlider::SliderMove, main);
-            }
-            break;
-        case RangeSlider::UpperHandle:
-            if (upperPos != upper) {
-                bool main = (mainControl == RangeSlider::UpperHandle);
-                triggerAction(QAbstractSlider::SliderMove, main);
-            }
-            break;
-        default:
-            break;
+    case RangeSlider::LowerHandle:
+        if (lowerPos != lower) {
+            bool main = (mainControl == RangeSlider::LowerHandle);
+            triggerAction(QAbstractSlider::SliderMove, main);
+        }
+        break;
+    case RangeSlider::UpperHandle:
+        if (upperPos != upper) {
+            bool main = (mainControl == RangeSlider::UpperHandle);
+            triggerAction(QAbstractSlider::SliderMove, main);
+        }
+        break;
+    default:
+        break;
     }
 }
 
-RangeSlider::RangeSlider(QWidget *parent) : QSlider(parent), d_ptr(new RangeSliderPrivate)
+RangeSlider::RangeSlider(QWidget* parent)
+    : QSlider(parent)
+    , d_ptr(new RangeSliderPrivate)
 {
     Q_D(RangeSlider);
     d->init(this);
 }
 
-RangeSlider::RangeSlider(Qt::Orientation orientation, QWidget *parent) : QSlider(orientation, parent), d_ptr(new RangeSliderPrivate)
+RangeSlider::RangeSlider(Qt::Orientation orientation, QWidget* parent)
+    : QSlider(orientation, parent)
+    , d_ptr(new RangeSliderPrivate)
 {
     Q_D(RangeSlider);
     d->init(this);
 }
 
-RangeSlider::~RangeSlider()
-{
-}
+RangeSlider::~RangeSlider() {}
 
 RangeSlider::HandleMovementMode RangeSlider::handleMovementMode() const
 {
@@ -400,7 +441,7 @@ void RangeSlider::setUpperPosition(int upper)
     }
 }
 
-void RangeSlider::keyPressEvent(QKeyEvent *event)
+void RangeSlider::keyPressEvent(QKeyEvent* event)
 {
     Q_D(RangeSlider);
     QSlider::keyPressEvent(event);
@@ -441,7 +482,7 @@ void RangeSlider::keyPressEvent(QKeyEvent *event)
         d->triggerAction(action, main);
 }
 
-void RangeSlider::mousePressEvent(QMouseEvent *event)
+void RangeSlider::mousePressEvent(QMouseEvent* event)
 {
     Q_D(RangeSlider);
     if (minimum() == maximum() || (event->buttons() ^ event->button())) {
@@ -457,7 +498,7 @@ void RangeSlider::mousePressEvent(QMouseEvent *event)
     event->accept();
 }
 
-void RangeSlider::mouseMoveEvent(QMouseEvent *event)
+void RangeSlider::mouseMoveEvent(QMouseEvent* event)
 {
     Q_D(RangeSlider);
     if (d->lowerPressed != QStyle::SC_SliderHandle && d->upperPressed != QStyle::SC_SliderHandle) {
@@ -515,7 +556,7 @@ void RangeSlider::mouseMoveEvent(QMouseEvent *event)
     event->accept();
 }
 
-void RangeSlider::mouseReleaseEvent(QMouseEvent *event)
+void RangeSlider::mouseReleaseEvent(QMouseEvent* event)
 {
     Q_D(RangeSlider);
     QSlider::mouseReleaseEvent(event);
@@ -525,7 +566,7 @@ void RangeSlider::mouseReleaseEvent(QMouseEvent *event)
     update();
 }
 
-void RangeSlider::paintEvent(QPaintEvent *event)
+void RangeSlider::paintEvent(QPaintEvent* event)
 {
     Q_D(RangeSlider);
     Q_UNUSED(event);
@@ -542,10 +583,10 @@ void RangeSlider::paintEvent(QPaintEvent *event)
     // handle rects
     opt.sliderPosition = d->lowerPos;
     const QRect lr = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this);
-    const int lrv  = d->pick(lr.center());
+    const int lrv = d->pick(lr.center());
     opt.sliderPosition = d->upperPos;
     const QRect ur = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this);
-    const int urv  = d->pick(ur.center());
+    const int urv = d->pick(ur.center());
 
     // span
     const int minv = qMin(lrv, urv);

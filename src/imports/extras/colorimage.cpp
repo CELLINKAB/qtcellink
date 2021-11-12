@@ -24,17 +24,16 @@
 
 #include <QtQuick/private/qquickimagebase_p_p.h>
 
-ColorImage::ColorImage(QQuickItem *parent)
+ColorImage::ColorImage(QQuickItem* parent)
     : QQuickImage(parent)
-{
-}
+{}
 
 QColor ColorImage::color() const
 {
     return m_color;
 }
 
-void ColorImage::setColor(const QColor &color)
+void ColorImage::setColor(const QColor& color)
 {
     if (m_color == color)
         return;
@@ -55,7 +54,7 @@ QColor ColorImage::defaultColor() const
     return m_defaultColor;
 }
 
-void ColorImage::setDefaultColor(const QColor &color)
+void ColorImage::setDefaultColor(const QColor& color)
 {
     if (m_defaultColor == color)
         return;
@@ -73,7 +72,8 @@ void ColorImage::pixmapChange()
 {
     QQuickImage::pixmapChange();
     if (m_color.alpha() > 0 && m_color != m_defaultColor) {
-        QQuickImageBasePrivate *d = static_cast<QQuickImageBasePrivate *>(QQuickItemPrivate::get(this));
+        QQuickImageBasePrivate* d = static_cast<QQuickImageBasePrivate*>(
+            QQuickItemPrivate::get(this));
         QImage image = d->pix.image();
         if (!image.isNull()) {
             QPainter painter(&image);

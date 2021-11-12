@@ -44,7 +44,8 @@
 Q_GLOBAL_STATIC(QByteArrayList, allowExternalModules)
 static QtMessageHandler messageHandler = nullptr;
 
-QuickEngine::QuickEngine(QObject *parent) : QQmlApplicationEngine(parent)
+QuickEngine::QuickEngine(QObject* parent)
+    : QQmlApplicationEngine(parent)
 {
     QLocale locale;
     locale.setNumberOptions(locale.numberOptions() | QLocale::OmitGroupSeparator);
@@ -56,14 +57,17 @@ static inline QString organizationStylePath()
     return QCoreApplication::organizationName() + QStringLiteral("/Styles");
 }
 
-void QuickEngine::init(const QString &style, const QString &path)
+void QuickEngine::init(const QString& style, const QString& path)
 {
     QIcon::setThemeName(style);
     QQuickStyle::setStyle(style);
-    QQuickStyle::addStylePath(path.isEmpty() ? QStringLiteral("qrc:/qt-project.org/imports/%1").arg(organizationStylePath()) : path);
+    QQuickStyle::addStylePath(
+        path.isEmpty()
+            ? QStringLiteral("qrc:/qt-project.org/imports/%1").arg(organizationStylePath())
+            : path);
 }
 
-static void addStylePaths(const QString &path)
+static void addStylePaths(const QString& path)
 {
     QDir dir(path);
     if (dir.cd(QCoreApplication::organizationName())) {
@@ -72,9 +76,9 @@ static void addStylePaths(const QString &path)
     }
 }
 
-static void initEngine(QQmlEngine *engine)
+static void initEngine(QQmlEngine* engine)
 {
-    QQmlContext *context = engine->rootContext();
+    QQmlContext* context = engine->rootContext();
     context->setContextProperty("QT_VERSION_STR", QT_VERSION_STR);
     context->setContextProperty("BUILD_DATE", __DATE__);
     context->setContextProperty("BUILD_TIME", __TIME__);
@@ -82,17 +86,18 @@ static void initEngine(QQmlEngine *engine)
     engine->addImportPath(":/qml");
 
     QDir appDir(QCoreApplication::applicationDirPath());
-    if (appDir.exists(QCoreApplication::organizationName()) || appDir.cd("../qml") || appDir.cd("../Resources/qml")) {
+    if (appDir.exists(QCoreApplication::organizationName()) || appDir.cd("../qml")
+        || appDir.cd("../Resources/qml")) {
         engine->addImportPath(appDir.absolutePath());
         addStylePaths(appDir.path());
     } else {
         const QStringList importPaths = engine->importPathList();
-        for (const QString &importPath : importPaths)
+        for (const QString& importPath : importPaths)
             addStylePaths(importPath);
     }
 }
 
-bool QuickEngine::load(const QUrl &url)
+bool QuickEngine::load(const QUrl& url)
 {
     if (rootObjects().isEmpty())
         initEngine(this);
@@ -104,24 +109,29 @@ bool QuickEngine::load(const QUrl &url)
     return !rootObjects().isEmpty();
 }
 
-void QuickEngine::addFont(const QString &source)
+void QuickEngine::addFont(const QString& source)
 {
     QFontDatabase::addApplicationFont(source);
 }
 
-void QuickEngine::setFont(const QString &family, int pixelSize)
+void QuickEngine::setFont(const QString& family, int pixelSize)
 {
     QFont font(family);
     font.setPixelSize(pixelSize);
     QGuiApplication::setFont(font);
 }
 
-void externalRegistrationHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+void externalRegistrationHandler(QtMsgType type,
+                                 const QMessageLogContext& context,
+                                 const QString& msg)
 {
     if (type == QtWarningMsg && msg.startsWith("Module '")) {
         const QByteArrayList modules = *allowExternalModules();
-        for (const QByteArray &module : modules) {
-            if (msg == QStringLiteral("Module '%1' does not contain a module identifier directive - it cannot be protected from external registrations.").arg(QString::fromLocal8Bit(module)))
+        for (const QByteArray& module : modules) {
+            if (msg
+                == QStringLiteral("Module '%1' does not contain a module identifier directive - it "
+                                  "cannot be protected from external registrations.")
+                       .arg(QString::fromLocal8Bit(module)))
                 return;
         }
     }
@@ -129,7 +139,7 @@ void externalRegistrationHandler(QtMsgType type, const QMessageLogContext &conte
         messageHandler(type, context, msg);
 }
 
-void QuickEngine::allowExternalRegistrations(const char *uri)
+void QuickEngine::allowExternalRegistrations(const char* uri)
 {
     if (!messageHandler)
         messageHandler = qInstallMessageHandler(externalRegistrationHandler);

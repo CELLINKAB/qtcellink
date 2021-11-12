@@ -23,8 +23,8 @@
 #ifndef ICONLOADER_H
 #define ICONLOADER_H
 
-#include <QtCore/qurl.h>
 #include <QtCore/qstring.h>
+#include <QtCore/qurl.h>
 #include <QtGui/qicon.h>
 #include <QtQuick/private/qquickpixmapcache_p.h>
 #include <QtQuickTemplates2/private/qquickicon_p.h>
@@ -34,7 +34,7 @@ class QObject;
 class IconLoader : public QQuickPixmap
 {
 public:
-    IconLoader(int slot, QObject *parent);
+    IconLoader(int slot, QObject* parent);
 
     bool isEnabled() const;
     void setEnabled(bool enabled);
@@ -42,12 +42,12 @@ public:
     QIcon toQIcon() const;
 
     QQuickIcon icon() const;
-    void setIcon(const QQuickIcon &icon);
+    void setIcon(const QQuickIcon& icon);
 
 private:
     void loadIcon();
 
-    QObject *m_parent = nullptr;
+    QObject* m_parent = nullptr;
     int m_slot = -1;
     bool m_enabled = false;
     QQuickIcon m_icon;

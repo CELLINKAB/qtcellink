@@ -24,6 +24,7 @@
 #define ICONLABEL_P_H
 
 #include <QtQuick/private/qquickitem_p.h>
+
 #include "iconlabel.h"
 
 class IconImage;
@@ -52,15 +53,15 @@ public:
     void updateImplicitSize();
     void layout();
 
-    void watchChanges(QQuickItem *item);
-    void unwatchChanges(QQuickItem *item);
+    void watchChanges(QQuickItem* item);
+    void unwatchChanges(QQuickItem* item);
     void setPositioningDirty();
 
     bool isLeftToRight() const;
 
-    void itemImplicitWidthChanged(QQuickItem *) override;
-    void itemImplicitHeightChanged(QQuickItem *) override;
-    void itemDestroyed(QQuickItem *item) override;
+    void itemImplicitWidthChanged(QQuickItem*) override;
+    void itemImplicitHeightChanged(QQuickItem*) override;
+    void itemDestroyed(QQuickItem* item) override;
 
     bool mirrored = false;
     IconLabel::Display display = IconLabel::TextBesideIcon;
@@ -74,8 +75,8 @@ public:
     QColor color;
     QString text;
     QQuickIcon icon;
-    IconImage *image = nullptr;
-    MnemonicLabel *label = nullptr;
+    IconImage* image = nullptr;
+    MnemonicLabel* label = nullptr;
 };
 
 #endif // ICONLABEL_P_H

@@ -30,10 +30,11 @@ class RowButtonPrivate;
 class RowButton : public QQuickAbstractButton
 {
     Q_OBJECT
-    Q_PROPERTY(bool highlighted READ isHighlighted WRITE setHighlighted NOTIFY highlightedChanged FINAL)
+    Q_PROPERTY(
+        bool highlighted READ isHighlighted WRITE setHighlighted NOTIFY highlightedChanged FINAL)
 
 public:
-    explicit RowButton(QQuickItem *parent = nullptr);
+    explicit RowButton(QQuickItem* parent = nullptr);
 
     bool isHighlighted() const;
     void setHighlighted(bool highlighted);

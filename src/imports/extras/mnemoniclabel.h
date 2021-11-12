@@ -32,10 +32,10 @@ class MnemonicLabel : public QQuickText
     Q_PROPERTY(bool mnemonicVisible READ isMnemonicVisible WRITE setMnemonicVisible FINAL)
 
 public:
-    explicit MnemonicLabel(QQuickItem *parent = nullptr);
+    explicit MnemonicLabel(QQuickItem* parent = nullptr);
 
     QString text() const;
-    void setText(const QString &text);
+    void setText(const QString& text);
 
     bool isMnemonicVisible() const;
     void setMnemonicVisible(bool visible);

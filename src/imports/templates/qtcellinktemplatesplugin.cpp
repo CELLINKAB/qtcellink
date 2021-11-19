@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 **
 ** This file is part of QtCellink.
 **
@@ -21,21 +21,18 @@
 
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
-#include <QtCore/qloggingcategory.h>
 
 #include "buttonrow.h"
+#include "componentview.h"
 #include "doublespinbox.h"
 #include "flipview.h"
 #include "progressindicator.h"
 #include "rowbutton.h"
 #include "titleseparator.h"
 
-#include "nativemenubar.h"
-#include "nativemenu.h"
-#include "nativemenuitem.h"
-#include "nativemenuseparator.h"
-
-Q_LOGGING_CATEGORY(lcMenus, "qtcellink.menus")
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+template <typename T> static void qmlRegisterAnonymousType(const char *, int) { qmlRegisterType<T>(); }
+#endif
 
 class QtCellinkTemplatesPlugin: public QQmlExtensionPlugin
 {
@@ -54,18 +51,14 @@ QtCellinkTemplatesPlugin::QtCellinkTemplatesPlugin(QObject *parent) : QQmlExtens
 void QtCellinkTemplatesPlugin::registerTypes(const char *uri)
 {
     qmlRegisterType<ButtonRow>(uri, 1, 0, "ButtonRow");
+    qmlRegisterType<ComponentView>(uri, 1, 0, "ComponentView");
     qmlRegisterType<DoubleSpinBox>(uri, 1, 0, "DoubleSpinBox");
-    qmlRegisterType<DoubleSpinButton>();
+    qmlRegisterAnonymousType<DoubleSpinButton>(uri, 1);
     qmlRegisterType<FlipView>(uri, 1, 0, "FlipView");
-    qmlRegisterType<FlipViewAttached>();
+    qmlRegisterAnonymousType<FlipViewAttached>(uri, 1);
     qmlRegisterType<ProgressIndicator>(uri, 1, 0, "ProgressIndicator");
     qmlRegisterType<RowButton>(uri, 1, 0, "RowButton");
     qmlRegisterType<TitleSeparator>(uri, 1, 0, "TitleSeparator");
-
-    qmlRegisterType<NativeMenu>(uri, 1, 0, "NativeMenu");
-    qmlRegisterType<NativeMenuBar>(uri, 1, 0, "NativeMenuBar");
-    qmlRegisterType<NativeMenuItem>(uri, 1, 0, "NativeMenuItem");
-    qmlRegisterType<NativeMenuSeparator>(uri, 1, 0, "NativeMenuSeparator");
 
     qmlRegisterRevision<QQuickItem, QT_VERSION_MINOR>(uri, 1, 0);
     qmlRegisterRevision<QQuickControl, QT_VERSION_MINOR>(uri, 1, 0);

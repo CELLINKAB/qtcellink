@@ -1,0 +1,3 @@
+module QtCellink.Menus
+plugin qtcellinkmenusplugin
+classname QtCellinkMenusPlugin

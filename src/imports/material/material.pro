@@ -14,5 +14,8 @@ SOURCES += \
     $$PWD/material.cpp \
     $$PWD/qtcellinkmaterialplugin.cpp
 
+RESOURCES += \
+    material.qrc
+
 CONFIG += no_cxx_module
 load(qml_plugin)

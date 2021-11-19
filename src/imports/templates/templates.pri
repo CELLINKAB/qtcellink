@@ -1,5 +1,6 @@
 HEADERS += \
     $$PWD/buttonrow.h \
+    $$PWD/componentview.h \
     $$PWD/doublespinbox.h \
     $$PWD/flipview.h \
     $$PWD/progressindicator.h \
@@ -8,6 +9,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/buttonrow.cpp \
+    $$PWD/componentview.cpp \
     $$PWD/doublespinbox.cpp \
     $$PWD/flipview.cpp \
     $$PWD/progressindicator.cpp \

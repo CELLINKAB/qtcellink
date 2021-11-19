@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Templates 2 module of Qt).
@@ -46,6 +46,8 @@ public:
 Q_SIGNALS:
     void runningChanged();
     void valueChanged();
+    void started();
+    void stopped();
 
 protected:
 #if QT_CONFIG(quicktemplates2_multitouch)
@@ -55,6 +57,8 @@ protected:
 #if QT_CONFIG(accessibility)
     QAccessible::Role accessibleRole() const override;
 #endif
+
+    void contentItemChange(QQuickItem *newItem, QQuickItem *oldItem) override;
 
 private:
     Q_DISABLE_COPY(ProgressIndicator)

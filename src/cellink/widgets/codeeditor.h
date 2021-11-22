@@ -42,7 +42,6 @@
 
 #include <QtWidgets/qplaintextedit.h>
 
-
 class QCompleter;
 class CodeEditor;
 
@@ -52,6 +51,7 @@ class Q_CELLINK_EXPORT LineNumberBar : public QWidget
     Q_PROPERTY(int hzMargin READ hzMargin WRITE setHzMargin NOTIFY hzMarginChanged)
 public:
     explicit LineNumberBar(CodeEditor* editor);
+    ~LineNumberBar() override;
 
     void setHzMargin(int margin);
 
@@ -80,6 +80,7 @@ class Q_CELLINK_EXPORT CodeEditor : public QPlainTextEdit
                    setHighlightLineColorAlpha NOTIFY highlightLineColorAlphaChanged)
 public:
     explicit CodeEditor(QWidget* parent = nullptr);
+    ~CodeEditor() override;
 
     QCompleter* completer() const { return m_completer; }
     void setCompleter(QCompleter* completer);
@@ -110,7 +111,7 @@ private:
     void paintLineNumbers(QPainter* painter, const QRect& rect);
 
     friend class LineNumberBar;
-    
+
     LineNumberBar m_lineNumberBar{this};
     QCompleter* m_completer = nullptr;
     qreal m_highlightLineColorAlpha = 0.2;

@@ -160,10 +160,7 @@ void IconImage::componentComplete()
     Q_D(IconImage);
     QQuickImage::componentComplete();
     d->updateIcon();
-    QObjectPrivate::connect(this,
-                            &QQuickImageBase::sourceSizeChanged,
-                            d,
-                            &IconImagePrivate::updateIcon);
+    QObjectPrivate::connect(this, &QQuickImageBase::sourceSizeChanged, d, &IconImagePrivate::updateIcon);
 }
 
 void IconImage::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)

@@ -54,11 +54,7 @@ void QtCellinkControlsPlugin::registerTypes(const char* uri)
     selector.addSelector(QStringLiteral("Controls"));
     selector.setPaths(QQuickStyle::stylePathList());
 
-    qmlRegisterType(typeUrl(selector.select(QStringLiteral("ButtonRow.qml"))),
-                    uri,
-                    1,
-                    0,
-                    "ButtonRow");
+    qmlRegisterType(typeUrl(selector.select(QStringLiteral("ButtonRow.qml"))), uri, 1, 0, "ButtonRow");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("ComponentView.qml"))),
                     uri,
                     1,
@@ -75,11 +71,7 @@ void QtCellinkControlsPlugin::registerTypes(const char* uri)
                     1,
                     0,
                     "ProgressIndicator");
-    qmlRegisterType(typeUrl(selector.select(QStringLiteral("RowButton.qml"))),
-                    uri,
-                    1,
-                    0,
-                    "RowButton");
+    qmlRegisterType(typeUrl(selector.select(QStringLiteral("RowButton.qml"))), uri, 1, 0, "RowButton");
     qmlRegisterType(typeUrl(QStringLiteral("SplitView.qml")), uri, 1, 0, "SplitView");
     qmlRegisterType(typeUrl(selector.select(QStringLiteral("TitleSeparator.qml"))),
                     uri,

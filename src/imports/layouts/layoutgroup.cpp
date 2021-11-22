@@ -178,8 +178,7 @@ void LayoutGroup::removeItem(QQuickItem* item)
     Q_D(LayoutGroup);
     if (!item)
         return;
-    d->removeItem(
-        static_cast<LayoutGroupItem*>(qmlAttachedPropertiesObject<LayoutGroup>(item, true)));
+    d->removeItem(static_cast<LayoutGroupItem*>(qmlAttachedPropertiesObject<LayoutGroup>(item, true)));
 }
 
 void LayoutGroupItemPrivate::reset()

@@ -214,10 +214,7 @@ void NodeItem::setSelectionModel(QItemSelectionModel* selectionModel)
 
     if (selectionModel) {
         selectionModel->setModel(m_model);
-        connect(selectionModel,
-                &QItemSelectionModel::currentChanged,
-                this,
-                &NodeItem::currentChange);
+        connect(selectionModel, &QItemSelectionModel::currentChanged, this, &NodeItem::currentChange);
         connect(selectionModel,
                 &QItemSelectionModel::selectionChanged,
                 this,
@@ -684,9 +681,7 @@ static void lowerNode(QSGNode* node)
 
 typedef void (*StackFunc)(QSGNode* node);
 
-static void restackNodes(QuickViewNode* viewNode,
-                         const QItemSelection& selection,
-                         StackFunc stackFunc)
+static void restackNodes(QuickViewNode* viewNode, const QItemSelection& selection, StackFunc stackFunc)
 {
     for (const QItemSelectionRange& range : selection) {
         if (range.width() == viewNode->columns() && range.height() == viewNode->rows())

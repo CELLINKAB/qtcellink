@@ -349,14 +349,8 @@ void NodeView::setNodeItem(NodeItem* nodeItem)
 
     if (m_nodeItem) {
         m_nodeItem->setParentItem(nullptr);
-        disconnect(m_nodeItem,
-                   &QQuickItem::implicitWidthChanged,
-                   this,
-                   &NodeView::updateContentSize);
-        disconnect(m_nodeItem,
-                   &QQuickItem::implicitHeightChanged,
-                   this,
-                   &NodeView::updateContentSize);
+        disconnect(m_nodeItem, &QQuickItem::implicitWidthChanged, this, &NodeView::updateContentSize);
+        disconnect(m_nodeItem, &QQuickItem::implicitHeightChanged, this, &NodeView::updateContentSize);
         disconnect(m_nodeItem, &NodeItem::pressed, this, &NodeView::pressed);
         disconnect(m_nodeItem, &NodeItem::released, this, &NodeView::released);
         disconnect(m_nodeItem, &NodeItem::activated, this, &NodeView::activated);
@@ -366,20 +360,11 @@ void NodeView::setNodeItem(NodeItem* nodeItem)
         disconnect(m_nodeItem, &NodeItem::rowsChanged, this, &NodeView::rowsChanged);
         disconnect(m_nodeItem, &NodeItem::columnsChanged, this, &NodeView::columnsChanged);
         disconnect(m_nodeItem, &NodeItem::currentRowChanged, this, &NodeView::currentRowChanged);
-        disconnect(m_nodeItem,
-                   &NodeItem::currentColumnChanged,
-                   this,
-                   &NodeView::currentColumnChanged);
+        disconnect(m_nodeItem, &NodeItem::currentColumnChanged, this, &NodeView::currentColumnChanged);
         disconnect(m_nodeItem, &NodeItem::modelChanged, this, &NodeView::modelChanged);
         disconnect(m_nodeItem, &NodeItem::selectionChanged, this, &NodeView::selectionChanged);
-        disconnect(m_nodeItem,
-                   &NodeItem::selectionModeChanged,
-                   this,
-                   &NodeView::selectionModeChanged);
-        disconnect(m_nodeItem,
-                   &NodeItem::selectionModelChanged,
-                   this,
-                   &NodeView::selectionModelChanged);
+        disconnect(m_nodeItem, &NodeItem::selectionModeChanged, this, &NodeView::selectionModeChanged);
+        disconnect(m_nodeItem, &NodeItem::selectionModelChanged, this, &NodeView::selectionModelChanged);
         disconnect(m_nodeItem, &NodeItem::pressedChanged, this, &NodeView::pressedChanged);
         disconnect(m_nodeItem, &NodeItem::selectingChanged, this, &NodeView::selectingChanged);
         disconnect(m_nodeItem, &NodeItem::nodeWidthChanged, this, &NodeView::nodeWidthChanged);
@@ -501,8 +486,7 @@ void NodeView::ensureVisible(const QRectF& rect)
         if (cx >= rect.x() - scrollMargin)
             cx = std::max(0.0, rect.x() - scrollMargin);
         else if (cx + width() <= rect.x() + rect.width())
-            cx = std::min(contentWidth() - width(),
-                          rect.x() + rect.width() - width() + scrollMargin);
+            cx = std::min(contentWidth() - width(), rect.x() + rect.width() - width() + scrollMargin);
     }
 
     qreal cy = contentY();
@@ -528,9 +512,7 @@ void NodeView::zoom(qreal factor, const QPointF& point)
     m_zoomFactor = factor;
     m_zoomPoint = point;
 
-    resizeContent(factor * m_nodeItem->implicitWidth(),
-                  factor * m_nodeItem->implicitHeight(),
-                  point);
+    resizeContent(factor * m_nodeItem->implicitWidth(), factor * m_nodeItem->implicitHeight(), point);
     returnToBounds();
     emit zoomChanged(factor, point);
 }

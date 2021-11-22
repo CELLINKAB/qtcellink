@@ -176,8 +176,7 @@ public:
         for (auto it = begin; it != end; ++it) {
             if (*it == delimiter) {
                 if (position > lastPosition
-                    || splitBehavior
-                           == QString::KeepEmptyParts) { // skip multiple consecutive delimiters
+                    || splitBehavior == QString::KeepEmptyParts) { // skip multiple consecutive delimiters
                     const ByteArraySplitterEntry entry = {lastPosition, position - lastPosition};
                     m_entries.append(entry);
                 }
@@ -207,9 +206,7 @@ public:
         return QString::fromLatin1(m_input + m_entries[index].start, m_entries[index].size);
     }
 
-    ByteArraySplitter splitterAt(int index,
-                                 char delimiter,
-                                 QString::SplitBehavior splitBehavior) const
+    ByteArraySplitter splitterAt(int index, char delimiter, QString::SplitBehavior splitBehavior) const
     {
         return ByteArraySplitter(m_input + m_entries[index].start,
                                  m_input + m_entries[index].start + m_entries[index].size,

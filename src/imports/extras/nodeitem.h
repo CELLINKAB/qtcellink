@@ -62,8 +62,7 @@ class NodeItem : public QQuickItem
     Q_PROPERTY(qreal nodeSpacing READ nodeSpacing WRITE setNodeSpacing NOTIFY nodeSpacingChanged)
     Q_PROPERTY(qreal nodeScaleX READ nodeScaleX WRITE setNodeScaleX NOTIFY nodeScaleXChanged)
     Q_PROPERTY(qreal nodeScaleY READ nodeScaleY WRITE setNodeScaleY NOTIFY nodeScaleYChanged)
-    Q_PROPERTY(
-        int selectionDelay READ selectionDelay WRITE setSelectionDelay NOTIFY selectionDelayChanged)
+    Q_PROPERTY(int selectionDelay READ selectionDelay WRITE setSelectionDelay NOTIFY selectionDelayChanged)
     Q_PROPERTY(QQmlListProperty<NodeDelegate> delegates READ delegates)
 
 public:

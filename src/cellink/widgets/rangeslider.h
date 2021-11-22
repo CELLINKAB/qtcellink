@@ -39,8 +39,7 @@ class Q_CELLINK_EXPORT RangeSlider : public QSlider
     Q_PROPERTY(int upperValue READ upperValue WRITE setUpperValue)
     Q_PROPERTY(int lowerPosition READ lowerPosition WRITE setLowerPosition)
     Q_PROPERTY(int upperPosition READ upperPosition WRITE setUpperPosition)
-    Q_PROPERTY(
-        HandleMovementMode handleMovementMode READ handleMovementMode WRITE setHandleMovementMode)
+    Q_PROPERTY(HandleMovementMode handleMovementMode READ handleMovementMode WRITE setHandleMovementMode)
     Q_ENUMS(HandleMovementMode)
 
 public:

@@ -60,12 +60,7 @@ QQmlListProperty<QObject> NativeMenuBar::data()
 
 QQmlListProperty<NativeMenu> NativeMenuBar::menus()
 {
-    return QQmlListProperty<NativeMenu>(this,
-                                        nullptr,
-                                        menus_append,
-                                        menus_count,
-                                        menus_at,
-                                        menus_clear);
+    return QQmlListProperty<NativeMenu>(this, nullptr, menus_append, menus_count, menus_at, menus_clear);
 }
 
 QWindow* NativeMenuBar::window() const

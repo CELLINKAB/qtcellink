@@ -34,12 +34,12 @@ public:
 
     void registerTypes(const char* uri) override
     {
-        qmlRegisterSingletonType(
-            QStringLiteral("qrc:/qt-project.org/imports/QtCellink/FontAwesome/FontAwesome.qml"),
-            uri,
-            1,
-            0,
-            "FontAwesome");
+        qmlRegisterSingletonType(QStringLiteral("qrc:/qt-project.org/imports/QtCellink/FontAwesome/"
+                                                "FontAwesome.qml"),
+                                 uri,
+                                 1,
+                                 0,
+                                 "FontAwesome");
     }
 };
 

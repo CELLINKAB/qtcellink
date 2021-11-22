@@ -72,8 +72,7 @@ void ColorImage::pixmapChange()
 {
     QQuickImage::pixmapChange();
     if (m_color.alpha() > 0 && m_color != m_defaultColor) {
-        QQuickImageBasePrivate* d = static_cast<QQuickImageBasePrivate*>(
-            QQuickItemPrivate::get(this));
+        QQuickImageBasePrivate* d = static_cast<QQuickImageBasePrivate*>(QQuickItemPrivate::get(this));
         QImage image = d->pix.image();
         if (!image.isNull()) {
             QPainter painter(&image);

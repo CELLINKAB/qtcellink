@@ -216,9 +216,7 @@ void BaseGeometryLoader::generateGeometry()
         ty = QAttribute::UnsignedInt;
         Q_ASSERT(sizeof(int) == sizeof(quint32));
         indexBytes.resize(m_indices.size() * sizeof(quint32));
-        memcpy(indexBytes.data(),
-               reinterpret_cast<const char*>(m_indices.data()),
-               indexBytes.size());
+        memcpy(indexBytes.data(), reinterpret_cast<const char*>(m_indices.data()), indexBytes.size());
     }
 
     QBuffer* indexBuffer = new QBuffer();

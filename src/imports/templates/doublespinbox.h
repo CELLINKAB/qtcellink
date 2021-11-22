@@ -38,8 +38,7 @@ class DoubleSpinBox : public QQuickControl
     Q_PROPERTY(qreal to READ to WRITE setTo NOTIFY toChanged FINAL)
     Q_PROPERTY(qreal value READ value WRITE setValue NOTIFY valueChanged FINAL)
     Q_PROPERTY(qreal stepSize READ stepSize WRITE setStepSize NOTIFY stepSizeChanged FINAL)
-    Q_PROPERTY(
-        qreal pageStepSize READ pageStepSize WRITE setPageStepSize NOTIFY pageStepSizeChanged FINAL)
+    Q_PROPERTY(qreal pageStepSize READ pageStepSize WRITE setPageStepSize NOTIFY pageStepSizeChanged FINAL)
     Q_PROPERTY(bool editable READ isEditable WRITE setEditable NOTIFY editableChanged FINAL)
     Q_PROPERTY(QValidator* validator READ validator WRITE setValidator NOTIFY validatorChanged FINAL)
     Q_PROPERTY(QJSValue textFromValue READ textFromValue WRITE setTextFromValue NOTIFY

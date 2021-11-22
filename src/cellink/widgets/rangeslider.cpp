@@ -47,12 +47,8 @@ public:
                           int value,
                           RangeSlider::RangeHandle handle);
     void drawHandle(QStylePainter* painter, RangeSlider::RangeHandle handle) const;
-    void setupPainter(QPainter* painter,
-                      Qt::Orientation orientation,
-                      qreal x1,
-                      qreal y1,
-                      qreal x2,
-                      qreal y2) const;
+    void setupPainter(
+        QPainter* painter, Qt::Orientation orientation, qreal x1, qreal y1, qreal x2, qreal y2) const;
     void drawRange(QStylePainter* painter, const QRect& rect) const;
     void triggerAction(QAbstractSlider::SliderAction action, bool main);
     void swapControls();
@@ -77,9 +73,7 @@ public:
 void RangeSliderPrivate::init(RangeSlider* slider)
 {
     q_ptr = slider;
-    QObject::connect(slider, &RangeSlider::sliderReleased, slider, [this]() {
-        movePressedHandle();
-    });
+    QObject::connect(slider, &RangeSlider::sliderReleased, slider, [this]() { movePressedHandle(); });
 }
 
 void RangeSliderPrivate::initStyleOption(QStyleOptionSlider* option,

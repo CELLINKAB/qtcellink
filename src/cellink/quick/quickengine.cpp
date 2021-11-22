@@ -62,9 +62,8 @@ void QuickEngine::init(const QString& style, const QString& path)
     QIcon::setThemeName(style);
     QQuickStyle::setStyle(style);
     QQuickStyle::addStylePath(
-        path.isEmpty()
-            ? QStringLiteral("qrc:/qt-project.org/imports/%1").arg(organizationStylePath())
-            : path);
+        path.isEmpty() ? QStringLiteral("qrc:/qt-project.org/imports/%1").arg(organizationStylePath())
+                       : path);
 }
 
 static void addStylePaths(const QString& path)
@@ -121,9 +120,7 @@ void QuickEngine::setFont(const QString& family, int pixelSize)
     QGuiApplication::setFont(font);
 }
 
-void externalRegistrationHandler(QtMsgType type,
-                                 const QMessageLogContext& context,
-                                 const QString& msg)
+void externalRegistrationHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
     if (type == QtWarningMsg && msg.startsWith("Module '")) {
         const QByteArrayList modules = *allowExternalModules();

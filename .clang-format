@@ -107,11 +107,11 @@ ObjCBlockIndentWidth: 4
 ObjCSpaceAfterProperty: false
 ObjCSpaceBeforeProtocolList: true
 PenaltyBreakAssignment: 150
-PenaltyBreakBeforeFirstCallParameter: 300
+PenaltyBreakBeforeFirstCallParameter: 1000
 PenaltyBreakComment: 500
 PenaltyBreakFirstLessLess: 400
 PenaltyBreakString: 600
-PenaltyExcessCharacter: 50
+PenaltyExcessCharacter: 10
 PenaltyReturnTypeOnItsOwnLine: 300
 PointerAlignment: Left
 IndentPPDirectives : AfterHash

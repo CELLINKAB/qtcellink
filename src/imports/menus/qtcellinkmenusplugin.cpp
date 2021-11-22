@@ -79,20 +79,12 @@ void QtCellinkMenusPlugin::registerTypes(const char* uri)
         qmlRegisterType(typeUrl(QStringLiteral("NativeMenu.qml")), uri, 1, 0, "Menu");
         qmlRegisterType(typeUrl(QStringLiteral("NativeMenuBar.qml")), uri, 1, 0, "MenuBar");
         qmlRegisterType(typeUrl(QStringLiteral("NativeMenuItem.qml")), uri, 1, 0, "MenuItem");
-        qmlRegisterType(typeUrl(QStringLiteral("NativeMenuSeparator.qml")),
-                        uri,
-                        1,
-                        0,
-                        "MenuSeparator");
+        qmlRegisterType(typeUrl(QStringLiteral("NativeMenuSeparator.qml")), uri, 1, 0, "MenuSeparator");
     } else {
         qmlRegisterType(typeUrl(QStringLiteral("QuickMenu.qml")), uri, 1, 0, "Menu");
         qmlRegisterType(typeUrl(QStringLiteral("QuickMenuBar.qml")), uri, 1, 0, "MenuBar");
         qmlRegisterType(typeUrl(QStringLiteral("QuickMenuItem.qml")), uri, 1, 0, "MenuItem");
-        qmlRegisterType(typeUrl(QStringLiteral("QuickMenuSeparator.qml")),
-                        uri,
-                        1,
-                        0,
-                        "MenuSeparator");
+        qmlRegisterType(typeUrl(QStringLiteral("QuickMenuSeparator.qml")), uri, 1, 0, "MenuSeparator");
     }
 }
 

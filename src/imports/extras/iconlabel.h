@@ -41,10 +41,8 @@ class IconLabel : public QQuickItem
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment FINAL)
     Q_PROPERTY(qreal topPadding READ topPadding WRITE setTopPadding RESET resetTopPadding FINAL)
     Q_PROPERTY(qreal leftPadding READ leftPadding WRITE setLeftPadding RESET resetLeftPadding FINAL)
-    Q_PROPERTY(
-        qreal rightPadding READ rightPadding WRITE setRightPadding RESET resetRightPadding FINAL)
-    Q_PROPERTY(qreal bottomPadding READ bottomPadding WRITE setBottomPadding RESET
-                   resetBottomPadding FINAL)
+    Q_PROPERTY(qreal rightPadding READ rightPadding WRITE setRightPadding RESET resetRightPadding FINAL)
+    Q_PROPERTY(qreal bottomPadding READ bottomPadding WRITE setBottomPadding RESET resetBottomPadding FINAL)
 
 public:
     enum Display

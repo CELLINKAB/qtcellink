@@ -1078,8 +1078,7 @@ QGradientStops* ProgressDelegate::nodeGradientStops(const QModelIndex& index, No
     return cache[key];
 }
 
-Qt::Orientation ProgressDelegate::nodeGradientOrientation(const QModelIndex& index,
-                                                          NodeItem* item) const
+Qt::Orientation ProgressDelegate::nodeGradientOrientation(const QModelIndex& index, NodeItem* item) const
 {
     Q_UNUSED(index)
     Q_UNUSED(item)

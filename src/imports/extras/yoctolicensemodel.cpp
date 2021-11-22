@@ -73,9 +73,7 @@ QString YoctoLicenseModel::manifest() const
     return m_manifest;
 }
 
-static YoctoLicense parseLicense(YoctoLicense license,
-                                 const QString& value,
-                                 const QStringList& licenses)
+static YoctoLicense parseLicense(YoctoLicense license, const QString& value, const QStringList& licenses)
 {
     license.licenses = licenses;
     const QStringList parts = value.split(QLatin1Char(' '), QString::SkipEmptyParts);

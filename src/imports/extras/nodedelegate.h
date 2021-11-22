@@ -54,8 +54,7 @@ class NodeDelegate : public QObject
     Q_PROPERTY(qreal topPadding READ topPadding WRITE setTopPadding NOTIFY topPaddingChanged)
     Q_PROPERTY(qreal leftPadding READ leftPadding WRITE setLeftPadding NOTIFY leftPaddingChanged)
     Q_PROPERTY(qreal rightPadding READ rightPadding WRITE setRightPadding NOTIFY rightPaddingChanged)
-    Q_PROPERTY(
-        qreal bottomPadding READ bottomPadding WRITE setBottomPadding NOTIFY bottomPaddingChanged)
+    Q_PROPERTY(qreal bottomPadding READ bottomPadding WRITE setBottomPadding NOTIFY bottomPaddingChanged)
 
 public:
     explicit NodeDelegate(QObject* parent = nullptr);
@@ -266,10 +265,8 @@ class TextDelegate : public AbstractTextDelegate
     Q_PROPERTY(int textRole READ textRole WRITE setTextRole NOTIFY textRoleChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QColor currentColor READ currentColor WRITE setCurrentColor NOTIFY currentColorChanged)
-    Q_PROPERTY(
-        QColor selectedColor READ selectedColor WRITE setSelectedColor NOTIFY selectedColorChanged)
-    Q_PROPERTY(
-        QColor disabledColor READ disabledColor WRITE setDisabledColor NOTIFY disabledColorChanged)
+    Q_PROPERTY(QColor selectedColor READ selectedColor WRITE setSelectedColor NOTIFY selectedColorChanged)
+    Q_PROPERTY(QColor disabledColor READ disabledColor WRITE setDisabledColor NOTIFY disabledColorChanged)
     Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY fontChanged)
     Q_PROPERTY(QFont currentFont READ currentFont WRITE setCurrentFont NOTIFY currentFontChanged)
     Q_PROPERTY(QFont selectedFont READ selectedFont WRITE setSelectedFont NOTIFY selectedFontChanged)
@@ -343,8 +340,7 @@ private:
 class HeaderDelegate : public TextDelegate
 {
     Q_OBJECT
-    Q_PROPERTY(
-        Qt::Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
+    Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
 
 public:
     explicit HeaderDelegate(QObject* parent = nullptr);
@@ -441,10 +437,8 @@ class ScaleDelegate : public AbstractScaleDelegate
     Q_OBJECT
     Q_PROPERTY(qreal scale READ scale WRITE setScale NOTIFY scaleChanged)
     Q_PROPERTY(qreal currentScale READ currentScale WRITE setCurrentScale NOTIFY currentScaleChanged)
-    Q_PROPERTY(
-        qreal selectedScale READ selectedScale WRITE setSelectedScale NOTIFY selectedScaleChanged)
-    Q_PROPERTY(
-        qreal disabledScale READ disabledScale WRITE setDisabledScale NOTIFY disabledScaleChanged)
+    Q_PROPERTY(qreal selectedScale READ selectedScale WRITE setSelectedScale NOTIFY selectedScaleChanged)
+    Q_PROPERTY(qreal disabledScale READ disabledScale WRITE setDisabledScale NOTIFY disabledScaleChanged)
     Q_PROPERTY(int scaleRole READ scaleRole WRITE setScaleRole NOTIFY scaleRoleChanged)
 
 public:
@@ -488,8 +482,7 @@ class ProgressDelegate : public RectDelegate
     Q_OBJECT
     Q_PROPERTY(int colorRole READ colorRole WRITE setColorRole NOTIFY colorRoleChanged)
     Q_PROPERTY(int progressRole READ progressRole WRITE setProgressRole NOTIFY progressRoleChanged)
-    Q_PROPERTY(
-        Qt::Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
+    Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
     Q_PROPERTY(Qt::LayoutDirection layoutDirection READ layoutDirection WRITE setLayoutDirection
                    NOTIFY layoutDirectionChanged)
 

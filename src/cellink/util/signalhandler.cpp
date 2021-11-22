@@ -39,10 +39,10 @@
 #include <QtCore/qsocketnotifier.h>
 
 #ifdef Q_OS_UNIX
-#include <signal.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <unistd.h>
+#    include <signal.h>
+#    include <sys/socket.h>
+#    include <sys/types.h>
+#    include <unistd.h>
 
 namespace {
 int sigIntFd[2];

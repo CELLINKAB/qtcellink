@@ -114,6 +114,7 @@ PenaltyBreakString: 600
 PenaltyExcessCharacter: 50
 PenaltyReturnTypeOnItsOwnLine: 300
 PointerAlignment: Left
+IndentPPDirectives : AfterHash
 ReflowComments:  false
 SortIncludes:    true
 SortUsingDeclarations: true

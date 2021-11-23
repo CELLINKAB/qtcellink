@@ -36,7 +36,12 @@
 #include <QtCore/qglobal.h>
 #include <QtQml/qqmllist.h>
 #include <QtQml/qqmlparserstatus.h>
-#include <QtQmlModels/private/qqmlobjectmodel_p.h>
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+#    include <QtQml/private/qqmlobjectmodel_p.h>
+#else
+#    include <QtQmlModels/private/qqmlobjectmodel_p.h>
+#endif
 
 class QQmlComponent;
 class QQmlContext;

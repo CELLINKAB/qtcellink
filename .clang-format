@@ -75,24 +75,29 @@ ForEachMacros:
   - BOOST_FOREACH
 IncludeBlocks: Regroup
 IncludeCategories:
+  - Regex:           '"stable\.h"$'
+    Priority:        -2
+  - Regex:           '_stable\.h"$'
+    Priority:        -2
+  - Regex:           '_pch\.h"$'
+    Priority:        -2
+  - Regex:           '_global\.h"$'
+    Priority:        -1
+  - Regex:           '_p\.h"$'
+    Priority:        0
+  - Regex:           '^"ui_.+'
+    Priority:        5
+  - Regex:           '"QtCellink.*'
+    Priority:        20
   - Regex:           '^<Q.*'
     Priority:        200
   - Regex:           '^<.*'
     Priority:        100
-  - Regex:           '"QtCellink.*'
-    Priority:        20   
   - Regex:           '/'
     Priority:        10
-  - Regex:           '^"ui_.+'
-    Priority:        0       
-  - Regex:           '_pch\.h'
-    Priority:        -1
-  - Regex:           '_stable\.h'
-    Priority:        -1  
-  - Regex:           '"stable\.h"'
-    Priority:        -1   
 IncludeIsMainRegex: '(Test)?$'
 IndentCaseLabels: false
+IndentPPDirectives: AfterHash
 IndentWidth:     4
 IndentWrappedFunctionNames: false
 JavaScriptQuotes: Leave
@@ -114,7 +119,6 @@ PenaltyBreakString: 600
 PenaltyExcessCharacter: 10
 PenaltyReturnTypeOnItsOwnLine: 300
 PointerAlignment: Left
-IndentPPDirectives : AfterHash
 ReflowComments:  false
 SortIncludes:    true
 SortUsingDeclarations: true

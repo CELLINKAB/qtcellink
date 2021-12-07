@@ -21,13 +21,13 @@
 ****************************************************************************/
 
 #include "iconlabel.h"
+#include "iconlabel_p.h"
 
 #include <QtGui/private/qguiapplication_p.h>
 #include <QtQuick/private/qquickitem_p.h>
 #include <QtQuick/private/qquicktext_p.h>
 
 #include "iconimage.h"
-#include "iconlabel_p.h"
 #include "mnemoniclabel.h"
 
 static void beginClass(QQuickItem* item)

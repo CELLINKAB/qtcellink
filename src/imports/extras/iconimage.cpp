@@ -21,11 +21,10 @@
 ****************************************************************************/
 
 #include "iconimage.h"
+#include "iconimage_p.h"
 
 #include <QtCore/qmath.h>
 #include <QtQuick/private/qquickimagebase_p_p.h>
-
-#include "iconimage_p.h"
 
 bool IconImagePrivate::updateDevicePixelRatio(qreal targetDevicePixelRatio)
 {

@@ -36,12 +36,12 @@ class FlipViewPrivate : public QQuickContainerPrivate
 public:
     void flip();
     void updateAngle(qreal value);
-    QQuickItem *getSide(const char *name);
-    void resizeItem(QQuickItem *item);
+    QQuickItem* getSide(const char* name);
+    void resizeItem(QQuickItem* item);
     void resizeItems();
 
-    void itemImplicitWidthChanged(QQuickItem *item) override;
-    void itemImplicitHeightChanged(QQuickItem *item) override;
+    void itemImplicitWidthChanged(QQuickItem* item) override;
+    void itemImplicitHeightChanged(QQuickItem* item) override;
 
     qreal getContentWidth() const override;
     qreal getContentHeight() const override;
@@ -58,18 +58,15 @@ class FlipViewAttachedPrivate : public QObjectPrivate
     Q_DECLARE_PUBLIC(FlipViewAttached)
 
 public:
-    static FlipViewAttachedPrivate *get(FlipViewAttached *attached)
-    {
-        return attached->d_func();
-    }
+    static FlipViewAttachedPrivate* get(FlipViewAttached* attached) { return attached->d_func(); }
 
-    void update(FlipView *newView, int newIndex);
+    void update(FlipView* newView, int newIndex);
     void updateCurrentIndex();
     void setCurrentIndex(int i);
 
     int index = -1;
     int currentIndex = -1;
-    FlipView *flipView = nullptr;
+    FlipView* flipView = nullptr;
 };
 
 void FlipViewPrivate::flip()
@@ -86,7 +83,7 @@ void FlipViewPrivate::flip()
         showFront = true;
     }
 
-    QQuickItem *currentItem = q->itemAt(currentIndex);
+    QQuickItem* currentItem = q->itemAt(currentIndex);
     if (currentItem) {
         QQuickItemPrivate::get(currentItem)->setCulled(false);
         currentItem->setParentItem(getSide(showFront ? "front" : showBack ? "back" : nullptr));
@@ -107,9 +104,9 @@ void FlipViewPrivate::updateAngle(qreal value)
     emit q->angleChanged();
 }
 
-QQuickItem *FlipViewPrivate::getSide(const char *name)
+QQuickItem* FlipViewPrivate::getSide(const char* name)
 {
-    QQuickItem *side = contentItem->property(name).value<QQuickItem *>();
+    QQuickItem* side = contentItem->property(name).value<QQuickItem*>();
     if (!side) {
         side = new QQuickItem(contentItem);
         resizeItem(side);
@@ -118,12 +115,12 @@ QQuickItem *FlipViewPrivate::getSide(const char *name)
     return side;
 }
 
-void FlipViewPrivate::resizeItem(QQuickItem *item)
+void FlipViewPrivate::resizeItem(QQuickItem* item)
 {
     if (!item)
         return;
 
-    QQuickAnchors *anchors = QQuickItemPrivate::get(item)->_anchors;
+    QQuickAnchors* anchors = QQuickItemPrivate::get(item)->_anchors;
     if (anchors && anchors->activeDirections() && !item->property("_FlipView_warned").toBool()) {
         qmlWarning(item) << "FlipView has detected conflicting anchors. Unable to layout the item.";
         item->setProperty("_FlipView_warned", true);
@@ -141,7 +138,7 @@ void FlipViewPrivate::resizeItems()
     resizeItem(getSide("back"));
 }
 
-void FlipViewPrivate::itemImplicitWidthChanged(QQuickItem *item)
+void FlipViewPrivate::itemImplicitWidthChanged(QQuickItem* item)
 {
     Q_Q(FlipView);
     QQuickContainerPrivate::itemImplicitWidthChanged(item);
@@ -149,7 +146,7 @@ void FlipViewPrivate::itemImplicitWidthChanged(QQuickItem *item)
         updateImplicitContentWidth();
 }
 
-void FlipViewPrivate::itemImplicitHeightChanged(QQuickItem *item)
+void FlipViewPrivate::itemImplicitHeightChanged(QQuickItem* item)
 {
     Q_Q(FlipView);
     QQuickContainerPrivate::itemImplicitHeightChanged(item);
@@ -160,18 +157,18 @@ void FlipViewPrivate::itemImplicitHeightChanged(QQuickItem *item)
 qreal FlipViewPrivate::getContentWidth() const
 {
     Q_Q(const FlipView);
-    QQuickItem *currentItem = q->currentItem();
+    QQuickItem* currentItem = q->currentItem();
     return currentItem ? currentItem->implicitWidth() : 0;
 }
 
 qreal FlipViewPrivate::getContentHeight() const
 {
     Q_Q(const FlipView);
-    QQuickItem *currentItem = q->currentItem();
+    QQuickItem* currentItem = q->currentItem();
     return currentItem ? currentItem->implicitHeight() : 0;
 }
 
-FlipView::FlipView(QQuickItem *parent)
+FlipView::FlipView(QQuickItem* parent)
     : QQuickContainer(*(new FlipViewPrivate), parent)
 {
     Q_D(FlipView);
@@ -179,7 +176,10 @@ FlipView::FlipView(QQuickItem *parent)
     setFlag(ItemIsFocusScope);
     setActiveFocusOnTab(true);
     QObjectPrivate::connect(this, &QQuickContainer::currentIndexChanged, d, &FlipViewPrivate::flip);
-    QObjectPrivate::connect(this, &QQuickContainer::currentItemChanged, d, &QQuickControlPrivate::updateImplicitContentSize);
+    QObjectPrivate::connect(this,
+                            &QQuickContainer::currentItemChanged,
+                            d,
+                            &QQuickControlPrivate::updateImplicitContentSize);
 }
 
 qreal FlipView::angle() const
@@ -204,7 +204,7 @@ void FlipView::setAxis(Qt::Axis axis)
     emit axisChanged();
 }
 
-FlipViewAttached *FlipView::qmlAttachedProperties(QObject *object)
+FlipViewAttached* FlipView::qmlAttachedProperties(QObject* object)
 {
     return new FlipViewAttached(object);
 }
@@ -216,33 +216,36 @@ void FlipView::componentComplete()
     d->resizeItems();
 }
 
-void FlipView::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void FlipView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     Q_D(FlipView);
     QQuickContainer::geometryChanged(newGeometry, oldGeometry);
     d->resizeItems();
 }
 
-void FlipView::itemAdded(int index, QQuickItem *item)
+void FlipView::itemAdded(int index, QQuickItem* item)
 {
     Q_D(FlipView);
     QQuickItemPrivate::get(item)->setCulled(true);
-    FlipViewAttached *attached = qobject_cast<FlipViewAttached *>(qmlAttachedPropertiesObject<FlipView>(item));
+    FlipViewAttached* attached = qobject_cast<FlipViewAttached*>(
+        qmlAttachedPropertiesObject<FlipView>(item));
     if (attached)
         FlipViewAttachedPrivate::get(attached)->update(this, index);
     d->resizeItem(item);
 }
 
-void FlipView::itemMoved(int index, QQuickItem *item)
+void FlipView::itemMoved(int index, QQuickItem* item)
 {
-    FlipViewAttached *attached = qobject_cast<FlipViewAttached *>(qmlAttachedPropertiesObject<FlipView>(item));
+    FlipViewAttached* attached = qobject_cast<FlipViewAttached*>(
+        qmlAttachedPropertiesObject<FlipView>(item));
     if (attached)
         FlipViewAttachedPrivate::get(attached)->update(this, index);
 }
 
-void FlipView::itemRemoved(int, QQuickItem *item)
+void FlipView::itemRemoved(int, QQuickItem* item)
 {
-    FlipViewAttached *attached = qobject_cast<FlipViewAttached *>(qmlAttachedPropertiesObject<FlipView>(item));
+    FlipViewAttached* attached = qobject_cast<FlipViewAttached*>(
+        qmlAttachedPropertiesObject<FlipView>(item));
     if (attached)
         FlipViewAttachedPrivate::get(attached)->update(nullptr, -1);
 }
@@ -275,20 +278,26 @@ void FlipViewAttachedPrivate::setCurrentIndex(int i)
         emit q->isPreviousItemChanged();
 }
 
-void FlipViewAttachedPrivate::update(FlipView *newView, int newIndex)
+void FlipViewAttachedPrivate::update(FlipView* newView, int newIndex)
 {
     Q_Q(FlipViewAttached);
     int oldIndex = index;
-    FlipView *oldView = flipView;
+    FlipView* oldView = flipView;
 
     index = newIndex;
     flipView = newView;
 
     if (oldView != newView) {
         if (oldView)
-            disconnect(oldView, &FlipView::currentIndexChanged, this, &FlipViewAttachedPrivate::updateCurrentIndex);
+            disconnect(oldView,
+                       &FlipView::currentIndexChanged,
+                       this,
+                       &FlipViewAttachedPrivate::updateCurrentIndex);
         if (newView)
-            connect(newView, &FlipView::currentIndexChanged, this, &FlipViewAttachedPrivate::updateCurrentIndex);
+            connect(newView,
+                    &FlipView::currentIndexChanged,
+                    this,
+                    &FlipViewAttachedPrivate::updateCurrentIndex);
         emit q->viewChanged();
     }
     if (oldIndex != newIndex)
@@ -297,11 +306,12 @@ void FlipViewAttachedPrivate::update(FlipView *newView, int newIndex)
     updateCurrentIndex();
 }
 
-FlipViewAttached::FlipViewAttached(QObject *parent)
+FlipViewAttached::FlipViewAttached(QObject* parent)
     : QObject(*(new FlipViewAttachedPrivate), parent)
 {
-    if (!qobject_cast<QQuickItem *>(parent))
-        qmlWarning(parent) << "FlipView: attached properties must be accessed from within a child item";
+    if (!qobject_cast<QQuickItem*>(parent))
+        qmlWarning(parent)
+            << "FlipView: attached properties must be accessed from within a child item";
 }
 
 int FlipViewAttached::index() const
@@ -310,7 +320,7 @@ int FlipViewAttached::index() const
     return d->index;
 }
 
-FlipView *FlipViewAttached::view() const
+FlipView* FlipViewAttached::view() const
 {
     Q_D(const FlipViewAttached);
     return d->flipView;

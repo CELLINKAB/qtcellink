@@ -41,14 +41,14 @@ class Q_CELLINK_EXPORT QuickEngine : public QQmlApplicationEngine
     Q_OBJECT
 
 public:
-    explicit QuickEngine(QObject *parent = nullptr);
+    explicit QuickEngine(QObject* parent = nullptr);
 
-    void init(const QString &style, const QString &path = QString());
-    bool load(const QUrl &source);
+    void init(const QString& style, const QString& path = QString());
+    bool load(const QUrl& source);
 
-    static void addFont(const QString &source);
-    static void setFont(const QString &family, int pixelSize);
-    static void allowExternalRegistrations(const char *uri);
+    static void addFont(const QString& source);
+    static void setFont(const QString& family, int pixelSize);
+    static void allowExternalRegistrations(const char* uri);
 };
 
 #endif // QUICKENGINE_H

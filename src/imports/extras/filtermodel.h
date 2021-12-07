@@ -37,29 +37,30 @@
 #define FILTERMODEL_H
 
 #include <QtCore/qsortfilterproxymodel.h>
-#include <QtQml/qqmlparserstatus.h>
 #include <QtQml/qjsvalue.h>
+#include <QtQml/qqmlparserstatus.h>
 
 class FilterModel : public QSortFilterProxyModel, public QQmlParserStatus
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
-    Q_PROPERTY(QObject *source READ source WRITE setSource)
+    Q_PROPERTY(QObject* source READ source WRITE setSource)
     Q_PROPERTY(QVariant filterValue READ filterValue WRITE setFilterValue)
     Q_PROPERTY(FilterRule filterRule READ filterRule WRITE setFilterRule)
     Q_INTERFACES(QQmlParserStatus)
     Q_ENUMS(FilterRule)
 
 public:
-    explicit FilterModel(QObject *parent = nullptr);
+    explicit FilterModel(QObject* parent = nullptr);
 
     int count() const;
     Q_INVOKABLE QJSValue get(int index) const;
 
-    QObject *source() const;
-    void setSource(QObject *source);
+    QObject* source() const;
+    void setSource(QObject* source);
 
-    enum FilterRule {
+    enum FilterRule
+    {
         EqualTo,
         LessThan,
         GreaterThan,
@@ -70,7 +71,7 @@ public:
     void setFilterRule(FilterRule rule);
 
     QVariant filterValue() const;
-    void setFilterValue(const QVariant &value);
+    void setFilterValue(const QVariant& value);
 
     Q_INVOKABLE int mapToSourceRow(int row) const;
     Q_INVOKABLE int mapFromSourceRow(int row) const;
@@ -82,7 +83,7 @@ protected:
     void classBegin() override;
     void componentComplete() override;
     QHash<int, QByteArray> roleNames() const override;
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
 private:
     bool m_complete = true;

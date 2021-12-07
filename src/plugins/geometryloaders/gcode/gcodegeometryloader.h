@@ -22,15 +22,15 @@
 #ifndef GCODEGEOMETRYLOADER_H
 #define GCODEGEOMETRYLOADER_H
 
+#include <Qt3DRender/private/qgeometryloaderinterface_p.h>
 #include <QtCore/qvector.h>
 #include <QtGui/qvector3d.h>
-#include <Qt3DRender/private/qgeometryloaderinterface_p.h>
 
 class GcodeGeometryLoader : public Qt3DRender::QGeometryLoaderInterface
 {
 public:
-    Qt3DRender::QGeometry *geometry() const override;
-    bool load(QIODevice *device, const QString &subMesh = QString()) override;
+    Qt3DRender::QGeometry* geometry() const override;
+    bool load(QIODevice* device, const QString& subMesh = QString()) override;
 
 private:
     QList<float> m_layers;

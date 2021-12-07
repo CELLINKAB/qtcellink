@@ -23,8 +23,8 @@
 #ifndef PROGRESSINDICATOR_H
 #define PROGRESSINDICATOR_H
 
-#include <QtQuickTemplates2/private/qquickcontrol_p.h>
 #include <QtGui/qcolor.h>
+#include <QtQuickTemplates2/private/qquickcontrol_p.h>
 
 class ProgressIndicatorPrivate;
 
@@ -35,7 +35,7 @@ class ProgressIndicator : public QQuickControl
     Q_PROPERTY(qreal value READ value WRITE setValue NOTIFY valueChanged FINAL)
 
 public:
-    explicit ProgressIndicator(QQuickItem *parent = nullptr);
+    explicit ProgressIndicator(QQuickItem* parent = nullptr);
 
     bool isRunning() const;
     void setRunning(bool running);
@@ -51,14 +51,14 @@ Q_SIGNALS:
 
 protected:
 #if QT_CONFIG(quicktemplates2_multitouch)
-    void touchEvent(QTouchEvent *event) override;
+    void touchEvent(QTouchEvent* event) override;
 #endif
 
 #if QT_CONFIG(accessibility)
     QAccessible::Role accessibleRole() const override;
 #endif
 
-    void contentItemChange(QQuickItem *newItem, QQuickItem *oldItem) override;
+    void contentItemChange(QQuickItem* newItem, QQuickItem* oldItem) override;
 
 private:
     Q_DISABLE_COPY(ProgressIndicator)

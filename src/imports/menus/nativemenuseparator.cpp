@@ -22,7 +22,7 @@
 
 #include "nativemenuseparator.h"
 
-NativeMenuSeparator::NativeMenuSeparator(QObject *parent)
+NativeMenuSeparator::NativeMenuSeparator(QObject* parent)
     : NativeMenuItem(parent)
 {
     setSeparator(true);

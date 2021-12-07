@@ -47,39 +47,39 @@ class NavigationGroup : public QObject
     Q_CLASSINFO("DefaultProperty", "data")
 
 public:
-    explicit NavigationGroup(QObject *parent = nullptr);
+    explicit NavigationGroup(QObject* parent = nullptr);
 
     int count() const;
     QQmlListProperty<QObject> data();
     QQmlListProperty<NavigationItem> items();
 
-    Q_INVOKABLE NavigationItem *itemAt(int index) const;
-    Q_INVOKABLE int indexOf(NavigationItem *item) const;
-    Q_INVOKABLE int find(const QString &name) const;
-    Q_INVOKABLE void addItem(NavigationItem *item);
+    Q_INVOKABLE NavigationItem* itemAt(int index) const;
+    Q_INVOKABLE int indexOf(NavigationItem* item) const;
+    Q_INVOKABLE int find(const QString& name) const;
+    Q_INVOKABLE void addItem(NavigationItem* item);
 
 public slots:
     void clear();
-    void trigger(const QString &name);
+    void trigger(const QString& name);
     void triggerAt(int index);
 
 signals:
     void itemsChanged();
-    void confirm(NavigationItem *item);
-    void triggered(NavigationItem *item);
+    void confirm(NavigationItem* item);
+    void triggered(NavigationItem* item);
 
 private:
-    static void data_append(QQmlListProperty<QObject> *property, QObject *object);
-    static int data_count(QQmlListProperty<QObject> *property);
-    static QObject *data_at(QQmlListProperty<QObject> *property, int index);
-    static void data_clear(QQmlListProperty<QObject> *property);
+    static void data_append(QQmlListProperty<QObject>* property, QObject* object);
+    static int data_count(QQmlListProperty<QObject>* property);
+    static QObject* data_at(QQmlListProperty<QObject>* property, int index);
+    static void data_clear(QQmlListProperty<QObject>* property);
 
-    static void items_append(QQmlListProperty<NavigationItem> *property, NavigationItem *item);
-    static int items_count(QQmlListProperty<NavigationItem> *property);
-    static NavigationItem *items_at(QQmlListProperty<NavigationItem> *property, int index);
-    static void items_clear(QQmlListProperty<NavigationItem> *property);
+    static void items_append(QQmlListProperty<NavigationItem>* property, NavigationItem* item);
+    static int items_count(QQmlListProperty<NavigationItem>* property);
+    static NavigationItem* items_at(QQmlListProperty<NavigationItem>* property, int index);
+    static void items_clear(QQmlListProperty<NavigationItem>* property);
 
-    QList<NavigationItem *> m_items;
+    QList<NavigationItem*> m_items;
     QObjectList m_data;
 };
 

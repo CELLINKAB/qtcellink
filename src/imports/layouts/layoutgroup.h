@@ -37,16 +37,16 @@ class LayoutGroup : public QObject
     Q_PROPERTY(qreal implicitHeight READ implicitHeight NOTIFY implicitHeightChanged FINAL)
 
 public:
-    explicit LayoutGroup(QObject *parent = nullptr);
+    explicit LayoutGroup(QObject* parent = nullptr);
 
     qreal implicitWidth() const;
     qreal implicitHeight() const;
 
-    static LayoutGroupItem *qmlAttachedProperties(QObject *object);
+    static LayoutGroupItem* qmlAttachedProperties(QObject* object);
 
 public Q_SLOTS:
-    void addItem(QQuickItem *item);
-    void removeItem(QQuickItem *item);
+    void addItem(QQuickItem* item);
+    void removeItem(QQuickItem* item);
 
 Q_SIGNALS:
     void implicitWidthChanged();
@@ -60,12 +60,14 @@ private:
 class LayoutGroupItem : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(qreal implicitWidth READ implicitWidth WRITE setImplicitWidth NOTIFY implicitWidthChanged FINAL)
-    Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged FINAL)
-    Q_PROPERTY(LayoutGroup *group READ group WRITE setGroup NOTIFY groupChanged FINAL)
+    Q_PROPERTY(qreal implicitWidth READ implicitWidth WRITE setImplicitWidth NOTIFY
+                   implicitWidthChanged FINAL)
+    Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY
+                   implicitHeightChanged FINAL)
+    Q_PROPERTY(LayoutGroup* group READ group WRITE setGroup NOTIFY groupChanged FINAL)
 
 public:
-    explicit LayoutGroupItem(QObject *parent = nullptr);
+    explicit LayoutGroupItem(QObject* parent = nullptr);
     ~LayoutGroupItem();
 
     qreal implicitWidth() const;
@@ -74,8 +76,8 @@ public:
     qreal implicitHeight() const;
     void setImplicitHeight(qreal height);
 
-    LayoutGroup *group() const;
-    void setGroup(LayoutGroup *group);
+    LayoutGroup* group() const;
+    void setGroup(LayoutGroup* group);
 
 Q_SIGNALS:
     void implicitWidthChanged();

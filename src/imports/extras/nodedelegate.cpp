@@ -31,19 +31,20 @@
 ****************************************************************************/
 
 #include "nodedelegate.h"
-#include "nodeitem.h"
 
 #include <QtCore/qcache.h>
 #include <QtGui/qtextlayout.h>
-#include <QtQuick/qsgimagenode.h>
-#include <QtQuick/qquickwindow.h>
 #include <QtQuick/private/qquickitem_p.h>
 #include <QtQuick/private/qquicktextnode_p.h>
 #include <QtQuick/private/qsgadaptationlayer_p.h>
+#include <QtQuick/qquickwindow.h>
+#include <QtQuick/qsgimagenode.h>
 
-NodeDelegate::NodeDelegate(QObject *parent) : QObject(parent)
-{
-}
+#include "nodeitem.h"
+
+NodeDelegate::NodeDelegate(QObject* parent)
+    : QObject(parent)
+{}
 
 qreal NodeDelegate::padding() const
 {
@@ -120,50 +121,53 @@ void NodeDelegate::setBottomPadding(qreal bottomPadding)
     emit changed();
 }
 
-QRectF NodeDelegate::nodeRect(const QModelIndex &index, NodeItem *item) const
+QRectF NodeDelegate::nodeRect(const QModelIndex& index, NodeItem* item) const
 {
     const qreal scale = item->nodeScale();
     const QRectF rect(QPointF(0, 0), item->nodeRect(index.row(), index.column()).size());
-    return rect.adjusted(scale * leftPadding(), scale * topPadding(), scale * -rightPadding(), scale * -bottomPadding());
+    return rect.adjusted(scale * leftPadding(),
+                         scale * topPadding(),
+                         scale * -rightPadding(),
+                         scale * -bottomPadding());
 }
 
-AbstractImageDelegate::AbstractImageDelegate(QObject *parent) : NodeDelegate(parent)
-{
-}
+AbstractImageDelegate::AbstractImageDelegate(QObject* parent)
+    : NodeDelegate(parent)
+{}
 
-QSGNode *AbstractImageDelegate::createNode(NodeItem *item)
+QSGNode* AbstractImageDelegate::createNode(NodeItem* item)
 {
-    QSGImageNode *imageNode = item->window()->createImageNode();
+    QSGImageNode* imageNode = item->window()->createImageNode();
     imageNode->setOwnsTexture(true);
     return imageNode;
 }
 
-void AbstractImageDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
+void AbstractImageDelegate::updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item)
 {
-    QSGImageNode *imageNode = static_cast<QSGImageNode *>(node);
+    QSGImageNode* imageNode = static_cast<QSGImageNode*>(node);
     QImage image = nodeImage(index, item);
-    QSGTexture *texture = item->window()->createTextureFromImage(image);
+    QSGTexture* texture = item->window()->createTextureFromImage(image);
     imageNode->setTexture(texture);
 }
 
-AbstractRectDelegate::AbstractRectDelegate(QObject *parent) : NodeDelegate(parent)
-{
-}
+AbstractRectDelegate::AbstractRectDelegate(QObject* parent)
+    : NodeDelegate(parent)
+{}
 
-QSGNode *AbstractRectDelegate::createNode(NodeItem *item)
+QSGNode* AbstractRectDelegate::createNode(NodeItem* item)
 {
-    QQuickItemPrivate *d = QQuickItemPrivate::get(item);
-    QSGInternalRectangleNode *rectNode = d->sceneGraphContext()->createInternalRectangleNode();
+    QQuickItemPrivate* d = QQuickItemPrivate::get(item);
+    QSGInternalRectangleNode* rectNode = d->sceneGraphContext()->createInternalRectangleNode();
     rectNode->setAntialiasing(true);
     return rectNode;
 }
 
-void AbstractRectDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
+void AbstractRectDelegate::updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item)
 {
-    QSGInternalRectangleNode *rectNode = static_cast<QSGInternalRectangleNode *>(node);
+    QSGInternalRectangleNode* rectNode = static_cast<QSGInternalRectangleNode*>(node);
     rectNode->setRect(nodeRect(index, item));
     rectNode->setRadius(nodeRadius(index, item));
-    if (QGradientStops *stops = nodeGradientStops(index, item)) {
+    if (QGradientStops* stops = nodeGradientStops(index, item)) {
         rectNode->setGradientStops(*stops);
         rectNode->setGradientVertical(nodeGradientOrientation(index, item) == Qt::Vertical);
     } else {
@@ -175,9 +179,9 @@ void AbstractRectDelegate::updateNode(QSGNode *node, const QModelIndex &index, N
     rectNode->update();
 }
 
-RectDelegate::RectDelegate(QObject *parent) : AbstractRectDelegate(parent)
-{
-}
+RectDelegate::RectDelegate(QObject* parent)
+    : AbstractRectDelegate(parent)
+{}
 
 qreal RectDelegate::radius() const
 {
@@ -199,7 +203,7 @@ QColor RectDelegate::color() const
     return m_color;
 }
 
-void RectDelegate::setColor(const QColor &color)
+void RectDelegate::setColor(const QColor& color)
 {
     if (m_color == color)
         return;
@@ -219,7 +223,7 @@ QColor RectDelegate::currentColor() const
     return m_currentColor;
 }
 
-void RectDelegate::setCurrentColor(const QColor &currentColor)
+void RectDelegate::setCurrentColor(const QColor& currentColor)
 {
     if (m_currentColor == currentColor)
         return;
@@ -239,7 +243,7 @@ QColor RectDelegate::selectedColor() const
     return m_selectedColor;
 }
 
-void RectDelegate::setSelectedColor(const QColor &selectedColor)
+void RectDelegate::setSelectedColor(const QColor& selectedColor)
 {
     if (m_selectedColor == selectedColor)
         return;
@@ -259,7 +263,7 @@ QColor RectDelegate::disabledColor() const
     return m_disabledColor;
 }
 
-void RectDelegate::setDisabledColor(const QColor &disabledColor)
+void RectDelegate::setDisabledColor(const QColor& disabledColor)
 {
     if (m_disabledColor == disabledColor)
         return;
@@ -339,7 +343,7 @@ QColor RectDelegate::borderColor() const
     return m_borderColor;
 }
 
-void RectDelegate::setBorderColor(const QColor &borderColor)
+void RectDelegate::setBorderColor(const QColor& borderColor)
 {
     if (m_borderColor == borderColor)
         return;
@@ -359,7 +363,7 @@ QColor RectDelegate::currentBorderColor() const
     return m_currentBorderColor;
 }
 
-void RectDelegate::setCurrentBorderColor(const QColor &currentBorderColor)
+void RectDelegate::setCurrentBorderColor(const QColor& currentBorderColor)
 {
     if (m_currentBorderColor == currentBorderColor)
         return;
@@ -384,7 +388,7 @@ QColor RectDelegate::disabledBorderColor() const
     return m_disabledBorderColor;
 }
 
-void RectDelegate::setDisabledBorderColor(const QColor &disabledBorderColor)
+void RectDelegate::setDisabledBorderColor(const QColor& disabledBorderColor)
 {
     if (m_disabledBorderColor == disabledBorderColor)
         return;
@@ -399,7 +403,7 @@ void RectDelegate::resetDisabledBorderColor()
     setDisabledBorderColor(QColor());
 }
 
-void RectDelegate::setSelectedBorderColor(const QColor &selectedBorderColor)
+void RectDelegate::setSelectedBorderColor(const QColor& selectedBorderColor)
 {
     if (m_selectedBorderColor == selectedBorderColor)
         return;
@@ -414,7 +418,7 @@ void RectDelegate::resetSelectedBorderColor()
     setSelectedBorderColor(QColor());
 }
 
-qreal RectDelegate::nodeRadius(const QModelIndex &index, NodeItem *item) const
+qreal RectDelegate::nodeRadius(const QModelIndex& index, NodeItem* item) const
 {
     Q_UNUSED(index)
     qreal radius = m_radius * item->nodeScale();
@@ -423,7 +427,7 @@ qreal RectDelegate::nodeRadius(const QModelIndex &index, NodeItem *item) const
     return radius;
 }
 
-QColor RectDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
+QColor RectDelegate::nodeColor(const QModelIndex& index, NodeItem* item) const
 {
     if (m_disabledColor.isValid() && !item->isEnabled(index))
         return m_disabledColor;
@@ -436,17 +440,17 @@ QColor RectDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
     return Qt::transparent;
 }
 
-QGradientStops *RectDelegate::nodeGradientStops(const QModelIndex &, NodeItem *) const
+QGradientStops* RectDelegate::nodeGradientStops(const QModelIndex&, NodeItem*) const
 {
     return nullptr;
 }
 
-Qt::Orientation RectDelegate::nodeGradientOrientation(const QModelIndex &, NodeItem *) const
+Qt::Orientation RectDelegate::nodeGradientOrientation(const QModelIndex&, NodeItem*) const
 {
     return Qt::Vertical;
 }
 
-QColor RectDelegate::nodeBorderColor(const QModelIndex &index, NodeItem *item) const
+QColor RectDelegate::nodeBorderColor(const QModelIndex& index, NodeItem* item) const
 {
     if (m_disabledBorderColor.isValid() && !item->isEnabled(index))
         return m_disabledBorderColor;
@@ -459,7 +463,7 @@ QColor RectDelegate::nodeBorderColor(const QModelIndex &index, NodeItem *item) c
     return Qt::transparent;
 }
 
-qreal RectDelegate::nodeBorderWidth(const QModelIndex &index, NodeItem *item) const
+qreal RectDelegate::nodeBorderWidth(const QModelIndex& index, NodeItem* item) const
 {
     qreal borderWidth = 0;
     if (m_disabledBorderWidth >= 0 && !item->isEnabled(index))
@@ -473,11 +477,11 @@ qreal RectDelegate::nodeBorderWidth(const QModelIndex &index, NodeItem *item) co
     return borderWidth * item->nodeScale();
 }
 
-AbstractTextDelegate::AbstractTextDelegate(QObject *parent) : NodeDelegate(parent)
-{
-}
+AbstractTextDelegate::AbstractTextDelegate(QObject* parent)
+    : NodeDelegate(parent)
+{}
 
-QSGNode *AbstractTextDelegate::createNode(NodeItem *item)
+QSGNode* AbstractTextDelegate::createNode(NodeItem* item)
 {
     return new QQuickTextNode(item);
 }
@@ -491,9 +495,9 @@ static qreal alignedY(qreal geometryHeight, qreal lineHeight, Qt::Alignment alig
     return 0;
 }
 
-void AbstractTextDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
+void AbstractTextDelegate::updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item)
 {
-    QQuickTextNode *textNode = static_cast<QQuickTextNode *>(node);
+    QQuickTextNode* textNode = static_cast<QQuickTextNode*>(node);
     textNode->deleteContent();
 
     QRectF rect = nodeRect(index, item);
@@ -507,9 +511,9 @@ void AbstractTextDelegate::updateNode(QSGNode *node, const QModelIndex &index, N
     textNode->addTextLayout(rect.topLeft(), &layout, nodeColor(index, item));
 }
 
-TextDelegate::TextDelegate(QObject *parent) : AbstractTextDelegate(parent)
-{
-}
+TextDelegate::TextDelegate(QObject* parent)
+    : AbstractTextDelegate(parent)
+{}
 
 int TextDelegate::textRole() const
 {
@@ -531,7 +535,7 @@ QColor TextDelegate::color() const
     return m_color;
 }
 
-void TextDelegate::setColor(const QColor &color)
+void TextDelegate::setColor(const QColor& color)
 {
     if (m_color == color)
         return;
@@ -546,7 +550,7 @@ QColor TextDelegate::currentColor() const
     return m_currentColor;
 }
 
-void TextDelegate::setCurrentColor(const QColor &currentColor)
+void TextDelegate::setCurrentColor(const QColor& currentColor)
 {
     if (m_currentColor == currentColor)
         return;
@@ -561,7 +565,7 @@ QColor TextDelegate::selectedColor() const
     return m_selectedColor;
 }
 
-void TextDelegate::setSelectedColor(const QColor &selectedColor)
+void TextDelegate::setSelectedColor(const QColor& selectedColor)
 {
     if (m_selectedColor == selectedColor)
         return;
@@ -576,7 +580,7 @@ QColor TextDelegate::disabledColor() const
     return m_disabledColor;
 }
 
-void TextDelegate::setDisabledColor(const QColor &disabledColor)
+void TextDelegate::setDisabledColor(const QColor& disabledColor)
 {
     if (m_disabledColor == disabledColor)
         return;
@@ -591,7 +595,7 @@ QFont TextDelegate::font() const
     return m_font;
 }
 
-void TextDelegate::setFont(const QFont &font)
+void TextDelegate::setFont(const QFont& font)
 {
     if (m_font == font)
         return;
@@ -606,7 +610,7 @@ QFont TextDelegate::currentFont() const
     return m_currentFont.value_or(m_font);
 }
 
-void TextDelegate::setCurrentFont(const QFont &currentFont)
+void TextDelegate::setCurrentFont(const QFont& currentFont)
 {
     if (m_currentFont == currentFont)
         return;
@@ -621,7 +625,7 @@ QFont TextDelegate::selectedFont() const
     return m_selectedFont.value_or(m_font);
 }
 
-void TextDelegate::setSelectedFont(const QFont &selectedFont)
+void TextDelegate::setSelectedFont(const QFont& selectedFont)
 {
     if (m_selectedFont == selectedFont)
         return;
@@ -636,7 +640,7 @@ QFont TextDelegate::disabledFont() const
     return m_disabledFont.value_or(m_font);
 }
 
-void TextDelegate::setDisabledFont(const QFont &disabledFont)
+void TextDelegate::setDisabledFont(const QFont& disabledFont)
 {
     if (m_disabledFont == disabledFont)
         return;
@@ -661,13 +665,13 @@ void TextDelegate::setAlignment(Qt::Alignment alignment)
     emit changed();
 }
 
-QString TextDelegate::nodeText(const QModelIndex &index, NodeItem *item) const
+QString TextDelegate::nodeText(const QModelIndex& index, NodeItem* item) const
 {
     Q_UNUSED(item);
     return index.data(m_textRole).toString();
 }
 
-QColor TextDelegate::nodeColor(const QModelIndex &index, NodeItem *item) const
+QColor TextDelegate::nodeColor(const QModelIndex& index, NodeItem* item) const
 {
     if (m_disabledColor.isValid() && !item->isEnabled(index))
         return m_disabledColor;
@@ -683,7 +687,7 @@ static bool isValidFont(std::optional<QFont> font)
     return font.has_value();
 }
 
-QFont TextDelegate::nodeFont(const QModelIndex &index, NodeItem *item) const
+QFont TextDelegate::nodeFont(const QModelIndex& index, NodeItem* item) const
 {
     QFont font = m_font;
     if (isValidFont(m_disabledFont) && !item->isEnabled(index))
@@ -696,16 +700,16 @@ QFont TextDelegate::nodeFont(const QModelIndex &index, NodeItem *item) const
     return font;
 }
 
-Qt::Alignment TextDelegate::nodeAlignment(const QModelIndex &index, NodeItem *item) const
+Qt::Alignment TextDelegate::nodeAlignment(const QModelIndex& index, NodeItem* item) const
 {
     Q_UNUSED(index)
     Q_UNUSED(item)
     return m_alignment;
 }
 
-HeaderDelegate::HeaderDelegate(QObject *parent) : TextDelegate(parent)
-{
-}
+HeaderDelegate::HeaderDelegate(QObject* parent)
+    : TextDelegate(parent)
+{}
 
 Qt::Orientation HeaderDelegate::orientation() const
 {
@@ -722,34 +726,34 @@ void HeaderDelegate::setOrientation(Qt::Orientation orientation)
     emit changed();
 }
 
-QString HeaderDelegate::nodeText(const QModelIndex &index, NodeItem *item) const
+QString HeaderDelegate::nodeText(const QModelIndex& index, NodeItem* item) const
 {
     Q_UNUSED(item);
-    const QAbstractItemModel *model = index.model();
+    const QAbstractItemModel* model = index.model();
     int section = m_orientation == Qt::Horizontal ? index.column() : index.row();
     return model->headerData(section, m_orientation, textRole()).toString();
 }
 
-AbstractOpacityDelegate::AbstractOpacityDelegate(QObject *parent) : NodeDelegate(parent)
-{
-}
+AbstractOpacityDelegate::AbstractOpacityDelegate(QObject* parent)
+    : NodeDelegate(parent)
+{}
 
-QSGNode *AbstractOpacityDelegate::createNode(NodeItem *item)
+QSGNode* AbstractOpacityDelegate::createNode(NodeItem* item)
 {
     Q_UNUSED(item);
-    QSGOpacityNode *opacityNode = new QSGOpacityNode;
+    QSGOpacityNode* opacityNode = new QSGOpacityNode;
     return opacityNode;
 }
 
-void AbstractOpacityDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
+void AbstractOpacityDelegate::updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item)
 {
-    QSGOpacityNode *opacityNode = static_cast<QSGOpacityNode *>(node);
+    QSGOpacityNode* opacityNode = static_cast<QSGOpacityNode*>(node);
     opacityNode->setOpacity(nodeOpacity(index, item));
 }
 
-OpacityDelegate::OpacityDelegate(QObject *parent) : AbstractOpacityDelegate(parent)
-{
-}
+OpacityDelegate::OpacityDelegate(QObject* parent)
+    : AbstractOpacityDelegate(parent)
+{}
 
 qreal OpacityDelegate::opacity() const
 {
@@ -831,7 +835,7 @@ static bool isValidOpacity(qreal opacity)
     return qFuzzyIsNull(opacity) || opacity > 0;
 }
 
-qreal OpacityDelegate::nodeOpacity(const QModelIndex &index, NodeItem *item) const
+qreal OpacityDelegate::nodeOpacity(const QModelIndex& index, NodeItem* item) const
 {
     if (m_opacityRole != -1) {
         bool ok = false;
@@ -848,20 +852,20 @@ qreal OpacityDelegate::nodeOpacity(const QModelIndex &index, NodeItem *item) con
     return m_opacity;
 }
 
-AbstractScaleDelegate::AbstractScaleDelegate(QObject *parent) : NodeDelegate(parent)
-{
-}
+AbstractScaleDelegate::AbstractScaleDelegate(QObject* parent)
+    : NodeDelegate(parent)
+{}
 
-QSGNode *AbstractScaleDelegate::createNode(NodeItem *item)
+QSGNode* AbstractScaleDelegate::createNode(NodeItem* item)
 {
     Q_UNUSED(item);
-    QSGTransformNode *scaleNode = new QSGTransformNode;
+    QSGTransformNode* scaleNode = new QSGTransformNode;
     return scaleNode;
 }
 
-void AbstractScaleDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
+void AbstractScaleDelegate::updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item)
 {
-    QSGTransformNode *scaleNode = static_cast<QSGTransformNode *>(node);
+    QSGTransformNode* scaleNode = static_cast<QSGTransformNode*>(node);
     QRectF rect = nodeRect(index, item);
     QMatrix4x4 matrix;
     matrix.translate(rect.width() / 2.0, rect.height() / 2.0);
@@ -870,9 +874,9 @@ void AbstractScaleDelegate::updateNode(QSGNode *node, const QModelIndex &index, 
     scaleNode->setMatrix(matrix);
 }
 
-ScaleDelegate::ScaleDelegate(QObject *parent) : AbstractScaleDelegate(parent)
-{
-}
+ScaleDelegate::ScaleDelegate(QObject* parent)
+    : AbstractScaleDelegate(parent)
+{}
 
 qreal ScaleDelegate::scale() const
 {
@@ -954,7 +958,7 @@ static bool isValidScale(qreal scale)
     return qFuzzyIsNull(scale) || scale >= 0;
 }
 
-qreal ScaleDelegate::nodeScale(const QModelIndex &index, NodeItem *item) const
+qreal ScaleDelegate::nodeScale(const QModelIndex& index, NodeItem* item) const
 {
     if (m_scaleRole != -1) {
         bool ok = false;
@@ -971,9 +975,9 @@ qreal ScaleDelegate::nodeScale(const QModelIndex &index, NodeItem *item) const
     return m_scale;
 }
 
-ProgressDelegate::ProgressDelegate(QObject *parent) : RectDelegate(parent)
-{
-}
+ProgressDelegate::ProgressDelegate(QObject* parent)
+    : RectDelegate(parent)
+{}
 
 int ProgressDelegate::colorRole() const
 {
@@ -1035,7 +1039,7 @@ void ProgressDelegate::setLayoutDirection(Qt::LayoutDirection layoutDirection)
     emit changed();
 }
 
-QColor ProgressDelegate::progressColor(const QModelIndex &index, NodeItem *item) const
+QColor ProgressDelegate::progressColor(const QModelIndex& index, NodeItem* item) const
 {
     Q_UNUSED(item);
     if (m_colorRole != -1) {
@@ -1046,7 +1050,7 @@ QColor ProgressDelegate::progressColor(const QModelIndex &index, NodeItem *item)
     return Qt::transparent;
 }
 
-QGradientStops *ProgressDelegate::nodeGradientStops(const QModelIndex &index, NodeItem *item) const
+QGradientStops* ProgressDelegate::nodeGradientStops(const QModelIndex& index, NodeItem* item) const
 {
     bool ok = false;
     qreal progress = std::clamp(index.data(m_progressRole).toReal(&ok), 0.0, 1.0);
@@ -1062,9 +1066,9 @@ QGradientStops *ProgressDelegate::nodeGradientStops(const QModelIndex &index, No
 
     static QCache<QVector<uint>, QGradientStops> cache;
     uint p = static_cast<uint>(std::lround(progress * 1000));
-    QVector<uint> key = { p, color1.rgba(), color2.rgba() };
+    QVector<uint> key = {p, color1.rgba(), color2.rgba()};
     if (!cache.contains(key)) {
-        QGradientStops *stops = new QGradientStops;
+        QGradientStops* stops = new QGradientStops;
         stops->append(qMakePair(0.0, color1));
         stops->append(qMakePair(progress, color1));
         stops->append(qMakePair(progress, color2));
@@ -1074,7 +1078,7 @@ QGradientStops *ProgressDelegate::nodeGradientStops(const QModelIndex &index, No
     return cache[key];
 }
 
-Qt::Orientation ProgressDelegate::nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const
+Qt::Orientation ProgressDelegate::nodeGradientOrientation(const QModelIndex& index, NodeItem* item) const
 {
     Q_UNUSED(index)
     Q_UNUSED(item)

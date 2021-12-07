@@ -19,8 +19,8 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
+#include <QtQml/qqmlextensionplugin.h>
 
 #include "buttonrow.h"
 #include "componentview.h"
@@ -31,24 +31,28 @@
 #include "titleseparator.h"
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-template <typename T> static void qmlRegisterAnonymousType(const char *, int) { qmlRegisterType<T>(); }
+template<typename T>
+static void qmlRegisterAnonymousType(const char*, int)
+{
+    qmlRegisterType<T>();
+}
 #endif
 
-class QtCellinkTemplatesPlugin: public QQmlExtensionPlugin
+class QtCellinkTemplatesPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    QtCellinkTemplatesPlugin(QObject *parent = nullptr);
-    void registerTypes(const char *uri) override;
+    QtCellinkTemplatesPlugin(QObject* parent = nullptr);
+    void registerTypes(const char* uri) override;
 };
 
-QtCellinkTemplatesPlugin::QtCellinkTemplatesPlugin(QObject *parent) : QQmlExtensionPlugin(parent)
-{
-}
+QtCellinkTemplatesPlugin::QtCellinkTemplatesPlugin(QObject* parent)
+    : QQmlExtensionPlugin(parent)
+{}
 
-void QtCellinkTemplatesPlugin::registerTypes(const char *uri)
+void QtCellinkTemplatesPlugin::registerTypes(const char* uri)
 {
     qmlRegisterType<ButtonRow>(uri, 1, 0, "ButtonRow");
     qmlRegisterType<ComponentView>(uri, 1, 0, "ComponentView");

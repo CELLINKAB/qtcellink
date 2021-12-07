@@ -19,37 +19,36 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
-#include <QtQml/qqml.h>
-#include <QtCore/qcoreapplication.h>
 #include <QtCore/qcommandlineparser.h>
+#include <QtCore/qcoreapplication.h>
 #include <QtCore/qloggingcategory.h>
+#include <QtQml/qqml.h>
+#include <QtQml/qqmlextensionplugin.h>
 
-#include "nativemenubar.h"
 #include "nativemenu.h"
+#include "nativemenubar.h"
 #include "nativemenuitem.h"
 #include "nativemenuseparator.h"
 
 Q_LOGGING_CATEGORY(lcMenus, "qtcellink.menus")
 
-class QtCellinkMenusPlugin: public QQmlExtensionPlugin
+class QtCellinkMenusPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    QtCellinkMenusPlugin(QObject *parent = nullptr);
+    QtCellinkMenusPlugin(QObject* parent = nullptr);
 
-    void registerTypes(const char *uri) override;
+    void registerTypes(const char* uri) override;
 
 private:
-    QUrl typeUrl(const QString &fileName) const;
+    QUrl typeUrl(const QString& fileName) const;
 };
 
-QtCellinkMenusPlugin::QtCellinkMenusPlugin(QObject *parent)
+QtCellinkMenusPlugin::QtCellinkMenusPlugin(QObject* parent)
     : QQmlExtensionPlugin(parent)
-{
-}
+{}
 
 static bool useNative()
 {
@@ -69,7 +68,7 @@ static bool useNative()
 #endif
 }
 
-void QtCellinkMenusPlugin::registerTypes(const char *uri)
+void QtCellinkMenusPlugin::registerTypes(const char* uri)
 {
     qmlRegisterType<NativeMenu>(uri, 1, 0, "NativeMenu");
     qmlRegisterType<NativeMenuBar>(uri, 1, 0, "NativeMenuBar");
@@ -89,7 +88,7 @@ void QtCellinkMenusPlugin::registerTypes(const char *uri)
     }
 }
 
-QUrl QtCellinkMenusPlugin::typeUrl(const QString &fileName) const
+QUrl QtCellinkMenusPlugin::typeUrl(const QString& fileName) const
 {
     QUrl url = baseUrl();
     url.setPath(url.path() + QLatin1Char('/') + fileName);

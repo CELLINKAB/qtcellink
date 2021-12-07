@@ -30,17 +30,18 @@ class ColorImage : public QQuickImage
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor RESET resetColor NOTIFY colorChanged FINAL)
-    Q_PROPERTY(QColor defaultColor READ defaultColor WRITE setDefaultColor RESET resetDefaultColor NOTIFY defaultColorChanged FINAL)
+    Q_PROPERTY(QColor defaultColor READ defaultColor WRITE setDefaultColor RESET resetDefaultColor
+                   NOTIFY defaultColorChanged FINAL)
 
 public:
-    explicit ColorImage(QQuickItem *parent = nullptr);
+    explicit ColorImage(QQuickItem* parent = nullptr);
 
     QColor color() const;
-    void setColor(const QColor &color);
+    void setColor(const QColor& color);
     void resetColor();
 
     QColor defaultColor() const;
-    void setDefaultColor(const QColor &color);
+    void setDefaultColor(const QColor& color);
     void resetDefaultColor();
 
 Q_SIGNALS:

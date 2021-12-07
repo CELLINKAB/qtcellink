@@ -22,8 +22,8 @@
 #ifndef COMPONENTVIEW_H
 #define COMPONENTVIEW_H
 
-#include <QtQuickTemplates2/private/qquickcontrol_p.h>
 #include <QtQml/qjsvalue.h>
+#include <QtQuickTemplates2/private/qquickcontrol_p.h>
 
 class ComponentView : public QQuickControl
 {
@@ -35,7 +35,7 @@ class ComponentView : public QQuickControl
     Q_CLASSINFO("DefaultProperty", "components")
 
 public:
-    explicit ComponentView(QQuickItem *parent = nullptr);
+    explicit ComponentView(QQuickItem* parent = nullptr);
 
     int count() const;
 
@@ -43,15 +43,15 @@ public:
     void setCurrentIndex(int currentIndex);
 
     QJSValue properties() const;
-    void setProperties(const QJSValue &properties);
+    void setProperties(const QJSValue& properties);
 
     QQmlListProperty<QQmlComponent> components();
 
-    Q_INVOKABLE QQmlComponent *componentAt(int index) const;
-    Q_INVOKABLE void addComponent(QQmlComponent *component);
-    Q_INVOKABLE void insertComponent(int index, QQmlComponent *component);
-    Q_INVOKABLE void removeComponent(QQmlComponent *component);
-    Q_INVOKABLE QQmlComponent *takeComponent(int index);
+    Q_INVOKABLE QQmlComponent* componentAt(int index) const;
+    Q_INVOKABLE void addComponent(QQmlComponent* component);
+    Q_INVOKABLE void insertComponent(int index, QQmlComponent* component);
+    Q_INVOKABLE void removeComponent(QQmlComponent* component);
+    Q_INVOKABLE QQmlComponent* takeComponent(int index);
 
 public Q_SLOTS:
     void clear();
@@ -61,23 +61,24 @@ Q_SIGNALS:
     void currentIndexChanged();
     void propertiesChanged();
     void componentsChanged();
-    void init(QQmlComponent *component);
-    void push(QQmlComponent *component);
-    void pop(QQmlComponent *component);
+    void init(QQmlComponent* component);
+    void push(QQmlComponent* component);
+    void pop(QQmlComponent* component);
 
 protected:
     void componentComplete() override;
     virtual void currentIndexChange(int newIndex, int oldIndex);
 
 private:
-    static void components_append(QQmlListProperty<QQmlComponent> *property, QQmlComponent *component);
-    static QQmlComponent *components_at(QQmlListProperty<QQmlComponent> *property, int index);
-    static void components_clear(QQmlListProperty<QQmlComponent> *property);
-    static int components_count(QQmlListProperty<QQmlComponent> *property);
+    static void components_append(QQmlListProperty<QQmlComponent>* property,
+                                  QQmlComponent* component);
+    static QQmlComponent* components_at(QQmlListProperty<QQmlComponent>* property, int index);
+    static void components_clear(QQmlListProperty<QQmlComponent>* property);
+    static int components_count(QQmlListProperty<QQmlComponent>* property);
 
     int m_currentIndex = -1;
     QJSValue m_properties;
-    QList<QQmlComponent *> m_components;
+    QList<QQmlComponent*> m_components;
 };
 
 QML_DECLARE_TYPE(ComponentView)

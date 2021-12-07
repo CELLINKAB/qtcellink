@@ -24,17 +24,16 @@
 
 #include <QtQuick/private/qquicktext_p_p.h>
 
-MnemonicLabel::MnemonicLabel(QQuickItem *parent)
+MnemonicLabel::MnemonicLabel(QQuickItem* parent)
     : QQuickText(parent)
-{
-}
+{}
 
 QString MnemonicLabel::text() const
 {
     return m_fullText;
 }
 
-void MnemonicLabel::setText(const QString &text)
+void MnemonicLabel::setText(const QString& text)
 {
     if (m_fullText == text)
         return;
@@ -78,17 +77,18 @@ void MnemonicLabel::updateMnemonic()
     int len = m_fullText.length();
     QVector<QTextLayout::FormatRange> formats;
     while (len) {
-        if (m_fullText.at(pos) == QLatin1Char('&') && (len == 1 || m_fullText.at(pos + 1) != QLatin1Char('&'))) {
+        if (m_fullText.at(pos) == QLatin1Char('&')
+            && (len == 1 || m_fullText.at(pos + 1) != QLatin1Char('&'))) {
             if (m_mnemonicVisible && (pos == 0 || m_fullText.at(pos - 1) != QLatin1Char('&')))
                 formats += underlineRange(pos);
             ++pos;
             --len;
             if (len == 0)
                 break;
-        } else if (m_fullText.at(pos) == QLatin1Char('(') && len >= 4 &&
-                   m_fullText.at(pos + 1) == QLatin1Char('&') &&
-                   m_fullText.at(pos + 2) != QLatin1Char('&') &&
-                   m_fullText.at(pos + 3) == QLatin1Char(')')) {
+        } else if (m_fullText.at(pos) == QLatin1Char('(') && len >= 4
+                   && m_fullText.at(pos + 1) == QLatin1Char('&')
+                   && m_fullText.at(pos + 2) != QLatin1Char('&')
+                   && m_fullText.at(pos + 3) == QLatin1Char(')')) {
             // a mnemonic with format "\s*(&X)"
             if (m_mnemonicVisible) {
                 formats += underlineRange(pos + 1);

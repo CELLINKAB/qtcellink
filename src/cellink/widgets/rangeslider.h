@@ -26,8 +26,9 @@
 #ifndef RANGESLIDER_H
 #define RANGESLIDER_H
 
-#include <QtWidgets/qslider.h>
 #include "qtcellink/src/cellink/core/cellink.h"
+
+#include <QtWidgets/qslider.h>
 
 class RangeSliderPrivate;
 
@@ -42,8 +43,8 @@ class Q_CELLINK_EXPORT RangeSlider : public QSlider
     Q_ENUMS(HandleMovementMode)
 
 public:
-    explicit RangeSlider(QWidget *parent = nullptr);
-    explicit RangeSlider(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit RangeSlider(QWidget* parent = nullptr);
+    explicit RangeSlider(Qt::Orientation orientation, QWidget* parent = nullptr);
     ~RangeSlider();
 
     enum HandleMovementMode
@@ -88,11 +89,11 @@ Q_SIGNALS:
     void sliderPressed(RangeHandle handle);
 
 protected:
-    void keyPressEvent(QKeyEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
-    void paintEvent(QPaintEvent *event) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
 
     void sliderChange(SliderChange change) override;
 

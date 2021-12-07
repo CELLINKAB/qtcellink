@@ -33,6 +33,8 @@
 #ifndef NODEDELEGATE_H
 #define NODEDELEGATE_H
 
+#include <optional>
+
 #include <QtCore/qabstractitemmodel.h>
 #include <QtCore/qobject.h>
 #include <QtCore/qrect.h>
@@ -41,7 +43,6 @@
 #include <QtGui/qcolor.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qimage.h>
-#include <optional>
 
 class QSGNode;
 class NodeItem;
@@ -56,7 +57,7 @@ class NodeDelegate : public QObject
     Q_PROPERTY(qreal bottomPadding READ bottomPadding WRITE setBottomPadding NOTIFY bottomPaddingChanged)
 
 public:
-    explicit NodeDelegate(QObject *parent = nullptr);
+    explicit NodeDelegate(QObject* parent = nullptr);
 
     qreal padding() const;
     void setPadding(qreal padding);
@@ -73,10 +74,10 @@ public:
     qreal bottomPadding() const;
     void setBottomPadding(qreal bottomPadding);
 
-    virtual QSGNode *createNode(NodeItem *item) = 0;
-    virtual void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) = 0;
+    virtual QSGNode* createNode(NodeItem* item) = 0;
+    virtual void updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item) = 0;
 
-    virtual QRectF nodeRect(const QModelIndex &index, NodeItem *item) const;
+    virtual QRectF nodeRect(const QModelIndex& index, NodeItem* item) const;
 
 signals:
     void changed();
@@ -99,12 +100,12 @@ class AbstractImageDelegate : public NodeDelegate
     Q_OBJECT
 
 public:
-    explicit AbstractImageDelegate(QObject *parent = nullptr);
+    explicit AbstractImageDelegate(QObject* parent = nullptr);
 
-    QSGNode *createNode(NodeItem *item) override;
-    void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) override;
+    QSGNode* createNode(NodeItem* item) override;
+    void updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item) override;
 
-    virtual QImage nodeImage(const QModelIndex &index, NodeItem *item) const = 0;
+    virtual QImage nodeImage(const QModelIndex& index, NodeItem* item) const = 0;
 };
 
 class AbstractRectDelegate : public NodeDelegate
@@ -112,17 +113,18 @@ class AbstractRectDelegate : public NodeDelegate
     Q_OBJECT
 
 public:
-    explicit AbstractRectDelegate(QObject *parent = nullptr);
+    explicit AbstractRectDelegate(QObject* parent = nullptr);
 
-    QSGNode *createNode(NodeItem *item) override;
-    void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) override;
+    QSGNode* createNode(NodeItem* item) override;
+    void updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item) override;
 
-    virtual qreal nodeRadius(const QModelIndex &index, NodeItem *item) const = 0;
-    virtual QColor nodeColor(const QModelIndex &index, NodeItem *item) const = 0;
-    virtual QGradientStops *nodeGradientStops(const QModelIndex &index, NodeItem *item) const = 0;
-    virtual Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const = 0;
-    virtual QColor nodeBorderColor(const QModelIndex &index, NodeItem *item) const = 0;
-    virtual qreal nodeBorderWidth(const QModelIndex &index, NodeItem *item) const = 0;
+    virtual qreal nodeRadius(const QModelIndex& index, NodeItem* item) const = 0;
+    virtual QColor nodeColor(const QModelIndex& index, NodeItem* item) const = 0;
+    virtual QGradientStops* nodeGradientStops(const QModelIndex& index, NodeItem* item) const = 0;
+    virtual Qt::Orientation nodeGradientOrientation(const QModelIndex& index,
+                                                    NodeItem* item) const = 0;
+    virtual QColor nodeBorderColor(const QModelIndex& index, NodeItem* item) const = 0;
+    virtual qreal nodeBorderWidth(const QModelIndex& index, NodeItem* item) const = 0;
 };
 
 class RectDelegate : public AbstractRectDelegate
@@ -130,38 +132,48 @@ class RectDelegate : public AbstractRectDelegate
     Q_OBJECT
     Q_PROPERTY(qreal radius READ radius WRITE setRadius NOTIFY radiusChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor RESET resetColor NOTIFY colorChanged)
-    Q_PROPERTY(QColor currentColor READ currentColor WRITE setCurrentColor RESET resetCurrentColor NOTIFY currentColorChanged)
-    Q_PROPERTY(QColor selectedColor READ selectedColor WRITE setSelectedColor RESET resetSelectedColor NOTIFY selectedColorChanged)
-    Q_PROPERTY(QColor disabledColor READ disabledColor WRITE setDisabledColor RESET resetDisabledColor NOTIFY disabledColorChanged)
+    Q_PROPERTY(QColor currentColor READ currentColor WRITE setCurrentColor RESET resetCurrentColor
+                   NOTIFY currentColorChanged)
+    Q_PROPERTY(QColor selectedColor READ selectedColor WRITE setSelectedColor RESET
+                   resetSelectedColor NOTIFY selectedColorChanged)
+    Q_PROPERTY(QColor disabledColor READ disabledColor WRITE setDisabledColor RESET
+                   resetDisabledColor NOTIFY disabledColorChanged)
     Q_PROPERTY(qreal borderWidth READ borderWidth WRITE setBorderWidth NOTIFY borderWidthChanged)
-    Q_PROPERTY(qreal currentBorderWidth READ currentBorderWidth WRITE setCurrentBorderWidth NOTIFY currentBorderWidthChanged)
-    Q_PROPERTY(qreal selectedBorderWidth READ selectedBorderWidth WRITE setSelectedBorderWidth NOTIFY selectedBorderWidthChanged)
-    Q_PROPERTY(qreal disabledBorderWidth READ disabledBorderWidth WRITE setDisabledBorderWidth NOTIFY disabledBorderWidthChanged)
-    Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor RESET resetBorderColor NOTIFY borderColorChanged)
-    Q_PROPERTY(QColor currentBorderColor READ currentBorderColor WRITE setCurrentBorderColor RESET resetCurrentBorderColor NOTIFY currentBorderColorChanged)
-    Q_PROPERTY(QColor selectedBorderColor READ selectedBorderColor WRITE setSelectedBorderColor RESET resetSelectedBorderColor NOTIFY selectedBorderColorChanged)
-    Q_PROPERTY(QColor disabledBorderColor READ disabledBorderColor WRITE setDisabledBorderColor RESET resetDisabledBorderColor NOTIFY disabledBorderColorChanged)
+    Q_PROPERTY(qreal currentBorderWidth READ currentBorderWidth WRITE setCurrentBorderWidth NOTIFY
+                   currentBorderWidthChanged)
+    Q_PROPERTY(qreal selectedBorderWidth READ selectedBorderWidth WRITE setSelectedBorderWidth
+                   NOTIFY selectedBorderWidthChanged)
+    Q_PROPERTY(qreal disabledBorderWidth READ disabledBorderWidth WRITE setDisabledBorderWidth
+                   NOTIFY disabledBorderWidthChanged)
+    Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor RESET resetBorderColor
+                   NOTIFY borderColorChanged)
+    Q_PROPERTY(QColor currentBorderColor READ currentBorderColor WRITE setCurrentBorderColor RESET
+                   resetCurrentBorderColor NOTIFY currentBorderColorChanged)
+    Q_PROPERTY(QColor selectedBorderColor READ selectedBorderColor WRITE setSelectedBorderColor
+                   RESET resetSelectedBorderColor NOTIFY selectedBorderColorChanged)
+    Q_PROPERTY(QColor disabledBorderColor READ disabledBorderColor WRITE setDisabledBorderColor
+                   RESET resetDisabledBorderColor NOTIFY disabledBorderColorChanged)
 
 public:
-    explicit RectDelegate(QObject *parent = nullptr);
+    explicit RectDelegate(QObject* parent = nullptr);
 
     qreal radius() const;
     void setRadius(qreal radius);
 
     QColor color() const;
-    void setColor(const QColor &color);
+    void setColor(const QColor& color);
     void resetColor();
 
     QColor currentColor() const;
-    void setCurrentColor(const QColor &currentColor);
+    void setCurrentColor(const QColor& currentColor);
     void resetCurrentColor();
 
     QColor selectedColor() const;
-    void setSelectedColor(const QColor &selectedColor);
+    void setSelectedColor(const QColor& selectedColor);
     void resetSelectedColor();
 
     QColor disabledColor() const;
-    void setDisabledColor(const QColor &disabledColor);
+    void setDisabledColor(const QColor& disabledColor);
     void resetDisabledColor();
 
     qreal borderWidth() const;
@@ -177,19 +189,19 @@ public:
     void setDisabledBorderWidth(qreal disabledBorderWidth);
 
     QColor borderColor() const;
-    void setBorderColor(const QColor &borderColor);
+    void setBorderColor(const QColor& borderColor);
     void resetBorderColor();
 
     QColor currentBorderColor() const;
-    void setCurrentBorderColor(const QColor &currentBorderColor);
+    void setCurrentBorderColor(const QColor& currentBorderColor);
     void resetCurrentBorderColor();
 
     QColor selectedBorderColor() const;
-    void setSelectedBorderColor(const QColor &selectedBorderColor);
+    void setSelectedBorderColor(const QColor& selectedBorderColor);
     void resetSelectedBorderColor();
 
     QColor disabledBorderColor() const;
-    void setDisabledBorderColor(const QColor &disabledBorderColor);
+    void setDisabledBorderColor(const QColor& disabledBorderColor);
     void resetDisabledBorderColor();
 
 signals:
@@ -208,12 +220,12 @@ signals:
     void disabledBorderColorChanged();
 
 protected:
-    qreal nodeRadius(const QModelIndex &index, NodeItem *item) const override;
-    QColor nodeColor(const QModelIndex &index, NodeItem *item) const override;
-    QGradientStops *nodeGradientStops(const QModelIndex &index, NodeItem *item) const override;
-    Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const override;
-    QColor nodeBorderColor(const QModelIndex &index, NodeItem *item) const override;
-    qreal nodeBorderWidth(const QModelIndex &index, NodeItem *item) const override;
+    qreal nodeRadius(const QModelIndex& index, NodeItem* item) const override;
+    QColor nodeColor(const QModelIndex& index, NodeItem* item) const override;
+    QGradientStops* nodeGradientStops(const QModelIndex& index, NodeItem* item) const override;
+    Qt::Orientation nodeGradientOrientation(const QModelIndex& index, NodeItem* item) const override;
+    QColor nodeBorderColor(const QModelIndex& index, NodeItem* item) const override;
+    qreal nodeBorderWidth(const QModelIndex& index, NodeItem* item) const override;
 
 private:
     qreal m_radius = 0;
@@ -236,15 +248,15 @@ class AbstractTextDelegate : public NodeDelegate
     Q_OBJECT
 
 public:
-    explicit AbstractTextDelegate(QObject *parent = nullptr);
+    explicit AbstractTextDelegate(QObject* parent = nullptr);
 
-    QSGNode *createNode(NodeItem *item) override;
-    void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) override;
+    QSGNode* createNode(NodeItem* item) override;
+    void updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item) override;
 
-    virtual QString nodeText(const QModelIndex &index, NodeItem *item) const = 0;
-    virtual QColor nodeColor(const QModelIndex &index, NodeItem *item) const = 0;
-    virtual QFont nodeFont(const QModelIndex &index, NodeItem *item) const = 0;
-    virtual Qt::Alignment nodeAlignment(const QModelIndex &index, NodeItem *item) const = 0;
+    virtual QString nodeText(const QModelIndex& index, NodeItem* item) const = 0;
+    virtual QColor nodeColor(const QModelIndex& index, NodeItem* item) const = 0;
+    virtual QFont nodeFont(const QModelIndex& index, NodeItem* item) const = 0;
+    virtual Qt::Alignment nodeAlignment(const QModelIndex& index, NodeItem* item) const = 0;
 };
 
 class TextDelegate : public AbstractTextDelegate
@@ -262,34 +274,34 @@ class TextDelegate : public AbstractTextDelegate
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment NOTIFY alignmentChanged)
 
 public:
-    explicit TextDelegate(QObject *parent = nullptr);
+    explicit TextDelegate(QObject* parent = nullptr);
 
     int textRole() const;
     void setTextRole(int textRole);
 
     QColor color() const;
-    void setColor(const QColor &color);
+    void setColor(const QColor& color);
 
     QColor currentColor() const;
-    void setCurrentColor(const QColor &currentColor);
+    void setCurrentColor(const QColor& currentColor);
 
     QColor selectedColor() const;
-    void setSelectedColor(const QColor &selectedColor);
+    void setSelectedColor(const QColor& selectedColor);
 
     QColor disabledColor() const;
-    void setDisabledColor(const QColor &disabledColor);
+    void setDisabledColor(const QColor& disabledColor);
 
     QFont font() const;
-    void setFont(const QFont &font);
+    void setFont(const QFont& font);
 
     QFont currentFont() const;
-    void setCurrentFont(const QFont &currentFont);
+    void setCurrentFont(const QFont& currentFont);
 
     QFont selectedFont() const;
-    void setSelectedFont(const QFont &selectedFont);
+    void setSelectedFont(const QFont& selectedFont);
 
     QFont disabledFont() const;
-    void setDisabledFont(const QFont &disabledFont);
+    void setDisabledFont(const QFont& disabledFont);
 
     Qt::Alignment alignment() const;
     void setAlignment(Qt::Alignment alignment);
@@ -307,10 +319,10 @@ signals:
     void alignmentChanged();
 
 protected:
-    QString nodeText(const QModelIndex &index, NodeItem *item) const override;
-    QColor nodeColor(const QModelIndex &index, NodeItem *item) const override;
-    QFont nodeFont(const QModelIndex &index, NodeItem *item) const override;
-    Qt::Alignment nodeAlignment(const QModelIndex &index, NodeItem *item) const override;
+    QString nodeText(const QModelIndex& index, NodeItem* item) const override;
+    QColor nodeColor(const QModelIndex& index, NodeItem* item) const override;
+    QFont nodeFont(const QModelIndex& index, NodeItem* item) const override;
+    Qt::Alignment nodeAlignment(const QModelIndex& index, NodeItem* item) const override;
 
 private:
     int m_textRole = -1;
@@ -331,7 +343,7 @@ class HeaderDelegate : public TextDelegate
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
 
 public:
-    explicit HeaderDelegate(QObject *parent = nullptr);
+    explicit HeaderDelegate(QObject* parent = nullptr);
 
     Qt::Orientation orientation() const;
     void setOrientation(Qt::Orientation orientation);
@@ -340,7 +352,7 @@ signals:
     void orientationChanged();
 
 protected:
-    QString nodeText(const QModelIndex &index, NodeItem *item) const override;
+    QString nodeText(const QModelIndex& index, NodeItem* item) const override;
 
 private:
     Qt::Orientation m_orientation = Qt::Horizontal;
@@ -351,25 +363,28 @@ class AbstractOpacityDelegate : public NodeDelegate
     Q_OBJECT
 
 public:
-    explicit AbstractOpacityDelegate(QObject *parent = nullptr);
+    explicit AbstractOpacityDelegate(QObject* parent = nullptr);
 
-    QSGNode *createNode(NodeItem *item) override;
-    void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) override;
+    QSGNode* createNode(NodeItem* item) override;
+    void updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item) override;
 
-    virtual qreal nodeOpacity(const QModelIndex &index, NodeItem *item) const = 0;
+    virtual qreal nodeOpacity(const QModelIndex& index, NodeItem* item) const = 0;
 };
 
 class OpacityDelegate : public AbstractOpacityDelegate
 {
     Q_OBJECT
     Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity NOTIFY opacityChanged)
-    Q_PROPERTY(qreal currentOpacity READ currentOpacity WRITE setCurrentOpacity NOTIFY currentOpacityChanged)
-    Q_PROPERTY(qreal selectedOpacity READ selectedOpacity WRITE setSelectedOpacity NOTIFY selectedOpacityChanged)
-    Q_PROPERTY(qreal disabledOpacity READ disabledOpacity WRITE setDisabledOpacity NOTIFY disabledOpacityChanged)
+    Q_PROPERTY(qreal currentOpacity READ currentOpacity WRITE setCurrentOpacity NOTIFY
+                   currentOpacityChanged)
+    Q_PROPERTY(qreal selectedOpacity READ selectedOpacity WRITE setSelectedOpacity NOTIFY
+                   selectedOpacityChanged)
+    Q_PROPERTY(qreal disabledOpacity READ disabledOpacity WRITE setDisabledOpacity NOTIFY
+                   disabledOpacityChanged)
     Q_PROPERTY(int opacityRole READ opacityRole WRITE setOpacityRole NOTIFY opacityRoleChanged)
 
 public:
-    explicit OpacityDelegate(QObject *parent = nullptr);
+    explicit OpacityDelegate(QObject* parent = nullptr);
 
     qreal opacity() const;
     void setOpacity(qreal opacity);
@@ -394,7 +409,7 @@ signals:
     void opacityRoleChanged();
 
 protected:
-    qreal nodeOpacity(const QModelIndex &index, NodeItem *item) const override;
+    qreal nodeOpacity(const QModelIndex& index, NodeItem* item) const override;
 
 private:
     int m_opacityRole = -1;
@@ -409,12 +424,12 @@ class AbstractScaleDelegate : public NodeDelegate
     Q_OBJECT
 
 public:
-    explicit AbstractScaleDelegate(QObject *parent = nullptr);
+    explicit AbstractScaleDelegate(QObject* parent = nullptr);
 
-    QSGNode *createNode(NodeItem *item) override;
-    void updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item) override;
+    QSGNode* createNode(NodeItem* item) override;
+    void updateNode(QSGNode* node, const QModelIndex& index, NodeItem* item) override;
 
-    virtual qreal nodeScale(const QModelIndex &index, NodeItem *item) const = 0;
+    virtual qreal nodeScale(const QModelIndex& index, NodeItem* item) const = 0;
 };
 
 class ScaleDelegate : public AbstractScaleDelegate
@@ -427,7 +442,7 @@ class ScaleDelegate : public AbstractScaleDelegate
     Q_PROPERTY(int scaleRole READ scaleRole WRITE setScaleRole NOTIFY scaleRoleChanged)
 
 public:
-    explicit ScaleDelegate(QObject *parent = nullptr);
+    explicit ScaleDelegate(QObject* parent = nullptr);
 
     qreal scale() const;
     void setScale(qreal scale);
@@ -452,7 +467,7 @@ signals:
     void scaleRoleChanged();
 
 protected:
-    qreal nodeScale(const QModelIndex &index, NodeItem *item) const override;
+    qreal nodeScale(const QModelIndex& index, NodeItem* item) const override;
 
 private:
     int m_scaleRole = -1;
@@ -468,10 +483,11 @@ class ProgressDelegate : public RectDelegate
     Q_PROPERTY(int colorRole READ colorRole WRITE setColorRole NOTIFY colorRoleChanged)
     Q_PROPERTY(int progressRole READ progressRole WRITE setProgressRole NOTIFY progressRoleChanged)
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
-    Q_PROPERTY(Qt::LayoutDirection layoutDirection READ layoutDirection WRITE setLayoutDirection NOTIFY layoutDirectionChanged)
+    Q_PROPERTY(Qt::LayoutDirection layoutDirection READ layoutDirection WRITE setLayoutDirection
+                   NOTIFY layoutDirectionChanged)
 
 public:
-    explicit ProgressDelegate(QObject *parent = nullptr);
+    explicit ProgressDelegate(QObject* parent = nullptr);
 
     int colorRole() const;
     void setColorRole(int colorRole);
@@ -492,9 +508,9 @@ signals:
     void layoutDirectionChanged();
 
 protected:
-    QColor progressColor(const QModelIndex &index, NodeItem *item) const;
-    QGradientStops *nodeGradientStops(const QModelIndex &index, NodeItem *item) const override;
-    Qt::Orientation nodeGradientOrientation(const QModelIndex &index, NodeItem *item) const override;
+    QColor progressColor(const QModelIndex& index, NodeItem* item) const;
+    QGradientStops* nodeGradientStops(const QModelIndex& index, NodeItem* item) const override;
+    Qt::Orientation nodeGradientOrientation(const QModelIndex& index, NodeItem* item) const override;
 
 private:
     int m_colorRole = -1;

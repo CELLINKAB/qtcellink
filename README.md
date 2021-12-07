@@ -1,6 +1,6 @@
 QtCellInk
 =========
 
-Qt extensions by CellInk AB. public repository.
+Public Qt extensions by CELLINK AB.
 
 Before submitting or reviewing a PR, please read our [Contributing Guidelines](CONTRIBUTING.md)

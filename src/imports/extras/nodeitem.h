@@ -33,10 +33,10 @@
 #ifndef NODEITEM_H
 #define NODEITEM_H
 
-#include <QtQuick/qquickitem.h>
 #include <QtCore/qabstractitemmodel.h>
 #include <QtCore/qitemselectionmodel.h>
 #include <QtQml/qqmllist.h>
+#include <QtQuick/qquickitem.h>
 
 class NodeDelegate;
 
@@ -50,9 +50,11 @@ class NodeItem : public QQuickItem
     Q_PROPERTY(int currentColumn READ currentColumn NOTIFY currentColumnChanged)
     Q_PROPERTY(QRectF currentRect READ currentRect NOTIFY currentRectChanged)
     Q_PROPERTY(QRect selection READ selection NOTIFY selectionChanged)
-    Q_PROPERTY(QObject *model READ model WRITE setModel NOTIFY modelChanged)
-    Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode NOTIFY selectionModeChanged)
-    Q_PROPERTY(QItemSelectionModel *selectionModel READ selectionModel WRITE setSelectionModel NOTIFY selectionModelChanged)
+    Q_PROPERTY(QObject* model READ model WRITE setModel NOTIFY modelChanged)
+    Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode NOTIFY
+                   selectionModeChanged)
+    Q_PROPERTY(QItemSelectionModel* selectionModel READ selectionModel WRITE setSelectionModel
+                   NOTIFY selectionModelChanged)
     Q_PROPERTY(bool pressed READ isPressed NOTIFY pressedChanged)
     Q_PROPERTY(bool selecting READ isSelecting NOTIFY selectingChanged)
     Q_PROPERTY(qreal nodeWidth READ nodeWidth WRITE setNodeWidth NOTIFY nodeWidthChanged)
@@ -64,7 +66,7 @@ class NodeItem : public QQuickItem
     Q_PROPERTY(QQmlListProperty<NodeDelegate> delegates READ delegates)
 
 public:
-    explicit NodeItem(QQuickItem *parent = nullptr);
+    explicit NodeItem(QQuickItem* parent = nullptr);
 
     int count() const;
 
@@ -79,19 +81,24 @@ public:
     QRectF currentRect() const;
 
     QRect selection() const;
-    void setSelection(const QRect &selection);
+    void setSelection(const QRect& selection);
 
-    QObject *model() const;
-    void setModel(QObject *model);
+    QObject* model() const;
+    void setModel(QObject* model);
 
-    enum SelectionMode { NoSelection, SingleSelection, MultiSelection };
+    enum SelectionMode
+    {
+        NoSelection,
+        SingleSelection,
+        MultiSelection
+    };
     Q_ENUM(SelectionMode)
 
     SelectionMode selectionMode() const;
     void setSelectionMode(SelectionMode selectionMode);
 
-    QItemSelectionModel *selectionModel() const;
-    void setSelectionModel(QItemSelectionModel *selectionModel);
+    QItemSelectionModel* selectionModel() const;
+    void setSelectionModel(QItemSelectionModel* selectionModel);
 
     bool isPressed() const;
     void setPressed(bool pressed);
@@ -119,14 +126,14 @@ public:
     int selectionDelay() const;
     void setSelectionDelay(int selectionDelay);
 
-    QList<NodeDelegate *> delegateList() const;
+    QList<NodeDelegate*> delegateList() const;
     QQmlListProperty<NodeDelegate> delegates();
 
-    bool isEnabled(const QModelIndex &index) const;
-    bool isCurrent(const QModelIndex &index) const;
-    bool isSelected(const QModelIndex &index) const;
+    bool isEnabled(const QModelIndex& index) const;
+    bool isCurrent(const QModelIndex& index) const;
+    bool isSelected(const QModelIndex& index) const;
 
-    virtual QModelIndex nodeAt(const QPointF &pos) const;
+    virtual QModelIndex nodeAt(const QPointF& pos) const;
     virtual QModelIndex nodeIndex(int row, int column) const;
     virtual QRectF nodeRect(int row, int column) const;
 
@@ -134,7 +141,7 @@ public slots:
     void setCurrent(int row, int column);
     void clearCurrent();
     void selectAll();
-    void select(const QRect &selection);
+    void select(const QRect& selection);
     void clearSelection();
     void cancelSelection();
 
@@ -157,29 +164,29 @@ signals:
     void nodeScaleXChanged();
     void nodeScaleYChanged();
     void selectionDelayChanged();
-    void pressed(const QModelIndex &index);
-    void released(const QModelIndex &index);
-    void activated(const QModelIndex &index);
-    void clicked(const QModelIndex &index);
-    void ensureVisible(const QRectF &rect);
+    void pressed(const QModelIndex& index);
+    void released(const QModelIndex& index);
+    void activated(const QModelIndex& index);
+    void clicked(const QModelIndex& index);
+    void ensureVisible(const QRectF& rect);
 
 protected:
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
     void mouseUngrabEvent() override;
-    void timerEvent(QTimerEvent *event) override;
+    void timerEvent(QTimerEvent* event) override;
 
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
-    void itemChange(ItemChange change, const ItemChangeData &data) override;
-    QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *data) override;
+    void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
+    void itemChange(ItemChange change, const ItemChangeData& data) override;
+    QSGNode* updatePaintNode(QSGNode* node, UpdatePaintNodeData* data) override;
 
     virtual void modelReset();
     virtual void rowsChange();
     virtual void columnsChange();
-    virtual void dataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-    virtual void currentChange(const QModelIndex &current, const QModelIndex &previous);
-    virtual void selectionChange(const QItemSelection &selected, const QItemSelection &deselected);
+    virtual void dataChange(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    virtual void currentChange(const QModelIndex& current, const QModelIndex& previous);
+    virtual void selectionChange(const QItemSelection& selected, const QItemSelection& deselected);
 
     void rebuild();
     void relayout();
@@ -187,14 +194,14 @@ protected:
     void startPressAndHold();
     void stopPressAndHold();
     void updateImplicitSize();
-    void updateSelection(const QItemSelection &selection);
-    void updateArea(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void updateSelection(const QItemSelection& selection);
+    void updateArea(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
 private:
-    static void delegates_append(QQmlListProperty<NodeDelegate> *property, NodeDelegate *delegate);
-    static int delegates_count(QQmlListProperty<NodeDelegate> *property);
-    static NodeDelegate *delegates_at(QQmlListProperty<NodeDelegate> *property, int index);
-    static void delegates_clear(QQmlListProperty<NodeDelegate> *property);
+    static void delegates_append(QQmlListProperty<NodeDelegate>* property, NodeDelegate* delegate);
+    static int delegates_count(QQmlListProperty<NodeDelegate>* property);
+    static NodeDelegate* delegates_at(QQmlListProperty<NodeDelegate>* property, int index);
+    static void delegates_clear(QQmlListProperty<NodeDelegate>* property);
 
     bool m_rebuild = true;
     bool m_relayout = true;
@@ -214,10 +221,10 @@ private:
     qreal m_nodeSpacing = 0;
     qreal m_nodeScaleX = 1;
     qreal m_nodeScaleY = 1;
-    QAbstractItemModel *m_model = nullptr;
+    QAbstractItemModel* m_model = nullptr;
     SelectionMode m_selectionMode = NoSelection;
-    QItemSelectionModel *m_selectionModel = nullptr;
-    QList<NodeDelegate *> m_delegates;
+    QItemSelectionModel* m_selectionModel = nullptr;
+    QList<NodeDelegate*> m_delegates;
     QModelIndex m_current;
     QItemSelection m_updates;
     QItemSelection m_selected;

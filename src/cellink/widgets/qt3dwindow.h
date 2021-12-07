@@ -51,10 +51,10 @@
 #ifndef QTCELLINK3DWINDOW_H
 #define QTCELLINK3DWINDOW_H
 
+#include "qtcellink/src/cellink/core/cellink.h"
+
 #include <Qt3DExtras/qt3dextras_global.h>
 #include <QtGui/QWindow>
-
-#include "qtcellink/src/cellink/core/cellink.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -62,14 +62,14 @@ namespace Qt3DCore {
 class QAspectEngine;
 class QAbstractAspect;
 class QEntity;
-}
+} // namespace Qt3DCore
 
 namespace Qt3DRender {
 class QCamera;
 class QFrameGraphNode;
 class QRenderAspect;
 class QRenderSettings;
-}
+} // namespace Qt3DRender
 
 namespace Qt3DExtras {
 class QForwardRenderer;
@@ -78,7 +78,7 @@ class QForwardRenderer;
 namespace Qt3DInput {
 class QInputAspect;
 class QInputSettings;
-}
+} // namespace Qt3DInput
 
 namespace Qt3DLogic {
 class QLogicAspect;
@@ -92,35 +92,35 @@ class Q_CELLINK_EXPORT Qt3DWindow : public QWindow
 {
     Q_OBJECT
 public:
-    Qt3DWindow(QScreen *screen = nullptr);
+    Qt3DWindow(QScreen* screen = nullptr);
     ~Qt3DWindow();
 
-    void registerAspect(Qt3DCore::QAbstractAspect *aspect);
-    void registerAspect(const QString &name);
+    void registerAspect(Qt3DCore::QAbstractAspect* aspect);
+    void registerAspect(const QString& name);
 
-    void setRootEntity(Qt3DCore::QEntity *root);
+    void setRootEntity(Qt3DCore::QEntity* root);
 
-    void setActiveFrameGraph(Qt3DRender::QFrameGraphNode *activeFrameGraph);
-    Qt3DRender::QFrameGraphNode *activeFrameGraph() const;
-    Qt3DExtras::QForwardRenderer *defaultFrameGraph() const;
+    void setActiveFrameGraph(Qt3DRender::QFrameGraphNode* activeFrameGraph);
+    Qt3DRender::QFrameGraphNode* activeFrameGraph() const;
+    Qt3DExtras::QForwardRenderer* defaultFrameGraph() const;
 
-    Qt3DRender::QCamera *camera() const;
-    Qt3DRender::QRenderSettings *renderSettings() const;
+    Qt3DRender::QCamera* camera() const;
+    Qt3DRender::QRenderSettings* renderSettings() const;
 
 public Q_SLOTS:
 
 Q_SIGNALS:
 
 protected:
-    void showEvent(QShowEvent *e) override;
-    void resizeEvent(QResizeEvent *) override;
-    bool event(QEvent *e) override;
+    void showEvent(QShowEvent* e) override;
+    void resizeEvent(QResizeEvent*) override;
+    bool event(QEvent* e) override;
 
 private:
     Q_DECLARE_PRIVATE(Qt3DWindow)
 };
 
-} // QtCellink
+} // namespace QtCellink
 
 QT_END_NAMESPACE
 

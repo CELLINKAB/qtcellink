@@ -23,8 +23,8 @@
 #include "rowbutton.h"
 
 #include <QtGui/qfontinfo.h>
-#include <QtQuickTemplates2/private/qquicktheme_p.h>
 #include <QtQuickTemplates2/private/qquickabstractbutton_p_p.h>
+#include <QtQuickTemplates2/private/qquicktheme_p.h>
 
 class RowButtonPrivate : public QQuickAbstractButtonPrivate
 {
@@ -32,7 +32,7 @@ public:
     bool highlighted = false;
 };
 
-RowButton::RowButton(QQuickItem *parent)
+RowButton::RowButton(QQuickItem* parent)
     : QQuickAbstractButton(*(new RowButtonPrivate), parent)
 {
     setCheckable(true);

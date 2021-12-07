@@ -34,6 +34,7 @@
 #define YOCTOLICENSEMODEL_H
 
 #include <QtCore/qabstractitemmodel.h>
+
 #include "yoctolicense.h"
 
 /*!
@@ -52,9 +53,15 @@ class YoctoLicenseModel : public QAbstractListModel
     Q_PROPERTY(QString manifest READ manifest WRITE setManifest NOTIFY manifestChanged)
 
 public:
-    explicit YoctoLicenseModel(QObject *parent = nullptr);
+    explicit YoctoLicenseModel(QObject* parent = nullptr);
 
-    enum Status { Null, Ready, Loading, Error };
+    enum Status
+    {
+        Null,
+        Ready,
+        Loading,
+        Error
+    };
     Q_ENUM(Status)
 
     Status status() const;
@@ -62,17 +69,22 @@ public:
     bool isEmpty() const;
 
     QString manifest() const;
-    void setManifest(const QString &manifest);
+    void setManifest(const QString& manifest);
 
-    enum DataRole { NameRole, VersionRole, LicensesRole };
+    enum DataRole
+    {
+        NameRole,
+        VersionRole,
+        LicensesRole
+    };
     Q_ENUM(DataRole)
 
     QHash<int, QByteArray> roleNames() const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex &index, int role = NameRole) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role = NameRole) const override;
 
     Q_INVOKABLE YoctoLicense get(int index) const;
-    Q_INVOKABLE QString read(const QString &name) const;
+    Q_INVOKABLE QString read(const QString& name) const;
 
 signals:
     void statusChanged();
@@ -82,7 +94,7 @@ signals:
 
 private slots:
     void setStatus(Status status);
-    void setLicenses(const QList<YoctoLicense> &licenses);
+    void setLicenses(const QList<YoctoLicense>& licenses);
 
 private:
     Status m_status = Null;

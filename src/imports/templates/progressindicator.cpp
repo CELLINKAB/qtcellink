@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include "progressindicator.h"
+
 #include <QtQuickTemplates2/private/qquickcontrol_p_p.h>
 
 class ProgressIndicatorPrivate : public QQuickControlPrivate
@@ -30,10 +31,9 @@ public:
     qreal value = 0;
 };
 
-ProgressIndicator::ProgressIndicator(QQuickItem *parent)
+ProgressIndicator::ProgressIndicator(QQuickItem* parent)
     : QQuickControl(*(new ProgressIndicatorPrivate), parent)
-{
-}
+{}
 
 bool ProgressIndicator::isRunning() const
 {
@@ -67,7 +67,7 @@ void ProgressIndicator::setValue(qreal value)
     emit valueChanged();
 }
 
-void ProgressIndicator::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
+void ProgressIndicator::contentItemChange(QQuickItem* newItem, QQuickItem* oldItem)
 {
     QQuickControl::contentItemChange(newItem, oldItem);
 
@@ -78,7 +78,7 @@ void ProgressIndicator::contentItemChange(QQuickItem *newItem, QQuickItem *oldIt
 }
 
 #if QT_CONFIG(quicktemplates2_multitouch)
-void ProgressIndicator::touchEvent(QTouchEvent *event)
+void ProgressIndicator::touchEvent(QTouchEvent* event)
 {
     event->ignore(); // QTBUG-61785
 }

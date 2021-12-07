@@ -51,16 +51,14 @@
 // We mean it.
 //
 
+#include <private/qlocale_tools_p.h>
+
+#include <Qt3DRender/private/qgeometryloaderinterface_p.h>
 #include <QtCore/QObject>
 #include <QtCore/QVector>
-
 #include <QtGui/QVector2D>
 #include <QtGui/QVector3D>
 #include <QtGui/QVector4D>
-
-#include <Qt3DRender/private/qgeometryloaderinterface_p.h>
-
-#include <private/qlocale_tools_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -96,12 +94,12 @@ public:
     QVector<QVector4D> tangents() const { return m_tangents; }
     QVector<unsigned int> indices() const { return m_indices; }
 
-    QGeometry *geometry() const override;
+    QGeometry* geometry() const override;
 
-    bool load(QIODevice *ioDev, const QString &subMesh = QString()) override;
+    bool load(QIODevice* ioDev, const QString& subMesh = QString()) override;
 
 protected:
-    virtual bool doLoad(QIODevice *ioDev, const QString &subMesh = QString()) = 0;
+    virtual bool doLoad(QIODevice* ioDev, const QString& subMesh = QString()) = 0;
 
     void generateAveragedNormals(const QVector<QVector3D>& points,
                                  QVector<QVector3D>& normals,
@@ -124,7 +122,7 @@ protected:
     QVector<QVector4D> m_tangents;
     QVector<unsigned int> m_indices;
 
-    QGeometry *m_geometry;
+    QGeometry* m_geometry;
 };
 
 struct FaceIndices
@@ -141,11 +139,10 @@ struct FaceIndices
         , normalIndex(nIndex)
     {}
 
-    bool operator == (const FaceIndices &other) const
+    bool operator==(const FaceIndices& other) const
     {
-        return positionIndex == other.positionIndex &&
-               texCoordIndex == other.texCoordIndex &&
-               normalIndex == other.normalIndex;
+        return positionIndex == other.positionIndex && texCoordIndex == other.texCoordIndex
+               && normalIndex == other.normalIndex;
     }
 
     unsigned int positionIndex;
@@ -168,15 +165,19 @@ QT3D_DECLARE_TYPEINFO(Qt3DRender, ByteArraySplitterEntry, Q_PRIMITIVE_TYPE)
 class ByteArraySplitter
 {
 public:
-    explicit ByteArraySplitter(const char *begin, const char *end, char delimiter, QString::SplitBehavior splitBehavior)
+    explicit ByteArraySplitter(const char* begin,
+                               const char* end,
+                               char delimiter,
+                               QString::SplitBehavior splitBehavior)
         : m_input(begin)
     {
         int position = 0;
         int lastPosition = 0;
         for (auto it = begin; it != end; ++it) {
             if (*it == delimiter) {
-                if (position > lastPosition || splitBehavior == QString::KeepEmptyParts) { // skip multiple consecutive delimiters
-                    const ByteArraySplitterEntry entry = { lastPosition, position - lastPosition };
+                if (position > lastPosition
+                    || splitBehavior == QString::KeepEmptyParts) { // skip multiple consecutive delimiters
+                    const ByteArraySplitterEntry entry = {lastPosition, position - lastPosition};
                     m_entries.append(entry);
                 }
                 lastPosition = position + 1;
@@ -185,29 +186,20 @@ public:
             ++position;
         }
 
-        const ByteArraySplitterEntry entry = { lastPosition, position - lastPosition };
+        const ByteArraySplitterEntry entry = {lastPosition, position - lastPosition};
         m_entries.append(entry);
     }
 
-    int size() const
-    {
-        return m_entries.size();
-    }
+    int size() const { return m_entries.size(); }
 
-    const char *charPtrAt(int index) const
-    {
-        return m_input + m_entries[index].start;
-    }
+    const char* charPtrAt(int index) const { return m_input + m_entries[index].start; }
 
     float floatAt(int index) const
     {
         return qstrntod(m_input + m_entries[index].start, m_entries[index].size, nullptr, nullptr);
     }
 
-    int intAt(int index) const
-    {
-        return strtol(m_input + m_entries[index].start, nullptr, 10);
-    }
+    int intAt(int index) const { return strtol(m_input + m_entries[index].start, nullptr, 10); }
 
     QString stringAt(int index) const
     {
@@ -216,12 +208,15 @@ public:
 
     ByteArraySplitter splitterAt(int index, char delimiter, QString::SplitBehavior splitBehavior) const
     {
-        return ByteArraySplitter(m_input + m_entries[index].start, m_input + m_entries[index].start + m_entries[index].size, delimiter, splitBehavior);
+        return ByteArraySplitter(m_input + m_entries[index].start,
+                                 m_input + m_entries[index].start + m_entries[index].size,
+                                 delimiter,
+                                 splitBehavior);
     }
 
 private:
     QVarLengthArray<ByteArraySplitterEntry, 16> m_entries;
-    const char *m_input;
+    const char* m_input;
 };
 
 } // namespace Qt3DRender

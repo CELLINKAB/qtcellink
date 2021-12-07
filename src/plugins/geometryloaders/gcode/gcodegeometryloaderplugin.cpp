@@ -23,7 +23,10 @@
 
 #include "gcodegeometryloader.h"
 
-static inline QString gcode() { return QStringLiteral("gcode"); }
+static inline QString gcode()
+{
+    return QStringLiteral("gcode");
+}
 
 class DefaultGeometryLoaderPlugin : public Qt3DRender::QGeometryLoaderFactory
 {
@@ -31,12 +34,9 @@ class DefaultGeometryLoaderPlugin : public Qt3DRender::QGeometryLoaderFactory
     Q_PLUGIN_METADATA(IID QGeometryLoaderFactory_iid FILE "gcode.json")
 
 public:
-    QStringList keys() const override
-    {
-        return QStringList() << gcode();
-    }
+    QStringList keys() const override { return QStringList() << gcode(); }
 
-    Qt3DRender::QGeometryLoaderInterface *create(const QString &ext) override
+    Qt3DRender::QGeometryLoaderInterface* create(const QString& ext) override
     {
         if (ext.compare(gcode(), Qt::CaseInsensitive) == 0)
             return new GcodeGeometryLoader;

@@ -21,9 +21,9 @@
 
 #include "componentview.h"
 
-ComponentView::ComponentView(QQuickItem *parent) : QQuickControl(parent)
-{
-}
+ComponentView::ComponentView(QQuickItem* parent)
+    : QQuickControl(parent)
+{}
 
 int ComponentView::count() const
 {
@@ -51,7 +51,7 @@ QJSValue ComponentView::properties() const
     return m_properties;
 }
 
-void ComponentView::setProperties(const QJSValue &properties)
+void ComponentView::setProperties(const QJSValue& properties)
 {
     if (m_properties.strictlyEquals(properties))
         return;
@@ -62,20 +62,25 @@ void ComponentView::setProperties(const QJSValue &properties)
 
 QQmlListProperty<QQmlComponent> ComponentView::components()
 {
-    return QQmlListProperty<QQmlComponent>(this, nullptr, components_append, components_count, components_at, components_clear);
+    return QQmlListProperty<QQmlComponent>(this,
+                                           nullptr,
+                                           components_append,
+                                           components_count,
+                                           components_at,
+                                           components_clear);
 }
 
-QQmlComponent *ComponentView::componentAt(int index) const
+QQmlComponent* ComponentView::componentAt(int index) const
 {
     return m_components.value(index);
 }
 
-void ComponentView::addComponent(QQmlComponent *component)
+void ComponentView::addComponent(QQmlComponent* component)
 {
     insertComponent(count(), component);
 }
 
-void ComponentView::insertComponent(int index, QQmlComponent *component)
+void ComponentView::insertComponent(int index, QQmlComponent* component)
 {
     if (!component)
         return;
@@ -85,7 +90,7 @@ void ComponentView::insertComponent(int index, QQmlComponent *component)
     emit countChanged();
 }
 
-void ComponentView::removeComponent(QQmlComponent *component)
+void ComponentView::removeComponent(QQmlComponent* component)
 {
     if (!m_components.removeAll(component))
         return;
@@ -94,12 +99,12 @@ void ComponentView::removeComponent(QQmlComponent *component)
     emit countChanged();
 }
 
-QQmlComponent *ComponentView::takeComponent(int index)
+QQmlComponent* ComponentView::takeComponent(int index)
 {
     if (index < 0 || index >= m_components.count())
         return nullptr;
 
-    QQmlComponent *component = m_components.takeAt(index);
+    QQmlComponent* component = m_components.takeAt(index);
     emit componentsChanged();
     emit countChanged();
     return component;
@@ -124,7 +129,7 @@ void ComponentView::componentComplete()
 
 void ComponentView::currentIndexChange(int newIndex, int oldIndex)
 {
-    QQmlComponent *component = componentAt(newIndex);
+    QQmlComponent* component = componentAt(newIndex);
     if (!component)
         return;
 
@@ -136,29 +141,30 @@ void ComponentView::currentIndexChange(int newIndex, int oldIndex)
         emit pop(component);
 }
 
-void ComponentView::components_append(QQmlListProperty<QQmlComponent> *property, QQmlComponent *component)
+void ComponentView::components_append(QQmlListProperty<QQmlComponent>* property,
+                                      QQmlComponent* component)
 {
     if (!component)
         return;
 
-    ComponentView *view = static_cast<ComponentView *>(property->object);
+    ComponentView* view = static_cast<ComponentView*>(property->object);
     view->addComponent(component);
 }
 
-QQmlComponent *ComponentView::components_at(QQmlListProperty<QQmlComponent> *property, int index)
+QQmlComponent* ComponentView::components_at(QQmlListProperty<QQmlComponent>* property, int index)
 {
-    ComponentView *view = static_cast<ComponentView *>(property->object);
+    ComponentView* view = static_cast<ComponentView*>(property->object);
     return view->m_components.value(index);
 }
 
-void ComponentView::components_clear(QQmlListProperty<QQmlComponent> *property)
+void ComponentView::components_clear(QQmlListProperty<QQmlComponent>* property)
 {
-    ComponentView *view = static_cast<ComponentView *>(property->object);
+    ComponentView* view = static_cast<ComponentView*>(property->object);
     view->clear();
 }
 
-int ComponentView::components_count(QQmlListProperty<QQmlComponent> *property)
+int ComponentView::components_count(QQmlListProperty<QQmlComponent>* property)
 {
-    ComponentView *view = static_cast<ComponentView *>(property->object);
+    ComponentView* view = static_cast<ComponentView*>(property->object);
     return view->count();
 }

@@ -21,7 +21,6 @@
 
 #include "keyboard.h"
 
-Keyboard::Keyboard(QObject *parent) :
-    QObject(parent)
-{
-}
+Keyboard::Keyboard(QObject* parent)
+    : QObject(parent)
+{}

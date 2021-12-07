@@ -27,8 +27,8 @@
 #include <QtCore/qurl.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qpa/qplatformmenu.h>
-#include <QtQml/qqmlparserstatus.h>
 #include <QtQml/qqml.h>
+#include <QtQml/qqmlparserstatus.h>
 #include <QtQuickTemplates2/private/qquickicon_p.h>
 
 class QQuickAction;
@@ -40,8 +40,8 @@ class NativeMenuItem : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
-    Q_PROPERTY(NativeMenu *menu READ menu NOTIFY menuChanged FINAL)
-    Q_PROPERTY(NativeMenu *subMenu READ subMenu NOTIFY subMenuChanged FINAL)
+    Q_PROPERTY(NativeMenu* menu READ menu NOTIFY menuChanged FINAL)
+    Q_PROPERTY(NativeMenu* subMenu READ subMenu NOTIFY subMenuChanged FINAL)
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged FINAL)
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged FINAL)
     Q_PROPERTY(bool separator READ isSeparator WRITE setSeparator NOTIFY separatorChanged FINAL)
@@ -52,22 +52,22 @@ class NativeMenuItem : public QObject, public QQmlParserStatus
     Q_PROPERTY(QVariant shortcut READ shortcut WRITE setShortcut NOTIFY shortcutChanged FINAL)
     Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY fontChanged FINAL)
     Q_PROPERTY(QQuickIcon icon READ icon WRITE setIcon NOTIFY iconChanged FINAL)
-    Q_PROPERTY(QQuickAction *action READ action WRITE setAction NOTIFY actionChanged)
+    Q_PROPERTY(QQuickAction* action READ action WRITE setAction NOTIFY actionChanged)
     Q_ENUMS(QPlatformMenuItem::MenuRole)
 
 public:
-    explicit NativeMenuItem(QObject *parent = nullptr);
+    explicit NativeMenuItem(QObject* parent = nullptr);
     ~NativeMenuItem();
 
-    QPlatformMenuItem *handle() const;
-    QPlatformMenuItem *create();
+    QPlatformMenuItem* handle() const;
+    QPlatformMenuItem* create();
     void sync();
 
-    NativeMenu *menu() const;
+    NativeMenu* menu() const;
     void setMenu(NativeMenu* menu);
 
-    NativeMenu *subMenu() const;
-    void setSubMenu(NativeMenu *menu);
+    NativeMenu* subMenu() const;
+    void setSubMenu(NativeMenu* menu);
 
     bool isEnabled() const;
     void setEnabled(bool enabled);
@@ -88,19 +88,19 @@ public:
     void setRole(QPlatformMenuItem::MenuRole role);
 
     QString text() const;
-    void setText(const QString &text);
+    void setText(const QString& text);
 
     QVariant shortcut() const;
     void setShortcut(const QVariant& shortcut);
 
     QFont font() const;
-    void setFont(const QFont &font);
+    void setFont(const QFont& font);
 
     QQuickIcon icon() const;
-    void setIcon(const QQuickIcon &icon);
+    void setIcon(const QQuickIcon& icon);
 
-    QQuickAction *action() const;
-    void setAction(QQuickAction *action);
+    QQuickAction* action() const;
+    void setAction(QQuickAction* action);
 
 public Q_SLOTS:
     void toggle();
@@ -127,7 +127,7 @@ protected:
     void classBegin() override;
     void componentComplete() override;
 
-    IconLoader *iconLoader() const;
+    IconLoader* iconLoader() const;
 
 private Q_SLOTS:
     void activate();
@@ -144,11 +144,11 @@ private:
     QString m_text;
     QVariant m_shortcut;
     QFont m_font;
-    QQuickAction *m_action = nullptr;
-    NativeMenu *m_menu = nullptr;
-    NativeMenu *m_subMenu = nullptr;
-    mutable IconLoader *m_iconLoader = nullptr;
-    QPlatformMenuItem *m_handle = nullptr;
+    QQuickAction* m_action = nullptr;
+    NativeMenu* m_menu = nullptr;
+    NativeMenu* m_subMenu = nullptr;
+    mutable IconLoader* m_iconLoader = nullptr;
+    QPlatformMenuItem* m_handle = nullptr;
 
     friend class NativeMenu;
 };

@@ -30,7 +30,7 @@ class NativeMenuSeparator : public NativeMenuItem
     Q_OBJECT
 
 public:
-    explicit NativeMenuSeparator(QObject *parent = nullptr);
+    explicit NativeMenuSeparator(QObject* parent = nullptr);
 };
 
 QML_DECLARE_TYPE(NativeMenuSeparator)

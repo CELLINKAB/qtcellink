@@ -38,41 +38,83 @@
 #ifndef CODEEDITOR_H
 #define CODEEDITOR_H
 
-#include <QtWidgets/qplaintextedit.h>
 #include "qtcellink/src/cellink/core/cellink.h"
 
-QT_FORWARD_DECLARE_CLASS(QCompleter)
+#include <QtWidgets/qplaintextedit.h>
+
+class QCompleter;
+class CodeEditor;
+
+class Q_CELLINK_EXPORT LineNumberBar : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(int hzMargin READ hzMargin WRITE setHzMargin NOTIFY hzMarginChanged)
+public:
+    explicit LineNumberBar(CodeEditor* editor);
+    ~LineNumberBar() override;
+
+    void setHzMargin(int margin);
+
+    int hzMargin() const { return m_hzMargin; }
+
+    QSize sizeHint() const override { return m_size; }
+
+protected:
+    void paintEvent(QPaintEvent* event) override;
+
+signals:
+    void hzMarginChanged(int margin);
+
+private:
+    void updateSize(int blockCount);
+
+    QSize m_size;
+    CodeEditor* const m_codeEditor = nullptr;
+    int m_hzMargin = 4;
+};
 
 class Q_CELLINK_EXPORT CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
-
+    Q_PROPERTY(qreal highlightLineColorAlpha READ highlightLineColorAlpha WRITE
+                   setHighlightLineColorAlpha NOTIFY highlightLineColorAlphaChanged)
 public:
-    explicit CodeEditor(QWidget *parent = nullptr);
+    explicit CodeEditor(QWidget* parent = nullptr);
+    ~CodeEditor() override;
 
-    QCompleter *completer() const;
-    void setCompleter(QCompleter *completer);
+    QCompleter* completer() const { return m_completer; }
+    void setCompleter(QCompleter* completer);
+
+    qreal highlightLineColorAlpha() const { return m_highlightLineColorAlpha; }
+    void setHighlightLineColorAlpha(qreal alpha);
+
+    LineNumberBar& lineNumberBar() { return m_lineNumberBar; }
 
 protected:
-    void focusInEvent(QFocusEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
+    void focusInEvent(QFocusEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
 
-    virtual void complete(const QString &prefix);
+    virtual void complete(const QString& prefix);
+
+signals:
+    void highlightLineColorAlphaChanged(qreal alpha);
 
 private slots:
     void highlightCurrentLine();
     void updateViewportMargins();
-    void updateLineNumbers(const QRect &rect, int dy);
-    void insertCompletion(const QString &completion);
+    void updateLineNumbers(const QRect& rect, int dy);
+    void insertCompletion(const QString& completion);
 
 private:
     QString textUnderCursor() const;
-    void paintLineNumbers(QPainter *painter, const QRect &rect);
+    void paintLineNumbers(QPainter* painter, const QRect& rect);
 
     friend class LineNumberBar;
-    QWidget *m_lineNumberBar = nullptr;
-    QCompleter *m_completer = nullptr;
+
+    LineNumberBar m_lineNumberBar{this};
+    QCompleter* m_completer = nullptr;
+    qreal m_highlightLineColorAlpha = 0.2;
 };
 
 #endif // CODEEDITOR_H

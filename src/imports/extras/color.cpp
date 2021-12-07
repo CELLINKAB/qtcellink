@@ -21,20 +21,22 @@
 ****************************************************************************/
 
 #include "color.h"
+
 #include <cmath>
 
-Color::Color(QObject *parent) :
-    QObject(parent)
-{
-}
+Color::Color(QObject* parent)
+    : QObject(parent)
+{}
 
-QColor Color::transparent(const QColor &color, qreal opacity) const
+QColor Color::transparent(const QColor& color, qreal opacity) const
 {
-    return QColor(color.red(), color.green(), color.blue(),
+    return QColor(color.red(),
+                  color.green(),
+                  color.blue(),
                   int(qreal(255) * qBound(qreal(0), opacity, qreal(1))));
 }
 
-QColor Color::blend(const QColor &a, const QColor &b, qreal factor) const
+QColor Color::blend(const QColor& a, const QColor& b, qreal factor) const
 {
     if (factor <= 0.0)
         return a;
@@ -48,8 +50,10 @@ QColor Color::blend(const QColor &a, const QColor &b, qreal factor) const
     return color;
 }
 
-QColor Color::hue(const QColor &color, qreal factor) const
+QColor Color::hue(const QColor& color, qreal factor) const
 {
     QColor base = color.toHsl();
-    return QColor::fromHslF(std::fmod(std::abs(base.hueF() + factor), 1.0), base.saturationF(), base.lightnessF());
+    return QColor::fromHslF(std::fmod(std::abs(base.hueF() + factor), 1.0),
+                            base.saturationF(),
+                            base.lightnessF());
 }

@@ -31,11 +31,12 @@
 ****************************************************************************/
 
 #include "navigationgroup.h"
+
 #include "navigationitem.h"
 
-NavigationGroup::NavigationGroup(QObject *parent) : QObject(parent)
-{
-}
+NavigationGroup::NavigationGroup(QObject* parent)
+    : QObject(parent)
+{}
 
 int NavigationGroup::count() const
 {
@@ -49,29 +50,34 @@ QQmlListProperty<QObject> NavigationGroup::data()
 
 QQmlListProperty<NavigationItem> NavigationGroup::items()
 {
-    return QQmlListProperty<NavigationItem>(this, nullptr, items_append, items_count, items_at, items_clear);
+    return QQmlListProperty<NavigationItem>(this,
+                                            nullptr,
+                                            items_append,
+                                            items_count,
+                                            items_at,
+                                            items_clear);
 }
 
-NavigationItem *NavigationGroup::itemAt(int index) const
+NavigationItem* NavigationGroup::itemAt(int index) const
 {
     return m_items.value(index);
 }
 
-int NavigationGroup::indexOf(NavigationItem *item) const
+int NavigationGroup::indexOf(NavigationItem* item) const
 {
     return m_items.indexOf(item);
 }
 
-int NavigationGroup::find(const QString &name) const
+int NavigationGroup::find(const QString& name) const
 {
-    for (int  i = 0; i < m_items.count(); ++i) {
+    for (int i = 0; i < m_items.count(); ++i) {
         if (m_items.at(i)->name() == name)
             return i;
     }
     return -1;
 }
 
-void NavigationGroup::addItem(NavigationItem *item)
+void NavigationGroup::addItem(NavigationItem* item)
 {
     connect(item, &NavigationItem::triggered, this, &NavigationGroup::triggered);
     m_items.append(item);
@@ -83,21 +89,21 @@ void NavigationGroup::clear()
     if (m_items.isEmpty())
         return;
 
-    for (NavigationItem *item : qAsConst(m_items))
+    for (NavigationItem* item : qAsConst(m_items))
         item->disconnect(this);
 
     m_items.clear();
     emit itemsChanged();
 }
 
-void NavigationGroup::trigger(const QString &name)
+void NavigationGroup::trigger(const QString& name)
 {
     triggerAt(find(name));
 }
 
 void NavigationGroup::triggerAt(int index)
 {
-    NavigationItem *item = itemAt(index);
+    NavigationItem* item = itemAt(index);
     if (!item)
         return;
 
@@ -107,53 +113,53 @@ void NavigationGroup::triggerAt(int index)
         item->trigger();
 }
 
-void NavigationGroup::data_append(QQmlListProperty<QObject> *property, QObject *object)
+void NavigationGroup::data_append(QQmlListProperty<QObject>* property, QObject* object)
 {
-    NavigationGroup *group = static_cast<NavigationGroup *>(property->object);
-    if (NavigationItem *item = qobject_cast<NavigationItem *>(object))
+    NavigationGroup* group = static_cast<NavigationGroup*>(property->object);
+    if (NavigationItem* item = qobject_cast<NavigationItem*>(object))
         group->addItem(item);
     else
         group->m_data.append(object);
 }
 
-int NavigationGroup::data_count(QQmlListProperty<QObject> *property)
+int NavigationGroup::data_count(QQmlListProperty<QObject>* property)
 {
-    NavigationGroup *group = static_cast<NavigationGroup *>(property->object);
+    NavigationGroup* group = static_cast<NavigationGroup*>(property->object);
     return group->m_data.count();
 }
 
-QObject *NavigationGroup::data_at(QQmlListProperty<QObject> *property, int index)
+QObject* NavigationGroup::data_at(QQmlListProperty<QObject>* property, int index)
 {
-    NavigationGroup *group = static_cast<NavigationGroup *>(property->object);
+    NavigationGroup* group = static_cast<NavigationGroup*>(property->object);
     return group->m_data.value(index);
 }
 
-void NavigationGroup::data_clear(QQmlListProperty<QObject> *property)
+void NavigationGroup::data_clear(QQmlListProperty<QObject>* property)
 {
-    NavigationGroup *group = static_cast<NavigationGroup *>(property->object);
+    NavigationGroup* group = static_cast<NavigationGroup*>(property->object);
     return group->m_data.clear();
 }
 
-void NavigationGroup::items_append(QQmlListProperty<NavigationItem> *property, NavigationItem *item)
+void NavigationGroup::items_append(QQmlListProperty<NavigationItem>* property, NavigationItem* item)
 {
-    NavigationGroup *group = static_cast<NavigationGroup *>(property->object);
+    NavigationGroup* group = static_cast<NavigationGroup*>(property->object);
     return group->addItem(item);
 }
 
-int NavigationGroup::items_count(QQmlListProperty<NavigationItem> *property)
+int NavigationGroup::items_count(QQmlListProperty<NavigationItem>* property)
 {
-    NavigationGroup *group = static_cast<NavigationGroup *>(property->object);
+    NavigationGroup* group = static_cast<NavigationGroup*>(property->object);
     return group->count();
 }
 
-NavigationItem *NavigationGroup::items_at(QQmlListProperty<NavigationItem> *property, int index)
+NavigationItem* NavigationGroup::items_at(QQmlListProperty<NavigationItem>* property, int index)
 {
-    NavigationGroup *group = static_cast<NavigationGroup *>(property->object);
+    NavigationGroup* group = static_cast<NavigationGroup*>(property->object);
     return group->itemAt(index);
 }
 
-void NavigationGroup::items_clear(QQmlListProperty<NavigationItem> *property)
+void NavigationGroup::items_clear(QQmlListProperty<NavigationItem>* property)
 {
-    NavigationGroup *group = static_cast<NavigationGroup *>(property->object);
+    NavigationGroup* group = static_cast<NavigationGroup*>(property->object);
     group->clear();
 }

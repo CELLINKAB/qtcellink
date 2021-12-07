@@ -1,0 +1,21 @@
+name: 'clang-format lint'
+author: 'Przemysław Sowa <ps@cellink.com>'
+description: 'Github Action that check if code is formatted correctly using clang-format'
+branding:
+  icon: 'align-left'
+  color: 'green'
+runs:
+  using: 'docker'
+  image: 'cellink/clang-format-lint'
+  #image: 'Dockerfile'
+  args:
+    - --clang-format-executable
+    - /clang-format/clang-format12
+    - -r
+    - --exclude
+    - src/libs/heartwarecore
+    - --exclude
+    - src/libs/QtCellinkInternal
+    - --exclude
+    - src/3rdparty
+    - src

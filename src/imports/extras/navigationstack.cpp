@@ -31,11 +31,13 @@
 ****************************************************************************/
 
 #include "navigationstack.h"
+
 #include "navigationitem.h"
 
-NavigationStack::NavigationStack(QObject *parent) : NavigationGroup(parent)
+NavigationStack::NavigationStack(QObject* parent)
+    : NavigationGroup(parent)
 {
-    connect(this, &NavigationGroup::triggered, [&](NavigationItem *item) {
+    connect(this, &NavigationGroup::triggered, [&](NavigationItem* item) {
         int index = indexOf(item);
         if (index > m_currentIndex)
             emit push(item->url(), item->properties());
@@ -47,7 +49,7 @@ NavigationStack::NavigationStack(QObject *parent) : NavigationGroup(parent)
     });
 }
 
-NavigationItem *NavigationStack::currentItem() const
+NavigationItem* NavigationStack::currentItem() const
 {
     return itemAt(m_currentIndex);
 }
@@ -77,7 +79,7 @@ QString NavigationStack::currentName() const
     return m_currentName;
 }
 
-void NavigationStack::setCurrentName(const QString &currentName)
+void NavigationStack::setCurrentName(const QString& currentName)
 {
     if (m_currentName == currentName)
         return;
@@ -97,7 +99,7 @@ void NavigationStack::navigateAt(int index)
     triggerAt(index);
 }
 
-void NavigationStack::navigateTo(const QString &name)
+void NavigationStack::navigateTo(const QString& name)
 {
     trigger(name);
 }
@@ -123,6 +125,6 @@ void NavigationStack::updateCurrentIndex()
 
 void NavigationStack::updateCurrentName()
 {
-    NavigationItem *item = currentItem();
+    NavigationItem* item = currentItem();
     m_currentName = item ? item->name() : QString();
 }

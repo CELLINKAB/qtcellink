@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 **
 ** This file is part of QtCellink.
 **
@@ -79,6 +79,7 @@ QtObject {
     readonly property string backspace: "\uf55a"
     readonly property string backward: "\uf04a"
     readonly property string bacon: "\uf7e5"
+    readonly property string bahai: "\uf666"
     readonly property string balanceScale: "\uf24e"
     readonly property string balanceScaleLeft: "\uf515"
     readonly property string balanceScaleRight: "\uf516"
@@ -163,6 +164,7 @@ QtObject {
     readonly property string carBattery: "\uf5df"
     readonly property string carCrash: "\uf5e1"
     readonly property string carSide: "\uf5e4"
+    readonly property string caravan: "\uf8ff"
     readonly property string caretDown: "\uf0d7"
     readonly property string caretLeft: "\uf0d9"
     readonly property string caretRight: "\uf0da"
@@ -247,6 +249,7 @@ QtObject {
     readonly property string compactDisc: "\uf51f"
     readonly property string compass: "\uf14e"
     readonly property string compress: "\uf066"
+    readonly property string compressAlt: "\uf422"
     readonly property string compressArrowsAlt: "\uf78c"
     readonly property string conciergeBell: "\uf562"
     readonly property string cookie: "\uf563"
@@ -323,6 +326,7 @@ QtObject {
     readonly property string exclamationCircle: "\uf06a"
     readonly property string exclamationTriangle: "\uf071"
     readonly property string expand: "\uf065"
+    readonly property string expandAlt: "\uf424"
     readonly property string expandArrowsAlt: "\uf31e"
     readonly property string externalLinkAlt: "\uf35d"
     readonly property string externalLinkSquareAlt: "\uf360"
@@ -456,8 +460,9 @@ QtObject {
     readonly property string hanukiah: "\uf6e6"
     readonly property string hardHat: "\uf807"
     readonly property string hashtag: "\uf292"
+    readonly property string hatCowboy: "\uf8c0"
+    readonly property string hatCowboySide: "\uf8c1"
     readonly property string hatWizard: "\uf6e8"
-    readonly property string haykal: "\uf666"
     readonly property string hdd: "\uf0a0"
     readonly property string heading: "\uf1dc"
     readonly property string headphones: "\uf025"
@@ -600,6 +605,7 @@ QtObject {
     readonly property string mosque: "\uf678"
     readonly property string motorcycle: "\uf21c"
     readonly property string mountain: "\uf6fc"
+    readonly property string mouse: "\uf8cc"
     readonly property string mousePointer: "\uf245"
     readonly property string mugHot: "\uf7b6"
     readonly property string music: "\uf001"
@@ -693,6 +699,7 @@ QtObject {
     readonly property string rainbow: "\uf75b"
     readonly property string random: "\uf074"
     readonly property string receipt: "\uf543"
+    readonly property string recordVinyl: "\uf8d9"
     readonly property string recycle: "\uf1b8"
     readonly property string redo: "\uf01e"
     readonly property string redoAlt: "\uf2f9"
@@ -887,6 +894,7 @@ QtObject {
     readonly property string tractor: "\uf722"
     readonly property string trademark: "\uf25c"
     readonly property string trafficLight: "\uf637"
+    readonly property string trailer: "\uf941"
     readonly property string train: "\uf238"
     readonly property string tram: "\uf7da"
     readonly property string transgender: "\uf224"

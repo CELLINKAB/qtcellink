@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Templates 2 module of Qt).
@@ -64,6 +64,8 @@ public:
     void startPressRepeat();
     void stopPressRepeat();
 
+    void accept();
+
     void handlePress(const QPointF &point) override;
     void handleMove(const QPointF &point) override;
     void handleRelease(const QPointF &point) override;
@@ -88,7 +90,7 @@ public:
     QValidator *validator = nullptr;
     mutable QJSValue textFromValue;
     mutable QJSValue valueFromText;
-    Qt::InputMethodHints inputMethodHints = Qt::ImhDigitsOnly;
+    Qt::InputMethodHints inputMethodHints = Qt::ImhDigitsOnly | Qt::ImhNoTextHandles;
 };
 
 class DoubleSpinButtonPrivate : public QObjectPrivate
@@ -287,6 +289,13 @@ void DoubleSpinBoxPrivate::stopPressRepeat()
     }
 }
 
+void DoubleSpinBoxPrivate::accept()
+{
+    Q_Q(DoubleSpinBox);
+    updateValue();
+    emit q->accepted();
+}
+
 void DoubleSpinBoxPrivate::handlePress(const QPointF &point)
 {
     Q_Q(DoubleSpinBox);
@@ -382,7 +391,7 @@ void DoubleSpinBox::setFrom(qreal from)
     d->from = from;
     emit fromChanged();
     if (isComponentComplete()) {
-        if (!d->setValue(d->value, /* allowWrap = */ false, /* modified = */ true)) {
+        if (!d->setValue(d->value, /* allowWrap = */ false, /* modified = */ false)) {
             d->updateUpEnabled();
             d->updateDownEnabled();
         }
@@ -404,7 +413,7 @@ void DoubleSpinBox::setTo(qreal to)
     d->to = to;
     emit toChanged();
     if (isComponentComplete()) {
-        if (!d->setValue(d->value, /* allowWrap = */ false, /* modified = */ true)) {
+        if (!d->setValue(d->value, /* allowWrap = */false, /* modified = */ false)) {
             d->updateUpEnabled();
             d->updateDownEnabled();
         }
@@ -494,6 +503,9 @@ void DoubleSpinBox::setValidator(QValidator *validator)
         return;
 
     d->validator = validator;
+    if (QQuickTextInput *textInput = qobject_cast<QQuickTextInput *>(contentItem()))
+        textInput->setValidator(validator);
+
     emit validatorChanged();
 }
 
@@ -836,7 +848,7 @@ void DoubleSpinBox::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
 {
     Q_D(DoubleSpinBox);
     if (QQuickTextInput *oldInput = qobject_cast<QQuickTextInput *>(oldItem)) {
-        disconnect(oldInput, &QQuickTextInput::accepted, this, &DoubleSpinBox::accepted);
+        QObjectPrivate::disconnect(oldInput, &QQuickTextInput::accepted, d, &DoubleSpinBoxPrivate::accept);
         disconnect(oldInput, &QQuickTextInput::inputMethodComposingChanged, this, &DoubleSpinBox::inputMethodComposingChanged);
     }
 
@@ -850,8 +862,10 @@ void DoubleSpinBox::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
 #endif
 
         if (QQuickTextInput *newInput = qobject_cast<QQuickTextInput *>(newItem)) {
-            connect(newInput, &QQuickTextInput::accepted, this, &DoubleSpinBox::accepted);
+            QObjectPrivate::connect(newInput, &QQuickTextInput::accepted, d, &DoubleSpinBoxPrivate::accept);
             connect(newInput, &QQuickTextInput::inputMethodComposingChanged, this, &DoubleSpinBox::inputMethodComposingChanged);
+
+            newInput->setValidator(d->validator);
         }
     }
 }

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Templates 2 module of Qt).
@@ -85,10 +85,6 @@ void FlipViewPrivate::flip()
         showBack = false;
         showFront = true;
     }
-
-    QQuickItem *previousItem = q->itemAt(previousIndex);
-    if (previousItem)
-        QQuickItemPrivate::get(previousItem)->setCulled(true);
 
     QQuickItem *currentItem = q->itemAt(currentIndex);
     if (currentItem) {

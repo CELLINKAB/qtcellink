@@ -9,6 +9,7 @@ DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 
 AUX_QML_FILES += \
     $$PWD/ButtonRow.qml \
+    $$PWD/ComponentView.qml \
     $$PWD/DoubleSpinBox.qml \
     $$PWD/FlipView.qml \
     $$PWD/ProgressIndicator.qml \
@@ -28,9 +29,6 @@ HEADERS += \
 SOURCES += \
     $$PWD/progressindicator.cpp \
     $$PWD/qtcellinkcontrolsplugin.cpp
-
-include(native/native.pri)
-include(quick/quick.pri)
 
 CONFIG += no_cxx_module
 load(qml_plugin)

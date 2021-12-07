@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Templates 2 module of Qt).
@@ -65,6 +65,16 @@ void ProgressIndicator::setValue(qreal value)
 
     d->value = value;
     emit valueChanged();
+}
+
+void ProgressIndicator::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
+{
+    QQuickControl::contentItemChange(newItem, oldItem);
+
+    if (oldItem)
+        disconnect(oldItem, SIGNAL(started()), this, SIGNAL(started()));
+    if (newItem)
+        connect(newItem, SIGNAL(started()), this, SIGNAL(started()));
 }
 
 #if QT_CONFIG(quicktemplates2_multitouch)

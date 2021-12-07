@@ -7,7 +7,7 @@ import QtQuick.tooling 1.2
 // 'qmlplugindump -nonrelocatable QtCellink.FontAwesome 1.0'
 
 Module {
-    dependencies: ["QtQuick 2.12"]
+    dependencies: ["QtQuick 2.0"]
     Component {
         prototype: "QObject"
         name: "QtCellink.FontAwesome/FontAwesome 1.0"
@@ -70,7 +70,10 @@ Module {
         Property { name: "backspace"; type: "string"; isReadonly: true }
         Property { name: "backward"; type: "string"; isReadonly: true }
         Property { name: "bacon"; type: "string"; isReadonly: true }
+        Property { name: "bahai"; type: "string"; isReadonly: true }
         Property { name: "balanceScale"; type: "string"; isReadonly: true }
+        Property { name: "balanceScaleLeft"; type: "string"; isReadonly: true }
+        Property { name: "balanceScaleRight"; type: "string"; isReadonly: true }
         Property { name: "ban"; type: "string"; isReadonly: true }
         Property { name: "bandAid"; type: "string"; isReadonly: true }
         Property { name: "barcode"; type: "string"; isReadonly: true }
@@ -90,6 +93,7 @@ Module {
         Property { name: "bezierCurve"; type: "string"; isReadonly: true }
         Property { name: "bible"; type: "string"; isReadonly: true }
         Property { name: "bicycle"; type: "string"; isReadonly: true }
+        Property { name: "biking"; type: "string"; isReadonly: true }
         Property { name: "binoculars"; type: "string"; isReadonly: true }
         Property { name: "biohazard"; type: "string"; isReadonly: true }
         Property { name: "birthdayCake"; type: "string"; isReadonly: true }
@@ -108,6 +112,9 @@ Module {
         Property { name: "bookOpen"; type: "string"; isReadonly: true }
         Property { name: "bookReader"; type: "string"; isReadonly: true }
         Property { name: "bookmark"; type: "string"; isReadonly: true }
+        Property { name: "borderAll"; type: "string"; isReadonly: true }
+        Property { name: "borderNone"; type: "string"; isReadonly: true }
+        Property { name: "borderStyle"; type: "string"; isReadonly: true }
         Property { name: "bowlingBall"; type: "string"; isReadonly: true }
         Property { name: "box"; type: "string"; isReadonly: true }
         Property { name: "boxOpen"; type: "string"; isReadonly: true }
@@ -148,6 +155,7 @@ Module {
         Property { name: "carBattery"; type: "string"; isReadonly: true }
         Property { name: "carCrash"; type: "string"; isReadonly: true }
         Property { name: "carSide"; type: "string"; isReadonly: true }
+        Property { name: "caravan"; type: "string"; isReadonly: true }
         Property { name: "caretDown"; type: "string"; isReadonly: true }
         Property { name: "caretLeft"; type: "string"; isReadonly: true }
         Property { name: "caretRight"; type: "string"; isReadonly: true }
@@ -232,6 +240,7 @@ Module {
         Property { name: "compactDisc"; type: "string"; isReadonly: true }
         Property { name: "compass"; type: "string"; isReadonly: true }
         Property { name: "compress"; type: "string"; isReadonly: true }
+        Property { name: "compressAlt"; type: "string"; isReadonly: true }
         Property { name: "compressArrowsAlt"; type: "string"; isReadonly: true }
         Property { name: "conciergeBell"; type: "string"; isReadonly: true }
         Property { name: "cookie"; type: "string"; isReadonly: true }
@@ -308,12 +317,14 @@ Module {
         Property { name: "exclamationCircle"; type: "string"; isReadonly: true }
         Property { name: "exclamationTriangle"; type: "string"; isReadonly: true }
         Property { name: "expand"; type: "string"; isReadonly: true }
+        Property { name: "expandAlt"; type: "string"; isReadonly: true }
         Property { name: "expandArrowsAlt"; type: "string"; isReadonly: true }
         Property { name: "externalLinkAlt"; type: "string"; isReadonly: true }
         Property { name: "externalLinkSquareAlt"; type: "string"; isReadonly: true }
         Property { name: "eye"; type: "string"; isReadonly: true }
         Property { name: "eyeDropper"; type: "string"; isReadonly: true }
         Property { name: "eyeSlash"; type: "string"; isReadonly: true }
+        Property { name: "fan"; type: "string"; isReadonly: true }
         Property { name: "fastBackward"; type: "string"; isReadonly: true }
         Property { name: "fastForward"; type: "string"; isReadonly: true }
         Property { name: "fax"; type: "string"; isReadonly: true }
@@ -440,8 +451,9 @@ Module {
         Property { name: "hanukiah"; type: "string"; isReadonly: true }
         Property { name: "hardHat"; type: "string"; isReadonly: true }
         Property { name: "hashtag"; type: "string"; isReadonly: true }
+        Property { name: "hatCowboy"; type: "string"; isReadonly: true }
+        Property { name: "hatCowboySide"; type: "string"; isReadonly: true }
         Property { name: "hatWizard"; type: "string"; isReadonly: true }
-        Property { name: "haykal"; type: "string"; isReadonly: true }
         Property { name: "hdd"; type: "string"; isReadonly: true }
         Property { name: "heading"; type: "string"; isReadonly: true }
         Property { name: "headphones"; type: "string"; isReadonly: true }
@@ -475,6 +487,7 @@ Module {
         Property { name: "iCursor"; type: "string"; isReadonly: true }
         Property { name: "iceCream"; type: "string"; isReadonly: true }
         Property { name: "icicles"; type: "string"; isReadonly: true }
+        Property { name: "icons"; type: "string"; isReadonly: true }
         Property { name: "idBadge"; type: "string"; isReadonly: true }
         Property { name: "idCard"; type: "string"; isReadonly: true }
         Property { name: "idCardAlt"; type: "string"; isReadonly: true }
@@ -583,6 +596,7 @@ Module {
         Property { name: "mosque"; type: "string"; isReadonly: true }
         Property { name: "motorcycle"; type: "string"; isReadonly: true }
         Property { name: "mountain"; type: "string"; isReadonly: true }
+        Property { name: "mouse"; type: "string"; isReadonly: true }
         Property { name: "mousePointer"; type: "string"; isReadonly: true }
         Property { name: "mugHot"; type: "string"; isReadonly: true }
         Property { name: "music"; type: "string"; isReadonly: true }
@@ -627,9 +641,12 @@ Module {
         Property { name: "percentage"; type: "string"; isReadonly: true }
         Property { name: "personBooth"; type: "string"; isReadonly: true }
         Property { name: "phone"; type: "string"; isReadonly: true }
+        Property { name: "phoneAlt"; type: "string"; isReadonly: true }
         Property { name: "phoneSlash"; type: "string"; isReadonly: true }
         Property { name: "phoneSquare"; type: "string"; isReadonly: true }
+        Property { name: "phoneSquareAlt"; type: "string"; isReadonly: true }
         Property { name: "phoneVolume"; type: "string"; isReadonly: true }
+        Property { name: "photoVideo"; type: "string"; isReadonly: true }
         Property { name: "piggyBank"; type: "string"; isReadonly: true }
         Property { name: "pills"; type: "string"; isReadonly: true }
         Property { name: "pizzaSlice"; type: "string"; isReadonly: true }
@@ -673,10 +690,12 @@ Module {
         Property { name: "rainbow"; type: "string"; isReadonly: true }
         Property { name: "random"; type: "string"; isReadonly: true }
         Property { name: "receipt"; type: "string"; isReadonly: true }
+        Property { name: "recordVinyl"; type: "string"; isReadonly: true }
         Property { name: "recycle"; type: "string"; isReadonly: true }
         Property { name: "redo"; type: "string"; isReadonly: true }
         Property { name: "redoAlt"; type: "string"; isReadonly: true }
         Property { name: "registered"; type: "string"; isReadonly: true }
+        Property { name: "removeFormat"; type: "string"; isReadonly: true }
         Property { name: "reply"; type: "string"; isReadonly: true }
         Property { name: "replyAll"; type: "string"; isReadonly: true }
         Property { name: "republican"; type: "string"; isReadonly: true }
@@ -759,15 +778,22 @@ Module {
         Property { name: "solarPanel"; type: "string"; isReadonly: true }
         Property { name: "sort"; type: "string"; isReadonly: true }
         Property { name: "sortAlphaDown"; type: "string"; isReadonly: true }
+        Property { name: "sortAlphaDownAlt"; type: "string"; isReadonly: true }
         Property { name: "sortAlphaUp"; type: "string"; isReadonly: true }
+        Property { name: "sortAlphaUpAlt"; type: "string"; isReadonly: true }
         Property { name: "sortAmountDown"; type: "string"; isReadonly: true }
+        Property { name: "sortAmountDownAlt"; type: "string"; isReadonly: true }
         Property { name: "sortAmountUp"; type: "string"; isReadonly: true }
+        Property { name: "sortAmountUpAlt"; type: "string"; isReadonly: true }
         Property { name: "sortDown"; type: "string"; isReadonly: true }
         Property { name: "sortNumericDown"; type: "string"; isReadonly: true }
+        Property { name: "sortNumericDownAlt"; type: "string"; isReadonly: true }
         Property { name: "sortNumericUp"; type: "string"; isReadonly: true }
+        Property { name: "sortNumericUpAlt"; type: "string"; isReadonly: true }
         Property { name: "sortUp"; type: "string"; isReadonly: true }
         Property { name: "spa"; type: "string"; isReadonly: true }
         Property { name: "spaceShuttle"; type: "string"; isReadonly: true }
+        Property { name: "spellCheck"; type: "string"; isReadonly: true }
         Property { name: "spider"; type: "string"; isReadonly: true }
         Property { name: "spinner"; type: "string"; isReadonly: true }
         Property { name: "splotch"; type: "string"; isReadonly: true }
@@ -859,6 +885,7 @@ Module {
         Property { name: "tractor"; type: "string"; isReadonly: true }
         Property { name: "trademark"; type: "string"; isReadonly: true }
         Property { name: "trafficLight"; type: "string"; isReadonly: true }
+        Property { name: "trailer"; type: "string"; isReadonly: true }
         Property { name: "train"; type: "string"; isReadonly: true }
         Property { name: "tram"; type: "string"; isReadonly: true }
         Property { name: "transgender"; type: "string"; isReadonly: true }
@@ -925,6 +952,7 @@ Module {
         Property { name: "video"; type: "string"; isReadonly: true }
         Property { name: "videoSlash"; type: "string"; isReadonly: true }
         Property { name: "vihara"; type: "string"; isReadonly: true }
+        Property { name: "voicemail"; type: "string"; isReadonly: true }
         Property { name: "volleyballBall"; type: "string"; isReadonly: true }
         Property { name: "volumeDown"; type: "string"; isReadonly: true }
         Property { name: "volumeMute"; type: "string"; isReadonly: true }
@@ -936,6 +964,7 @@ Module {
         Property { name: "wallet"; type: "string"; isReadonly: true }
         Property { name: "warehouse"; type: "string"; isReadonly: true }
         Property { name: "water"; type: "string"; isReadonly: true }
+        Property { name: "waveSquare"; type: "string"; isReadonly: true }
         Property { name: "weight"; type: "string"; isReadonly: true }
         Property { name: "weightHanging"; type: "string"; isReadonly: true }
         Property { name: "wheelchair"; type: "string"; isReadonly: true }

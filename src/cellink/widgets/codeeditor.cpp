@@ -59,6 +59,8 @@ CodeEditor::CodeEditor(QWidget* parent)
 
     connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumbers);
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+    connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::updateHighlightLines);
+    connect(this, &CodeEditor::selectionChanged, this, &CodeEditor::updateHighlightLines);
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateViewportMargins);
     connect(this, &CodeEditor::highlightLineColorAlphaChanged, this, &CodeEditor::highlightCurrentLine);
 
@@ -294,4 +296,14 @@ void LineNumberBar::updateSize(int blockCount)
     }
     m_size.setWidth(2 * m_hzMargin + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits);
     updateGeometry();
+}
+
+void CodeEditor::updateHighlightLines()
+{
+    if (!textCursor().hasSelection()) {
+        m_selectedLines = QSet{textCursor().blockNumber()};
+    } else {
+        m_selectedLines.insert(textCursor().blockNumber());
+    }
+    emit highlightedLinesChanged(m_selectedLines);
 }

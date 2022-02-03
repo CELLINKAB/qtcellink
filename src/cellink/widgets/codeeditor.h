@@ -99,6 +99,7 @@ protected:
 
 signals:
     void highlightLineColorAlphaChanged(qreal alpha);
+    void highlightedLinesChanged(const QSet<int>& lines);
 
 private slots:
     void highlightCurrentLine();
@@ -109,12 +110,14 @@ private slots:
 private:
     QString textUnderCursor() const;
     void paintLineNumbers(QPainter* painter, const QRect& rect);
+    void updateHighlightLines();
 
     friend class LineNumberBar;
 
     LineNumberBar m_lineNumberBar{this};
     QCompleter* m_completer = nullptr;
     qreal m_highlightLineColorAlpha = 0.2;
+    QSet<int> m_selectedLines{};
 };
 
 #endif // CODEEDITOR_H

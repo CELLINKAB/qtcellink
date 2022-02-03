@@ -60,7 +60,6 @@ CodeEditor::CodeEditor(QWidget* parent)
     connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumbers);
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::updateHighlightLines);
-    connect(this, &CodeEditor::selectionChanged, this, &CodeEditor::updateHighlightLines);
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateViewportMargins);
     connect(this, &CodeEditor::highlightLineColorAlphaChanged, this, &CodeEditor::highlightCurrentLine);
 
@@ -300,10 +299,32 @@ void LineNumberBar::updateSize(int blockCount)
 
 void CodeEditor::updateHighlightLines()
 {
-    if (!textCursor().hasSelection()) {
-        m_selectedLines = QSet{textCursor().blockNumber()};
-    } else {
-        m_selectedLines.insert(textCursor().blockNumber());
+    const auto lineNumber = textCursor().blockNumber();
+    if (lineNumber == m_lastLineNumber) {
+        return;
     }
-    emit highlightedLinesChanged(m_selectedLines);
+    if (!textCursor().hasSelection()) {
+        m_highlightLines.low = m_highlightLines.high = lineNumber;
+        m_selectDirection = SelectDirection::None;
+    } else {
+        // Direction is only set when none has been set
+        if (m_selectDirection == SelectDirection::None) {
+            m_selectDirection = (lineNumber > m_lastLineNumber) ? SelectDirection::Down
+                                                                : SelectDirection::Up;
+        }
+        m_selectDirection == SelectDirection::Down ? m_highlightLines.high = lineNumber
+                                                   : m_highlightLines.low = lineNumber;
+        // Selection has gone back to where it started (deselection)
+        if (m_highlightLines.low == m_highlightLines.high) {
+            m_selectDirection = SelectDirection::None;
+        }
+        // When selecting many lines in the opposite direction past the start the numbers are swapped
+        if (m_highlightLines.low > m_highlightLines.high) {
+            const auto low = m_highlightLines.low;
+            m_highlightLines.low = m_highlightLines.high;
+            m_highlightLines.high = low;
+        }
+    }
+    emit highlightLinesChanged(m_highlightLines);
+    m_lastLineNumber = lineNumber;
 }

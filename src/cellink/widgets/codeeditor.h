@@ -45,6 +45,15 @@
 class QCompleter;
 class CodeEditor;
 
+namespace {
+enum SelectDirection
+{
+    None,
+    Down,
+    Up
+};
+} // namespace
+
 class Q_CELLINK_EXPORT LineNumberBar : public QWidget
 {
     Q_OBJECT
@@ -78,6 +87,7 @@ class Q_CELLINK_EXPORT CodeEditor : public QPlainTextEdit
     Q_OBJECT
     Q_PROPERTY(qreal highlightLineColorAlpha READ highlightLineColorAlpha WRITE
                    setHighlightLineColorAlpha NOTIFY highlightLineColorAlphaChanged)
+    Q_PROPERTY(HighlightLines highlightLines READ highlightLines NOTIFY highlightLinesChanged)
 public:
     explicit CodeEditor(QWidget* parent = nullptr);
     ~CodeEditor() override;
@@ -90,6 +100,20 @@ public:
 
     LineNumberBar& lineNumberBar() { return m_lineNumberBar; }
 
+    struct HighlightLines
+    {
+        int low;
+        int high;
+
+        bool operator==(const HighlightLines& other) const
+        {
+            return low == other.low && high == other.high;
+        }
+
+        bool operator!=(const HighlightLines& other) const { return !(*this == other); }
+    };
+    HighlightLines highlightLines() const { return m_highlightLines; }
+
 protected:
     void focusInEvent(QFocusEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
@@ -99,7 +123,7 @@ protected:
 
 signals:
     void highlightLineColorAlphaChanged(qreal alpha);
-    void highlightedLinesChanged(const QSet<int>& lines);
+    void highlightLinesChanged(CodeEditor::HighlightLines lines);
 
 private slots:
     void highlightCurrentLine();
@@ -118,6 +142,11 @@ private:
     QCompleter* m_completer = nullptr;
     qreal m_highlightLineColorAlpha = 0.2;
     QSet<int> m_selectedLines{};
+    HighlightLines m_highlightLines{0, 0};
+    int m_lastLineNumber = 0;
+    SelectDirection m_selectDirection{SelectDirection::None};
 };
+
+Q_DECLARE_METATYPE(CodeEditor::HighlightLines)
 
 #endif // CODEEDITOR_H

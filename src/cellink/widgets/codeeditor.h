@@ -45,15 +45,6 @@
 class QCompleter;
 class CodeEditor;
 
-namespace {
-enum SelectDirection
-{
-    None,
-    Down,
-    Up
-};
-} // namespace
-
 class Q_CELLINK_EXPORT LineNumberBar : public QWidget
 {
     Q_OBJECT
@@ -134,7 +125,7 @@ private slots:
 private:
     QString textUnderCursor() const;
     void paintLineNumbers(QPainter* painter, const QRect& rect);
-    void updateHighlightLines();
+    void updateHighlightLines(bool cursorChanged);
 
     friend class LineNumberBar;
 
@@ -144,7 +135,7 @@ private:
     QSet<int> m_selectedLines{};
     HighlightLines m_highlightLines{0, 0};
     int m_lastLineNumber = 0;
-    SelectDirection m_selectDirection{SelectDirection::None};
+    int m_pivotLine = 0;
 };
 
 Q_DECLARE_METATYPE(CodeEditor::HighlightLines)

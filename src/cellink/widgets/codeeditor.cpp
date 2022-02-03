@@ -59,7 +59,8 @@ CodeEditor::CodeEditor(QWidget* parent)
 
     connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumbers);
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
-    connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::updateHighlightLines);
+    connect(this, &CodeEditor::cursorPositionChanged, this, [this]() { updateHighlightLines(true); });
+    connect(this, &CodeEditor::selectionChanged, this, [this]() { updateHighlightLines(false); });
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateViewportMargins);
     connect(this, &CodeEditor::highlightLineColorAlphaChanged, this, &CodeEditor::highlightCurrentLine);
 
@@ -297,32 +298,28 @@ void LineNumberBar::updateSize(int blockCount)
     updateGeometry();
 }
 
-void CodeEditor::updateHighlightLines()
+void CodeEditor::updateHighlightLines(bool cursorChanged)
 {
     const auto lineNumber = textCursor().blockNumber();
-    if (lineNumber == m_lastLineNumber) {
+    // Edge case: when having selected several lines and then deselecting by clicking on the cursor
+    if (lineNumber == m_lastLineNumber
+        && (cursorChanged
+            || (!cursorChanged
+                && (textCursor().hasSelection() || m_highlightLines.low == m_highlightLines.high)))) {
         return;
     }
+
     if (!textCursor().hasSelection()) {
-        m_highlightLines.low = m_highlightLines.high = lineNumber;
-        m_selectDirection = SelectDirection::None;
+        m_highlightLines.low = m_highlightLines.high = m_pivotLine = lineNumber;
     } else {
-        // Direction is only set when none has been set
-        if (m_selectDirection == SelectDirection::None) {
-            m_selectDirection = (lineNumber > m_lastLineNumber) ? SelectDirection::Down
-                                                                : SelectDirection::Up;
-        }
-        m_selectDirection == SelectDirection::Down ? m_highlightLines.high = lineNumber
-                                                   : m_highlightLines.low = lineNumber;
-        // Selection has gone back to where it started (deselection)
-        if (m_highlightLines.low == m_highlightLines.high) {
-            m_selectDirection = SelectDirection::None;
-        }
-        // When selecting many lines in the opposite direction past the start the numbers are swapped
-        if (m_highlightLines.low > m_highlightLines.high) {
-            const auto low = m_highlightLines.low;
-            m_highlightLines.low = m_highlightLines.high;
-            m_highlightLines.high = low;
+        if (lineNumber > m_pivotLine) {
+            m_highlightLines.low = m_pivotLine;
+            m_highlightLines.high = lineNumber;
+        } else if (lineNumber < m_pivotLine) {
+            m_highlightLines.low = lineNumber;
+            m_highlightLines.high = m_pivotLine;
+        } else {
+            m_highlightLines.low = m_highlightLines.high = m_pivotLine = lineNumber;
         }
     }
     emit highlightLinesChanged(m_highlightLines);

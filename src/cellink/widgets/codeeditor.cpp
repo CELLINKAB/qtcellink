@@ -59,6 +59,8 @@ CodeEditor::CodeEditor(QWidget* parent)
 
     connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumbers);
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+    connect(this, &CodeEditor::cursorPositionChanged, this, [this]() { updateHighlightLines(true); });
+    connect(this, &CodeEditor::selectionChanged, this, [this]() { updateHighlightLines(false); });
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateViewportMargins);
     connect(this, &CodeEditor::highlightLineColorAlphaChanged, this, &CodeEditor::highlightCurrentLine);
 
@@ -294,4 +296,32 @@ void LineNumberBar::updateSize(int blockCount)
     }
     m_size.setWidth(2 * m_hzMargin + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits);
     updateGeometry();
+}
+
+void CodeEditor::updateHighlightLines(bool cursorChanged)
+{
+    const auto lineNumber = textCursor().blockNumber();
+    // Edge case: when having selected several lines and then deselecting by clicking on the cursor
+    if (lineNumber == m_lastLineNumber
+        && (cursorChanged
+            || (!cursorChanged
+                && (textCursor().hasSelection() || m_highlightLines.low == m_highlightLines.high)))) {
+        return;
+    }
+
+    if (!textCursor().hasSelection()) {
+        m_highlightLines.low = m_highlightLines.high = m_pivotLine = lineNumber;
+    } else {
+        if (lineNumber > m_pivotLine) {
+            m_highlightLines.low = m_pivotLine;
+            m_highlightLines.high = lineNumber;
+        } else if (lineNumber < m_pivotLine) {
+            m_highlightLines.low = lineNumber;
+            m_highlightLines.high = m_pivotLine;
+        } else {
+            m_highlightLines.low = m_highlightLines.high = m_pivotLine = lineNumber;
+        }
+    }
+    emit highlightLinesChanged(m_highlightLines);
+    m_lastLineNumber = lineNumber;
 }

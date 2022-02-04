@@ -42,6 +42,8 @@
 
 #include <QtWidgets/qplaintextedit.h>
 
+#include "highlightlines.h"
+
 class QCompleter;
 class CodeEditor;
 
@@ -78,6 +80,7 @@ class Q_CELLINK_EXPORT CodeEditor : public QPlainTextEdit
     Q_OBJECT
     Q_PROPERTY(qreal highlightLineColorAlpha READ highlightLineColorAlpha WRITE
                    setHighlightLineColorAlpha NOTIFY highlightLineColorAlphaChanged)
+    Q_PROPERTY(HighlightLines highlightLines READ highlightLines NOTIFY highlightLinesChanged)
 public:
     explicit CodeEditor(QWidget* parent = nullptr);
     ~CodeEditor() override;
@@ -90,6 +93,8 @@ public:
 
     LineNumberBar& lineNumberBar() { return m_lineNumberBar; }
 
+    HighlightLines highlightLines() const { return m_highlightLines; }
+
 protected:
     void focusInEvent(QFocusEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
@@ -99,6 +104,7 @@ protected:
 
 signals:
     void highlightLineColorAlphaChanged(qreal alpha);
+    void highlightLinesChanged(HighlightLines lines);
 
 private slots:
     void highlightCurrentLine();
@@ -109,12 +115,16 @@ private slots:
 private:
     QString textUnderCursor() const;
     void paintLineNumbers(QPainter* painter, const QRect& rect);
+    void updateHighlightLines(bool cursorChanged);
 
     friend class LineNumberBar;
 
     LineNumberBar m_lineNumberBar{this};
     QCompleter* m_completer = nullptr;
     qreal m_highlightLineColorAlpha = 0.2;
+    HighlightLines m_highlightLines{0, 0};
+    int m_lastLineNumber = 0;
+    int m_pivotLine = 0;
 };
 
 #endif // CODEEDITOR_H

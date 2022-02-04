@@ -42,6 +42,8 @@
 
 #include <QtWidgets/qplaintextedit.h>
 
+#include "highlightlines.h"
+
 class QCompleter;
 class CodeEditor;
 
@@ -91,18 +93,6 @@ public:
 
     LineNumberBar& lineNumberBar() { return m_lineNumberBar; }
 
-    struct HighlightLines
-    {
-        int low;
-        int high;
-
-        bool operator==(const HighlightLines& other) const
-        {
-            return low == other.low && high == other.high;
-        }
-
-        bool operator!=(const HighlightLines& other) const { return !(*this == other); }
-    };
     HighlightLines highlightLines() const { return m_highlightLines; }
 
 protected:
@@ -114,7 +104,7 @@ protected:
 
 signals:
     void highlightLineColorAlphaChanged(qreal alpha);
-    void highlightLinesChanged(CodeEditor::HighlightLines lines);
+    void highlightLinesChanged(HighlightLines lines);
 
 private slots:
     void highlightCurrentLine();
@@ -132,12 +122,9 @@ private:
     LineNumberBar m_lineNumberBar{this};
     QCompleter* m_completer = nullptr;
     qreal m_highlightLineColorAlpha = 0.2;
-    QSet<int> m_selectedLines{};
     HighlightLines m_highlightLines{0, 0};
     int m_lastLineNumber = 0;
     int m_pivotLine = 0;
 };
-
-Q_DECLARE_METATYPE(CodeEditor::HighlightLines)
 
 #endif // CODEEDITOR_H

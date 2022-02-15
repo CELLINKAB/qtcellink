@@ -91,14 +91,16 @@ class Qt3DWindowPrivate;
 class Q_CELLINK_EXPORT Qt3DWindow : public QWindow
 {
     Q_OBJECT
+    Q_PROPERTY(Qt3DCore::QEntity* rootEntity READ rootEntity WRITE setRootEntity NOTIFY rootEntityChanged)
+    Q_PROPERTY(Qt3DRender::QCamera* camera READ camera CONSTANT)
+    Q_PROPERTY(Qt3DRender::QRenderSettings* renderSettings READ renderSettings CONSTANT)
+
 public:
-    Qt3DWindow(QScreen* screen = nullptr);
-    ~Qt3DWindow();
+    explicit Qt3DWindow(QScreen* screen = nullptr);
+    ~Qt3DWindow() override;
 
     void registerAspect(Qt3DCore::QAbstractAspect* aspect);
     void registerAspect(const QString& name);
-
-    void setRootEntity(Qt3DCore::QEntity* root);
 
     void setActiveFrameGraph(Qt3DRender::QFrameGraphNode* activeFrameGraph);
     Qt3DRender::QFrameGraphNode* activeFrameGraph() const;
@@ -107,9 +109,13 @@ public:
     Qt3DRender::QCamera* camera() const;
     Qt3DRender::QRenderSettings* renderSettings() const;
 
+    Qt3DCore::QEntity* rootEntity() const;
+
 public Q_SLOTS:
+    void setRootEntity(Qt3DCore::QEntity* root);
 
 Q_SIGNALS:
+    void rootEntityChanged(Qt3DCore::QEntity* value);
 
 protected:
     void showEvent(QShowEvent* e) override;

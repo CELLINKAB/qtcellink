@@ -19,7 +19,7 @@ SOURCES += \
 RESOURCES += \
     fontawesome.qrc
 
-CONFIG += no_cxx_module builtin_resources qtquickcompiler
+#CONFIG += no_cxx_module builtin_resources qtquickcompiler
 load(qml_plugin)
 
 ### TODO: fix qml_module.prf (no way to turn off install_qml_files)

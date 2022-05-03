@@ -17,9 +17,11 @@ SOURCES += \
     $$PWD/qtcellinkfontawesomeplugin.cpp
 
 RESOURCES += \
-    fontawesome.qrc
+    $$PWD/fontawesome.qrc
 
-CONFIG += no_cxx_module builtin_resources qtquickcompiler
+CONFIG += qtquickcompiler
+linux: CONFIG += no_cxx_module builtin_resources
+
 load(qml_plugin)
 
 ### TODO: fix qml_module.prf (no way to turn off install_qml_files)

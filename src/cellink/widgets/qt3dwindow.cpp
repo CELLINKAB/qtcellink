@@ -194,10 +194,20 @@ void Qt3DWindow::setRootEntity(Qt3DCore::QEntity* root)
     if (d->m_userRoot != root) {
         if (d->m_userRoot != nullptr)
             d->m_userRoot->setParent(static_cast<Qt3DCore::QNode*>(nullptr));
+
         if (root != nullptr)
             root->setParent(d->m_root);
+
         d->m_userRoot = root;
+
+        emit rootEntityChanged(root);
     }
+}
+
+Qt3DCore::QEntity* Qt3DWindow::rootEntity() const
+{
+    Q_D(const Qt3DWindow);
+    return d->m_userRoot;
 }
 
 /*!

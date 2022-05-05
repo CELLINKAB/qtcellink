@@ -73,7 +73,7 @@ QString YoctoLicenseModel::manifest() const
 static YoctoLicense parseLicense(YoctoLicense license, const QString &value, const QStringList &licenses)
 {
     license.licenses = licenses;
-    const QStringList parts = value.split(QLatin1Char(' '), QString::SkipEmptyParts);
+    const QStringList parts = value.split(QLatin1Char(' '), Qt::SkipEmptyParts);
     for (QString part : parts) {
         while (!part.isEmpty() && !part.front().isLetterOrNumber())
             part.remove(0, 1);

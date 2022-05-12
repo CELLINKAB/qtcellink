@@ -11,8 +11,12 @@ versionAtLeast(QT_VERSION, 5.14.0) {
 }
 
 versionAtLeast(QT_VERSION, 5.15.0) {
+    # QmlModelObjectAttached in private does not have EXPORT declataion
+    win32:warning("Disabling qtcellinkextrasplugin due to DLL link issues on Windows")
     requires(!win32)
 }
+
+CONFIG += no_cxx_module
 
 DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 
@@ -61,5 +65,4 @@ SOURCES += \
     $$PWD/rect.cpp \
     $$PWD/yoctolicensemodel.cpp
 
-# CONFIG += no_cxx_module
 load(qml_plugin)

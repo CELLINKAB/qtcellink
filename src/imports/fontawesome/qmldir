@@ -1,3 +1,3 @@
 module QtCellink.FontAwesome
-plugin qtcellinkfontawesomeplugin
+plugin declarative_qtcellinkfontawesomeplugin
 classname QtCellinkFontAwesomePlugin

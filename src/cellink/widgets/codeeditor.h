@@ -102,6 +102,8 @@ protected:
 
     virtual void complete(const QString& prefix);
 
+    QList<QTextEdit::ExtraSelection> m_extraSelections{};
+
 signals:
     void highlightLineColorAlphaChanged(qreal alpha);
     void highlightLinesChanged(HighlightLines lines);

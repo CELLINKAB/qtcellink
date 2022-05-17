@@ -103,6 +103,7 @@ protected:
     virtual void complete(const QString& prefix);
 
     QList<QTextEdit::ExtraSelection> m_extraSelections{};
+    qreal m_highlightLineColorAlpha = 0.2;
 
 signals:
     void highlightLineColorAlphaChanged(qreal alpha);
@@ -123,7 +124,6 @@ private:
 
     LineNumberBar m_lineNumberBar{this};
     QCompleter* m_completer = nullptr;
-    qreal m_highlightLineColorAlpha = 0.2;
     HighlightLines m_highlightLines{0, 0};
     int m_lastLineNumber = 0;
     int m_pivotLine = 0;

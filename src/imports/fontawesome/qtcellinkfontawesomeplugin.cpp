@@ -34,6 +34,8 @@ public:
 
     void registerTypes(const char* uri) override
     {
+        qDebug() << "Registered FontAwesome at" << uri;
+
         qmlRegisterSingletonType(QStringLiteral("qrc:/qt-project.org/imports/QtCellink/FontAwesome/"
                                                 "FontAwesome.qml"),
                                  uri,

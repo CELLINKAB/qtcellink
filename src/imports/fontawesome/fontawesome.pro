@@ -20,6 +20,7 @@ RESOURCES += \
     $$PWD/fontawesome.qrc
 
 CONFIG += qtquickcompiler no_cxx_module
+linux: CONFIG += builtin_resources
 
 load(qml_plugin)
 

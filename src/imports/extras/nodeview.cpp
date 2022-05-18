@@ -571,7 +571,7 @@ void NodeView::wheelEvent(QWheelEvent *event)
         return;
 
     const qreal deltasPerStep = QWheelEvent::DefaultDeltasPerStep;
-    zoom(m_zoomFactor + event->angleDelta().y() / deltasPerStep, mapToItem(m_nodeItem, event->posF()));
+    zoom(m_zoomFactor + event->angleDelta().y() / deltasPerStep, mapToItem(m_nodeItem, event->position()));
 }
 
 QRectF NodeView::viewportArea() const

@@ -148,6 +148,9 @@ bool FilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParen
     case EqualTo:
         return value == m_filterValue;
     case LessThan:
+        // Qt 5.15.x does not provide an alternative for the deprecration
+        // of this operator. A suggestion is to leave it as it is until
+        // the migration to Qt 6 which offers the QVariant::compare function
         return value < m_filterValue;
     case GreaterThan:
         return value > m_filterValue;

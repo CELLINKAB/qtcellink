@@ -19,6 +19,7 @@
 **
 ****************************************************************************/
 
+#include <QDebug>
 #include <QtQml/qqml.h>
 #include <QtQml/qqmlextensionplugin.h>
 

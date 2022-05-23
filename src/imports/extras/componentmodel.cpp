@@ -1,3 +1,4 @@
+
 /****************************************************************************
 **
 ** Copyright (C) 2021 CELLINK AB <info@cellink.com>
@@ -32,8 +33,10 @@
 
 #include "componentmodel.h"
 
-#include <QtQml/qqmlcomponent.h>
-#include <QtQml/qqmlcontext.h>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+
+#    include <QtQml/qqmlcomponent.h>
+#    include <QtQml/qqmlcontext.h>
 
 ComponentModel::ComponentModel(QObject* parent)
     : QQmlObjectModel(parent)
@@ -157,3 +160,5 @@ int ComponentModel::components_count(QQmlListProperty<QQmlComponent>* property)
     ComponentModel* model = qobject_cast<ComponentModel*>(property->object);
     return model->m_components.count();
 }
+
+#endif

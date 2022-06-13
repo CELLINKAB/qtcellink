@@ -168,7 +168,7 @@ void CodeEditor::complete(const QString& prefix)
 
 void CodeEditor::highlightCurrentLine()
 {
-    QList<QTextEdit::ExtraSelection> extraSelections;
+    auto extraSelections = m_extraSelections;
 
     if (!isReadOnly()) {
         QTextEdit::ExtraSelection selection;

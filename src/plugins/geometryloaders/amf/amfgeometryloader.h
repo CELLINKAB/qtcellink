@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 **
 ** This file is part of QtCellink.
 **
@@ -27,7 +27,7 @@
 class AmfGeometryLoader : public Qt3DRender::BaseGeometryLoader
 {
 protected:
-    bool doLoad(QIODevice *ioDev, const QString &subMesh) final;
+    bool doLoad(QIODevice* ioDev, const QString& subMesh) final;
 };
 
 #endif // AMFGEOMETRYLOADER_H

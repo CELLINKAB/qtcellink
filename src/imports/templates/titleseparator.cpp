@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Templates 2 module of Qt).
@@ -30,10 +30,9 @@ public:
     QString title;
 };
 
-TitleSeparator::TitleSeparator(QQuickItem *parent)
+TitleSeparator::TitleSeparator(QQuickItem* parent)
     : QQuickControl(*(new TitleSeparatorPrivate), parent)
-{
-}
+{}
 
 QString TitleSeparator::title() const
 {
@@ -41,7 +40,7 @@ QString TitleSeparator::title() const
     return d->title;
 }
 
-void TitleSeparator::setTitle(QString &title)
+void TitleSeparator::setTitle(QString& title)
 {
     Q_D(TitleSeparator);
     if (title == d->title)

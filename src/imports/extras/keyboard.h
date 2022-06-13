@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 **
 ** This file is part of QtCellink.
 **
@@ -30,9 +30,12 @@ class Keyboard : public QObject
     Q_OBJECT
 
 public:
-    explicit Keyboard(QObject *parent = nullptr);
+    explicit Keyboard(QObject* parent = nullptr);
 
-    Q_INVOKABLE static Qt::KeyboardModifiers modifiers() { return QGuiApplication::keyboardModifiers(); }
+    Q_INVOKABLE static Qt::KeyboardModifiers modifiers()
+    {
+        return QGuiApplication::keyboardModifiers();
+    }
 };
 
 #endif // KEYBOARD_H

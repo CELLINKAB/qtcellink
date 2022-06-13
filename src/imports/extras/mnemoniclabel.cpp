@@ -1,36 +1,22 @@
 /****************************************************************************
 **
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing/
 **
-** This file is part of the Qt Quick Controls 2 module of the Qt Toolkit.
+** This file is part of QtCellink (based on the Qt Quick Controls 2 module of Qt).
 **
-** $QT_BEGIN_LICENSE:LGPL3$
-** Commercial License Usage
-** Licensees holding valid commercial Qt licenses may use this file in
-** accordance with the commercial license agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company. For licensing terms
-** and conditions see http://www.qt.io/terms-conditions. For further
-** information use the contact form at http://www.qt.io/contact-us.
+** QtCellink is free software: you can redistribute it and/or modify it
+** under the terms of the GNU Lesser General Public License as published
+** by the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 3 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPLv3 included in the
-** packaging of this file. Please review the following information to
-** ensure the GNU Lesser General Public License version 3 requirements
-** will be met: https://www.gnu.org/licenses/lgpl.html.
+** QtCellink is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+** GNU Lesser General Public License for more details.
 **
-** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 2.0 or later as published by the Free
-** Software Foundation and appearing in the file LICENSE.GPL included in
-** the packaging of this file. Please review the following information to
-** ensure the GNU General Public License version 2.0 requirements will be
-** met: http://www.gnu.org/licenses/gpl-2.0.html.
-**
-** $QT_END_LICENSE$
+** You should have received a copy of the GNU Lesser General Public License
+** along with QtCellink. If not, see <https://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
 
@@ -38,17 +24,16 @@
 
 #include <QtQuick/private/qquicktext_p_p.h>
 
-MnemonicLabel::MnemonicLabel(QQuickItem *parent)
+MnemonicLabel::MnemonicLabel(QQuickItem* parent)
     : QQuickText(parent)
-{
-}
+{}
 
 QString MnemonicLabel::text() const
 {
     return m_fullText;
 }
 
-void MnemonicLabel::setText(const QString &text)
+void MnemonicLabel::setText(const QString& text)
 {
     if (m_fullText == text)
         return;
@@ -92,17 +77,18 @@ void MnemonicLabel::updateMnemonic()
     int len = m_fullText.length();
     QVector<QTextLayout::FormatRange> formats;
     while (len) {
-        if (m_fullText.at(pos) == QLatin1Char('&') && (len == 1 || m_fullText.at(pos + 1) != QLatin1Char('&'))) {
+        if (m_fullText.at(pos) == QLatin1Char('&')
+            && (len == 1 || m_fullText.at(pos + 1) != QLatin1Char('&'))) {
             if (m_mnemonicVisible && (pos == 0 || m_fullText.at(pos - 1) != QLatin1Char('&')))
                 formats += underlineRange(pos);
             ++pos;
             --len;
             if (len == 0)
                 break;
-        } else if (m_fullText.at(pos) == QLatin1Char('(') && len >= 4 &&
-                   m_fullText.at(pos + 1) == QLatin1Char('&') &&
-                   m_fullText.at(pos + 2) != QLatin1Char('&') &&
-                   m_fullText.at(pos + 3) == QLatin1Char(')')) {
+        } else if (m_fullText.at(pos) == QLatin1Char('(') && len >= 4
+                   && m_fullText.at(pos + 1) == QLatin1Char('&')
+                   && m_fullText.at(pos + 2) != QLatin1Char('&')
+                   && m_fullText.at(pos + 3) == QLatin1Char(')')) {
             // a mnemonic with format "\s*(&X)"
             if (m_mnemonicVisible) {
                 formats += underlineRange(pos + 1);

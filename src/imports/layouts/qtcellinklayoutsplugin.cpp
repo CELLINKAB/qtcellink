@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 **
 ** This file is part of QtCellink.
 **
@@ -19,28 +19,27 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
+#include <QtQml/qqmlextensionplugin.h>
 
 #include "layoutgroup.h"
 
-class QtCellinkLayoutsPlugin: public QQmlExtensionPlugin
+class QtCellinkLayoutsPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    QtCellinkLayoutsPlugin(QObject *parent = nullptr);
+    QtCellinkLayoutsPlugin(QObject* parent = nullptr);
 
-    void registerTypes(const char *uri) override;
+    void registerTypes(const char* uri) override;
 };
 
-QtCellinkLayoutsPlugin::QtCellinkLayoutsPlugin(QObject *parent)
+QtCellinkLayoutsPlugin::QtCellinkLayoutsPlugin(QObject* parent)
     : QQmlExtensionPlugin(parent)
-{
-}
+{}
 
-void QtCellinkLayoutsPlugin::registerTypes(const char *uri)
+void QtCellinkLayoutsPlugin::registerTypes(const char* uri)
 {
     qmlRegisterType<LayoutGroup>(uri, 1, 0, "LayoutGroup");
 }

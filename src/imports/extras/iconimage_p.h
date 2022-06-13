@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Controls 2 module of Qt).
@@ -23,8 +23,8 @@
 #ifndef ICONIMAGE_P_H
 #define ICONIMAGE_P_H
 
-#include <QtQuick/private/qquickimage_p_p.h>
 #include <QtGui/private/qiconloader_p.h>
+#include <QtQuick/private/qquickimage_p_p.h>
 
 class IconImagePrivate : public QQuickImagePrivate
 {

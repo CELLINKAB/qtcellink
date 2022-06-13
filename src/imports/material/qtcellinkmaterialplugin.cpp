@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 **
 ** This file is part of QtCellink.
 **
@@ -19,22 +19,31 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
-#include <QtQml/qqmlengine.h>
 #include <QtQml/qqml.h>
+#include <QtQml/qqmlengine.h>
+#include <QtQml/qqmlextensionplugin.h>
+
 #include "material.h"
 
-class MaterialPlugin: public QQmlExtensionPlugin
+class QtCellinkMaterialPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    explicit MaterialPlugin(QObject *parent = nullptr) : QQmlExtensionPlugin(parent) { }
+    explicit QtCellinkMaterialPlugin(QObject* parent = nullptr)
+        : QQmlExtensionPlugin(parent)
+    {}
 
-    void registerTypes(const char *uri) override
+    void registerTypes(const char* uri) override
     {
-        qmlRegisterSingletonType<Material>(uri, 1, 0, "Material", [](QQmlEngine *engine, QJSEngine *) -> QObject * { return new Material(engine); });
+        qmlRegisterSingletonType<Material>(uri,
+                                           1,
+                                           0,
+                                           "Material",
+                                           [](QQmlEngine* engine, QJSEngine*) -> QObject* {
+                                               return new Material(engine);
+                                           });
     }
 };
 

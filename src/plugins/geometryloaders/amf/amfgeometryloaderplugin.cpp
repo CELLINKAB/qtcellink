@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 **
 ** This file is part of QtCellink.
 **
@@ -23,7 +23,10 @@
 
 #include "amfgeometryloader.h"
 
-static inline QString amf() { return QStringLiteral("amf"); }
+static inline QString amf()
+{
+    return QStringLiteral("amf");
+}
 
 class DefaultGeometryLoaderPlugin : public Qt3DRender::QGeometryLoaderFactory
 {
@@ -31,12 +34,9 @@ class DefaultGeometryLoaderPlugin : public Qt3DRender::QGeometryLoaderFactory
     Q_PLUGIN_METADATA(IID QGeometryLoaderFactory_iid FILE "amf.json")
 
 public:
-    QStringList keys() const override
-    {
-        return QStringList() << amf();
-    }
+    QStringList keys() const override { return QStringList() << amf(); }
 
-    Qt3DRender::QGeometryLoaderInterface *create(const QString &ext) override
+    Qt3DRender::QGeometryLoaderInterface* create(const QString& ext) override
     {
         if (ext.compare(amf(), Qt::CaseInsensitive) == 0)
             return new AmfGeometryLoader;

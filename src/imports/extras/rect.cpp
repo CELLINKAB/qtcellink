@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 **
 ** This file is part of QtCellink.
 **
@@ -21,7 +21,6 @@
 
 #include "rect.h"
 
-Rect::Rect(QObject *parent) :
-    QObject(parent)
-{
-}
+Rect::Rect(QObject* parent)
+    : QObject(parent)
+{}

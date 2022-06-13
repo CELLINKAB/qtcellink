@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Templates 2 module of Qt).
@@ -23,8 +23,8 @@
 #ifndef BUTTONROW_H
 #define BUTTONROW_H
 
-#include <QtQuickTemplates2/private/qquickcontainer_p.h>
 #include <QtQml/qqml.h>
+#include <QtQuickTemplates2/private/qquickcontainer_p.h>
 
 class ButtonRowPrivate;
 class ButtonRowAttached;
@@ -36,12 +36,12 @@ class ButtonRow : public QQuickContainer
     Q_PROPERTY(bool exclusive READ isExclusive WRITE setExclusive NOTIFY exclusiveChanged)
 
 public:
-    explicit ButtonRow(QQuickItem *parent = nullptr);
+    explicit ButtonRow(QQuickItem* parent = nullptr);
 
     bool isExclusive() const;
     void setExclusive(bool exclusive);
 
-    static ButtonRowAttached *qmlAttachedProperties(QObject *object);
+    static ButtonRowAttached* qmlAttachedProperties(QObject* object);
 
 Q_SIGNALS:
     void exclusiveChanged();
@@ -50,11 +50,11 @@ Q_SIGNALS:
 protected:
     void updatePolish() override;
     void componentComplete() override;
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
-    bool isContent(QQuickItem *item) const override;
-    void itemAdded(int index, QQuickItem *item) override;
-    void itemMoved(int index, QQuickItem *item) override;
-    void itemRemoved(int index, QQuickItem *item) override;
+    void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
+    bool isContent(QQuickItem* item) const override;
+    void itemAdded(int index, QQuickItem* item) override;
+    void itemMoved(int index, QQuickItem* item) override;
+    void itemRemoved(int index, QQuickItem* item) override;
 
     QFont defaultFont() const override;
     QPalette defaultPalette() const override;
@@ -74,15 +74,15 @@ class ButtonRowAttached : public QObject
     Q_PROPERTY(int index READ index NOTIFY indexChanged FINAL)
     Q_PROPERTY(bool isLastItem READ isLastItem NOTIFY isLastItemChanged FINAL)
     Q_PROPERTY(bool isFirstItem READ isFirstItem NOTIFY isFirstItemChanged FINAL)
-    Q_PROPERTY(ButtonRow *buttonRow READ buttonRow NOTIFY buttonRowChanged FINAL)
+    Q_PROPERTY(ButtonRow* buttonRow READ buttonRow NOTIFY buttonRowChanged FINAL)
 
 public:
-    explicit ButtonRowAttached(QObject *parent = nullptr);
+    explicit ButtonRowAttached(QObject* parent = nullptr);
 
     int index() const;
     bool isLastItem() const;
     bool isFirstItem() const;
-    ButtonRow *buttonRow() const;
+    ButtonRow* buttonRow() const;
 
 Q_SIGNALS:
     void indexChanged();

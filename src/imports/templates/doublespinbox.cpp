@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Templates 2 module of Qt).
@@ -24,10 +24,9 @@
 
 #include <QtGui/qguiapplication.h>
 #include <QtGui/qstylehints.h>
-
-#include <QtQml/qqmlinfo.h>
-#include <QtQml/private/qqmllocale_p.h>
 #include <QtQml/private/qqmlengine_p.h>
+#include <QtQml/private/qqmllocale_p.h>
+#include <QtQml/qqmlinfo.h>
 #include <QtQuick/private/qquicktextinput_p.h>
 #include <QtQuickTemplates2/private/qquickcontrol_p_p.h>
 
@@ -52,21 +51,23 @@ public:
     qreal effectiveStepSize(qreal step) const;
 
     void updateDisplayText();
-    void setDisplayText(const QString &displayText);
+    void setDisplayText(const QString& displayText);
 
     bool upEnabled() const;
     void updateUpEnabled();
     bool downEnabled() const;
     void updateDownEnabled();
-    void updateHover(const QPointF &pos);
+    void updateHover(const QPointF& pos);
 
     void startRepeatDelay();
     void startPressRepeat();
     void stopPressRepeat();
 
-    void handlePress(const QPointF &point) override;
-    void handleMove(const QPointF &point) override;
-    void handleRelease(const QPointF &point) override;
+    void accept();
+
+    void handlePress(const QPointF& point) override;
+    void handleMove(const QPointF& point) override;
+    void handleRelease(const QPointF& point) override;
     void handleUngrab() override;
 
     bool editable = false;
@@ -79,16 +80,16 @@ public:
     qreal pageStepSize = 10;
     int delayTimer = 0;
     int repeatTimer = 0;
-    int  decimals = 2;
+    int decimals = 2;
     QString prefix;
     QString suffix;
     QString displayText;
-    DoubleSpinButton *up = nullptr;
-    DoubleSpinButton *down = nullptr;
-    QValidator *validator = nullptr;
+    DoubleSpinButton* up = nullptr;
+    DoubleSpinButton* down = nullptr;
+    QValidator* validator = nullptr;
     mutable QJSValue textFromValue;
     mutable QJSValue valueFromText;
-    Qt::InputMethodHints inputMethodHints = Qt::ImhDigitsOnly;
+    Qt::InputMethodHints inputMethodHints = Qt::ImhDigitsOnly | Qt::ImhNoTextHandles;
 };
 
 class DoubleSpinButtonPrivate : public QObjectPrivate
@@ -96,14 +97,11 @@ class DoubleSpinButtonPrivate : public QObjectPrivate
     Q_DECLARE_PUBLIC(DoubleSpinButton)
 
 public:
-    static DoubleSpinButtonPrivate *get(DoubleSpinButton *button)
-    {
-        return button->d_func();
-    }
+    static DoubleSpinButtonPrivate* get(DoubleSpinButton* button) { return button->d_func(); }
 
     bool pressed = false;
     bool hovered = false;
-    QQuickItem *indicator = nullptr;
+    QQuickItem* indicator = nullptr;
 };
 
 qreal DoubleSpinBoxPrivate::boundValue(qreal value, bool wrap) const
@@ -129,9 +127,9 @@ void DoubleSpinBoxPrivate::updateValue()
         QVariant text = contentItem->property("text");
         if (text.isValid()) {
             qreal val = 0;
-            QQmlEngine *engine = qmlEngine(q);
+            QQmlEngine* engine = qmlEngine(q);
             if (engine && valueFromText.isCallable()) {
-                QV4::ExecutionEngine *v4 = QQmlEnginePrivate::getV4Engine(engine);
+                QV4::ExecutionEngine* v4 = QQmlEnginePrivate::getV4Engine(engine);
                 QJSValue loc(v4, QQmlLocale::wrap(v4, locale));
                 val = valueFromText.call(QJSValueList() << text.toString() << loc).toInt();
             } else {
@@ -200,9 +198,9 @@ void DoubleSpinBoxPrivate::updateDisplayText()
         return;
 
     QString text;
-    QQmlEngine *engine = qmlEngine(q);
+    QQmlEngine* engine = qmlEngine(q);
     if (engine && textFromValue.isCallable()) {
-        QV4::ExecutionEngine *v4 = QQmlEnginePrivate::getV4Engine(engine);
+        QV4::ExecutionEngine* v4 = QQmlEnginePrivate::getV4Engine(engine);
         QJSValue loc(v4, QQmlLocale::wrap(v4, locale));
         text = textFromValue.call(QJSValueList() << value << loc << decimals).toString();
     } else {
@@ -211,7 +209,7 @@ void DoubleSpinBoxPrivate::updateDisplayText()
     setDisplayText(text);
 }
 
-void DoubleSpinBoxPrivate::setDisplayText(const QString &text)
+void DoubleSpinBoxPrivate::setDisplayText(const QString& text)
 {
     Q_Q(DoubleSpinBox);
     if (displayText == text)
@@ -223,13 +221,13 @@ void DoubleSpinBoxPrivate::setDisplayText(const QString &text)
 
 bool DoubleSpinBoxPrivate::upEnabled() const
 {
-    const QQuickItem *upIndicator = up->indicator();
+    const QQuickItem* upIndicator = up->indicator();
     return upIndicator && upIndicator->isEnabled();
 }
 
 void DoubleSpinBoxPrivate::updateUpEnabled()
 {
-    QQuickItem *upIndicator = up->indicator();
+    QQuickItem* upIndicator = up->indicator();
     if (!upIndicator)
         return;
 
@@ -238,24 +236,24 @@ void DoubleSpinBoxPrivate::updateUpEnabled()
 
 bool DoubleSpinBoxPrivate::downEnabled() const
 {
-    const QQuickItem *downIndicator = down->indicator();
+    const QQuickItem* downIndicator = down->indicator();
     return downIndicator && downIndicator->isEnabled();
 }
 
 void DoubleSpinBoxPrivate::updateDownEnabled()
 {
-    QQuickItem *downIndicator = down->indicator();
+    QQuickItem* downIndicator = down->indicator();
     if (!downIndicator)
         return;
 
     downIndicator->setEnabled(wrap || (from < to ? value > from : value < from));
 }
 
-void DoubleSpinBoxPrivate::updateHover(const QPointF &pos)
+void DoubleSpinBoxPrivate::updateHover(const QPointF& pos)
 {
     Q_Q(DoubleSpinBox);
-    QQuickItem *ui = up->indicator();
-    QQuickItem *di = down->indicator();
+    QQuickItem* ui = up->indicator();
+    QQuickItem* di = down->indicator();
     up->setHovered(ui && ui->isEnabled() && ui->contains(q->mapToItem(ui, pos)));
     down->setHovered(di && di->isEnabled() && di->contains(q->mapToItem(di, pos)));
 }
@@ -287,12 +285,19 @@ void DoubleSpinBoxPrivate::stopPressRepeat()
     }
 }
 
-void DoubleSpinBoxPrivate::handlePress(const QPointF &point)
+void DoubleSpinBoxPrivate::accept()
+{
+    Q_Q(DoubleSpinBox);
+    updateValue();
+    emit q->accepted();
+}
+
+void DoubleSpinBoxPrivate::handlePress(const QPointF& point)
 {
     Q_Q(DoubleSpinBox);
     QQuickControlPrivate::handlePress(point);
-    QQuickItem *ui = up->indicator();
-    QQuickItem *di = down->indicator();
+    QQuickItem* ui = up->indicator();
+    QQuickItem* di = down->indicator();
     up->setPressed(ui && ui->isEnabled() && ui->contains(ui->mapFromItem(q, point)));
     down->setPressed(di && di->isEnabled() && di->contains(di->mapFromItem(q, point)));
 
@@ -302,12 +307,12 @@ void DoubleSpinBoxPrivate::handlePress(const QPointF &point)
         startRepeatDelay();
 }
 
-void DoubleSpinBoxPrivate::handleMove(const QPointF &point)
+void DoubleSpinBoxPrivate::handleMove(const QPointF& point)
 {
     Q_Q(DoubleSpinBox);
     QQuickControlPrivate::handleMove(point);
-    QQuickItem *ui = up->indicator();
-    QQuickItem *di = down->indicator();
+    QQuickItem* ui = up->indicator();
+    QQuickItem* di = down->indicator();
     up->setPressed(ui && ui->isEnabled() && ui->contains(ui->mapFromItem(q, point)));
     down->setPressed(di && di->isEnabled() && di->contains(di->mapFromItem(q, point)));
 
@@ -317,12 +322,12 @@ void DoubleSpinBoxPrivate::handleMove(const QPointF &point)
         stopPressRepeat();
 }
 
-void DoubleSpinBoxPrivate::handleRelease(const QPointF &point)
+void DoubleSpinBoxPrivate::handleRelease(const QPointF& point)
 {
     Q_Q(DoubleSpinBox);
     QQuickControlPrivate::handleRelease(point);
-    QQuickItem *ui = up->indicator();
-    QQuickItem *di = down->indicator();
+    QQuickItem* ui = up->indicator();
+    QQuickItem* di = down->indicator();
 
     qreal oldValue = value;
     if (up->isPressed()) {
@@ -352,7 +357,7 @@ void DoubleSpinBoxPrivate::handleUngrab()
     stopPressRepeat();
 }
 
-DoubleSpinBox::DoubleSpinBox(QQuickItem *parent)
+DoubleSpinBox::DoubleSpinBox(QQuickItem* parent)
     : QQuickControl(*(new DoubleSpinBoxPrivate), parent)
 {
     Q_D(DoubleSpinBox);
@@ -382,7 +387,7 @@ void DoubleSpinBox::setFrom(qreal from)
     d->from = from;
     emit fromChanged();
     if (isComponentComplete()) {
-        if (!d->setValue(d->value, /* allowWrap = */ false, /* modified = */ true)) {
+        if (!d->setValue(d->value, /* allowWrap = */ false, /* modified = */ false)) {
             d->updateUpEnabled();
             d->updateDownEnabled();
         }
@@ -404,7 +409,7 @@ void DoubleSpinBox::setTo(qreal to)
     d->to = to;
     emit toChanged();
     if (isComponentComplete()) {
-        if (!d->setValue(d->value, /* allowWrap = */ false, /* modified = */ true)) {
+        if (!d->setValue(d->value, /* allowWrap = */ false, /* modified = */ false)) {
             d->updateUpEnabled();
             d->updateDownEnabled();
         }
@@ -481,19 +486,22 @@ void DoubleSpinBox::setEditable(bool editable)
     emit editableChanged();
 }
 
-QValidator *DoubleSpinBox::validator() const
+QValidator* DoubleSpinBox::validator() const
 {
     Q_D(const DoubleSpinBox);
     return d->validator;
 }
 
-void DoubleSpinBox::setValidator(QValidator *validator)
+void DoubleSpinBox::setValidator(QValidator* validator)
 {
     Q_D(DoubleSpinBox);
     if (d->validator == validator)
         return;
 
     d->validator = validator;
+    if (QQuickTextInput* textInput = qobject_cast<QQuickTextInput*>(contentItem()))
+        textInput->setValidator(validator);
+
     emit validatorChanged();
 }
 
@@ -501,14 +509,16 @@ QJSValue DoubleSpinBox::textFromValue() const
 {
     Q_D(const DoubleSpinBox);
     if (!d->textFromValue.isCallable()) {
-        QQmlEngine *engine = qmlEngine(this);
+        QQmlEngine* engine = qmlEngine(this);
         if (engine)
-            d->textFromValue = engine->evaluate(QStringLiteral("(function(value, locale, decimals) { return Number(value).toLocaleString(locale, 'f', decimals); })"));
+            d->textFromValue = engine->evaluate(
+                QStringLiteral("(function(value, locale, decimals) { return "
+                               "Number(value).toLocaleString(locale, 'f', decimals); })"));
     }
     return d->textFromValue;
 }
 
-void DoubleSpinBox::setTextFromValue(const QJSValue &callback)
+void DoubleSpinBox::setTextFromValue(const QJSValue& callback)
 {
     Q_D(DoubleSpinBox);
     if (!callback.isCallable()) {
@@ -523,14 +533,15 @@ QJSValue DoubleSpinBox::valueFromText() const
 {
     Q_D(const DoubleSpinBox);
     if (!d->valueFromText.isCallable()) {
-        QQmlEngine *engine = qmlEngine(this);
+        QQmlEngine* engine = qmlEngine(this);
         if (engine)
-            d->valueFromText = engine->evaluate(QStringLiteral("function(text, locale) { return Number.fromLocaleString(locale, text); }"));
+            d->valueFromText = engine->evaluate(QStringLiteral(
+                "function(text, locale) { return Number.fromLocaleString(locale, text); }"));
     }
     return d->valueFromText;
 }
 
-void DoubleSpinBox::setValueFromText(const QJSValue &callback)
+void DoubleSpinBox::setValueFromText(const QJSValue& callback)
 {
     Q_D(DoubleSpinBox);
     if (!callback.isCallable()) {
@@ -541,13 +552,13 @@ void DoubleSpinBox::setValueFromText(const QJSValue &callback)
     emit valueFromTextChanged();
 }
 
-DoubleSpinButton *DoubleSpinBox::up() const
+DoubleSpinButton* DoubleSpinBox::up() const
 {
     Q_D(const DoubleSpinBox);
     return d->up;
 }
 
-DoubleSpinButton *DoubleSpinBox::down() const
+DoubleSpinButton* DoubleSpinBox::down() const
 {
     Q_D(const DoubleSpinBox);
     return d->down;
@@ -601,7 +612,7 @@ QString DoubleSpinBox::displayText() const
     return d->displayText;
 }
 
-void DoubleSpinBox::setDisplayText(const QString &text)
+void DoubleSpinBox::setDisplayText(const QString& text)
 {
     Q_D(DoubleSpinBox);
     d->hasDisplayText = true;
@@ -641,7 +652,7 @@ QString DoubleSpinBox::prefix() const
     return d->prefix;
 }
 
-void DoubleSpinBox::setPrefix(const QString &prefix)
+void DoubleSpinBox::setPrefix(const QString& prefix)
 {
     Q_D(DoubleSpinBox);
     if (d->prefix == prefix)
@@ -657,7 +668,7 @@ QString DoubleSpinBox::suffix() const
     return d->suffix;
 }
 
-void DoubleSpinBox::setSuffix(const QString &suffix)
+void DoubleSpinBox::setSuffix(const QString& suffix)
 {
     Q_D(DoubleSpinBox);
     if (d->suffix == suffix)
@@ -679,7 +690,7 @@ void DoubleSpinBox::decrease()
     d->stepDown(false);
 }
 
-void DoubleSpinBox::focusInEvent(QFocusEvent *event)
+void DoubleSpinBox::focusInEvent(QFocusEvent* event)
 {
     Q_D(DoubleSpinBox);
     QQuickControl::focusInEvent(event);
@@ -689,21 +700,21 @@ void DoubleSpinBox::focusInEvent(QFocusEvent *event)
         d->contentItem->forceActiveFocus(event->reason());
 }
 
-void DoubleSpinBox::hoverEnterEvent(QHoverEvent *event)
+void DoubleSpinBox::hoverEnterEvent(QHoverEvent* event)
 {
     Q_D(DoubleSpinBox);
     QQuickControl::hoverEnterEvent(event);
     d->updateHover(event->posF());
 }
 
-void DoubleSpinBox::hoverMoveEvent(QHoverEvent *event)
+void DoubleSpinBox::hoverMoveEvent(QHoverEvent* event)
 {
     Q_D(DoubleSpinBox);
     QQuickControl::hoverMoveEvent(event);
     d->updateHover(event->posF());
 }
 
-void DoubleSpinBox::hoverLeaveEvent(QHoverEvent *event)
+void DoubleSpinBox::hoverLeaveEvent(QHoverEvent* event)
 {
     Q_D(DoubleSpinBox);
     QQuickControl::hoverLeaveEvent(event);
@@ -711,13 +722,15 @@ void DoubleSpinBox::hoverLeaveEvent(QHoverEvent *event)
     d->up->setHovered(false);
 }
 
-void DoubleSpinBox::keyPressEvent(QKeyEvent *event)
+void DoubleSpinBox::keyPressEvent(QKeyEvent* event)
 {
     Q_D(DoubleSpinBox);
     QQuickControl::keyPressEvent(event);
 
     int key = event->key();
-    if (d->editable && (key == Qt::Key_Enter || key == Qt::Key_Return || key == Qt::Key_Up || key == Qt::Key_Down || key == Qt::Key_PageUp || key == Qt::Key_PageDown))
+    if (d->editable
+        && (key == Qt::Key_Enter || key == Qt::Key_Return || key == Qt::Key_Up
+            || key == Qt::Key_Down || key == Qt::Key_PageUp || key == Qt::Key_PageDown))
         d->updateValue();
 
     switch (key) {
@@ -760,7 +773,7 @@ void DoubleSpinBox::keyPressEvent(QKeyEvent *event)
     setAccessibleProperty("pressed", d->up->isPressed() || d->down->isPressed());
 }
 
-void DoubleSpinBox::keyReleaseEvent(QKeyEvent *event)
+void DoubleSpinBox::keyReleaseEvent(QKeyEvent* event)
 {
     Q_D(DoubleSpinBox);
     QQuickControl::keyReleaseEvent(event);
@@ -770,7 +783,7 @@ void DoubleSpinBox::keyReleaseEvent(QKeyEvent *event)
     setAccessibleProperty("pressed", false);
 }
 
-void DoubleSpinBox::timerEvent(QTimerEvent *event)
+void DoubleSpinBox::timerEvent(QTimerEvent* event)
 {
     Q_D(DoubleSpinBox);
     QQuickControl::timerEvent(event);
@@ -785,13 +798,14 @@ void DoubleSpinBox::timerEvent(QTimerEvent *event)
 }
 
 #if QT_CONFIG(wheelevent)
-void DoubleSpinBox::wheelEvent(QWheelEvent *event)
+void DoubleSpinBox::wheelEvent(QWheelEvent* event)
 {
     Q_D(DoubleSpinBox);
     QQuickControl::wheelEvent(event);
     if (d->wheelEnabled) {
         const QPointF angle = event->angleDelta();
-        const qreal delta = (qFuzzyIsNull(angle.y()) ? angle.x() : angle.y()) / QWheelEvent::DefaultDeltasPerStep;
+        const qreal delta = (qFuzzyIsNull(angle.y()) ? angle.x() : angle.y())
+                            / QWheelEvent::DefaultDeltasPerStep;
         d->stepBy(d->effectiveStepSize(d->stepSize) * delta, true);
     }
 }
@@ -802,7 +816,7 @@ void DoubleSpinBox::classBegin()
     Q_D(DoubleSpinBox);
     QQuickControl::classBegin();
 
-    QQmlContext *context = qmlContext(this);
+    QQmlContext* context = qmlContext(this);
     if (context) {
         QQmlEngine::setContextForObject(d->up, context);
         QQmlEngine::setContextForObject(d->down, context);
@@ -820,7 +834,7 @@ void DoubleSpinBox::componentComplete()
     }
 }
 
-void DoubleSpinBox::itemChange(ItemChange change, const ItemChangeData &value)
+void DoubleSpinBox::itemChange(ItemChange change, const ItemChangeData& value)
 {
     Q_D(DoubleSpinBox);
     QQuickControl::itemChange(change, value);
@@ -832,12 +846,18 @@ void DoubleSpinBox::itemChange(ItemChange change, const ItemChangeData &value)
     }
 }
 
-void DoubleSpinBox::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
+void DoubleSpinBox::contentItemChange(QQuickItem* newItem, QQuickItem* oldItem)
 {
     Q_D(DoubleSpinBox);
-    if (QQuickTextInput *oldInput = qobject_cast<QQuickTextInput *>(oldItem)) {
-        disconnect(oldInput, &QQuickTextInput::accepted, this, &DoubleSpinBox::accepted);
-        disconnect(oldInput, &QQuickTextInput::inputMethodComposingChanged, this, &DoubleSpinBox::inputMethodComposingChanged);
+    if (QQuickTextInput* oldInput = qobject_cast<QQuickTextInput*>(oldItem)) {
+        QObjectPrivate::disconnect(oldInput,
+                                   &QQuickTextInput::accepted,
+                                   d,
+                                   &DoubleSpinBoxPrivate::accept);
+        disconnect(oldInput,
+                   &QQuickTextInput::inputMethodComposingChanged,
+                   this,
+                   &DoubleSpinBox::inputMethodComposingChanged);
     }
 
     if (newItem) {
@@ -849,14 +869,22 @@ void DoubleSpinBox::contentItemChange(QQuickItem *newItem, QQuickItem *oldItem)
             newItem->setCursor(Qt::IBeamCursor);
 #endif
 
-        if (QQuickTextInput *newInput = qobject_cast<QQuickTextInput *>(newItem)) {
-            connect(newInput, &QQuickTextInput::accepted, this, &DoubleSpinBox::accepted);
-            connect(newInput, &QQuickTextInput::inputMethodComposingChanged, this, &DoubleSpinBox::inputMethodComposingChanged);
+        if (QQuickTextInput* newInput = qobject_cast<QQuickTextInput*>(newItem)) {
+            QObjectPrivate::connect(newInput,
+                                    &QQuickTextInput::accepted,
+                                    d,
+                                    &DoubleSpinBoxPrivate::accept);
+            connect(newInput,
+                    &QQuickTextInput::inputMethodComposingChanged,
+                    this,
+                    &DoubleSpinBox::inputMethodComposingChanged);
+
+            newInput->setValidator(d->validator);
         }
     }
 }
 
-void DoubleSpinBox::localeChange(const QLocale &newLocale, const QLocale &oldLocale)
+void DoubleSpinBox::localeChange(const QLocale& newLocale, const QLocale& oldLocale)
 {
     Q_D(DoubleSpinBox);
     QQuickControl::localeChange(newLocale, oldLocale);
@@ -897,10 +925,9 @@ void DoubleSpinBox::accessibilityActiveChanged(bool active)
 }
 #endif
 
-DoubleSpinButton::DoubleSpinButton(DoubleSpinBox *parent)
+DoubleSpinButton::DoubleSpinButton(DoubleSpinBox* parent)
     : QObject(*(new DoubleSpinButtonPrivate), parent)
-{
-}
+{}
 
 bool DoubleSpinButton::isPressed() const
 {
@@ -918,13 +945,13 @@ void DoubleSpinButton::setPressed(bool pressed)
     emit pressedChanged();
 }
 
-QQuickItem *DoubleSpinButton::indicator() const
+QQuickItem* DoubleSpinButton::indicator() const
 {
     Q_D(const DoubleSpinButton);
     return d->indicator;
 }
 
-void DoubleSpinButton::setIndicator(QQuickItem *indicator)
+void DoubleSpinButton::setIndicator(QQuickItem* indicator)
 {
     Q_D(DoubleSpinButton);
     if (d->indicator == indicator)
@@ -935,7 +962,7 @@ void DoubleSpinButton::setIndicator(QQuickItem *indicator)
 
     if (indicator) {
         if (!indicator->parentItem())
-            indicator->setParentItem(static_cast<QQuickItem *>(parent()));
+            indicator->setParentItem(static_cast<QQuickItem*>(parent()));
     }
     emit indicatorChanged();
 }

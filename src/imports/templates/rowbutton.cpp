@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Templates 2 module of Qt).
@@ -23,8 +23,8 @@
 #include "rowbutton.h"
 
 #include <QtGui/qfontinfo.h>
-#include <QtQuickTemplates2/private/qquicktheme_p.h>
 #include <QtQuickTemplates2/private/qquickabstractbutton_p_p.h>
+#include <QtQuickTemplates2/private/qquicktheme_p.h>
 
 class RowButtonPrivate : public QQuickAbstractButtonPrivate
 {
@@ -32,7 +32,7 @@ public:
     bool highlighted = false;
 };
 
-RowButton::RowButton(QQuickItem *parent)
+RowButton::RowButton(QQuickItem* parent)
     : QQuickAbstractButton(*(new RowButtonPrivate), parent)
 {
     setCheckable(true);

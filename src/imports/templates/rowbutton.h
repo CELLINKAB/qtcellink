@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Templates 2 module of Qt).
@@ -33,7 +33,7 @@ class RowButton : public QQuickAbstractButton
     Q_PROPERTY(bool highlighted READ isHighlighted WRITE setHighlighted NOTIFY highlightedChanged FINAL)
 
 public:
-    explicit RowButton(QQuickItem *parent = nullptr);
+    explicit RowButton(QQuickItem* parent = nullptr);
 
     bool isHighlighted() const;
     void setHighlighted(bool highlighted);

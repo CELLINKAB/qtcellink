@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Controls 2 module of Qt).
@@ -24,10 +24,9 @@
 
 #include <QtQuick/private/qsgadaptationlayer_p.h>
 
-PaddedRectangle::PaddedRectangle(QQuickItem *parent) :
-    QQuickRectangle(parent)
-{
-}
+PaddedRectangle::PaddedRectangle(QQuickItem* parent)
+    : QQuickRectangle(parent)
+{}
 
 qreal PaddedRectangle::padding() const
 {
@@ -160,13 +159,14 @@ void PaddedRectangle::setBottomPadding(qreal padding, bool has)
     }
 }
 
-QSGNode *PaddedRectangle::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
+QSGNode* PaddedRectangle::updatePaintNode(QSGNode* node, UpdatePaintNodeData* data)
 {
-    QSGTransformNode *transformNode = static_cast<QSGTransformNode *>(node);
+    QSGTransformNode* transformNode = static_cast<QSGTransformNode*>(node);
     if (!transformNode)
         transformNode = new QSGTransformNode;
 
-    QSGInternalRectangleNode *rectNode = static_cast<QSGInternalRectangleNode *>(QQuickRectangle::updatePaintNode(transformNode->firstChild(), data));
+    QSGInternalRectangleNode* rectNode = static_cast<QSGInternalRectangleNode*>(
+        QQuickRectangle::updatePaintNode(transformNode->firstChild(), data));
 
     if (rectNode) {
         if (!transformNode->firstChild())
@@ -177,13 +177,14 @@ QSGNode *PaddedRectangle::updatePaintNode(QSGNode *node, UpdatePaintNodeData *da
         qreal right = rightPadding();
         qreal bottom = bottomPadding();
 
-        if (!qFuzzyIsNull(top) || !qFuzzyIsNull(left) || !qFuzzyIsNull(right) || !qFuzzyIsNull(bottom)) {
+        if (!qFuzzyIsNull(top) || !qFuzzyIsNull(left) || !qFuzzyIsNull(right)
+            || !qFuzzyIsNull(bottom)) {
             QMatrix4x4 m;
             m.translate(left, top);
             transformNode->setMatrix(m);
 
-            qreal w = qMax<qreal>(0.0, width() -left-right);
-            qreal h = qMax<qreal>(0.0, height() -top-bottom);
+            qreal w = qMax<qreal>(0.0, width() - left - right);
+            qreal h = qMax<qreal>(0.0, height() - top - bottom);
 
             rectNode->setRect(QRectF(0, 0, w, h));
             rectNode->update();

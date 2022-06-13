@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 **
 ** This file is part of QtCellink.
 **
@@ -19,20 +19,27 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
+#include <QtQml/qqmlextensionplugin.h>
 
-class QtCellinkFontAwesomePlugin: public QQmlExtensionPlugin
+class QtCellinkFontAwesomePlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    explicit QtCellinkFontAwesomePlugin(QObject *parent = nullptr) : QQmlExtensionPlugin(parent) { }
+    explicit QtCellinkFontAwesomePlugin(QObject* parent = nullptr)
+        : QQmlExtensionPlugin(parent)
+    {}
 
-    void registerTypes(const char *uri) override
+    void registerTypes(const char* uri) override
     {
-        qmlRegisterSingletonType(QStringLiteral("qrc:/qt-project.org/imports/QtCellink/FontAwesome/FontAwesome.qml"), uri, 1, 0, "FontAwesome");
+        qmlRegisterSingletonType(QStringLiteral("qrc:/qt-project.org/imports/QtCellink/FontAwesome/"
+                                                "FontAwesome.qml"),
+                                 uri,
+                                 1,
+                                 0,
+                                 "FontAwesome");
     }
 };
 

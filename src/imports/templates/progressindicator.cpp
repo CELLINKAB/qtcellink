@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 CELLINK AB <info@cellink.com>
+** Copyright (C) 2020 CELLINK AB <info@cellink.com>
 ** Copyright (C) 2017 The Qt Company Ltd.
 **
 ** This file is part of QtCellink (based on the Qt Quick Templates 2 module of Qt).
@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include "progressindicator.h"
+
 #include <QtQuickTemplates2/private/qquickcontrol_p_p.h>
 
 class ProgressIndicatorPrivate : public QQuickControlPrivate
@@ -30,10 +31,9 @@ public:
     qreal value = 0;
 };
 
-ProgressIndicator::ProgressIndicator(QQuickItem *parent)
+ProgressIndicator::ProgressIndicator(QQuickItem* parent)
     : QQuickControl(*(new ProgressIndicatorPrivate), parent)
-{
-}
+{}
 
 bool ProgressIndicator::isRunning() const
 {
@@ -67,8 +67,18 @@ void ProgressIndicator::setValue(qreal value)
     emit valueChanged();
 }
 
+void ProgressIndicator::contentItemChange(QQuickItem* newItem, QQuickItem* oldItem)
+{
+    QQuickControl::contentItemChange(newItem, oldItem);
+
+    if (oldItem)
+        disconnect(oldItem, SIGNAL(started()), this, SIGNAL(started()));
+    if (newItem)
+        connect(newItem, SIGNAL(started()), this, SIGNAL(started()));
+}
+
 #if QT_CONFIG(quicktemplates2_multitouch)
-void ProgressIndicator::touchEvent(QTouchEvent *event)
+void ProgressIndicator::touchEvent(QTouchEvent* event)
 {
     event->ignore(); // QTBUG-61785
 }

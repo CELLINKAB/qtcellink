@@ -37,11 +37,16 @@
 #include <QtQml/qqmllist.h>
 #include <QtQml/qqmlparserstatus.h>
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-#    include <QtQml/private/qqmlobjectmodel_p.h>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+#    pragma message( \
+        "Disabled file due to Qt 5.15 link issues with QQmlModelAttached::staticMetaObject")
 #else
-#    include <QtQmlModels/private/qqmlobjectmodel_p.h>
-#endif
+
+#    if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+#        include <QtQml/private/qqmlobjectmodel_p.h>
+#    else
+#        include <QtQmlModels/private/qqmlobjectmodel_p.h>
+#    endif
 
 class QQmlComponent;
 class QQmlContext;
@@ -102,4 +107,5 @@ private:
     QList<QQmlComponent*> m_components;
 };
 
+#endif
 #endif // COMPONENTMODEL_H

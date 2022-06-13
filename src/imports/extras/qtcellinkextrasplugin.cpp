@@ -67,11 +67,14 @@ QtCellinkExtrasPlugin::QtCellinkExtrasPlugin(QObject* parent)
 
 void QtCellinkExtrasPlugin::registerTypes(const char* uri)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+    qmlRegisterType<ComponentModel>(uri, 1, 0, "ComponentModel");
+#endif
+
     qmlRegisterSingletonType<Color>(uri, 1, 0, "Color", [](QQmlEngine* engine, QJSEngine*) -> QObject* {
         return new Color(engine);
     });
     qmlRegisterType<ColorImage>(uri, 1, 0, "ColorImage");
-    qmlRegisterType<ComponentModel>(uri, 1, 0, "ComponentModel");
     qmlRegisterType<FilterModel>(uri, 1, 0, "FilterModel");
     qmlRegisterType<HeaderDelegate>(uri, 1, 0, "HeaderDelegate");
     qmlRegisterType<IconImage>(uri, 1, 0, "IconImage");

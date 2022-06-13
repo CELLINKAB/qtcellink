@@ -30,5 +30,5 @@ SOURCES += \
     $$PWD/progressindicator.cpp \
     $$PWD/qtcellinkcontrolsplugin.cpp
 
-# CONFIG += no_cxx_module
+CONFIG += no_cxx_module
 load(qml_plugin)

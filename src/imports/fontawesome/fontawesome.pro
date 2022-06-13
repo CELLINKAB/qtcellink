@@ -7,7 +7,7 @@ QT += qml
 DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 
 QML_FILES += \
-    $$PWD/FontAwesome.qml
+    $$files(*.qml)
 
 OTHER_FILES += \
     $$PWD/qmldir \
@@ -19,8 +19,8 @@ SOURCES += \
 RESOURCES += \
     $$PWD/fontawesome.qrc
 
-CONFIG += qtquickcompiler
-linux: CONFIG += no_cxx_module builtin_resources
+CONFIG += qtquickcompiler no_cxx_module
+linux: CONFIG += builtin_resources
 
 load(qml_plugin)
 

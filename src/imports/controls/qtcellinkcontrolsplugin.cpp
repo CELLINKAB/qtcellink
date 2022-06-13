@@ -45,6 +45,22 @@ QtCellinkControlsPlugin::QtCellinkControlsPlugin(QObject* parent)
     : QQmlExtensionPlugin(parent)
 {}
 
+static bool useNative()
+{
+    QCommandLineParser cmdLine;
+    QCommandLineOption nativeOption(QStringLiteral("native"));
+    QCommandLineOption nonNativeOption(QStringLiteral("no-native"));
+
+    cmdLine.addOptions({nativeOption, nonNativeOption});
+    cmdLine.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
+
+    // fails if we call the exe with unknown arguments unless filtered
+    auto filteredArgs = qApp->arguments().filter(QRegExp(QStringLiteral("`(no-)?native$")));
+    filteredArgs.push_front(qApp->arguments().front());
+
+    cmdLine.process(filteredArgs);
+}
+
 void QtCellinkControlsPlugin::registerTypes(const char* uri)
 {
     QQuickStyleSelector selector;

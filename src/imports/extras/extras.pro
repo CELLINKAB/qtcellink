@@ -60,4 +60,5 @@ SOURCES += \
     $$PWD/rect.cpp \
     $$PWD/yoctolicensemodel.cpp
 
+CONFIG += no_cxx_module
 load(qml_plugin)

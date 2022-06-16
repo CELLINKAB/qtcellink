@@ -14,6 +14,12 @@ versionAtLeast(QT_VERSION, 5.15.0) {
     requires(!win32)
 }
 
+win32 {
+    system(powershell -Command cp $$PWD/qmldir.win $$PWD/qmldir)
+} else {
+    system(cp $$PWD/qmldir.linux $$PWD/qmldir)
+}
+
 DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 
 OTHER_FILES += \
@@ -63,3 +69,7 @@ SOURCES += \
 
 # CONFIG += no_cxx_module
 load(qml_plugin)
+
+DISTFILES += \
+    qmldir.linux \
+    qmldir.win

@@ -1,0 +1,3 @@
+module QtCellink.Controls
+plugin declarative_qtcellinkcontrolsplugin
+classname QtCellinkControlsPlugin

@@ -86,3 +86,6 @@ qt.conf
 *.qmlc
 .qmlcache
 codeattributions.qdoc
+src/imports/controls/qmldir
+src/imports/extras/qmldir
+src/imports/fontawesome/qmldir

@@ -1,0 +1,3 @@
+module QtCellink.Extras
+plugin declarative_qtcellinkextrasplugin
+classname QtCellinkExtrasPlugin

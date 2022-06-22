@@ -65,10 +65,45 @@ QtCellinkExtrasPlugin::QtCellinkExtrasPlugin(QObject* parent)
     : QQmlExtensionPlugin(parent)
 {}
 
+namespace {
+template<typename T>
+int workaroundQmlRegisterType(const char* uri, int versionMajor, int versionMinor, const char* qmlName)
+{
+    QML_GETTYPENAMES
+
+    QQmlPrivate::RegisterType type
+        = {0,
+           qRegisterNormalizedMetaType<T*>(pointerName.constData()),
+           qRegisterNormalizedMetaType<QQmlListProperty<T>>(listName.constData()),
+           sizeof(T),
+           QQmlPrivate::createInto<T>,
+           QString(),
+           uri,
+           versionMajor,
+           versionMinor,
+           qmlName,
+           &T::staticMetaObject,
+           QQmlPrivate::attachedPropertiesFunc<T>(),
+           T::qmlAttachedProperties(nullptr)->metaObject(),
+           QQmlPrivate::StaticCastSelector<T, QQmlParserStatus>::cast(),
+           QQmlPrivate::StaticCastSelector<T, QQmlPropertyValueSource>::cast(),
+           QQmlPrivate::StaticCastSelector<T, QQmlPropertyValueInterceptor>::cast(),
+           nullptr,
+           nullptr,
+           nullptr,
+           0};
+
+    return QQmlPrivate::qmlregister(QQmlPrivate::TypeRegistration, &type);
+}
+
+} // namespace
+
 void QtCellinkExtrasPlugin::registerTypes(const char* uri)
 {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
     qmlRegisterType<ComponentModel>(uri, 1, 0, "ComponentModel");
+#else
+    workaroundQmlRegisterType<ComponentModel>(uri, 1, 0, "ComponentModel");
 #endif
 
     qmlRegisterSingletonType<Color>(uri, 1, 0, "Color", [](QQmlEngine* engine, QJSEngine*) -> QObject* {

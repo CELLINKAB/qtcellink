@@ -19,6 +19,7 @@
 **
 ****************************************************************************/
 
+#include <QCommandLineParser>
 #include <QtQml/qqml.h>
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQuickControls2/private/qquickstyleselector_p.h>

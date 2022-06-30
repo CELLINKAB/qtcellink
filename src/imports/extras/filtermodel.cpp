@@ -145,6 +145,11 @@ bool FilterModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParen
     if (!value.isValid())
         return false;
 
+    // Note for QVariant operators:
+    // Qt 5.15.x does not provide an alternative for the deprecration
+    // of (<, >) operators. A suggestion is to leave them as they are until
+    // the migration to Qt 6 which offers the QVariant::compare function
+
     switch (m_filterRule) {
     case EqualTo:
         return value == m_filterValue;

@@ -60,6 +60,8 @@ static bool useNative()
     filteredArgs.push_front(qApp->arguments().front());
 
     cmdLine.process(filteredArgs);
+
+    return true;
 }
 
 void QtCellinkControlsPlugin::registerTypes(const char* uri)

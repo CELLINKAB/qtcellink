@@ -34,9 +34,10 @@
 ****************************************************************************/
 
 #include "filtermodel.h"
+
 #include <QtQml/qqmlengine.h>
 
-FilterModel::FilterModel(QObject *parent)
+FilterModel::FilterModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
     connect(this, &QSortFilterProxyModel::rowsInserted, this, &FilterModel::countChanged);
@@ -48,14 +49,14 @@ int FilterModel::count() const
     return rowCount();
 }
 
-QObject *FilterModel::source() const
+QObject* FilterModel::source() const
 {
     return sourceModel();
 }
 
-void FilterModel::setSource(QObject *source)
+void FilterModel::setSource(QObject* source)
 {
-    setSourceModel(qobject_cast<QAbstractItemModel *>(source));
+    setSourceModel(qobject_cast<QAbstractItemModel*>(source));
 }
 
 FilterModel::FilterRule FilterModel::filterRule() const
@@ -78,7 +79,7 @@ QVariant FilterModel::filterValue() const
     return m_filterValue;
 }
 
-void FilterModel::setFilterValue(const QVariant &value)
+void FilterModel::setFilterValue(const QVariant& value)
 {
     if (m_filterValue == value)
         return;
@@ -100,7 +101,7 @@ int FilterModel::mapFromSourceRow(int row) const
 
 QJSValue FilterModel::get(int idx) const
 {
-    QJSEngine *engine = qmlEngine(this);
+    QJSEngine* engine = qmlEngine(this);
     if (!engine || idx < 0 || idx >= count())
         return QJSValue();
 
@@ -127,18 +128,18 @@ void FilterModel::componentComplete()
 
 QHash<int, QByteArray> FilterModel::roleNames() const
 {
-    QAbstractItemModel *source = sourceModel();
+    QAbstractItemModel* source = sourceModel();
     if (!source)
         return QHash<int, QByteArray>();
     return source->roleNames();
 }
 
-bool FilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+bool FilterModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
     if (!m_filterValue.isValid())
         return true;
 
-    QAbstractItemModel *model = sourceModel();
+    QAbstractItemModel* model = sourceModel();
     QModelIndex sourceIndex = model->index(sourceRow, 0, sourceParent);
     QVariant value = model->data(sourceIndex, filterRole());
     if (!value.isValid())

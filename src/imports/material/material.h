@@ -1083,7 +1083,8 @@ class Material : public QObject
     Q_PROPERTY(QString shutter_speed READ shutter_speed CONSTANT)
     Q_PROPERTY(QString signal_cellular_4_bar READ signal_cellular_4_bar CONSTANT)
     Q_PROPERTY(QString signal_cellular_alt READ signal_cellular_alt CONSTANT)
-    Q_PROPERTY(QString signal_cellular_connected_no_internet_4_bar READ signal_cellular_connected_no_internet_4_bar CONSTANT)
+    Q_PROPERTY(QString signal_cellular_connected_no_internet_4_bar READ
+                   signal_cellular_connected_no_internet_4_bar CONSTANT)
     Q_PROPERTY(QString signal_cellular_no_sim READ signal_cellular_no_sim CONSTANT)
     Q_PROPERTY(QString signal_cellular_null READ signal_cellular_null CONSTANT)
     Q_PROPERTY(QString signal_cellular_off READ signal_cellular_off CONSTANT)
@@ -1331,7 +1332,7 @@ class Material : public QObject
     Q_PROPERTY(QString zoom_out_map READ zoom_out_map CONSTANT)
 
 public:
-    explicit Material(QObject *parent = nullptr);
+    explicit Material(QObject* parent = nullptr);
 
     QColor red() const { return color(Red); }
     QColor pink() const { return color(Pink); }
@@ -1353,7 +1354,8 @@ public:
     QColor gray() const { return color(Gray); }
     QColor blueGray() const { return color(BlueGray); }
 
-    enum Color {
+    enum Color
+    {
         Red,
         Pink,
         Purple,
@@ -1376,7 +1378,8 @@ public:
     };
     Q_ENUM(Color)
 
-    enum Shade {
+    enum Shade
+    {
         Shade50,
         Shade100,
         Shade200,

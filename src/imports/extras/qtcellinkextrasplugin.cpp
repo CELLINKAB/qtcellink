@@ -19,9 +19,9 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
-#include <QtQml/qqmlengine.h>
 #include <QtQml/qqml.h>
+#include <QtQml/qqmlengine.h>
+#include <QtQml/qqmlextensionplugin.h>
 
 #include "color.h"
 #include "colorimage.h"
@@ -30,8 +30,6 @@
 #include "iconimage.h"
 #include "iconlabel.h"
 #include "keyboard.h"
-#include "yoctolicense.h"
-#include "yoctolicensemodel.h"
 #include "mnemoniclabel.h"
 #include "navigationgroup.h"
 #include "navigationitem.h"
@@ -41,37 +39,88 @@
 #include "nodeview.h"
 #include "paddedrectangle.h"
 #include "rect.h"
+#include "yoctolicense.h"
+#include "yoctolicensemodel.h"
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-template <typename T> static void qmlRegisterAnonymousType(const char *, int) { qmlRegisterType<T>(); }
+template<typename T>
+static void qmlRegisterAnonymousType(const char*, int)
+{
+    qmlRegisterType<T>();
+}
 #endif
 
-class QtCellinkExtrasPlugin: public QQmlExtensionPlugin
+class QtCellinkExtrasPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    explicit QtCellinkExtrasPlugin(QObject *parent = nullptr);
+    explicit QtCellinkExtrasPlugin(QObject* parent = nullptr);
 
-    void registerTypes(const char *uri) override;
+    void registerTypes(const char* uri) override;
 };
 
-QtCellinkExtrasPlugin::QtCellinkExtrasPlugin(QObject *parent)
+QtCellinkExtrasPlugin::QtCellinkExtrasPlugin(QObject* parent)
     : QQmlExtensionPlugin(parent)
+{}
+
+namespace {
+template<typename T>
+int workaroundQmlRegisterType(const char* uri, int versionMajor, int versionMinor, const char* qmlName)
 {
+    QML_GETTYPENAMES
+
+    QQmlPrivate::RegisterType type
+        = {0,
+           qRegisterNormalizedMetaType<T*>(pointerName.constData()),
+           qRegisterNormalizedMetaType<QQmlListProperty<T>>(listName.constData()),
+           sizeof(T),
+           QQmlPrivate::createInto<T>,
+           QString(),
+           uri,
+           versionMajor,
+           versionMinor,
+           qmlName,
+           &T::staticMetaObject,
+           QQmlPrivate::attachedPropertiesFunc<T>(),
+           T::qmlAttachedProperties(nullptr)->metaObject(),
+           QQmlPrivate::StaticCastSelector<T, QQmlParserStatus>::cast(),
+           QQmlPrivate::StaticCastSelector<T, QQmlPropertyValueSource>::cast(),
+           QQmlPrivate::StaticCastSelector<T, QQmlPropertyValueInterceptor>::cast(),
+           nullptr,
+           nullptr,
+           nullptr,
+           0};
+
+    return QQmlPrivate::qmlregister(QQmlPrivate::TypeRegistration, &type);
 }
 
-void QtCellinkExtrasPlugin::registerTypes(const char *uri)
+} // namespace
+
+void QtCellinkExtrasPlugin::registerTypes(const char* uri)
 {
-    qmlRegisterSingletonType<Color>(uri, 1, 0, "Color", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Color(engine); });
-    qmlRegisterType<ColorImage>(uri, 1, 0, "ColorImage");
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
     qmlRegisterType<ComponentModel>(uri, 1, 0, "ComponentModel");
+#else
+    workaroundQmlRegisterType<ComponentModel>(uri, 1, 0, "ComponentModel");
+#endif
+
+    qmlRegisterSingletonType<Color>(uri, 1, 0, "Color", [](QQmlEngine* engine, QJSEngine*) -> QObject* {
+        return new Color(engine);
+    });
+    qmlRegisterType<ColorImage>(uri, 1, 0, "ColorImage");
     qmlRegisterType<FilterModel>(uri, 1, 0, "FilterModel");
     qmlRegisterType<HeaderDelegate>(uri, 1, 0, "HeaderDelegate");
     qmlRegisterType<IconImage>(uri, 1, 0, "IconImage");
     qmlRegisterType<IconLabel>(uri, 1, 0, "IconLabel");
-    qmlRegisterSingletonType<Keyboard>(uri, 1, 0, "Keyboard", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Keyboard(engine); });
+    qmlRegisterSingletonType<Keyboard>(uri,
+                                       1,
+                                       0,
+                                       "Keyboard",
+                                       [](QQmlEngine* engine, QJSEngine*) -> QObject* {
+                                           return new Keyboard(engine);
+                                       });
     qRegisterMetaType<YoctoLicense>();
     qmlRegisterType<YoctoLicenseModel>(uri, 1, 0, "YoctoLicenseModel");
     qmlRegisterType<MnemonicLabel>(uri, 1, 0, "MnemonicLabel");
@@ -84,7 +133,9 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterType<OpacityDelegate>(uri, 1, 0, "OpacityDelegate");
     qmlRegisterType<PaddedRectangle>(uri, 1, 0, "PaddedRectangle");
     qmlRegisterType<ProgressDelegate>(uri, 1, 0, "ProgressDelegate");
-    qmlRegisterSingletonType<Rect>(uri, 1, 0, "Rect", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Rect(engine); });
+    qmlRegisterSingletonType<Rect>(uri, 1, 0, "Rect", [](QQmlEngine* engine, QJSEngine*) -> QObject* {
+        return new Rect(engine);
+    });
     qmlRegisterType<RectDelegate>(uri, 1, 0, "RectDelegate");
     qmlRegisterType<ScaleDelegate>(uri, 1, 0, "ScaleDelegate");
     qmlRegisterType<TextDelegate>(uri, 1, 0, "TextDelegate");

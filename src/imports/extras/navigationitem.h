@@ -51,7 +51,7 @@ class NavigationItem : public QObject
     Q_PROPERTY(QJSValue properties READ properties WRITE setProperties NOTIFY propertiesChanged)
 
 public:
-    explicit NavigationItem(QObject *parent = nullptr);
+    explicit NavigationItem(QObject* parent = nullptr);
 
     bool isEnabled() const;
     void setEnabled(bool enabled);
@@ -66,19 +66,19 @@ public:
     void setFullScreen(bool fullScreen);
 
     QString name() const;
-    void setName(const QString &name);
+    void setName(const QString& name);
 
     QString title() const;
-    void setTitle(const QString &title);
+    void setTitle(const QString& title);
 
     QString icon() const;
-    void setIcon(const QString &icon);
+    void setIcon(const QString& icon);
 
     QString url() const;
-    void setUrl(const QString &url);
+    void setUrl(const QString& url);
 
     QJSValue properties() const;
-    void setProperties(const QJSValue &properties);
+    void setProperties(const QJSValue& properties);
 
 public slots:
     void trigger();
@@ -93,7 +93,7 @@ signals:
     void iconChanged();
     void urlChanged();
     void propertiesChanged();
-    void triggered(NavigationItem *item);
+    void triggered(NavigationItem* item);
 
 private:
     bool m_enabled = true;

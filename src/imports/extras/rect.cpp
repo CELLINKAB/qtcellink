@@ -21,7 +21,6 @@
 
 #include "rect.h"
 
-Rect::Rect(QObject *parent) :
-    QObject(parent)
-{
-}
+Rect::Rect(QObject* parent)
+    : QObject(parent)
+{}

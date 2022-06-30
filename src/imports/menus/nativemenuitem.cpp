@@ -21,19 +21,19 @@
 ****************************************************************************/
 
 #include "nativemenuitem.h"
-#include "nativemenu.h"
-#include "iconloader.h"
 
+#include <QtGui/private/qguiapplication_p.h>
 #include <QtGui/qicon.h>
 #include <QtGui/qkeysequence.h>
 #include <QtGui/qpa/qplatformtheme.h>
-#include <QtGui/private/qguiapplication_p.h>
 #include <QtQuickTemplates2/private/qquickaction_p.h>
 
-NativeMenuItem::NativeMenuItem(QObject *parent)
+#include "iconloader.h"
+#include "nativemenu.h"
+
+NativeMenuItem::NativeMenuItem(QObject* parent)
     : QObject(parent)
-{
-}
+{}
 
 NativeMenuItem::~NativeMenuItem()
 {
@@ -45,12 +45,12 @@ NativeMenuItem::~NativeMenuItem()
     m_handle = nullptr;
 }
 
-QPlatformMenuItem *NativeMenuItem::handle() const
+QPlatformMenuItem* NativeMenuItem::handle() const
 {
     return m_handle;
 }
 
-QPlatformMenuItem *NativeMenuItem::create()
+QPlatformMenuItem* NativeMenuItem::create()
 {
     if (!m_handle && m_menu && m_menu->handle()) {
         m_handle = m_menu->handle()->createMenuItem();
@@ -96,12 +96,12 @@ void NativeMenuItem::sync()
         m_menu->handle()->syncMenuItem(m_handle);
 }
 
-NativeMenu *NativeMenuItem::menu() const
+NativeMenu* NativeMenuItem::menu() const
 {
     return m_menu;
 }
 
-void NativeMenuItem::setMenu(NativeMenu *menu)
+void NativeMenuItem::setMenu(NativeMenu* menu)
 {
     if (m_menu == menu)
         return;
@@ -110,12 +110,12 @@ void NativeMenuItem::setMenu(NativeMenu *menu)
     emit menuChanged();
 }
 
-NativeMenu *NativeMenuItem::subMenu() const
+NativeMenu* NativeMenuItem::subMenu() const
 {
     return m_subMenu;
 }
 
-void NativeMenuItem::setSubMenu(NativeMenu *menu)
+void NativeMenuItem::setSubMenu(NativeMenu* menu)
 {
     if (m_subMenu == menu)
         return;
@@ -231,7 +231,7 @@ QString NativeMenuItem::text() const
     return m_text;
 }
 
-void NativeMenuItem::setText(const QString &text)
+void NativeMenuItem::setText(const QString& text)
 {
     if (m_text == text)
         return;
@@ -279,7 +279,7 @@ QQuickIcon NativeMenuItem::icon() const
     return m_iconLoader->icon();
 }
 
-void NativeMenuItem::setIcon(const QQuickIcon &icon)
+void NativeMenuItem::setIcon(const QQuickIcon& icon)
 {
     if (iconLoader()->icon() == icon)
         return;
@@ -288,17 +288,17 @@ void NativeMenuItem::setIcon(const QQuickIcon &icon)
     emit iconChanged();
 }
 
-QQuickAction *NativeMenuItem::action() const
+QQuickAction* NativeMenuItem::action() const
 {
     return m_action;
 }
 
-void NativeMenuItem::setAction(QQuickAction *action)
+void NativeMenuItem::setAction(QQuickAction* action)
 {
     if (m_action == action)
         return;
 
-    if (QQuickAction *oldAction = m_action) {
+    if (QQuickAction* oldAction = m_action) {
         disconnect(oldAction, &QQuickAction::triggered, this, &NativeMenuItem::triggered);
         disconnect(oldAction, &QQuickAction::textChanged, this, &NativeMenuItem::setText);
         disconnect(oldAction, &QQuickAction::enabledChanged, this, &NativeMenuItem::setEnabled);
@@ -332,9 +332,7 @@ void NativeMenuItem::toggle()
         setChecked(!m_checked);
 }
 
-void NativeMenuItem::classBegin()
-{
-}
+void NativeMenuItem::classBegin() {}
 
 void NativeMenuItem::componentComplete()
 {
@@ -344,10 +342,10 @@ void NativeMenuItem::componentComplete()
     sync();
 }
 
-IconLoader *NativeMenuItem::iconLoader() const
+IconLoader* NativeMenuItem::iconLoader() const
 {
     if (!m_iconLoader) {
-        NativeMenuItem *that = const_cast<NativeMenuItem *>(this);
+        NativeMenuItem* that = const_cast<NativeMenuItem*>(this);
         static int slot = staticMetaObject.indexOfSlot("updateIcon()");
         m_iconLoader = new IconLoader(slot, that);
         m_iconLoader->setEnabled(m_complete);

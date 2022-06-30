@@ -33,10 +33,10 @@ class TitleSeparator : public QQuickControl
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
 
 public:
-    explicit TitleSeparator(QQuickItem *parent = nullptr);
+    explicit TitleSeparator(QQuickItem* parent = nullptr);
 
     QString title() const;
-    void setTitle(QString &title);
+    void setTitle(QString& title);
 
 Q_SIGNALS:
     void titleChanged();

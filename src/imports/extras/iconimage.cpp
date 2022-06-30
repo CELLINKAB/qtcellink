@@ -55,10 +55,12 @@ void IconImagePrivate::updateIcon()
         size.setHeight(q->height());
 
     const qreal dpr = calculateDevicePixelRatio();
-    const QIconLoaderEngineEntry *entry = QIconLoaderEngine::entryForSize(icon, size * dpr, qCeil(dpr));
+    const QIconLoaderEngineEntry* entry = QIconLoaderEngine::entryForSize(icon,
+                                                                          size * dpr,
+                                                                          qCeil(dpr));
 
     if (entry) {
-        QQmlContext *context = qmlContext(q);
+        QQmlContext* context = qmlContext(q);
         const QUrl entryUrl = QUrl::fromLocalFile(entry->filename);
         url = context ? context->resolvedUrl(entryUrl) : entryUrl;
         isThemeIcon = true;
@@ -98,7 +100,7 @@ qreal IconImagePrivate::calculateDevicePixelRatio() const
     return q->window() ? q->window()->effectiveDevicePixelRatio() : qApp->devicePixelRatio();
 }
 
-IconImage::IconImage(QQuickItem *parent)
+IconImage::IconImage(QQuickItem* parent)
     : QQuickImage(*(new IconImagePrivate), parent)
 {
     setFillMode(Pad);
@@ -110,7 +112,7 @@ QString IconImage::name() const
     return d->icon.iconName;
 }
 
-void IconImage::setName(const QString &name)
+void IconImage::setName(const QString& name)
 {
     Q_D(IconImage);
     if (d->icon.iconName == name)
@@ -128,7 +130,7 @@ QColor IconImage::color() const
     return d->color;
 }
 
-void IconImage::setColor(const QColor &color)
+void IconImage::setColor(const QColor& color)
 {
     Q_D(IconImage);
     if (d->color == color)
@@ -140,7 +142,7 @@ void IconImage::setColor(const QColor &color)
     emit colorChanged();
 }
 
-void IconImage::setSource(const QUrl &source)
+void IconImage::setSource(const QUrl& source)
 {
     Q_D(IconImage);
     if (d->source == source)
@@ -160,7 +162,7 @@ void IconImage::componentComplete()
     QObjectPrivate::connect(this, &QQuickImageBase::sourceSizeChanged, d, &IconImagePrivate::updateIcon);
 }
 
-void IconImage::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void IconImage::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     Q_D(IconImage);
     QQuickImage::geometryChanged(newGeometry, oldGeometry);
@@ -168,7 +170,7 @@ void IconImage::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeom
         d->updateIcon();
 }
 
-void IconImage::itemChange(ItemChange change, const ItemChangeData &value)
+void IconImage::itemChange(ItemChange change, const ItemChangeData& value)
 {
     Q_D(IconImage);
     if (change == ItemDevicePixelRatioHasChanged)

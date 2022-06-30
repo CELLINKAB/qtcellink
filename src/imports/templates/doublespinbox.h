@@ -23,8 +23,8 @@
 #ifndef DOUBLESPINBOX_H
 #define DOUBLESPINBOX_H
 
-#include <QtQuickTemplates2/private/qquickcontrol_p.h>
 #include <QtQml/qjsvalue.h>
+#include <QtQuickTemplates2/private/qquickcontrol_p.h>
 
 class QValidator;
 class DoubleSpinButton;
@@ -40,21 +40,26 @@ class DoubleSpinBox : public QQuickControl
     Q_PROPERTY(qreal stepSize READ stepSize WRITE setStepSize NOTIFY stepSizeChanged FINAL)
     Q_PROPERTY(qreal pageStepSize READ pageStepSize WRITE setPageStepSize NOTIFY pageStepSizeChanged FINAL)
     Q_PROPERTY(bool editable READ isEditable WRITE setEditable NOTIFY editableChanged FINAL)
-    Q_PROPERTY(QValidator *validator READ validator WRITE setValidator NOTIFY validatorChanged FINAL)
-    Q_PROPERTY(QJSValue textFromValue READ textFromValue WRITE setTextFromValue NOTIFY textFromValueChanged FINAL)
-    Q_PROPERTY(QJSValue valueFromText READ valueFromText WRITE setValueFromText NOTIFY valueFromTextChanged FINAL)
-    Q_PROPERTY(DoubleSpinButton *up READ up CONSTANT FINAL)
-    Q_PROPERTY(DoubleSpinButton *down READ down CONSTANT FINAL)
-    Q_PROPERTY(Qt::InputMethodHints inputMethodHints READ inputMethodHints WRITE setInputMethodHints NOTIFY inputMethodHintsChanged FINAL)
-    Q_PROPERTY(bool inputMethodComposing READ isInputMethodComposing NOTIFY inputMethodComposingChanged FINAL)
+    Q_PROPERTY(QValidator* validator READ validator WRITE setValidator NOTIFY validatorChanged FINAL)
+    Q_PROPERTY(QJSValue textFromValue READ textFromValue WRITE setTextFromValue NOTIFY
+                   textFromValueChanged FINAL)
+    Q_PROPERTY(QJSValue valueFromText READ valueFromText WRITE setValueFromText NOTIFY
+                   valueFromTextChanged FINAL)
+    Q_PROPERTY(DoubleSpinButton* up READ up CONSTANT FINAL)
+    Q_PROPERTY(DoubleSpinButton* down READ down CONSTANT FINAL)
+    Q_PROPERTY(Qt::InputMethodHints inputMethodHints READ inputMethodHints WRITE setInputMethodHints
+                   NOTIFY inputMethodHintsChanged FINAL)
+    Q_PROPERTY(bool inputMethodComposing READ isInputMethodComposing NOTIFY
+                   inputMethodComposingChanged FINAL)
     Q_PROPERTY(bool wrap READ wrap WRITE setWrap NOTIFY wrapChanged FINAL)
-    Q_PROPERTY(QString displayText READ displayText WRITE setDisplayText RESET resetDisplayText NOTIFY displayTextChanged FINAL)
+    Q_PROPERTY(QString displayText READ displayText WRITE setDisplayText RESET resetDisplayText
+                   NOTIFY displayTextChanged FINAL)
     Q_PROPERTY(int decimals READ decimals WRITE setDecimals NOTIFY decimalsChanged FINAL)
     Q_PROPERTY(QString prefix READ prefix WRITE setPrefix NOTIFY prefixChanged FINAL)
     Q_PROPERTY(QString suffix READ suffix WRITE setSuffix NOTIFY suffixChanged FINAL)
 
 public:
-    explicit DoubleSpinBox(QQuickItem *parent = nullptr);
+    explicit DoubleSpinBox(QQuickItem* parent = nullptr);
 
     qreal from() const;
     void setFrom(qreal from);
@@ -73,17 +78,17 @@ public:
     bool isEditable() const;
     void setEditable(bool editable);
 
-    QValidator *validator() const;
-    void setValidator(QValidator *validator);
+    QValidator* validator() const;
+    void setValidator(QValidator* validator);
 
     QJSValue textFromValue() const;
-    void setTextFromValue(const QJSValue &callback);
+    void setTextFromValue(const QJSValue& callback);
 
     QJSValue valueFromText() const;
-    void setValueFromText(const QJSValue &callback);
+    void setValueFromText(const QJSValue& callback);
 
-    DoubleSpinButton *up() const;
-    DoubleSpinButton *down() const;
+    DoubleSpinButton* up() const;
+    DoubleSpinButton* down() const;
 
     Qt::InputMethodHints inputMethodHints() const;
     void setInputMethodHints(Qt::InputMethodHints hints);
@@ -94,17 +99,17 @@ public:
     void setWrap(bool wrap);
 
     QString displayText() const;
-    void setDisplayText(const QString &text);
+    void setDisplayText(const QString& text);
     void resetDisplayText();
 
     int decimals() const;
     void setDecimals(int decimals);
 
     QString prefix() const;
-    void setPrefix(const QString &prefix);
+    void setPrefix(const QString& prefix);
 
     QString suffix() const;
-    void setSuffix(const QString &suffix);
+    void setSuffix(const QString& suffix);
 
 public Q_SLOTS:
     void increase();
@@ -132,22 +137,22 @@ Q_SIGNALS:
     void suffixChanged();
 
 protected:
-    void focusInEvent(QFocusEvent *event) override;
-    void hoverEnterEvent(QHoverEvent *event) override;
-    void hoverMoveEvent(QHoverEvent *event) override;
-    void hoverLeaveEvent(QHoverEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
-    void timerEvent(QTimerEvent *event) override;
+    void focusInEvent(QFocusEvent* event) override;
+    void hoverEnterEvent(QHoverEvent* event) override;
+    void hoverMoveEvent(QHoverEvent* event) override;
+    void hoverLeaveEvent(QHoverEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
+    void timerEvent(QTimerEvent* event) override;
 #if QT_CONFIG(wheelevent)
-    void wheelEvent(QWheelEvent *event) override;
+    void wheelEvent(QWheelEvent* event) override;
 #endif
 
     void classBegin() override;
     void componentComplete() override;
-    void itemChange(ItemChange change, const ItemChangeData &value) override;
-    void contentItemChange(QQuickItem *newItem, QQuickItem *oldItem) override;
-    void localeChange(const QLocale &newLocale, const QLocale &oldLocale) override;
+    void itemChange(ItemChange change, const ItemChangeData& value) override;
+    void contentItemChange(QQuickItem* newItem, QQuickItem* oldItem) override;
+    void localeChange(const QLocale& newLocale, const QLocale& oldLocale) override;
 
     QFont defaultFont() const override;
     QPalette defaultPalette() const override;
@@ -167,17 +172,17 @@ class DoubleSpinButton : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool pressed READ isPressed WRITE setPressed NOTIFY pressedChanged FINAL)
-    Q_PROPERTY(QQuickItem *indicator READ indicator WRITE setIndicator NOTIFY indicatorChanged FINAL)
+    Q_PROPERTY(QQuickItem* indicator READ indicator WRITE setIndicator NOTIFY indicatorChanged FINAL)
     Q_PROPERTY(bool hovered READ isHovered WRITE setHovered NOTIFY hoveredChanged FINAL)
 
 public:
-    explicit DoubleSpinButton(DoubleSpinBox *parent);
+    explicit DoubleSpinButton(DoubleSpinBox* parent);
 
     bool isPressed() const;
     void setPressed(bool pressed);
 
-    QQuickItem *indicator() const;
-    void setIndicator(QQuickItem *indicator);
+    QQuickItem* indicator() const;
+    void setIndicator(QQuickItem* indicator);
 
     bool isHovered() const;
     void setHovered(bool hovered);

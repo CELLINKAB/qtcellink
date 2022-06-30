@@ -21,23 +21,23 @@
 
 #include "amfgeometryloader.h"
 
+#include <assimp/Importer.hpp>
+#include <assimp/mesh.h>
+#include <assimp/scene.h>
+
 #include <QtCore/qiodevice.h>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/mesh.h>
-
-static QVector3D toQVector3D(const aiVector3D &v)
+static QVector3D toQVector3D(const aiVector3D& v)
 {
     return QVector3D(v.x, v.y, v.z);
 }
 
-static QVector2D toQVector2D(const aiVector3D &v)
+static QVector2D toQVector2D(const aiVector3D& v)
 {
     return QVector2D(v.x, v.y);
 }
 
-bool AmfGeometryLoader::doLoad(QIODevice *device, const QString &subMesh)
+bool AmfGeometryLoader::doLoad(QIODevice* device, const QString& subMesh)
 {
     if (!device)
         return false;
@@ -45,11 +45,11 @@ bool AmfGeometryLoader::doLoad(QIODevice *device, const QString &subMesh)
     const QByteArray buffer = device->readAll();
 
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFileFromMemory(buffer, buffer.size(), 0, nullptr);
+    const aiScene* scene = importer.ReadFileFromMemory(buffer, buffer.size(), 0, nullptr);
     if (!scene)
         return false;
 
-    const aiNode *node = nullptr;
+    const aiNode* node = nullptr;
     if (!subMesh.isEmpty()) {
         node = node->FindNode(subMesh.toUtf8());
         if (!node)
@@ -60,7 +60,7 @@ bool AmfGeometryLoader::doLoad(QIODevice *device, const QString &subMesh)
 
     for (uint m = 0; m < count; ++m) {
         uint idx = node ? node->mMeshes[m] : m;
-        const aiMesh *mesh = scene->mMeshes[idx];
+        const aiMesh* mesh = scene->mMeshes[idx];
 
         m_points.reserve(m_points.size() + mesh->mNumVertices);
         if (mesh->mNormals)
@@ -80,7 +80,7 @@ bool AmfGeometryLoader::doLoad(QIODevice *device, const QString &subMesh)
         }
 
         for (uint f = 0; f < mesh->mNumFaces; ++f) {
-            const aiFace &face = mesh->mFaces[f];
+            const aiFace& face = mesh->mFaces[f];
             for (uint i = 0; i < face.mNumIndices; ++i)
                 m_indices += face.mIndices[i];
         }

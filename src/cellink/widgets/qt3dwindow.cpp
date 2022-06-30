@@ -50,18 +50,18 @@
 
 #include "qt3dwindow.h"
 
-#include <QtGui/qevent.h>
-#include <QtGui/qopenglcontext.h>
-#include <QtGui/private/qwindow_p.h>
 #include <Qt3DCore/qaspectengine.h>
 #include <Qt3DCore/qentity.h>
 #include <Qt3DExtras/qforwardrenderer.h>
-#include <Qt3DRender/qrendersettings.h>
-#include <Qt3DRender/qrenderaspect.h>
 #include <Qt3DInput/qinputaspect.h>
 #include <Qt3DInput/qinputsettings.h>
 #include <Qt3DLogic/qlogicaspect.h>
 #include <Qt3DRender/qcamera.h>
+#include <Qt3DRender/qrenderaspect.h>
+#include <Qt3DRender/qrendersettings.h>
+#include <QtGui/private/qwindow_p.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qopenglcontext.h>
 
 static void initResources()
 {
@@ -79,26 +79,26 @@ class Qt3DWindowPrivate : public QWindowPrivate
 public:
     Qt3DWindowPrivate();
 
-    Qt3DCore::QAspectEngine *m_aspectEngine;
+    Qt3DCore::QAspectEngine* m_aspectEngine;
 
     // Aspects
-    Qt3DRender::QRenderAspect *m_renderAspect;
-    Qt3DInput::QInputAspect *m_inputAspect;
-    Qt3DLogic::QLogicAspect *m_logicAspect;
+    Qt3DRender::QRenderAspect* m_renderAspect;
+    Qt3DInput::QInputAspect* m_inputAspect;
+    Qt3DLogic::QLogicAspect* m_logicAspect;
 
     // Renderer configuration
-    Qt3DRender::QRenderSettings *m_renderSettings;
-    Qt3DExtras::QForwardRenderer *m_forwardRenderer;
-    Qt3DRender::QCamera *m_defaultCamera;
+    Qt3DRender::QRenderSettings* m_renderSettings;
+    Qt3DExtras::QForwardRenderer* m_forwardRenderer;
+    Qt3DRender::QCamera* m_defaultCamera;
 
     // Input configuration
-    Qt3DInput::QInputSettings *m_inputSettings;
+    Qt3DInput::QInputSettings* m_inputSettings;
 
     // Logic configuration
 
     // Scene
-    Qt3DCore::QEntity *m_root;
-    Qt3DCore::QEntity *m_userRoot;
+    Qt3DCore::QEntity* m_root;
+    Qt3DCore::QEntity* m_userRoot;
 
     bool m_initialized;
 
@@ -117,10 +117,9 @@ Qt3DWindowPrivate::Qt3DWindowPrivate()
     , m_root(new Qt3DCore::QEntity)
     , m_userRoot(nullptr)
     , m_initialized(false)
-{
-}
+{}
 
-Qt3DWindow::Qt3DWindow(QScreen *screen)
+Qt3DWindow::Qt3DWindow(QScreen* screen)
     : QWindow(*new Qt3DWindowPrivate(), nullptr)
 {
     Q_D(Qt3DWindow);
@@ -147,7 +146,7 @@ Qt3DWindow::Qt3DWindow(QScreen *screen)
     format.setSamples(4);
     format.setStencilBufferSize(8);
     setFormat(format);
-//    QSurfaceFormat::setDefaultFormat(format);
+    //    QSurfaceFormat::setDefaultFormat(format);
 
     d->m_aspectEngine->registerAspect(d->m_renderAspect);
     d->m_aspectEngine->registerAspect(d->m_inputAspect);
@@ -169,7 +168,7 @@ Qt3DWindow::~Qt3DWindow()
 /*!
     Registers the specified \a aspect.
 */
-void Qt3DWindow::registerAspect(Qt3DCore::QAbstractAspect *aspect)
+void Qt3DWindow::registerAspect(Qt3DCore::QAbstractAspect* aspect)
 {
     Q_ASSERT(!isVisible());
     Q_D(Qt3DWindow);
@@ -179,7 +178,7 @@ void Qt3DWindow::registerAspect(Qt3DCore::QAbstractAspect *aspect)
 /*!
     Registers the specified aspect \a name.
 */
-void Qt3DWindow::registerAspect(const QString &name)
+void Qt3DWindow::registerAspect(const QString& name)
 {
     Q_ASSERT(!isVisible());
     Q_D(Qt3DWindow);
@@ -189,22 +188,32 @@ void Qt3DWindow::registerAspect(const QString &name)
 /*!
     Sets the specified \a root entity of the scene.
 */
-void Qt3DWindow::setRootEntity(Qt3DCore::QEntity *root)
+void Qt3DWindow::setRootEntity(Qt3DCore::QEntity* root)
 {
     Q_D(Qt3DWindow);
     if (d->m_userRoot != root) {
         if (d->m_userRoot != nullptr)
             d->m_userRoot->setParent(static_cast<Qt3DCore::QNode*>(nullptr));
+
         if (root != nullptr)
             root->setParent(d->m_root);
+
         d->m_userRoot = root;
+
+        emit rootEntityChanged(root);
     }
+}
+
+Qt3DCore::QEntity* Qt3DWindow::rootEntity() const
+{
+    Q_D(const Qt3DWindow);
+    return d->m_userRoot;
 }
 
 /*!
     Activates the specified \a activeFrameGraph.
 */
-void Qt3DWindow::setActiveFrameGraph(Qt3DRender::QFrameGraphNode *activeFrameGraph)
+void Qt3DWindow::setActiveFrameGraph(Qt3DRender::QFrameGraphNode* activeFrameGraph)
 {
     Q_D(Qt3DWindow);
     d->m_renderSettings->setActiveFrameGraph(activeFrameGraph);
@@ -213,7 +222,7 @@ void Qt3DWindow::setActiveFrameGraph(Qt3DRender::QFrameGraphNode *activeFrameGra
 /*!
     Returns the node of the active frame graph.
 */
-Qt3DRender::QFrameGraphNode *Qt3DWindow::activeFrameGraph() const
+Qt3DRender::QFrameGraphNode* Qt3DWindow::activeFrameGraph() const
 {
     Q_D(const Qt3DWindow);
     return d->m_renderSettings->activeFrameGraph();
@@ -222,13 +231,13 @@ Qt3DRender::QFrameGraphNode *Qt3DWindow::activeFrameGraph() const
 /*!
     Returns the node of the default framegraph
 */
-Qt3DExtras::QForwardRenderer *Qt3DWindow::defaultFrameGraph() const
+Qt3DExtras::QForwardRenderer* Qt3DWindow::defaultFrameGraph() const
 {
     Q_D(const Qt3DWindow);
     return d->m_forwardRenderer;
 }
 
-Qt3DRender::QCamera *Qt3DWindow::camera() const
+Qt3DRender::QCamera* Qt3DWindow::camera() const
 {
     Q_D(const Qt3DWindow);
     return d->m_defaultCamera;
@@ -237,7 +246,7 @@ Qt3DRender::QCamera *Qt3DWindow::camera() const
 /*!
     Returns the render settings of the 3D Window.
 */
-Qt3DRender::QRenderSettings *Qt3DWindow::renderSettings() const
+Qt3DRender::QRenderSettings* Qt3DWindow::renderSettings() const
 {
     Q_D(const Qt3DWindow);
     return d->m_renderSettings;
@@ -246,7 +255,7 @@ Qt3DRender::QRenderSettings *Qt3DWindow::renderSettings() const
 /*!
     Manages the display events specified in \a e.
 */
-void Qt3DWindow::showEvent(QShowEvent *e)
+void Qt3DWindow::showEvent(QShowEvent* e)
 {
     Q_D(Qt3DWindow);
     if (!d->m_initialized) {
@@ -263,7 +272,7 @@ void Qt3DWindow::showEvent(QShowEvent *e)
 /*!
     Resets the aspect ratio of the 3D window.
 */
-void Qt3DWindow::resizeEvent(QResizeEvent *)
+void Qt3DWindow::resizeEvent(QResizeEvent*)
 {
     Q_D(Qt3DWindow);
     d->m_defaultCamera->setAspectRatio(float(width()) / float(height()));
@@ -274,7 +283,7 @@ void Qt3DWindow::resizeEvent(QResizeEvent *)
 
     Requests renderer to redraw if we are using OnDemand render policy.
 */
-bool Qt3DWindow::event(QEvent *e)
+bool Qt3DWindow::event(QEvent* e)
 {
     Q_D(Qt3DWindow);
     const bool needsRedraw = (e->type() == QEvent::Expose || e->type() == QEvent::UpdateRequest);
@@ -283,6 +292,6 @@ bool Qt3DWindow::event(QEvent *e)
     return QWindow::event(e);
 }
 
-} // Qt3DExtras
+} // namespace QtCellink
 
 QT_END_NAMESPACE

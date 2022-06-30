@@ -31,12 +31,14 @@
 ****************************************************************************/
 
 #include "yoctolicensemodel.h"
+
+#include <thread>
+
 #include <QtCore/qdir.h>
 #include <QtCore/qfile.h>
 #include <QtCore/qfileinfo.h>
 #include <QtCore/qpointer.h>
 #include <QtCore/qtextstream.h>
-#include <thread>
 
 static const QLatin1String PackageKey("PACKAGE NAME");
 static const QLatin1String VersionKey("PACKAGE VERSION");
@@ -44,7 +46,8 @@ static const QLatin1String RecipeKey("RECIPE NAME");
 static const QLatin1String LicenseKey("LICENSE");
 static const QString LicenseFile = QStringLiteral("generic_%1");
 
-YoctoLicenseModel::YoctoLicenseModel(QObject *parent) : QAbstractListModel(parent)
+YoctoLicenseModel::YoctoLicenseModel(QObject* parent)
+    : QAbstractListModel(parent)
 {
     qRegisterMetaType<Status>("Status");
     qRegisterMetaType<YoctoLicense>("YoctoLicense");
@@ -70,7 +73,7 @@ QString YoctoLicenseModel::manifest() const
     return m_manifest;
 }
 
-static YoctoLicense parseLicense(YoctoLicense license, const QString &value, const QStringList &licenses)
+static YoctoLicense parseLicense(YoctoLicense license, const QString& value, const QStringList& licenses)
 {
     license.licenses = licenses;
     const QStringList parts = value.split(QLatin1Char(' '), Qt::SkipEmptyParts);
@@ -85,7 +88,7 @@ static YoctoLicense parseLicense(YoctoLicense license, const QString &value, con
     return license;
 }
 
-void YoctoLicenseModel::setManifest(const QString &manifest)
+void YoctoLicenseModel::setManifest(const QString& manifest)
 {
     if (m_manifest == manifest)
         return;
@@ -97,7 +100,10 @@ void YoctoLicenseModel::setManifest(const QString &manifest)
     std::thread([model, manifest]() {
         QFile file(manifest);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QMetaObject::invokeMethod(model.data(), "setStatus", Qt::QueuedConnection, Q_ARG(Status, Error));
+            QMetaObject::invokeMethod(model.data(),
+                                      "setStatus",
+                                      Qt::QueuedConnection,
+                                      Q_ARG(Status, Error));
             return;
         }
 
@@ -119,12 +125,19 @@ void YoctoLicenseModel::setManifest(const QString &manifest)
             else if (key == RecipeKey)
                 license.name = value;
             else if (key == LicenseKey)
-                licenses.insert(license.name, parseLicense(license, value, licenses.value(license.name).licenses));
+                licenses.insert(license.name,
+                                parseLicense(license, value, licenses.value(license.name).licenses));
         }
 
         if (model) {
-            QMetaObject::invokeMethod(model.data(), "setLicenses", Qt::QueuedConnection, Q_ARG(QList<YoctoLicense>, licenses.values()));
-            QMetaObject::invokeMethod(model.data(), "setStatus", Qt::QueuedConnection, Q_ARG(Status, Ready));
+            QMetaObject::invokeMethod(model.data(),
+                                      "setLicenses",
+                                      Qt::QueuedConnection,
+                                      Q_ARG(QList<YoctoLicense>, licenses.values()));
+            QMetaObject::invokeMethod(model.data(),
+                                      "setStatus",
+                                      Qt::QueuedConnection,
+                                      Q_ARG(Status, Ready));
         }
     }).detach();
 
@@ -133,14 +146,10 @@ void YoctoLicenseModel::setManifest(const QString &manifest)
 
 QHash<int, QByteArray> YoctoLicenseModel::roleNames() const
 {
-    return {
-        { NameRole, "name" },
-        { VersionRole, "version" },
-        { LicensesRole, "licenses" }
-    };
+    return {{NameRole, "name"}, {VersionRole, "version"}, {LicensesRole, "licenses"}};
 }
 
-int YoctoLicenseModel::rowCount(const QModelIndex &parent) const
+int YoctoLicenseModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
         return 0;
@@ -148,7 +157,7 @@ int YoctoLicenseModel::rowCount(const QModelIndex &parent) const
     return m_licenses.count();
 }
 
-QVariant YoctoLicenseModel::data(const QModelIndex &index, int role) const
+QVariant YoctoLicenseModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -173,7 +182,7 @@ YoctoLicense YoctoLicenseModel::get(int index) const
     return m_licenses.value(index);
 }
 
-QString YoctoLicenseModel::read(const QString &name) const
+QString YoctoLicenseModel::read(const QString& name) const
 {
     QString filePath = QFileInfo(m_manifest).dir().filePath(LicenseFile.arg(name));
     QFile file(filePath);
@@ -192,7 +201,7 @@ void YoctoLicenseModel::setStatus(Status status)
     emit statusChanged();
 }
 
-void YoctoLicenseModel::setLicenses(const QList<YoctoLicense> &licenses)
+void YoctoLicenseModel::setLicenses(const QList<YoctoLicense>& licenses)
 {
     if (m_licenses == licenses)
         return;

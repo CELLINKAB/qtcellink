@@ -19,20 +19,30 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
+#include <QDebug>
 #include <QtQml/qqml.h>
+#include <QtQml/qqmlextensionplugin.h>
 
-class QtCellinkFontAwesomePlugin: public QQmlExtensionPlugin
+class QtCellinkFontAwesomePlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    explicit QtCellinkFontAwesomePlugin(QObject *parent = nullptr) : QQmlExtensionPlugin(parent) { }
+    explicit QtCellinkFontAwesomePlugin(QObject* parent = nullptr)
+        : QQmlExtensionPlugin(parent)
+    {}
 
-    void registerTypes(const char *uri) override
+    void registerTypes(const char* uri) override
     {
-        qmlRegisterSingletonType(QStringLiteral("qrc:/qt-project.org/imports/QtCellink/FontAwesome/FontAwesome.qml"), uri, 1, 0, "FontAwesome");
+        qDebug() << "Registered FontAwesome at" << uri;
+
+        qmlRegisterSingletonType(QStringLiteral("qrc:/qt-project.org/imports/QtCellink/FontAwesome/"
+                                                "FontAwesome.qml"),
+                                 uri,
+                                 1,
+                                 0,
+                                 "FontAwesome");
     }
 };
 

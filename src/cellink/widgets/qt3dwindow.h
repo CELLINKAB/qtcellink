@@ -51,9 +51,10 @@
 #ifndef QTCELLINK3DWINDOW_H
 #define QTCELLINK3DWINDOW_H
 
+#include "qtcellink/src/cellink/core/cellink.h"
+
 #include <Qt3DExtras/qt3dextras_global.h>
 #include <QtGui/QWindow>
-#include <QtCellink/cellink.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -61,14 +62,14 @@ namespace Qt3DCore {
 class QAspectEngine;
 class QAbstractAspect;
 class QEntity;
-}
+} // namespace Qt3DCore
 
 namespace Qt3DRender {
 class QCamera;
 class QFrameGraphNode;
 class QRenderAspect;
 class QRenderSettings;
-}
+} // namespace Qt3DRender
 
 namespace Qt3DExtras {
 class QForwardRenderer;
@@ -77,7 +78,7 @@ class QForwardRenderer;
 namespace Qt3DInput {
 class QInputAspect;
 class QInputSettings;
-}
+} // namespace Qt3DInput
 
 namespace Qt3DLogic {
 class QLogicAspect;
@@ -90,36 +91,42 @@ class Qt3DWindowPrivate;
 class Q_CELLINK_EXPORT Qt3DWindow : public QWindow
 {
     Q_OBJECT
+    Q_PROPERTY(Qt3DCore::QEntity* rootEntity READ rootEntity WRITE setRootEntity NOTIFY rootEntityChanged)
+    Q_PROPERTY(Qt3DRender::QCamera* camera READ camera CONSTANT)
+    Q_PROPERTY(Qt3DRender::QRenderSettings* renderSettings READ renderSettings CONSTANT)
+
 public:
-    Qt3DWindow(QScreen *screen = nullptr);
-    ~Qt3DWindow();
+    explicit Qt3DWindow(QScreen* screen = nullptr);
+    ~Qt3DWindow() override;
 
-    void registerAspect(Qt3DCore::QAbstractAspect *aspect);
-    void registerAspect(const QString &name);
+    void registerAspect(Qt3DCore::QAbstractAspect* aspect);
+    void registerAspect(const QString& name);
 
-    void setRootEntity(Qt3DCore::QEntity *root);
+    void setActiveFrameGraph(Qt3DRender::QFrameGraphNode* activeFrameGraph);
+    Qt3DRender::QFrameGraphNode* activeFrameGraph() const;
+    Qt3DExtras::QForwardRenderer* defaultFrameGraph() const;
 
-    void setActiveFrameGraph(Qt3DRender::QFrameGraphNode *activeFrameGraph);
-    Qt3DRender::QFrameGraphNode *activeFrameGraph() const;
-    Qt3DExtras::QForwardRenderer *defaultFrameGraph() const;
+    Qt3DRender::QCamera* camera() const;
+    Qt3DRender::QRenderSettings* renderSettings() const;
 
-    Qt3DRender::QCamera *camera() const;
-    Qt3DRender::QRenderSettings *renderSettings() const;
+    Qt3DCore::QEntity* rootEntity() const;
 
 public Q_SLOTS:
+    void setRootEntity(Qt3DCore::QEntity* root);
 
 Q_SIGNALS:
+    void rootEntityChanged(Qt3DCore::QEntity* value);
 
 protected:
-    void showEvent(QShowEvent *e) override;
-    void resizeEvent(QResizeEvent *) override;
-    bool event(QEvent *e) override;
+    void showEvent(QShowEvent* e) override;
+    void resizeEvent(QResizeEvent*) override;
+    bool event(QEvent* e) override;
 
 private:
     Q_DECLARE_PRIVATE(Qt3DWindow)
 };
 
-} // QtCellink
+} // namespace QtCellink
 
 QT_END_NAMESPACE
 

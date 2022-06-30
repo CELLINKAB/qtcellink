@@ -25,19 +25,19 @@
 #include <Qt3DRender/qbuffer.h>
 #include <Qt3DRender/qgeometry.h>
 
-Qt3DRender::QGeometry *GcodeGeometryLoader::geometry() const
+Qt3DRender::QGeometry* GcodeGeometryLoader::geometry() const
 {
     if (m_points.empty())
         return nullptr;
 
     const int size = m_points.count() * sizeof(QVector3D);
-    const char *data = reinterpret_cast<const char *>(m_points.data());
+    const char* data = reinterpret_cast<const char*>(m_points.data());
 
-    Qt3DRender::QGeometry *geometry = new Qt3DRender::QGeometry;
-    Qt3DRender::QBuffer *buffer = new Qt3DRender::QBuffer(geometry);
+    Qt3DRender::QGeometry* geometry = new Qt3DRender::QGeometry;
+    Qt3DRender::QBuffer* buffer = new Qt3DRender::QBuffer(geometry);
     buffer->setData(QByteArray(data, size));
 
-    Qt3DRender::QAttribute *attribute = new Qt3DRender::QAttribute(geometry);
+    Qt3DRender::QAttribute* attribute = new Qt3DRender::QAttribute(geometry);
     attribute->setName(Qt3DRender::QAttribute::defaultPositionAttributeName());
     attribute->setVertexBaseType(Qt3DRender::QAttribute::Float);
     attribute->setVertexSize(3);
@@ -49,19 +49,19 @@ Qt3DRender::QGeometry *GcodeGeometryLoader::geometry() const
     return geometry;
 }
 
-static inline qreal readFloat(const QByteArray &command)
+static inline qreal readFloat(const QByteArray& command)
 {
     return command.mid(1).toFloat();
 }
 
-static bool readLine(const QByteArray &line, QVector3D &vec)
+static bool readLine(const QByteArray& line, QVector3D& vec)
 {
     if (line.isEmpty() || !line.startsWith("G1 "))
         return false;
 
     float e = 0;
     const QByteArrayList commands = line.split(' ');
-    for (const QByteArray &command : commands) {
+    for (const QByteArray& command : commands) {
         if (command.isEmpty())
             continue;
         switch (command.front()) {
@@ -85,14 +85,17 @@ static bool readLine(const QByteArray &line, QVector3D &vec)
     return e > 0;
 }
 
-static QVector<QVector3D> filterPoints(const QVector<QVector3D> &points, float from, float to)
+static QVector<QVector3D> filterPoints(const QVector<QVector3D>& points, float from, float to)
 {
     QVector<QVector3D> filtered;
-    std::copy_if(points.cbegin(), points.cend(), std::back_inserter(filtered), [=](const QVector3D &vec){ return vec.z() >= from && vec.z() <= to; });
+    std::copy_if(points.cbegin(),
+                 points.cend(),
+                 std::back_inserter(filtered),
+                 [=](const QVector3D& vec) { return vec.z() >= from && vec.z() <= to; });
     return filtered;
 }
 
-static QPair<int, int> parseRange(const QString &subMesh)
+static QPair<int, int> parseRange(const QString& subMesh)
 {
     QPair<int, int> range = qMakePair(0, INT_MAX);
     bool ok = false;
@@ -112,7 +115,7 @@ static QPair<int, int> parseRange(const QString &subMesh)
     return range;
 }
 
-bool GcodeGeometryLoader::load(QIODevice *device, const QString &subMesh)
+bool GcodeGeometryLoader::load(QIODevice* device, const QString& subMesh)
 {
     if (!device)
         return false;

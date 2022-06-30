@@ -5,6 +5,14 @@ IMPORT_VERSION = 1.0
 QT += qml quick
 QT_PRIVATE += core-private gui-private qml-private quick-private quicktemplates2-private
 
+versionAtLeast(QT_VERSION, 5.14.0) {
+    message("Using qmlmodels library as we are Qt 5.14 or later")
+    QT += qmlmodels
+    QT_PRIVATE += qmlmodels-private
+}
+
+CONFIG += no_cxx_module
+
 DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 
 OTHER_FILES += \

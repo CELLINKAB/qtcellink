@@ -45,7 +45,8 @@ class IconLabel : public QQuickItem
     Q_PROPERTY(qreal bottomPadding READ bottomPadding WRITE setBottomPadding RESET resetBottomPadding FINAL)
 
 public:
-    enum Display {
+    enum Display
+    {
         IconOnly,
         TextOnly,
         TextBesideIcon,
@@ -53,20 +54,20 @@ public:
     };
     Q_ENUM(Display)
 
-    explicit IconLabel(QQuickItem *parent = nullptr);
+    explicit IconLabel(QQuickItem* parent = nullptr);
     ~IconLabel();
 
     QQuickIcon icon() const;
-    void setIcon(const QQuickIcon &icon);
+    void setIcon(const QQuickIcon& icon);
 
     QString text() const;
     void setText(const QString text);
 
     QFont font() const;
-    void setFont(const QFont &font);
+    void setFont(const QFont& font);
 
     QColor color() const;
-    void setColor(const QColor &color);
+    void setColor(const QColor& color);
 
     Display display() const;
     void setDisplay(Display display);
@@ -98,7 +99,7 @@ public:
 
 protected:
     void componentComplete() override;
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
 private:
     Q_DISABLE_COPY(IconLabel)

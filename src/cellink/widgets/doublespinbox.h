@@ -1,7 +1,8 @@
 #ifndef DOUBLESPINBOX_H
 #define DOUBLESPINBOX_H
 
-#include <QtCellink/cellink.h>
+#include "qtcellink/src/cellink/core/cellink.h"
+
 #include <QtWidgets/qspinbox.h>
 
 class Q_CELLINK_EXPORT DoubleSpinBox : public QDoubleSpinBox
@@ -10,7 +11,7 @@ class Q_CELLINK_EXPORT DoubleSpinBox : public QDoubleSpinBox
     Q_PROPERTY(bool invertedControls READ invertedControls WRITE setInvertedControls)
 
 public:
-    explicit DoubleSpinBox(QWidget *parent = nullptr);
+    explicit DoubleSpinBox(QWidget* parent = nullptr);
 
     bool invertedControls() const;
     void setInvertedControls(bool invert);

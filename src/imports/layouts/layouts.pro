@@ -10,6 +10,9 @@ DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 OTHER_FILES += \
     $$PWD/qmldir
 
+INCLUDEPATH += \
+    $$MOC_DIR
+
 HEADERS += \
     $$PWD/layoutgroup.h
 
@@ -19,3 +22,4 @@ SOURCES += \
 
 CONFIG += no_cxx_module
 load(qml_plugin)
+

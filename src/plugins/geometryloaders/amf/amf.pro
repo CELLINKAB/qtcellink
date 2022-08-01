@@ -2,6 +2,9 @@ TARGET = amfgeometryloader
 QT += core-private 3dcore 3dcore-private 3drender 3drender-private
 CONFIG += assimp
 
+INCLUDEPATH += \
+    $$MOC_DIR
+
 HEADERS += \
     amfgeometryloader.h \
     basegeometryloader_p.h

@@ -18,6 +18,9 @@ DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 OTHER_FILES += \
     $$PWD/qmldir
 
+INCLUDEPATH += \
+    $$MOC_DIR
+
 HEADERS += \
     $$PWD/color.h \
     $$PWD/colorimage.h \

@@ -4,6 +4,9 @@ IMPORT_VERSION = 1.0
 
 QT += qml
 
+INCLUDEPATH += \
+    $$MOC_DIR
+
 OTHER_FILES += \
     $$PWD/qmldir
 

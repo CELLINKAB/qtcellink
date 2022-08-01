@@ -6,6 +6,9 @@ QT += qml
 
 DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
 
+INCLUDEPATH += \
+    $$MOC_DIR
+
 QML_FILES += \
     $$files(*.qml)
 

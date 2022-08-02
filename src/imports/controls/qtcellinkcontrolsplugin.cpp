@@ -46,7 +46,7 @@ QtCellinkControlsPlugin::QtCellinkControlsPlugin(QObject* parent)
     : QQmlExtensionPlugin(parent)
 {}
 
-static bool useNative()
+static void useNative()
 {
     QCommandLineParser cmdLine;
     QCommandLineOption nativeOption(QStringLiteral("native"));

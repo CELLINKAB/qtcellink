@@ -285,10 +285,13 @@ void Qt3DWindow::resizeEvent(QResizeEvent*)
 */
 bool Qt3DWindow::event(QEvent* e)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Q_D(Qt3DWindow);
     const bool needsRedraw = (e->type() == QEvent::Expose || e->type() == QEvent::UpdateRequest);
     if (needsRedraw && d->m_renderSettings->renderPolicy() == Qt3DRender::QRenderSettings::OnDemand)
+        // sendCommand obsolete in Qt6
         d->m_renderSettings->sendCommand(QLatin1Literal("InvalidateFrame"));
+#endif
     return QWindow::event(e);
 }
 

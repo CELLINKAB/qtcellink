@@ -84,6 +84,21 @@ namespace Qt3DLogic {
 class QLogicAspect;
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#    ifndef OPAQUE_PTR_QEntity
+#        define OPAQUE_PTR_QEntity
+Q_DECLARE_OPAQUE_POINTER(Qt3DCore::QEntity*)
+#    endif
+#    ifndef OPAQUE_PTR_QCamera
+#        define OPAQUE_PTR_QCamera
+Q_DECLARE_OPAQUE_POINTER(Qt3DRender::QCamera*)
+#    endif
+#    ifndef OPAQUE_PTR_QRenderSettings
+#        define OPAQUE_PTR_QRenderSettings
+Q_DECLARE_OPAQUE_POINTER(Qt3DRender::QRenderSettings*)
+#    endif
+#endif
+
 namespace QtCellink {
 
 class Qt3DWindowPrivate;

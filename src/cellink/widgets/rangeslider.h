@@ -30,7 +30,7 @@
 
 #include <QtWidgets/qslider.h>
 
-namespace {
+namespace cellink {
 
 class RangeSliderPrivate;
 
@@ -105,6 +105,6 @@ private:
     QScopedPointer<RangeSliderPrivate> d_ptr;
 };
 
-} // namespace
+} // namespace cellink
 
 #endif // RANGESLIDER_H

@@ -1,9 +1,8 @@
-#ifndef HIGHLIGHTLINES_H
-#define HIGHLIGHTLINES_H
+#pragma once
 
-#include <QtGlobal>
+#include <QtCore/QMetaType>
 
-namespace {
+namespace cellink {
 
 struct HighlightLines
 {
@@ -17,7 +16,7 @@ struct HighlightLines
 
     bool operator!=(const HighlightLines& other) const { return !(*this == other); }
 };
-Q_DECLARE_METATYPE(HighlightLines)
 
-} // namespace
-#endif // HIGHLIGHTLINES_H
+} // namespace cellink
+
+Q_DECLARE_METATYPE(cellink::HighlightLines)

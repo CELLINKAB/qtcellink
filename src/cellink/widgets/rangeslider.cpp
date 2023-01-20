@@ -29,6 +29,8 @@
 #include <QtWidgets/qstyleoption.h>
 #include <QtWidgets/qstylepainter.h>
 
+namespace cellink {
+
 class RangeSliderPrivate
 {
     Q_DECLARE_PUBLIC(RangeSlider)
@@ -621,3 +623,5 @@ void RangeSlider::sliderChange(SliderChange change)
         setValues(d->lower, d->upper); // force within the range
     QSlider::sliderChange(change);
 }
+
+} // namespace cellink

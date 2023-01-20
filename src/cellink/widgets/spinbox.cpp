@@ -1,5 +1,7 @@
 #include "spinbox.h"
 
+namespace cellink {
+
 SpinBox::SpinBox(QWidget* parent)
     : QSpinBox(parent)
 {
@@ -18,6 +20,7 @@ bool SpinBox::invertedControls() const
 void SpinBox::setInvertedControls(bool invert)
 {
     m_inverted = invert;
+    emit invertedControlsChanged(invert);
 }
 
 void SpinBox::stepBy(int steps)
@@ -26,3 +29,5 @@ void SpinBox::stepBy(int steps)
     QSpinBox::stepBy(m_inverted ? -steps : steps);
     m_editing = false;
 }
+
+} // namespace cellink

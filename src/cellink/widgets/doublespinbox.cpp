@@ -1,5 +1,7 @@
 #include "doublespinbox.h"
 
+namespace cellink {
+
 DoubleSpinBox::DoubleSpinBox(QWidget* parent)
     : QDoubleSpinBox(parent)
 {
@@ -26,3 +28,5 @@ void DoubleSpinBox::stepBy(int steps)
     QDoubleSpinBox::stepBy(m_inverted ? -steps : steps);
     m_editing = false;
 }
+
+} // namespace cellink

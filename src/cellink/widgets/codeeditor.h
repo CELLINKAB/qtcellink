@@ -45,6 +45,9 @@
 #include "highlightlines.h"
 
 class QCompleter;
+
+namespace cellink {
+
 class CodeEditor;
 
 class Q_CELLINK_EXPORT LineNumberBar : public QWidget
@@ -128,5 +131,7 @@ private:
     int m_lastLineNumber = 0;
     int m_pivotLine = 0;
 };
+
+} // namespace cellink
 
 #endif // CODEEDITOR_H

@@ -27,6 +27,8 @@
 
 #include <QPainter>
 
+namespace cellink {
+
 ProgressIndicator::ProgressIndicator(QWidget* parent)
     : QWidget(parent)
     , m_angle(0)
@@ -143,3 +145,5 @@ void ProgressIndicator::paintEvent(QPaintEvent* /*event*/)
         p.restore();
     }
 }
+
+} // namespace cellink

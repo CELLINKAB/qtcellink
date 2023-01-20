@@ -5,6 +5,8 @@
 
 #include <QtWidgets/qspinbox.h>
 
+namespace cellink {
+
 class Q_CELLINK_EXPORT DoubleSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
@@ -25,5 +27,7 @@ private:
     bool m_editing = false;
     bool m_inverted = false;
 };
+
+} // namespace cellink
 
 #endif // DOUBLESPINBOX_H

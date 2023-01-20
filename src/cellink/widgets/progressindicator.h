@@ -31,6 +31,8 @@
 #include <QColor>
 #include <QWidget>
 
+namespace cellink {
+
 /*!
     \class QProgressIndicator
     \brief The QProgressIndicator class lets an application display a progress indicator to show
@@ -119,5 +121,7 @@ private:
     bool m_displayedWhenStopped;
     QColor m_color;
 };
+
+} // namespace cellink
 
 #endif // PROGRESSINDICATOR_H

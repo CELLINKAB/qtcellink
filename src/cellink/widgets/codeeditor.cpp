@@ -45,6 +45,8 @@
 #include <QtWidgets/qcompleter.h>
 #include <QtWidgets/qscrollbar.h>
 
+namespace cellink {
+
 static QFont monospaceFont()
 {
     QFont font("Monospace");
@@ -325,3 +327,5 @@ void CodeEditor::updateHighlightLines(bool cursorChanged)
     emit highlightLinesChanged(m_highlightLines);
     m_lastLineNumber = lineNumber;
 }
+
+} // namespace cellink

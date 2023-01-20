@@ -1,7 +1,9 @@
 #ifndef HIGHLIGHTLINES_H
 #define HIGHLIGHTLINES_H
 
-#include <QWidget>
+#include <QtGlobal>
+
+namespace {
 
 struct HighlightLines
 {
@@ -17,4 +19,5 @@ struct HighlightLines
 };
 Q_DECLARE_METATYPE(HighlightLines)
 
+} // namespace
 #endif // HIGHLIGHTLINES_H

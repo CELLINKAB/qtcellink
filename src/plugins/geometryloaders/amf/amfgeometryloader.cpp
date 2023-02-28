@@ -49,7 +49,7 @@ bool AmfGeometryLoader::doLoad(QIODevice* device, const QString& subMesh)
     if (!scene)
         return false;
 
-    const aiNode* node = nullptr;
+    const aiNode* node = scene->mRootNode;
     if (!subMesh.isEmpty()) {
         node = node->FindNode(subMesh.toUtf8());
         if (!node)
@@ -70,7 +70,7 @@ bool AmfGeometryLoader::doLoad(QIODevice* device, const QString& subMesh)
             m_points += toQVector3D(mesh->mVertices[v]);
             if (mesh->mNormals)
                 m_normals += toQVector3D(mesh->mNormals[v]);
-            if (mesh->mTextureCoords) {
+            if (mesh->mTextureCoords) { //NOLINT
                 for (uint t = 0; t < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++t) {
                     if (!mesh->mTextureCoords[t])
                         break;

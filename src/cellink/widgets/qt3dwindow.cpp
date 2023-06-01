@@ -133,6 +133,7 @@ Qt3DWindow::Qt3DWindow(QScreen* screen)
 
     resize(1024, 768);
 
+    /*
     QSurfaceFormat format = QSurfaceFormat::defaultFormat();
 #ifdef QT_OPENGL_ES_2
     format.setRenderableType(QSurfaceFormat::OpenGLES);
@@ -146,6 +147,7 @@ Qt3DWindow::Qt3DWindow(QScreen* screen)
     format.setSamples(4);
     format.setStencilBufferSize(8);
     setFormat(format);
+    */
     //    QSurfaceFormat::setDefaultFormat(format);
 
     d->m_aspectEngine->registerAspect(d->m_renderAspect);

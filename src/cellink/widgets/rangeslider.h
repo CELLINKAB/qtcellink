@@ -26,7 +26,7 @@
 #ifndef RANGESLIDER_H
 #define RANGESLIDER_H
 
-#include "qtcellink/src/cellink/core/cellink.h"
+#include "cellink.h"
 
 #include <QtWidgets/qslider.h>
 

@@ -38,7 +38,7 @@
 #ifndef CODEEDITOR_H
 #define CODEEDITOR_H
 
-#include "qtcellink/src/cellink/core/cellink.h"
+#include "cellink.h"
 
 #include <QtWidgets/qplaintextedit.h>
 

@@ -51,7 +51,7 @@
 #ifndef QTCELLINK3DWINDOW_H
 #define QTCELLINK3DWINDOW_H
 
-#include "qtcellink/src/cellink/core/cellink.h"
+#include "cellink.h"
 
 #include <Qt3DExtras/qt3dextras_global.h>
 #include <QtGui/QWindow>

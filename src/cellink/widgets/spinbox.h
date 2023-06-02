@@ -1,7 +1,7 @@
 #ifndef SPINBOX_H
 #define SPINBOX_H
 
-#include "qtcellink/src/cellink/core/cellink.h"
+#include "cellink.h"
 
 #include <QtWidgets/qspinbox.h>
 

@@ -26,7 +26,7 @@
 #ifndef PROGRESSINDICATOR_H
 #define PROGRESSINDICATOR_H
 
-#include "qtcellink/src/cellink/core/cellink.h"
+#include "cellink.h"
 
 #include <QColor>
 #include <QWidget>

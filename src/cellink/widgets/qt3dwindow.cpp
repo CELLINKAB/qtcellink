@@ -292,7 +292,7 @@ bool Qt3DWindow::event(QEvent* e)
     const bool needsRedraw = (e->type() == QEvent::Expose || e->type() == QEvent::UpdateRequest);
     if (needsRedraw && d->m_renderSettings->renderPolicy() == Qt3DRender::QRenderSettings::OnDemand)
         // sendCommand obsolete in Qt6
-        d->m_renderSettings->sendCommand(QLatin1Literal("InvalidateFrame"));
+        d->m_renderSettings->sendCommand(QStringLiteral("InvalidateFrame"));
 #endif
     return QWindow::event(e);
 }

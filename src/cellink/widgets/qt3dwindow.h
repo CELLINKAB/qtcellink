@@ -111,7 +111,7 @@ class Q_CELLINK_EXPORT Qt3DWindow : public QWindow
     Q_PROPERTY(Qt3DRender::QRenderSettings* renderSettings READ renderSettings CONSTANT)
 
 public:
-    explicit Qt3DWindow(QScreen* screen = nullptr);
+    explicit Qt3DWindow(QScreen* screen = nullptr, int samples = 4);
     ~Qt3DWindow() override;
 
     void registerAspect(Qt3DCore::QAbstractAspect* aspect);

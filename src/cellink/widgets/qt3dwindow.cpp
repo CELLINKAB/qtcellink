@@ -119,7 +119,12 @@ Qt3DWindowPrivate::Qt3DWindowPrivate()
     , m_initialized(false)
 {}
 
-Qt3DWindow::Qt3DWindow(QScreen* screen)
+/**
+ * @brief Qt3DWindow::Qt3DWindow
+ * @param screen qt screen  to show window on
+ * @param samples number of multisampling samples, increase for higher quality, reduce for speed
+ */
+Qt3DWindow::Qt3DWindow(QScreen* screen, int samples)
     : QWindow(*new Qt3DWindowPrivate(), nullptr)
 {
     Q_D(Qt3DWindow);
@@ -133,7 +138,6 @@ Qt3DWindow::Qt3DWindow(QScreen* screen)
 
     resize(1024, 768);
 
-    /*
     QSurfaceFormat format = QSurfaceFormat::defaultFormat();
 #ifdef QT_OPENGL_ES_2
     format.setRenderableType(QSurfaceFormat::OpenGLES);
@@ -144,11 +148,15 @@ Qt3DWindow::Qt3DWindow(QScreen* screen)
     }
 #endif
     format.setDepthBufferSize(24);
-    format.setSamples(4);
+    format.setSamples(samples);
     format.setStencilBufferSize(8);
+    format.setColorSpace(QSurfaceFormat::DefaultColorSpace);
+#ifdef _DEBUG
+    format.setOptions(QSurfaceFormat::DebugContext | QSurfaceFormat::defaultFormat().options());
+#endif
     setFormat(format);
-    */
-    //    QSurfaceFormat::setDefaultFormat(format);
+
+    QSurfaceFormat::setDefaultFormat(format);
 
     d->m_aspectEngine->registerAspect(d->m_renderAspect);
     d->m_aspectEngine->registerAspect(d->m_inputAspect);

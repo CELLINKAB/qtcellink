@@ -59,6 +59,7 @@
 #include <Qt3DRender/qcamera.h>
 #include <Qt3DRender/qrenderaspect.h>
 #include <Qt3DRender/qrendersettings.h>
+#include <QtCore/QTimer>
 #include <QtGui/private/qwindow_p.h>
 #include <QtGui/qevent.h>
 #include <QtGui/qopenglcontext.h>
@@ -260,12 +261,16 @@ Qt3DRender::QRenderSettings* Qt3DWindow::renderSettings() const
 void Qt3DWindow::showEvent(QShowEvent* e)
 {
     Q_D(Qt3DWindow);
-    if (!d->m_initialized) {
-        d->m_root->addComponent(d->m_renderSettings);
-        d->m_root->addComponent(d->m_inputSettings);
-        d->m_aspectEngine->setRootEntity(Qt3DCore::QEntityPtr(d->m_root));
 
+    if (!d->m_initialized) {
         d->m_initialized = true;
+
+        // becomes stuck sometimes, maybe because it's inside showEvent?
+        QTimer::singleShot(0, this, [d]() {
+            d->m_root->addComponent(d->m_renderSettings);
+            d->m_root->addComponent(d->m_inputSettings);
+            d->m_aspectEngine->setRootEntity(Qt3DCore::QEntityPtr(d->m_root));
+        });
     }
 
     QWindow::showEvent(e);

@@ -266,6 +266,8 @@ void Qt3DWindow::showEvent(QShowEvent* e)
         d->m_initialized = true;
 
         // becomes stuck sometimes, maybe because it's inside showEvent?
+        // It seems to happen when there are thread pool tasks running,
+        // as it waits for all of them to complete. :-/
         QTimer::singleShot(0, this, [d]() {
             d->m_root->addComponent(d->m_renderSettings);
             d->m_root->addComponent(d->m_inputSettings);

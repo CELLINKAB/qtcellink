@@ -195,16 +195,6 @@ void Qt3DWindow::setRootEntity(Qt3DCore::QEntity* root)
 {
     Q_D(Qt3DWindow);
     if (d->m_userRoot != root) {
-        if (d->m_userRoot != nullptr)
-            d->m_userRoot->setParent(static_cast<Qt3DCore::QNode*>(nullptr));
-
-        if (root != nullptr)
-            root->setParent(d->m_root);
-
-        d->m_userRoot = root;
-
-        emit rootEntityChanged(root);
-
         if (!d->m_initialized) {
             d->m_initialized = true;
 
@@ -213,9 +203,20 @@ void Qt3DWindow::setRootEntity(Qt3DCore::QEntity* root)
             // as it waits for all of them to complete. :-/
             d->m_root->addComponent(d->m_renderSettings);
             d->m_root->addComponent(d->m_inputSettings);
+            d->m_aspectEngine->setRootEntity(Qt3DCore::QEntityPtr(d->m_root));
         }
 
-        d->m_aspectEngine->setRootEntity(Qt3DCore::QEntityPtr(d->m_root));
+        if (d->m_userRoot != nullptr) {
+            d->m_userRoot->setParent(static_cast<Qt3DCore::QNode*>(nullptr));
+        }
+
+        if (root != nullptr) {
+            root->setParent(d->m_root);
+        }
+
+        d->m_userRoot = root;
+
+        emit rootEntityChanged(root);
     }
 }
 
@@ -272,8 +273,6 @@ Qt3DRender::QRenderSettings* Qt3DWindow::renderSettings() const
 */
 void Qt3DWindow::showEvent(QShowEvent* e)
 {
-    Q_D(Qt3DWindow);
-
     QWindow::showEvent(e);
 }
 
@@ -293,14 +292,25 @@ void Qt3DWindow::resizeEvent(QResizeEvent*)
 */
 bool Qt3DWindow::event(QEvent* e)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Q_D(Qt3DWindow);
     const bool needsRedraw = (e->type() == QEvent::Expose || e->type() == QEvent::UpdateRequest);
-    if (needsRedraw && d->m_renderSettings->renderPolicy() == Qt3DRender::QRenderSettings::OnDemand)
+
+    if (needsRedraw && d->m_renderSettings->renderPolicy() == Qt3DRender::QRenderSettings::OnDemand) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         // sendCommand obsolete in Qt6
         d->m_renderSettings->sendCommand(QStringLiteral("InvalidateFrame"));
+#else
+        d->m_aspectEngine->processFrame(); /// ? Is this correct
 #endif
+    }
+
     return QWindow::event(e);
+}
+
+Qt3DCore::QAspectEngine* Qt3DWindow::engine() const
+{
+    const Q_D(Qt3DWindow);
+    return d->m_aspectEngine;
 }
 
 } // namespace QtCellink

@@ -118,13 +118,13 @@ public:
     void registerAspect(const QString& name);
 
     void setActiveFrameGraph(Qt3DRender::QFrameGraphNode* activeFrameGraph);
-    Qt3DRender::QFrameGraphNode* activeFrameGraph() const;
-    Qt3DExtras::QForwardRenderer* defaultFrameGraph() const;
+    [[nodiscard]] Qt3DRender::QFrameGraphNode* activeFrameGraph() const;
+    [[nodiscard]] Qt3DExtras::QForwardRenderer* defaultFrameGraph() const;
 
-    Qt3DRender::QCamera* camera() const;
-    Qt3DRender::QRenderSettings* renderSettings() const;
-
-    Qt3DCore::QEntity* rootEntity() const;
+    [[nodiscard]] Qt3DRender::QCamera* camera() const;
+    [[nodiscard]] Qt3DRender::QRenderSettings* renderSettings() const;
+    [[nodiscard]] Qt3DCore::QEntity* rootEntity() const;
+    [[nodiscard]] Qt3DCore::QAspectEngine* engine() const;
 
 public Q_SLOTS:
     void setRootEntity(Qt3DCore::QEntity* root);

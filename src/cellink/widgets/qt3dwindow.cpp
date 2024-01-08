@@ -204,6 +204,18 @@ void Qt3DWindow::setRootEntity(Qt3DCore::QEntity* root)
         d->m_userRoot = root;
 
         emit rootEntityChanged(root);
+
+        if (!d->m_initialized) {
+            d->m_initialized = true;
+
+            // becomes stuck sometimes,
+            // It seems to happen when there are thread pool tasks running,
+            // as it waits for all of them to complete. :-/
+            d->m_root->addComponent(d->m_renderSettings);
+            d->m_root->addComponent(d->m_inputSettings);
+        }
+
+        d->m_aspectEngine->setRootEntity(Qt3DCore::QEntityPtr(d->m_root));
     }
 }
 
@@ -261,19 +273,6 @@ Qt3DRender::QRenderSettings* Qt3DWindow::renderSettings() const
 void Qt3DWindow::showEvent(QShowEvent* e)
 {
     Q_D(Qt3DWindow);
-
-    if (!d->m_initialized) {
-        d->m_initialized = true;
-
-        // becomes stuck sometimes, maybe because it's inside showEvent?
-        // It seems to happen when there are thread pool tasks running,
-        // as it waits for all of them to complete. :-/
-        QTimer::singleShot(0, this, [d]() {
-            d->m_root->addComponent(d->m_renderSettings);
-            d->m_root->addComponent(d->m_inputSettings);
-            d->m_aspectEngine->setRootEntity(Qt3DCore::QEntityPtr(d->m_root));
-        });
-    }
 
     QWindow::showEvent(e);
 }

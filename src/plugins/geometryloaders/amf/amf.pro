@@ -2,6 +2,15 @@ TARGET = amfgeometryloader
 QT += core-private 3dcore 3dcore-private 3drender 3drender-private
 CONFIG += assimp
 
+load(assimp)
+
+versionAtLeast(QT_VERSION, "6.0.0") {
+   CONFIG += plugin
+} else {
+   load(qt_build_config)
+   load(qt_plugin)
+}
+
 INCLUDEPATH += \
     $$MOC_DIR
 
@@ -20,9 +29,6 @@ DISTFILES += \
 PLUGIN_TYPE = geometryloaders
 PLUGIN_CLASS_NAME = AmfGeometryLoaderPlugin
 
-load(assimp)
-load(qt_build_config)
-load(qt_plugin)
 
 exists($$BUILD_TREE/conanbuildinfo.pri) {
     CONFIG += conan_basic_setup

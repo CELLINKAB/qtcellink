@@ -135,6 +135,7 @@ void DoubleSpinBoxPrivate::updateValue()
             } else {
                 val = locale.toDouble(text.toString());
             }
+
             setValue(val, /* allowWrap = */ false, /* modified = */ true);
         }
     }
@@ -146,12 +147,13 @@ bool DoubleSpinBoxPrivate::setValue(qreal newValue, bool allowWrap, bool modifie
     if (q->isComponentComplete())
         newValue = boundValue(newValue, allowWrap);
 
+    updateDisplayText();
+
     if (value == newValue)
         return false;
 
     value = newValue;
 
-    updateDisplayText();
     updateUpEnabled();
     updateDownEnabled();
 
@@ -212,8 +214,6 @@ void DoubleSpinBoxPrivate::updateDisplayText()
 void DoubleSpinBoxPrivate::setDisplayText(const QString& text)
 {
     Q_Q(DoubleSpinBox);
-    if (displayText == text)
-        return;
 
     displayText = text;
     emit q->displayTextChanged();

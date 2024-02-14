@@ -147,12 +147,12 @@ bool DoubleSpinBoxPrivate::setValue(qreal newValue, bool allowWrap, bool modifie
     if (q->isComponentComplete())
         newValue = boundValue(newValue, allowWrap);
 
+    value = newValue;
+
     updateDisplayText();
 
     if (value == newValue)
         return false;
-
-    value = newValue;
 
     updateUpEnabled();
     updateDownEnabled();

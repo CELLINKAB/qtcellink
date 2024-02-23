@@ -131,11 +131,13 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void rootEntityChanged(Qt3DCore::QEntity* value);
+    void mousePressed();
 
 protected:
     void showEvent(QShowEvent* e) override;
     void resizeEvent(QResizeEvent*) override;
     bool event(QEvent* e) override;
+    void mousePressEvent(QMouseEvent*) override;
 
 private:
     Q_DECLARE_PRIVATE(Qt3DWindow)

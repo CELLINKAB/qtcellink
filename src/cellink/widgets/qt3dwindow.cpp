@@ -169,12 +169,9 @@ Qt3DWindow::~Qt3DWindow()
     Q_D(Qt3DWindow);
 
     d->m_renderSettings->setRenderPolicy(Qt3DRender::QRenderSettings::OnDemand);
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents, 100);
-
+    d->m_aspectEngine->setRootEntity(nullptr);
     d->m_aspectEngine->unregisterAspect(d->m_renderAspect);
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents, 100);
-
-    delete d->m_aspectEngine;
+    d->m_aspectEngine->deleteLater();
 }
 
 /*!

@@ -293,6 +293,10 @@ void Qt3DWindow::resizeEvent(QResizeEvent*)
     Q_D(Qt3DWindow);
     d->m_defaultCamera->setAspectRatio(float(width()) / float(height()));
 }
+void Qt3DWindow::mousePressEvent(QMouseEvent*)
+{
+    emit mousePressed();
+}
 
 /*!
     \reimp

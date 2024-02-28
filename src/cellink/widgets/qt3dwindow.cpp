@@ -60,6 +60,8 @@
 #include <Qt3DRender/qrenderaspect.h>
 #include <Qt3DRender/qrendersettings.h>
 #include <QtCore/QTimer>
+#include <QtCore/qeventloop.h>
+#include <QtGui/QGuiApplication>
 #include <QtGui/private/qwindow_p.h>
 #include <QtGui/qevent.h>
 #include <QtGui/qopenglcontext.h>
@@ -165,7 +167,11 @@ Qt3DWindow::Qt3DWindow(QScreen* screen)
 Qt3DWindow::~Qt3DWindow()
 {
     Q_D(Qt3DWindow);
-    delete d->m_aspectEngine;
+
+    d->m_renderSettings->setRenderPolicy(Qt3DRender::QRenderSettings::OnDemand);
+    d->m_aspectEngine->setRootEntity(nullptr);
+    d->m_aspectEngine->unregisterAspect(d->m_renderAspect);
+    d->m_aspectEngine->deleteLater();
 }
 
 /*!

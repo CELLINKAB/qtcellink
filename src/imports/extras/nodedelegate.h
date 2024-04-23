@@ -43,10 +43,12 @@
 #include <QtGui/qimage.h>
 #include <optional>
 
+#include <DxUi/uiglobal.h>
+
 class QSGNode;
 class NodeItem;
 
-class NodeDelegate : public QObject
+class DX_UI_EXPORT NodeDelegate : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(qreal padding READ padding WRITE setPadding NOTIFY paddingChanged)
@@ -94,7 +96,7 @@ private:
     std::optional<qreal> m_bottomPadding;
 };
 
-class AbstractImageDelegate : public NodeDelegate
+class DX_UI_EXPORT AbstractImageDelegate : public NodeDelegate
 {
     Q_OBJECT
 
@@ -107,7 +109,7 @@ public:
     virtual QImage nodeImage(const QModelIndex &index, NodeItem *item) const = 0;
 };
 
-class AbstractRectDelegate : public NodeDelegate
+class DX_UI_EXPORT AbstractRectDelegate : public NodeDelegate
 {
     Q_OBJECT
 
@@ -125,7 +127,7 @@ public:
     virtual qreal nodeBorderWidth(const QModelIndex &index, NodeItem *item) const = 0;
 };
 
-class RectDelegate : public AbstractRectDelegate
+class DX_UI_EXPORT RectDelegate : public AbstractRectDelegate
 {
     Q_OBJECT
     Q_PROPERTY(qreal radius READ radius WRITE setRadius NOTIFY radiusChanged)
@@ -462,7 +464,7 @@ private:
     qreal m_disabledScale = -1.0;
 };
 
-class ProgressDelegate : public RectDelegate
+class DX_UI_EXPORT ProgressDelegate : public RectDelegate
 {
     Q_OBJECT
     Q_PROPERTY(int colorRole READ colorRole WRITE setColorRole NOTIFY colorRoleChanged)

@@ -5,10 +5,12 @@ IMPORT_VERSION = 1.0
 QT += qml quick
 QT_PRIVATE += core-private gui-private qml-private quick-private quicktemplates2-private
 
-DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII
+DEFINES += QT_NO_CAST_TO_ASCII QT_NO_CAST_FROM_ASCII BUILD_DX_UI
 
 OTHER_FILES += \
     $$PWD/qmldir
+
+INCLUDEPATH += $$SOURCE_TREE/src/apps/assay-studio-app/src
 
 HEADERS += \
     $$PWD/color.h \
@@ -29,6 +31,7 @@ HEADERS += \
     $$PWD/nodeview.h \
     $$PWD/paddedrectangle.h \
     $$PWD/rect.h \
+    $$PWD/rectstackdelegate.h \
     $$PWD/yoctolicense.h \
     $$PWD/yoctolicensemodel.h
 
@@ -50,6 +53,7 @@ SOURCES += \
     $$PWD/paddedrectangle.cpp \
     $$PWD/qtcellinkextrasplugin.cpp \
     $$PWD/rect.cpp \
+    $$PWD/rectstackdelegate.cpp \
     $$PWD/yoctolicensemodel.cpp
 
 CONFIG += no_cxx_module

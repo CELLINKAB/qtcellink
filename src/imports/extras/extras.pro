@@ -31,7 +31,7 @@ HEADERS += \
     $$PWD/nodeview.h \
     $$PWD/paddedrectangle.h \
     $$PWD/rect.h \
-    $$PWD/rectstackdelegate.h \
+    $$PWD/multigradientdelegate.h \
     $$PWD/yoctolicense.h \
     $$PWD/yoctolicensemodel.h
 
@@ -53,7 +53,7 @@ SOURCES += \
     $$PWD/paddedrectangle.cpp \
     $$PWD/qtcellinkextrasplugin.cpp \
     $$PWD/rect.cpp \
-    $$PWD/rectstackdelegate.cpp \
+    $$PWD/multigradientdelegate.cpp \
     $$PWD/yoctolicensemodel.cpp
 
 CONFIG += no_cxx_module

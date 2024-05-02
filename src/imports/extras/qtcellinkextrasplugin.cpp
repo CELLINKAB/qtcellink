@@ -41,7 +41,7 @@
 #include "nodeview.h"
 #include "paddedrectangle.h"
 #include "rect.h"
-#include "rectstackdelegate.h"
+#include "multigradientdelegate.h"
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
 template <typename T> static void qmlRegisterAnonymousType(const char *, int) { qmlRegisterType<T>(); }
@@ -85,7 +85,7 @@ void QtCellinkExtrasPlugin::registerTypes(const char *uri)
     qmlRegisterType<OpacityDelegate>(uri, 1, 0, "OpacityDelegate");
     qmlRegisterType<PaddedRectangle>(uri, 1, 0, "PaddedRectangle");
     qmlRegisterType<ProgressDelegate>(uri, 1, 0, "ProgressDelegate");
-    qmlRegisterType<RectStackDelegate>(uri, 1, 0, "RectStackDelegate");
+    qmlRegisterType<MultiGradientDelegate>(uri, 1, 0, "MultiGradientDelegate");
     qmlRegisterSingletonType<Rect>(uri, 1, 0, "Rect", [](QQmlEngine *engine, QJSEngine *) -> QObject* { return new Rect(engine); });
     qmlRegisterType<RectDelegate>(uri, 1, 0, "RectDelegate");
     qmlRegisterType<ScaleDelegate>(uri, 1, 0, "ScaleDelegate");

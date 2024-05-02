@@ -26,10 +26,18 @@ void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, 
 
     MultiGradient multiGradient = index.data(multiGradientRole).value<MultiGradient>();
     if (multiGradient.data.size() > 0) {
+        QRectF rect = nodeRect(index, item);
+        rectNode->setRect(rect);
+        rectNode->setRadius(nodeRadius(index, item));
+
         QGradientStops *gradients = gradientStops(multiGradient);
         rectNode->setGradientStops(*gradients);
         rectNode->setGradientVertical(nodeGradientOrientation(index, item) == Qt::Vertical);
-        setupParentNode(node, index, item);
+
+        rectNode->setPenColor(nodeBorderColor(index, item));
+        rectNode->setPenWidth(nodeBorderWidth(index, item));
+        rectNode->update();
+
     } else {
         ProgressDelegate::updateNode(node, index, item);
     }
@@ -41,27 +49,23 @@ QGradientStops *MultiGradientDelegate::gradientStops(const MultiGradient &multiG
 
     if (!cache.contains(multiGradient.cacheKey)) {
         QGradientStops *stops = new QGradientStops;
-
         qreal position = 0;
+
         for (auto it = multiGradient.data.rbegin(); it != multiGradient.data.rend(); it++) {
             stops->append(qMakePair(position, it->second));
             position += it->first;
-            stops->append(qMakePair(position, it->second));
+            position = std::clamp(position, 0.0, 1.0);
+
+            // Adding a stop at position 1.0 is redundant,
+            // the engine will automatically fill from last position until 1.0,
+            // if there is no other stop in between.
+            // it also produces weird positioned gradients in some cases
+            if (!qFuzzyCompare(position, 1.0))
+                stops->append(qMakePair(position, it->second));
+
         }
         cache.insert(multiGradient.cacheKey, stops);
     }
 
     return cache[multiGradient.cacheKey];
-}
-
-void MultiGradientDelegate::setupParentNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
-{
-    QSGInternalRectangleNode *parentNode = static_cast<QSGInternalRectangleNode *>(node);
-    QRectF parentRect = nodeRect(index, item);
-    parentNode->setRect(parentRect);
-    parentNode->setRadius(nodeRadius(index, item));
-    parentNode->setPenColor(nodeBorderColor(index, item));
-    parentNode->setPenWidth(nodeBorderWidth(index, item));
-
-    parentNode->update();
 }

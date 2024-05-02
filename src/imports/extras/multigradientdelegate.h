@@ -18,8 +18,6 @@ public:
 protected:
     QGradientStops *gradientStops(const MultiGradient &multiGradient) const;
 
-private:
-    void setupParentNode(QSGNode *node, const QModelIndex &index, NodeItem *item);
 };
 
 #endif

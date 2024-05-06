@@ -10,7 +10,6 @@
 MultiGradientDelegate::MultiGradientDelegate(QObject *parent) :
     ProgressDelegate(parent)
 {
-
 }
 
 void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
@@ -30,7 +29,12 @@ void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, 
         rectNode->setRect(rect);
         rectNode->setRadius(nodeRadius(index, item));
 
-        QGradientStops *gradients = gradientStops(multiGradient);
+        QGradientStops *gradients = nullptr;
+        if (multiGradient.gradientType == MultiGradient::Full)
+            gradients = fullGradientStops(multiGradient);
+        else if (multiGradient.gradientType == MultiGradient::BottomToPosition)
+            gradients = bottomToTopGradientStops(multiGradient, index, item);
+
         rectNode->setGradientStops(*gradients);
         rectNode->setGradientVertical(nodeGradientOrientation(index, item) == Qt::Vertical);
 
@@ -43,7 +47,18 @@ void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, 
     }
 }
 
-QGradientStops *MultiGradientDelegate::gradientStops(const MultiGradient &multiGradient) const
+QSGNode *MultiGradientDelegate::createNode(NodeItem *item)
+{
+    connect(item, &NodeItem::selectionChanged, this, &MultiGradientDelegate::onItemSelectionChanged);
+    return ProgressDelegate::createNode(item);
+}
+
+void MultiGradientDelegate::onItemSelectionChanged()
+{
+    m_itemSelectionChanged = true;
+}
+
+QGradientStops *MultiGradientDelegate::fullGradientStops(const MultiGradient &multiGradient) const
 {
     static QCache<uint, QGradientStops> cache;
 
@@ -68,4 +83,51 @@ QGradientStops *MultiGradientDelegate::gradientStops(const MultiGradient &multiG
     }
 
     return cache[multiGradient.cacheKey];
+}
+
+QGradientStops *MultiGradientDelegate::bottomToTopGradientStops(const MultiGradient &multiGradient, const QModelIndex &index, NodeItem *item)
+{
+    static QCache<uint, QGradientStops> cache;
+
+    if (m_itemSelectionChanged) {
+        cache.clear();
+        m_itemSelectionChanged = false;
+    }
+
+    if (!cache.contains(multiGradient.cacheKey)) {
+        QGradientStops *stops = new QGradientStops;
+        qreal totalP = totalPercentage(multiGradient);
+        qreal position = 1.0 - multiGradient.data.last().first;
+        position = std::clamp(position, 0.0, 1.0);
+
+        stops->append(qMakePair(0.0, nodeColor(index, item)));
+        stops->append(qMakePair(position, nodeColor(index, item)));
+
+        for (auto it = multiGradient.data.rbegin(); it != multiGradient.data.rend(); it++) {
+            stops->append(qMakePair(position, it->second));
+            position += it->first / totalP;
+            position = std::clamp(position, 0.0, 1.0);
+
+            // Adding a stop at position 1.0 is redundant,
+            // the engine will automatically fill from last position until 1.0,
+            // if there is no other stop in between.
+            // it also produces weird positioned gradients in some cases
+            if (!qFuzzyCompare(position, 1.0))
+                stops->append(qMakePair(position, it->second));
+
+        }
+        cache.insert(multiGradient.cacheKey, stops);
+    }
+
+    return cache[multiGradient.cacheKey];
+}
+
+qreal MultiGradientDelegate::totalPercentage(const MultiGradient &multiGradient) const
+{
+    qreal total = 0;
+    for (const auto &gradient : multiGradient.data) {
+        total += gradient.first;
+    }
+
+    return total;
 }

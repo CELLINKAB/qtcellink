@@ -60,9 +60,9 @@ void MultiGradientDelegate::onItemSelectionChanged()
 
 QGradientStops *MultiGradientDelegate::fullGradientStops(const MultiGradient &multiGradient) const
 {
-    static QCache<uint, QGradientStops> cache;
+//    static QCache<uint, QGradientStops> cache;
 
-    if (!cache.contains(multiGradient.cacheKey)) {
+//    if (!cache.contains(multiGradient.cacheKey)) {
         QGradientStops *stops = new QGradientStops;
         qreal position = 0;
 
@@ -79,10 +79,11 @@ QGradientStops *MultiGradientDelegate::fullGradientStops(const MultiGradient &mu
                 stops->append(qMakePair(position, it->second));
 
         }
-        cache.insert(multiGradient.cacheKey, stops);
-    }
+//        cache.insert(multiGradient.cacheKey, stops);
+//    }
 
-    return cache[multiGradient.cacheKey];
+//    return cache[multiGradient.cacheKey];
+        return stops;
 }
 
 QGradientStops *MultiGradientDelegate::bottomToTopGradientStops(const MultiGradient &multiGradient, const QModelIndex &index, NodeItem *item)

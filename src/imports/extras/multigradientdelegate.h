@@ -27,6 +27,7 @@ private:
     bool m_itemSelectionChanged = false;
 
 private:
+    qreal totalPercentageDivCount(const MultiGradient &multiGradient) const;
     qreal totalPercentage(const MultiGradient &multiGradient) const;
 };
 

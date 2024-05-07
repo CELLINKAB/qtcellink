@@ -7,6 +7,8 @@
 #include <QCache>
 #include <QVector>
 
+QCache<uint, QGradientStops> MultiGradientDelegate::m_cache;
+
 MultiGradientDelegate::MultiGradientDelegate(QObject *parent) :
     ProgressDelegate(parent)
 {
@@ -58,11 +60,9 @@ void MultiGradientDelegate::onItemSelectionChanged()
     m_itemSelectionChanged = true;
 }
 
-QGradientStops *MultiGradientDelegate::fullGradientStops(const MultiGradient &multiGradient) const
+QGradientStops *MultiGradientDelegate::fullGradientStops(const MultiGradient &multiGradient)
 {
-//    static QCache<uint, QGradientStops> cache;
-
-//    if (!cache.contains(multiGradient.cacheKey)) {
+    if (!m_cache.contains(multiGradient.cacheKey)) {
         QGradientStops *stops = new QGradientStops;
         qreal position = 0;
 
@@ -79,27 +79,23 @@ QGradientStops *MultiGradientDelegate::fullGradientStops(const MultiGradient &mu
                 stops->append(qMakePair(position, it->second));
 
         }
-//        cache.insert(multiGradient.cacheKey, stops);
-//    }
+        m_cache.insert(multiGradient.cacheKey, stops);
+    }
 
-//    return cache[multiGradient.cacheKey];
-        return stops;
+    return m_cache[multiGradient.cacheKey];
 }
 
 QGradientStops *MultiGradientDelegate::bottomToTopGradientStops(const MultiGradient &multiGradient, const QModelIndex &index, NodeItem *item)
 {
-    static QCache<uint, QGradientStops> cache;
+    if (m_itemSelectionChanged) {
+        m_cache.clear();
+        m_itemSelectionChanged = false;
+    }
 
-//    if (m_itemSelectionChanged) {
-//        cache.clear();
-//        m_itemSelectionChanged = false;
-//    }
+    if (!m_cache.contains(multiGradient.cacheKey)) {
 
-//    if (!cache.contains(multiGradient.cacheKey)) {
         QGradientStops *stops = new QGradientStops;
-//        qreal totalPDivCount = totalPercentageDivCount(multiGradient);
-        qreal position = 1.0 - multiGradient.data.last().first;
-        qreal totalP = totalPercentage(multiGradient);
+        qreal position = 1.0 - multiGradient.data.first().first;
         position = std::clamp(position, 0.0, 1.0);
 
         stops->append(qMakePair(0.0, nodeColor(index, item)));
@@ -107,7 +103,7 @@ QGradientStops *MultiGradientDelegate::bottomToTopGradientStops(const MultiGradi
 
         for (auto it = multiGradient.data.rbegin(); it != multiGradient.data.rend(); it++) {
             stops->append(qMakePair(position, it->second));
-            position += it->first / totalP;
+            position += multiGradient.data.first().first / static_cast<qreal>(multiGradient.data.size());
             position = std::clamp(position, 0.0, 1.0);
 
             // Adding a stop at position 1.0 is redundant,
@@ -118,11 +114,12 @@ QGradientStops *MultiGradientDelegate::bottomToTopGradientStops(const MultiGradi
                 stops->append(qMakePair(position, it->second));
 
         }
-//        cache.insert(multiGradient.cacheKey, stops);
-//    }
 
-//    return cache[multiGradient.cacheKey];
-        return stops;
+
+        m_cache.insert(multiGradient.cacheKey, stops);
+    }
+
+    return m_cache[multiGradient.cacheKey];
 }
 
 qreal MultiGradientDelegate::totalPercentageDivCount(const MultiGradient &multiGradient) const

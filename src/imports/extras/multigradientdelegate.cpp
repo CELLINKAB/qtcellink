@@ -32,10 +32,13 @@ void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, 
         rectNode->setRadius(nodeRadius(index, item));
 
         QGradientStops *gradients = nullptr;
-        if (multiGradient.gradientType == MultiGradient::Full)
-            gradients = fullGradientStops(multiGradient);
-        else if (multiGradient.gradientType == MultiGradient::BottomToPosition)
+        if (multiGradient.hasMixedGradients) {
             gradients = bottomToTopGradientStops(multiGradient, index, item);
+        } else if (multiGradient.gradientType == MultiGradient::Full) {
+            gradients = fullGradientStops(multiGradient);
+        } else if (multiGradient.gradientType == MultiGradient::BottomToPosition) {
+            gradients = bottomToTopGradientStops(multiGradient, index, item);
+        }
 
         rectNode->setGradientStops(*gradients);
         rectNode->setGradientVertical(nodeGradientOrientation(index, item) == Qt::Vertical);

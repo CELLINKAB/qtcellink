@@ -1,11 +1,16 @@
 #include "multigradientdelegate.h"
 #include "imultigradient.h"
 #include "nodeitem.h"
+#include "targetliquidmodel.h"
+
+#include <DxUi/liquid.h>
+#include <DxUi/targetliquid.h>
 
 #include <QtQuick/private/qsgadaptationlayer_p.h>
 #include <QtQuick/private/qsgdefaultinternalrectanglenode_p.h>
 #include <QCache>
 #include <QVector>
+
 
 QCache<uint, QGradientStops> MultiGradientDelegate::m_cache;
 
@@ -22,23 +27,15 @@ void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, 
     Q_ASSERT(node);
     Q_ASSERT(item);
 
-    int multiGradientRole = model->multiGradientRole();
     QSGInternalRectangleNode *rectNode = static_cast<QSGInternalRectangleNode *>(node);
 
-    MultiGradient multiGradient = index.data(multiGradientRole).value<MultiGradient>();
-    if (multiGradient.data.size() > 0) {
+    QList<TargetLiquid *> liquids = model->multiGradientData(index);
+    if (liquids.size() > 0) {
         QRectF rect = nodeRect(index, item);
         rectNode->setRect(rect);
         rectNode->setRadius(nodeRadius(index, item));
 
-        QGradientStops *gradients = nullptr;
-        if (multiGradient.hasMixedGradients) {
-            gradients = bottomToTopGradientStops(multiGradient, index, item);
-        } else if (multiGradient.gradientType == MultiGradient::Full) {
-            gradients = fullGradientStops(multiGradient);
-        } else if (multiGradient.gradientType == MultiGradient::BottomToPosition) {
-            gradients = bottomToTopGradientStops(multiGradient, index, item);
-        }
+        QGradientStops *gradients = getGradients(index, liquids, item);
 
         rectNode->setGradientStops(*gradients);
         rectNode->setGradientVertical(nodeGradientOrientation(index, item) == Qt::Vertical);
@@ -63,84 +60,64 @@ void MultiGradientDelegate::onItemSelectionChanged()
     m_itemSelectionChanged = true;
 }
 
-QGradientStops *MultiGradientDelegate::fullGradientStops(const MultiGradient &multiGradient)
+QGradientStops *MultiGradientDelegate::getGradients(const QModelIndex &index, const QList<TargetLiquid *> &liquids, NodeItem *item)
 {
-    if (!m_cache.contains(multiGradient.cacheKey)) {
-        QGradientStops *stops = new QGradientStops;
-        qreal position = 0;
+    QGradientStops *stops = new QGradientStops;
+    qreal minGradientHeight = 0.05;
 
-        for (auto it = multiGradient.data.rbegin(); it != multiGradient.data.rend(); it++) {
-            stops->append(qMakePair(position, it->second));
-            position += it->first;
-            position = std::clamp(position, 0.0, 1.0);
+    qreal maxVolumeWithinAllWells = index.data(TargetLiquidModel::MaxVolume).toDouble();
+    qreal prevY = 1.0 - minGradientHeight - totalPercentage(index, liquids, maxVolumeWithinAllWells);
+    prevY = std::clamp(prevY, 0.0, 1.0);
 
-            // Adding a stop at position 1.0 is redundant,
-            // the engine will automatically fill from last position until 1.0,
-            // if there is no other stop in between.
-            // it also produces weird positioned gradients in some cases
-            if (!qFuzzyCompare(position, 1.0))
-                stops->append(qMakePair(position, it->second));
+    stops->append(qMakePair(0.0, nodeColor(index, item)));
+    stops->append(qMakePair(prevY, nodeColor(index, item)));
 
+    for (auto it = liquids.rbegin(); it != liquids.rend(); it++) {
+        qreal volume = (*it)->volumeAt(index.row(), index.column());
+        stops->append(qMakePair(prevY, (*it)->liquid()->color()));
+        prevY += std::clamp(volume / maxVolumeWithinAllWells, minGradientHeight, 1.0);
+
+        if (!qFuzzyCompare(prevY, 1.0) && !qFuzzyIsNull(prevY))
+            stops->append(qMakePair(prevY, (*it)->liquid()->color()));
+    }
+
+    return stops;
+}
+
+qreal MultiGradientDelegate::targetLiquidsTotalVolume(const QModelIndex &index, const QList<TargetLiquid *> &targetLiquids) const
+{
+    qreal totalVolume = 0;
+    for (const TargetLiquid *targetLiquid : targetLiquids)
+        totalVolume += targetLiquid->volumeAt(index.row(), index.column());
+
+    return totalVolume;
+}
+
+qreal MultiGradientDelegate::totalPercentage(const QModelIndex &index, const QList<TargetLiquid *> &targetLiquids, qreal maxVolume) const
+{
+    qreal totalPercentage = 0;
+
+    for (const TargetLiquid *targetLiquid : targetLiquids) {
+        totalPercentage += targetLiquid->volumeAt(index.row(), index.column()) /  maxVolume;
+    }
+
+    return totalPercentage;
+}
+
+qreal MultiGradientDelegate::maxWellVolume(const QModelIndex &index) const
+{
+    qreal maxVolume = 0;
+    for (int i = 0; i < index.model()->rowCount(); i++) {
+        for (int j = 0; j < index.model()->columnCount(); j++) {
+            bool ok;
+            qreal totalWellVolumeAtIndex = index.model()->index(i, j).data(TargetLiquidModel::MaxVolume).toDouble(&ok);
+            if (!ok)
+                continue;
+
+            if (totalWellVolumeAtIndex > maxVolume)
+                maxVolume = totalWellVolumeAtIndex;
         }
-        m_cache.insert(multiGradient.cacheKey, stops);
     }
 
-    return m_cache[multiGradient.cacheKey];
-}
-
-QGradientStops *MultiGradientDelegate::bottomToTopGradientStops(const MultiGradient &multiGradient, const QModelIndex &index, NodeItem *item)
-{
-    if (m_itemSelectionChanged) {
-        m_cache.clear();
-        m_itemSelectionChanged = false;
-    }
-
-    if (!m_cache.contains(multiGradient.cacheKey)) {
-
-        QGradientStops *stops = new QGradientStops;
-        qreal position = 1.0 - multiGradient.data.first().first;
-        position = std::clamp(position, 0.0, 1.0);
-
-        stops->append(qMakePair(0.0, nodeColor(index, item)));
-        stops->append(qMakePair(position, nodeColor(index, item)));
-
-        for (auto it = multiGradient.data.rbegin(); it != multiGradient.data.rend(); it++) {
-            stops->append(qMakePair(position, it->second));
-            position += multiGradient.data.first().first / static_cast<qreal>(multiGradient.data.size());
-            position = std::clamp(position, 0.0, 1.0);
-
-            // Adding a stop at position 1.0 is redundant,
-            // the engine will automatically fill from last position until 1.0,
-            // if there is no other stop in between.
-            // it also produces weird positioned gradients in some cases
-            if (!qFuzzyCompare(position, 1.0))
-                stops->append(qMakePair(position, it->second));
-
-        }
-
-
-        m_cache.insert(multiGradient.cacheKey, stops);
-    }
-
-    return m_cache[multiGradient.cacheKey];
-}
-
-qreal MultiGradientDelegate::totalPercentageDivCount(const MultiGradient &multiGradient) const
-{
-    qreal total = 0;
-    for (const auto &gradient : multiGradient.data) {
-        total += gradient.first;
-    }
-
-    return total / multiGradient.data.size();
-}
-
-qreal MultiGradientDelegate::totalPercentage(const MultiGradient &multiGradient) const
-{
-    qreal total = 0;
-    for (const auto &gradient : multiGradient.data) {
-        total += gradient.first;
-    }
-
-    return total;
+    return maxVolume;
 }

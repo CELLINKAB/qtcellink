@@ -42,7 +42,7 @@
 
 class NodeDelegate;
 
-class DX_UI_EXPORT NodeItem : public QQuickItem
+class NodeItem : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)

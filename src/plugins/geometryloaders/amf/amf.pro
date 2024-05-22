@@ -22,5 +22,12 @@ else: error("Need assimp included via conan in the top level project")
 
 PLUGIN_TYPE = geometryloaders
 PLUGIN_CLASS_NAME = AmfGeometryLoaderPlugin
+
+load(assimp)
 load(qt_build_config)
 load(qt_plugin)
+
+exists($$BUILD_TREE/conanbuildinfo.pri) {
+    CONFIG += conan_basic_setup
+    include($$BUILD_TREE/conanbuildinfo.pri)
+}

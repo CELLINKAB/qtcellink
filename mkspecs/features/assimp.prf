@@ -1,0 +1,21 @@
+heartos {
+
+    isEmpty(PKG_CONFIG) {
+        heartos: PKG_CONFIG = PKG_CONFIG_PATH=$$[QT_HOST_DATA]/pkgconfig $$[QT_HOST_BINS]/pkg-config
+    }
+
+    ASSIMP_PKGS = assimp
+    packagesExist($$ASSIMP_PKGS) {
+        PKGCONFIG += $$ASSIMP_PKGS
+        CONFIG += link_pkgconfig
+        export(PKGCONFIG)
+        export(CONFIG)
+    } else {
+        error("Unable to find Assimp with pkg-config. Not installed in SDK?")
+    }
+
+    gcc:!clang: {
+        QMAKE_CXXFLAGS += -Wno-psabi
+        export(QMAKE_CXXFLAGS)
+    }
+}

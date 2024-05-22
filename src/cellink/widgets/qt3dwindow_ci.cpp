@@ -59,6 +59,9 @@
 #include <Qt3DRender/qcamera.h>
 #include <Qt3DRender/qrenderaspect.h>
 #include <Qt3DRender/qrendersettings.h>
+#include <QtCore/QTimer>
+#include <QtCore/qeventloop.h>
+#include <QtGui/QGuiApplication>
 #include <QtGui/private/qwindow_p.h>
 #include <QtGui/qevent.h>
 #include <QtGui/qopenglcontext.h>
@@ -133,6 +136,7 @@ Qt3DWindow::Qt3DWindow(QScreen* screen)
 
     resize(1024, 768);
 
+    /*
     QSurfaceFormat format = QSurfaceFormat::defaultFormat();
 #ifdef QT_OPENGL_ES_2
     format.setRenderableType(QSurfaceFormat::OpenGLES);
@@ -146,6 +150,7 @@ Qt3DWindow::Qt3DWindow(QScreen* screen)
     format.setSamples(4);
     format.setStencilBufferSize(8);
     setFormat(format);
+    */
     //    QSurfaceFormat::setDefaultFormat(format);
 
     d->m_aspectEngine->registerAspect(d->m_renderAspect);
@@ -162,7 +167,11 @@ Qt3DWindow::Qt3DWindow(QScreen* screen)
 Qt3DWindow::~Qt3DWindow()
 {
     Q_D(Qt3DWindow);
-    delete d->m_aspectEngine;
+
+    d->m_renderSettings->setRenderPolicy(Qt3DRender::QRenderSettings::OnDemand);
+    d->m_aspectEngine->setRootEntity(nullptr);
+    d->m_aspectEngine->unregisterAspect(d->m_renderAspect);
+    d->m_aspectEngine->deleteLater();
 }
 
 /*!
@@ -192,11 +201,24 @@ void Qt3DWindow::setRootEntity(Qt3DCore::QEntity* root)
 {
     Q_D(Qt3DWindow);
     if (d->m_userRoot != root) {
-        if (d->m_userRoot != nullptr)
-            d->m_userRoot->setParent(static_cast<Qt3DCore::QNode*>(nullptr));
+        if (!d->m_initialized) {
+            d->m_initialized = true;
 
-        if (root != nullptr)
+            // becomes stuck sometimes,
+            // It seems to happen when there are thread pool tasks running,
+            // as it waits for all of them to complete. :-/
+            d->m_root->addComponent(d->m_renderSettings);
+            d->m_root->addComponent(d->m_inputSettings);
+            d->m_aspectEngine->setRootEntity(Qt3DCore::QEntityPtr(d->m_root));
+        }
+
+        if (d->m_userRoot != nullptr) {
+            d->m_userRoot->setParent(static_cast<Qt3DCore::QNode*>(nullptr));
+        }
+
+        if (root != nullptr) {
             root->setParent(d->m_root);
+        }
 
         d->m_userRoot = root;
 
@@ -257,15 +279,6 @@ Qt3DRender::QRenderSettings* Qt3DWindow::renderSettings() const
 */
 void Qt3DWindow::showEvent(QShowEvent* e)
 {
-    Q_D(Qt3DWindow);
-    if (!d->m_initialized) {
-        d->m_root->addComponent(d->m_renderSettings);
-        d->m_root->addComponent(d->m_inputSettings);
-        d->m_aspectEngine->setRootEntity(Qt3DCore::QEntityPtr(d->m_root));
-
-        d->m_initialized = true;
-    }
-
     QWindow::showEvent(e);
 }
 
@@ -277,6 +290,10 @@ void Qt3DWindow::resizeEvent(QResizeEvent*)
     Q_D(Qt3DWindow);
     d->m_defaultCamera->setAspectRatio(float(width()) / float(height()));
 }
+void Qt3DWindow::mousePressEvent(QMouseEvent*)
+{
+    emit mousePressed();
+}
 
 /*!
     \reimp
@@ -285,14 +302,25 @@ void Qt3DWindow::resizeEvent(QResizeEvent*)
 */
 bool Qt3DWindow::event(QEvent* e)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Q_D(Qt3DWindow);
     const bool needsRedraw = (e->type() == QEvent::Expose || e->type() == QEvent::UpdateRequest);
-    if (needsRedraw && d->m_renderSettings->renderPolicy() == Qt3DRender::QRenderSettings::OnDemand)
+
+    if (needsRedraw && d->m_renderSettings->renderPolicy() == Qt3DRender::QRenderSettings::OnDemand) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         // sendCommand obsolete in Qt6
-        d->m_renderSettings->sendCommand(QLatin1Literal("InvalidateFrame"));
+        d->m_renderSettings->sendCommand(QStringLiteral("InvalidateFrame"));
+#else
+        d->m_aspectEngine->processFrame(); /// ? Is this correct
 #endif
+    }
+
     return QWindow::event(e);
+}
+
+Qt3DCore::QAspectEngine* Qt3DWindow::engine() const
+{
+    const Q_D(Qt3DWindow);
+    return d->m_aspectEngine;
 }
 
 } // namespace QtCellink

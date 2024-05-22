@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-#include "progressindicator.h"
+#include "progressindicator_ci.h"
 
 #include <QPainter>
 

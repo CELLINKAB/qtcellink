@@ -17,6 +17,9 @@ SOURCES += \
 DISTFILES += \
     amf.json
 
+exists($$BUILD_TREE/conanbuildinfo.pri): include($$BUILD_TREE/conanbuildinfo.pri)
+else: error("Need assimp included via conan in the top level project")
+
 PLUGIN_TYPE = geometryloaders
 PLUGIN_CLASS_NAME = AmfGeometryLoaderPlugin
 load(qt_build_config)

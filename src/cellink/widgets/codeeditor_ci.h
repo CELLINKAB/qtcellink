@@ -35,14 +35,14 @@
 **
 ****************************************************************************/
 
-#ifndef CODEEDITOR_H
-#define CODEEDITOR_H
+#ifndef CODEEDITOR_CI_H
+#define CODEEDITOR_CI_H
 
 #include "qtcellink/src/cellink/core/cellink.h"
 
 #include <QtWidgets/qplaintextedit.h>
 
-#include "highlightlines.h"
+#include "highlightlines_ci.h"
 
 class QCompleter;
 
@@ -56,13 +56,13 @@ class Q_CELLINK_EXPORT LineNumberBar : public QWidget
     Q_PROPERTY(int hzMargin READ hzMargin WRITE setHzMargin NOTIFY hzMarginChanged)
 public:
     explicit LineNumberBar(CodeEditor* editor);
+    LineNumberBar(const LineNumberBar&) = delete;
     ~LineNumberBar() override;
 
     void setHzMargin(int margin);
+    [[nodiscard]] int hzMargin() const { return m_hzMargin; }
 
-    int hzMargin() const { return m_hzMargin; }
-
-    QSize sizeHint() const override { return m_size; }
+    [[nodiscard]] QSize sizeHint() const override { return m_size; }
 
 protected:
     void paintEvent(QPaintEvent* event) override;
@@ -86,17 +86,18 @@ class Q_CELLINK_EXPORT CodeEditor : public QPlainTextEdit
     Q_PROPERTY(HighlightLines highlightLines READ highlightLines NOTIFY highlightLinesChanged)
 public:
     explicit CodeEditor(QWidget* parent = nullptr);
+    CodeEditor(const CodeEditor&) = delete;
     ~CodeEditor() override;
 
-    QCompleter* completer() const { return m_completer; }
+    [[nodiscard]] QCompleter* completer() const { return m_completer; }
     void setCompleter(QCompleter* completer);
 
-    qreal highlightLineColorAlpha() const { return m_highlightLineColorAlpha; }
+    [[nodiscard]] qreal highlightLineColorAlpha() const { return m_highlightLineColorAlpha; }
     void setHighlightLineColorAlpha(qreal alpha);
 
-    LineNumberBar& lineNumberBar() { return m_lineNumberBar; }
+    [[nodiscard]] LineNumberBar& lineNumberBar() { return m_lineNumberBar; }
 
-    HighlightLines highlightLines() const { return m_highlightLines; }
+    [[nodiscard]] HighlightLines highlightLines() const { return m_highlightLines; }
 
 protected:
     void focusInEvent(QFocusEvent* event) override;
@@ -119,7 +120,7 @@ private slots:
     void insertCompletion(const QString& completion);
 
 private:
-    QString textUnderCursor() const;
+    [[nodiscard]] QString textUnderCursor() const;
     void paintLineNumbers(QPainter* painter, const QRect& rect);
     void updateHighlightLines(bool cursorChanged);
 
@@ -134,4 +135,4 @@ private:
 
 } // namespace cellink
 
-#endif // CODEEDITOR_H
+#endif // CODEEDITOR_CI_H

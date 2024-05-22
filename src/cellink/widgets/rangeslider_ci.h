@@ -23,8 +23,8 @@
  ** <http://libqxt.org>  <foundation@libqxt.org>
  **
  ****************************************************************************/
-#ifndef RANGESLIDER_H
-#define RANGESLIDER_H
+#ifndef RANGESLIDER_CI_H
+#define RANGESLIDER_CI_H
 
 #include "qtcellink/src/cellink/core/cellink.h"
 
@@ -107,4 +107,4 @@ private:
 
 } // namespace cellink
 
-#endif // RANGESLIDER_H
+#endif // RANGESLIDER_CI_H

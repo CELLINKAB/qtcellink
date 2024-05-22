@@ -1,5 +1,5 @@
-#ifndef SPINBOX_H
-#define SPINBOX_H
+#ifndef SPINBOX_CI_H
+#define SPINBOX_CI_H
 
 #include "qtcellink/src/cellink/core/cellink.h"
 
@@ -32,4 +32,4 @@ private:
 
 } // namespace cellink
 
-#endif // SPINBOX_H
+#endif // SPINBOX_CI_H

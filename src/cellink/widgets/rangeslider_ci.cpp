@@ -23,7 +23,7 @@
  ** <http://libqxt.org>  <foundation@libqxt.org>
  **
  ****************************************************************************/
-#include "rangeslider.h"
+#include "rangeslider_ci.h"
 
 #include <QtGui/qevent.h>
 #include <QtWidgets/qstyleoption.h>

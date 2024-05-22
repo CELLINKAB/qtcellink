@@ -73,6 +73,9 @@ QGradientStops *MultiGradientDelegate::getGradients(const QModelIndex &index, co
     stops->append(qMakePair(prevY, nodeColor(index, item)));
 
     for (auto it = liquids.rbegin(); it != liquids.rend(); it++) {
+        if (!(*it)->isValid()) {
+            continue;
+        }
         qreal volume = (*it)->volumeAt(index.row(), index.column());
         stops->append(qMakePair(prevY, (*it)->liquid()->color()));
         prevY += std::clamp(volume / maxVolumeWithinAllWells, minGradientHeight, 1.0);
@@ -98,7 +101,9 @@ qreal MultiGradientDelegate::totalPercentage(const QModelIndex &index, const QLi
     qreal totalPercentage = 0;
 
     for (const TargetLiquid *targetLiquid : targetLiquids) {
-        totalPercentage += targetLiquid->volumeAt(index.row(), index.column()) /  maxVolume;
+        if (targetLiquid->isValid()) {
+            totalPercentage += targetLiquid->volumeAt(index.row(), index.column()) /  maxVolume;
+        }
     }
 
     return totalPercentage;

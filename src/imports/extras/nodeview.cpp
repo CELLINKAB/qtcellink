@@ -381,6 +381,7 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         connect(nodeItem, &NodeItem::released, this, &NodeView::released);
         connect(nodeItem, &NodeItem::activated, this, &NodeView::activated);
         connect(nodeItem, &NodeItem::clicked, this, &NodeView::clicked);
+        connect(nodeItem, &NodeItem::doubleClicked, this, &NodeView::doubleClicked);
         connect(nodeItem, &NodeItem::ensureVisible, this, &NodeView::ensureVisible);
         connect(nodeItem, &NodeItem::countChanged, this, &NodeView::countChanged);
         connect(nodeItem, &NodeItem::rowsChanged, this, &NodeView::rowsChanged);

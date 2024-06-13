@@ -504,7 +504,13 @@ void NodeView::ensureVisible(const QRectF &rect)
 
 void NodeView::zoom(qreal factor, const QPointF &point)
 {
-    factor = std::clamp(factor, m_minimumZoomFactor, m_maximumZoomFactor);
+    // using std::clamp on MSVC asserts here saying invalid bound arguments passed
+    if (factor < m_minimumZoomFactor) {
+        factor = m_minimumZoomFactor;
+    } else if (factor > m_maximumZoomFactor) {
+        factor = m_maximumZoomFactor;
+    }
+
     if (qFuzzyCompare(m_zoomFactor, factor) && m_zoomPoint == point)
         return;
 
@@ -540,8 +546,22 @@ void NodeView::zoomIn(qreal factor)
         bounds.setTop(selection.bottom() - height());
 
     // keep within bounds
-    setContentX(std::clamp(contentX(), bounds.left(), bounds.right()));
-    setContentY(std::clamp(contentY(), bounds.top(), bounds.bottom()));
+    // using std::clamp on MSVC asserts here saying invalid bound arguments passed
+    qreal x = contentX();
+    qreal y = contentY();
+
+    if (x < bounds.left())
+        x = bounds.left();
+    else if (x > bounds.right())
+        x = bounds.right();
+
+    if (y < bounds.top())
+        y = bounds.top();
+    else if (y > bounds.bottom())
+        y = bounds.bottom();
+
+    setContentX(x);
+    setContentY(y);
 }
 
 void NodeView::zoomOut(qreal factor)

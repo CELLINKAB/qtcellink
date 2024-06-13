@@ -25,18 +25,11 @@ public slots:
     void onItemSelectionChanged();
 
 protected:
-    QGradientStops *getGradients(const QModelIndex &index, const QList<TargetLiquid *> &liquids, NodeItem *item);
+    QGradientStops *getGradients(const QModelIndex &index, IMultiGradient::Gradients &gradients, NodeItem *item);
 
 private:
     bool m_itemSelectionChanged = false;
     static QCache<uint, QGradientStops> m_cache;
-
-private:
-//    qreal totalPercentageDivCount(const MultiGradient &multiGradient) const;
-//    qreal totalPercentage(const MultiGradient &multiGradient) const;
-    qreal targetLiquidsTotalVolume(const QModelIndex &index, const QList<TargetLiquid *> &targetLiquids) const;
-    qreal totalPercentage(const QModelIndex &index, const QList<TargetLiquid *> &targetLiquids, qreal maxVolume) const;
-    qreal maxWellVolume(const QModelIndex &index) const;
 };
 
 #endif

@@ -29,13 +29,13 @@ void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, 
 
     QSGInternalRectangleNode *rectNode = static_cast<QSGInternalRectangleNode *>(node);
 
-    QList<TargetLiquid *> liquids = model->multiGradientData(index);
-    if (liquids.size() > 0) {
+    IMultiGradient::Gradients grads = model->multiGradientData(index);
+    if (grads.data.size() > 0) {
         QRectF rect = nodeRect(index, item);
         rectNode->setRect(rect);
         rectNode->setRadius(nodeRadius(index, item));
 
-        QGradientStops *gradients = getGradients(index, liquids, item);
+        QGradientStops *gradients = getGradients(index, grads, item);
 
         rectNode->setGradientStops(*gradients);
         rectNode->setGradientVertical(nodeGradientOrientation(index, item) == Qt::Vertical);
@@ -60,69 +60,41 @@ void MultiGradientDelegate::onItemSelectionChanged()
     m_itemSelectionChanged = true;
 }
 
-QGradientStops *MultiGradientDelegate::getGradients(const QModelIndex &index, const QList<TargetLiquid *> &liquids, NodeItem *item)
+QGradientStops *MultiGradientDelegate::getGradients(const QModelIndex &index, IMultiGradient::Gradients &gradients, NodeItem *item)
 {
     QGradientStops *stops = new QGradientStops;
-    qreal minGradientHeight = 0.05;
+    qreal normalizedFractionSum = 0;
 
-    qreal maxVolumeWithinAllWells = index.data(TargetLiquidModel::MaxVolume).toDouble();
-    qreal prevY = 1.0 - minGradientHeight - totalPercentage(index, liquids, maxVolumeWithinAllWells);
-    prevY = std::clamp(prevY, 0.0, 1.0);
+    // distribute the excess fraction (subtract from fractions bigger than min)
+    if (gradients.totalAdjustedFraction > 1.0) {
+        qreal excessFraction = gradients.totalAdjustedFraction - 1.0;
+        qreal adjustedFraction = gradients.totalAdjustedFraction - gradients.minGradientFraction * gradients.data.count();
+
+        for (auto it = gradients.data.begin(); it != gradients.data.end(); it++) {
+            if (it->first > gradients.minGradientFraction) {
+                qreal adjustment = (excessFraction * (it->first - gradients.minGradientFraction) / adjustedFraction);
+                it->first -= adjustment;
+            }
+            normalizedFractionSum += it->first;
+        }
+    } else {
+        normalizedFractionSum = gradients.totalAdjustedFraction;
+    }
+
+    qreal prevY = 1.0 - normalizedFractionSum;
 
     stops->append(qMakePair(0.0, nodeColor(index, item)));
     stops->append(qMakePair(prevY, nodeColor(index, item)));
 
-    for (auto it = liquids.rbegin(); it != liquids.rend(); it++) {
-        if (!(*it)->isValid()) {
-            continue;
-        }
-        qreal volume = (*it)->volumeAt(index.row(), index.column());
-        stops->append(qMakePair(prevY, (*it)->liquid()->color()));
-        prevY += std::clamp(volume / maxVolumeWithinAllWells, minGradientHeight, 1.0);
+    for (auto it = gradients.data.rbegin(); it != gradients.data.rend(); it++) {
+        if (it->second->isValid()) {
+            stops->append(qMakePair(prevY, it->second->liquid()->color()));
+            prevY += std::clamp(it->first, gradients.minGradientFraction, 1.0);
 
-        if (!qFuzzyCompare(prevY, 1.0) && !qFuzzyIsNull(prevY))
-            stops->append(qMakePair(prevY, (*it)->liquid()->color()));
+            if (!qFuzzyCompare(prevY, 1.0) && !qFuzzyIsNull(prevY))
+                stops->append(qMakePair(prevY, it->second->liquid()->color()));
+        }
     }
 
     return stops;
-}
-
-qreal MultiGradientDelegate::targetLiquidsTotalVolume(const QModelIndex &index, const QList<TargetLiquid *> &targetLiquids) const
-{
-    qreal totalVolume = 0;
-    for (const TargetLiquid *targetLiquid : targetLiquids)
-        totalVolume += targetLiquid->volumeAt(index.row(), index.column());
-
-    return totalVolume;
-}
-
-qreal MultiGradientDelegate::totalPercentage(const QModelIndex &index, const QList<TargetLiquid *> &targetLiquids, qreal maxVolume) const
-{
-    qreal totalPercentage = 0;
-
-    for (const TargetLiquid *targetLiquid : targetLiquids) {
-        if (targetLiquid->isValid()) {
-            totalPercentage += targetLiquid->volumeAt(index.row(), index.column()) /  maxVolume;
-        }
-    }
-
-    return totalPercentage;
-}
-
-qreal MultiGradientDelegate::maxWellVolume(const QModelIndex &index) const
-{
-    qreal maxVolume = 0;
-    for (int i = 0; i < index.model()->rowCount(); i++) {
-        for (int j = 0; j < index.model()->columnCount(); j++) {
-            bool ok;
-            qreal totalWellVolumeAtIndex = index.model()->index(i, j).data(TargetLiquidModel::MaxVolume).toDouble(&ok);
-            if (!ok)
-                continue;
-
-            if (totalWellVolumeAtIndex > maxVolume)
-                maxVolume = totalWellVolumeAtIndex;
-        }
-    }
-
-    return maxVolume;
 }

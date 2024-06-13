@@ -7,7 +7,7 @@
 #include <DxUi/uiglobal.h>
 
 #include "nodedelegate.h"
-#include "imultigradient.h"
+#include "multigradientinterface.h"
 
 class Q_DECL_EXPORT MultiGradientDelegate : public ProgressDelegate
 {
@@ -25,7 +25,7 @@ public slots:
     void onItemSelectionChanged();
 
 protected:
-    QGradientStops *getGradients(const QModelIndex &index, IMultiGradient::Gradients &gradients, NodeItem *item);
+    QGradientStops *getGradients(const QModelIndex &index, MultiGradientInterface::Gradients &gradients, NodeItem *item);
 
 private:
     bool m_itemSelectionChanged = false;

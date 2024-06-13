@@ -1,5 +1,5 @@
 #include "multigradientdelegate.h"
-#include "imultigradient.h"
+#include "multigradientinterface.h"
 #include "nodeitem.h"
 #include "targetliquidmodel.h"
 
@@ -21,7 +21,7 @@ MultiGradientDelegate::MultiGradientDelegate(QObject *parent) :
 
 void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, NodeItem *item)
 {
-    IMultiGradient *model = dynamic_cast<IMultiGradient*>(item->model());
+    MultiGradientInterface *model = dynamic_cast<MultiGradientInterface*>(item->model());
 
     Q_ASSERT(model);
     Q_ASSERT(node);
@@ -29,7 +29,7 @@ void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, 
 
     QSGInternalRectangleNode *rectNode = static_cast<QSGInternalRectangleNode *>(node);
 
-    IMultiGradient::Gradients grads = model->multiGradientData(index);
+    MultiGradientInterface::Gradients grads = model->multiGradientData(index);
     if (grads.data.size() > 0) {
         QRectF rect = nodeRect(index, item);
         rectNode->setRect(rect);
@@ -60,7 +60,7 @@ void MultiGradientDelegate::onItemSelectionChanged()
     m_itemSelectionChanged = true;
 }
 
-QGradientStops *MultiGradientDelegate::getGradients(const QModelIndex &index, IMultiGradient::Gradients &gradients, NodeItem *item)
+QGradientStops *MultiGradientDelegate::getGradients(const QModelIndex &index, MultiGradientInterface::Gradients &gradients, NodeItem *item)
 {
     QGradientStops *stops = new QGradientStops;
     qreal normalizedFractionSum = 0;

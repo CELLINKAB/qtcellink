@@ -62,6 +62,12 @@ void MultiGradientDelegate::onItemSelectionChanged()
 
 QGradientStops *MultiGradientDelegate::getGradients(const QModelIndex &index, MultiGradientInterface::Gradients &gradients, NodeItem *item)
 {
+
+//    if (m_cache.contains(gradients.cacheKey)) {
+////        qDebug() << "Cache hit at index " << index;
+//        return m_cache[gradients.cacheKey];
+//    }
+
     QGradientStops *stops = new QGradientStops;
     qreal normalizedFractionSum = 0;
 
@@ -95,6 +101,8 @@ QGradientStops *MultiGradientDelegate::getGradients(const QModelIndex &index, Mu
                 stops->append(qMakePair(prevY, it->second->liquid()->color()));
         }
     }
+
+//    m_cache.insert(gradients.cacheKey, stops);
 
     return stops;
 }

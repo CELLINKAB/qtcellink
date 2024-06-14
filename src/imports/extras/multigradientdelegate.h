@@ -30,6 +30,7 @@ protected:
 private:
     bool m_itemSelectionChanged = false;
     static QCache<uint, QGradientStops> m_cache;
+    bool m_cacheActivated = false;
 };
 
 #endif

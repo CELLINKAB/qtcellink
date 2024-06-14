@@ -31,6 +31,7 @@ void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, 
 
     MultiGradientInterface::Gradients grads = model->multiGradientData(index);
     if (grads.data.size() > 0) {
+
         QRectF rect = nodeRect(index, item);
         rectNode->setRect(rect);
         rectNode->setRadius(nodeRadius(index, item));
@@ -63,10 +64,9 @@ void MultiGradientDelegate::onItemSelectionChanged()
 QGradientStops *MultiGradientDelegate::getGradients(const QModelIndex &index, MultiGradientInterface::Gradients &gradients, NodeItem *item)
 {
 
-//    if (m_cache.contains(gradients.cacheKey)) {
-////        qDebug() << "Cache hit at index " << index;
-//        return m_cache[gradients.cacheKey];
-//    }
+    if (m_cacheActivated && m_cache.contains(gradients.cacheKey)) {
+        return m_cache[gradients.cacheKey];
+    }
 
     QGradientStops *stops = new QGradientStops;
     qreal normalizedFractionSum = 0;
@@ -102,7 +102,9 @@ QGradientStops *MultiGradientDelegate::getGradients(const QModelIndex &index, Mu
         }
     }
 
-//    m_cache.insert(gradients.cacheKey, stops);
+    if (m_cacheActivated) {
+        m_cache.insert(gradients.cacheKey, stops);
+    }
 
     return stops;
 }

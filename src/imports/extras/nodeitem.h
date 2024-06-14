@@ -220,7 +220,7 @@ private:
     int m_selectionTimer = 0;
     int m_selectionDelay = 0;
     int m_clickCount = 0;
-    int m_doubleClickInterval = 150;
+    int m_doubleClickInterval = 300;
     qreal m_nodeWidth = 10;
     qreal m_nodeHeight = 10;
     qreal m_nodeSpacing = 0;

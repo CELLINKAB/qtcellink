@@ -23,7 +23,14 @@ void MultiGradientDelegate::updateNode(QSGNode *node, const QModelIndex &index, 
 {
     MultiGradientInterface *model = dynamic_cast<MultiGradientInterface*>(item->model());
 
-    Q_ASSERT(model);
+    // if the cast failed, it means the model does not implement the MultiGradientInterface
+    // and this is fine, only the models requiering the multiGradient functionality should
+    // implement the interface
+    if (!model) {
+        ProgressDelegate::updateNode(node, index, item);
+        return;
+    }
+
     Q_ASSERT(node);
     Q_ASSERT(item);
 

@@ -485,6 +485,9 @@ void NodeItem::mousePressEvent(QMouseEvent *event)
     if (isEnabled(index)) {
         m_selectionModel->setCurrentIndex(index, QItemSelectionModel::Current);
         startPressAndHold();
+        m_clickCount++;
+        startDoubleClickTimer();
+        onDoubleClickTimer();
         emit pressed(index);
         setPressed(true);
     }
@@ -836,6 +839,17 @@ void NodeItem::startPressAndHold()
     m_pressTimer = startTimer(QGuiApplication::styleHints()->mousePressAndHoldInterval());
 }
 
+void NodeItem::onDoubleClickTimer()
+{
+    if (m_doubleClickTimer.isActive() && m_doubleClickTimer.remainingTime() > 0 && m_clickCount >= 2) {
+        stopDoubleClickTimer();
+        if (m_selectionModel) {
+            QModelIndex index = m_selectionModel->currentIndex();
+            emit doubleClicked(index);
+        }
+    }
+}
+
 void NodeItem::stopPressAndHold()
 {
     if (m_pressTimer <= 0)
@@ -899,4 +913,23 @@ void NodeItem::delegates_clear(QQmlListProperty<NodeDelegate> *property)
     for (NodeDelegate *delegate : qAsConst(item->m_delegates))
         disconnect(delegate, &NodeDelegate::changed, item, &NodeItem::fullUpdate);
     item->m_delegates.clear();
+}
+
+void NodeItem::startDoubleClickTimer()
+{
+    // start the timer only if it's not already running
+    // and only a single shot
+    if (!m_doubleClickTimer.isActive()) {
+        m_doubleClickTimer.start(0);
+        m_doubleClickTimer.setInterval(m_doubleClickInterval);
+        QTimer::singleShot(m_doubleClickInterval, &m_doubleClickTimer, [this]() {
+            stopDoubleClickTimer();
+        });
+    }
+}
+
+void NodeItem::stopDoubleClickTimer()
+{
+    m_doubleClickTimer.stop();
+    m_clickCount = 0;
 }

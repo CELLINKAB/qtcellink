@@ -33,9 +33,12 @@
 #ifndef NODEITEM_H
 #define NODEITEM_H
 
-#include <QtQuick/qquickitem.h>
+#include <DxUi/uiglobal.h>
+
 #include <QtCore/qabstractitemmodel.h>
 #include <QtCore/qitemselectionmodel.h>
+#include <QtCore/qtimer.h>
+#include <QtQuick/qquickitem.h>
 #include <QtQml/qqmllist.h>
 
 class NodeDelegate;
@@ -161,6 +164,7 @@ signals:
     void released(const QModelIndex &index);
     void activated(const QModelIndex &index);
     void clicked(const QModelIndex &index);
+    void doubleClicked(const QModelIndex &index);
     void ensureVisible(const QRectF &rect);
 
 protected:
@@ -190,11 +194,17 @@ protected:
     void updateSelection(const QItemSelection &selection);
     void updateArea(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
+protected slots:
+    void onDoubleClickTimer();
+
+
 private:
     static void delegates_append(QQmlListProperty<NodeDelegate> *property, NodeDelegate *delegate);
     static int delegates_count(QQmlListProperty<NodeDelegate> *property);
     static NodeDelegate *delegates_at(QQmlListProperty<NodeDelegate> *property, int index);
     static void delegates_clear(QQmlListProperty<NodeDelegate> *property);
+    void startDoubleClickTimer();
+    void stopDoubleClickTimer();
 
     bool m_rebuild = true;
     bool m_relayout = true;
@@ -209,6 +219,8 @@ private:
     int m_pressTimer = 0;
     int m_selectionTimer = 0;
     int m_selectionDelay = 0;
+    int m_clickCount = 0;
+    int m_doubleClickInterval = 300;
     qreal m_nodeWidth = 10;
     qreal m_nodeHeight = 10;
     qreal m_nodeSpacing = 0;
@@ -223,6 +235,7 @@ private:
     QItemSelection m_selected;
     QItemSelection m_deselected;
     QRect m_selection;
+    QTimer m_doubleClickTimer;
 };
 
 #endif // NODEITEM_H

@@ -43,6 +43,8 @@
 #include <QtGui/qimage.h>
 #include <optional>
 
+#include <DxUi/uiglobal.h>
+
 class QSGNode;
 class NodeItem;
 

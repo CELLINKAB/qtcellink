@@ -1043,7 +1043,7 @@ QColor ProgressDelegate::progressColor(const QModelIndex &index, NodeItem *item)
         if (color.isValid())
             return color;
     }
-    return Qt::transparent;
+    return nodeColor(index, item);
 }
 
 QGradientStops *ProgressDelegate::nodeGradientStops(const QModelIndex &index, NodeItem *item) const

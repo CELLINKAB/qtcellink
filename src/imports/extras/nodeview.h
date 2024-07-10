@@ -172,6 +172,7 @@ signals:
     void released(const QModelIndex &index);
     void activated(const QModelIndex &index);
     void clicked(const QModelIndex &index);
+    void doubleClicked(const QModelIndex &index);
     void zoomChanged(qreal factor, const QPointF &point);
 
 protected slots:

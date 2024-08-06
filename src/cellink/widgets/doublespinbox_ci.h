@@ -1,5 +1,5 @@
-#ifndef DOUBLESPINBOX_H
-#define DOUBLESPINBOX_H
+#ifndef DOUBLESPINBOX_CI_H
+#define DOUBLESPINBOX_CI_H
 
 #include "qtcellink/src/cellink/core/cellink.h"
 
@@ -30,4 +30,4 @@ private:
 
 } // namespace cellink
 
-#endif // DOUBLESPINBOX_H
+#endif // DOUBLESPINBOX_CI_H

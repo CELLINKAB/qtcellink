@@ -1,4 +1,4 @@
-#include "spinbox.h"
+#include "spinbox_ci.h"
 
 namespace cellink {
 

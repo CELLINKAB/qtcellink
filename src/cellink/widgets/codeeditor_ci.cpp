@@ -35,7 +35,7 @@
 **
 ****************************************************************************/
 
-#include "codeeditor.h"
+#include "codeeditor_ci.h"
 
 #include <QtCore/qabstractitemmodel.h>
 #include <QtGui/qfont.h>

@@ -1,6 +1,5 @@
 TARGET = amfgeometryloader
 QT += core-private 3dcore 3dcore-private 3drender 3drender-private
-CONFIG += assimp
 
 INCLUDEPATH += \
     $$MOC_DIR
@@ -20,11 +19,14 @@ DISTFILES += \
 PLUGIN_TYPE = geometryloaders
 PLUGIN_CLASS_NAME = AmfGeometryLoaderPlugin
 
-load(assimp)
 load(qt_build_config)
 load(qt_plugin)
 
 exists($$BUILD_TREE/conanbuildinfo.pri) {
     CONFIG += conan_basic_setup
     include($$BUILD_TREE/conanbuildinfo.pri)
+} else {
+    CONFIG += assimp
+    warning("Need assimp included via conan in the top level project, attempting to sideload")
+    load(assimp)
 }

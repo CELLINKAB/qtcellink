@@ -48,8 +48,7 @@
 **
 ****************************************************************************/
 
-#ifndef QTCELLINK3DWINDOW_H
-#define QTCELLINK3DWINDOW_H
+#pragma once
 
 #include "../core/cellink.h"
 
@@ -99,6 +98,8 @@ Q_DECLARE_OPAQUE_POINTER(Qt3DRender::QRenderSettings*)
 #    endif
 #endif
 
+QT_END_NAMESPACE
+
 namespace QtCellink {
 
 class Qt3DWindowPrivate;
@@ -144,7 +145,3 @@ private:
 };
 
 } // namespace QtCellink
-
-QT_END_NAMESPACE
-
-#endif // QTCELLINK3DWINDOW_H

@@ -74,8 +74,6 @@ static void initResources()
 #endif
 }
 
-QT_BEGIN_NAMESPACE
-
 namespace {
 Q_LOGGING_CATEGORY(lc, "cellink.Qt3DWindow")
 }
@@ -349,5 +347,3 @@ Qt3DCore::QAspectEngine* Qt3DWindow::engine() const
 }
 
 } // namespace QtCellink
-
-QT_END_NAMESPACE

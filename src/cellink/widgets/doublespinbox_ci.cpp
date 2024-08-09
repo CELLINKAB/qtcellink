@@ -1,4 +1,4 @@
-#include "doublespinbox.h"
+#include "doublespinbox_ci.h"
 
 namespace cellink {
 

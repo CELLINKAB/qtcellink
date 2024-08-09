@@ -26,6 +26,7 @@
 
 class AmfGeometryLoader : public Qt3DRender::BaseGeometryLoader
 {
+    Q_OBJECT
 protected:
     bool doLoad(QIODevice* ioDev, const QString& subMesh) final;
 };

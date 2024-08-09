@@ -4,10 +4,10 @@ QT += core-private gui-private
 CONFIG += no_private_qt_headers_warning
 
 HEADERS += \
-    $$PWD/qt3dwindow.h
+    $$PWD/qt3dwindow_ci.h
 
 SOURCES += \
-    $$PWD/qt3dwindow.cpp
+    $$PWD/qt3dwindow_ci.cpp
 
 include($$PWD/../core/global.pri)
 INCLUDEPATH += \

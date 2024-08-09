@@ -3,19 +3,20 @@ DEPENDPATH += $$PWD
 QT += widgets
 
 HEADERS += \
-    $$PWD/codeeditor.h \
-    $$PWD/doublespinbox.h \
-    $$PWD/highlightlines.h \
-    $$PWD/progressindicator.h \
-    $$PWD/rangeslider.h \
-    $$PWD/spinbox.h
+    $$PWD/codeeditor_ci.h \
+    $$PWD/doublespinbox_ci.h \
+    $$PWD/highlightlines_ci.h \
+    $$PWD/progressindicator_ci.h \
+    $$PWD/rangeslider_ci.h \
+    $$PWD/spinbox_ci.h
 
+# _ci suffix to avoid .obj clash with qtcellinkinternal/widgets/ .cpp files with same name
 SOURCES += \
-    $$PWD/codeeditor.cpp \
-    $$PWD/doublespinbox.cpp \
-    $$PWD/progressindicator.cpp \
-    $$PWD/rangeslider.cpp \
-    $$PWD/spinbox.cpp
+    $$PWD/codeeditor_ci.cpp \
+    $$PWD/doublespinbox_ci.cpp \
+    $$PWD/progressindicator_ci.cpp \
+    $$PWD/rangeslider_ci.cpp \
+    $$PWD/spinbox_ci.cpp
 
 include($$PWD/../core/global.pri)
 INCLUDEPATH += \

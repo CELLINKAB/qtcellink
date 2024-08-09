@@ -23,8 +23,8 @@
  * SOFTWARE.
  */
 
-#ifndef PROGRESSINDICATOR_H
-#define PROGRESSINDICATOR_H
+#ifndef PROGRESSINDICATOR_CI_H
+#define PROGRESSINDICATOR_CI_H
 
 #include "qtcellink/src/cellink/core/cellink.h"
 
@@ -124,4 +124,4 @@ private:
 
 } // namespace cellink
 
-#endif // PROGRESSINDICATOR_H
+#endif // PROGRESSINDICATOR_CI_H

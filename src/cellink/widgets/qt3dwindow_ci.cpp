@@ -48,7 +48,7 @@
 **
 ****************************************************************************/
 
-#include "qt3dwindow.h"
+#include "qt3dwindow_ci.h"
 
 #include <Qt3DCore/qaspectengine.h>
 #include <Qt3DCore/qentity.h>
@@ -110,7 +110,7 @@ public:
 
     bool m_initialized;
 
-    Q_DECLARE_PUBLIC(Qt3DWindow)
+    Q_DECLARE_PUBLIC(QtCellink::Qt3DWindow)
 };
 
 Qt3DWindowPrivate::Qt3DWindowPrivate()

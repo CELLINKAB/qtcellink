@@ -174,6 +174,7 @@ signals:
     void clicked(const QModelIndex &index);
     void doubleClicked(const QModelIndex &index);
     void zoomChanged(qreal factor, const QPointF &point);
+    void selectionFinished();
 
 protected slots:
     void resizeNodeItem();

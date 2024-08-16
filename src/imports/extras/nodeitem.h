@@ -166,6 +166,7 @@ signals:
     void clicked(const QModelIndex &index);
     void doubleClicked(const QModelIndex &index);
     void ensureVisible(const QRectF &rect);
+    void selectionFinished();
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

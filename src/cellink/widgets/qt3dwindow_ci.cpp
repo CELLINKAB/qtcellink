@@ -61,6 +61,7 @@
 #include <Qt3DRender/qrendersettings.h>
 #include <QtCore/QTimer>
 #include <QtCore/qeventloop.h>
+#include <QtCore/qloggingcategory.h>
 #include <QtGui/QGuiApplication>
 #include <QtGui/private/qwindow_p.h>
 #include <QtGui/qevent.h>
@@ -74,6 +75,10 @@ static void initResources()
 }
 
 QT_BEGIN_NAMESPACE
+
+namespace {
+Q_LOGGING_CATEGORY(lc, "qtcellink.Qt3DWindow");
+}
 
 namespace QtCellink {
 
@@ -303,15 +308,35 @@ void Qt3DWindow::mousePressEvent(QMouseEvent*)
 bool Qt3DWindow::event(QEvent* e)
 {
     Q_D(Qt3DWindow);
-    const bool needsRedraw = (e->type() == QEvent::Expose || e->type() == QEvent::UpdateRequest);
 
-    if (needsRedraw && d->m_renderSettings->renderPolicy() == Qt3DRender::QRenderSettings::OnDemand) {
+    switch (e->type()) {
+    case QEvent::Expose:
+        [[fallthrough]];
+    case QEvent::UpdateRequest:
+        if (d->m_renderSettings->renderPolicy() == Qt3DRender::QRenderSettings::OnDemand) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        // sendCommand obsolete in Qt6
-        d->m_renderSettings->sendCommand(QStringLiteral("InvalidateFrame"));
+            // sendCommand obsolete in Qt6
+            d->m_renderSettings->sendCommand(QStringLiteral("InvalidateFrame"));
 #else
-        d->m_aspectEngine->processFrame(); /// ? Is this correct
+            d->m_aspectEngine->processFrame(); /// ? Is this correct
 #endif
+        }
+        break;
+
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+    case QEvent::TouchCancel: {
+        // not catching things here by default, but keep if we need to debug
+        const auto te = static_cast<QTouchEvent*>(e);
+        if (te->touchPoints().count() >= 2) {
+            qCDebug(lc) << this << te;
+        }
+        break;
+    }
+
+    default:
+        break;
     }
 
     return QWindow::event(e);

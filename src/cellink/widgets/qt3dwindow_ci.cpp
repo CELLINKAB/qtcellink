@@ -344,7 +344,7 @@ bool Qt3DWindow::event(QEvent* e)
 
 Qt3DCore::QAspectEngine* Qt3DWindow::engine() const
 {
-    const Q_D(Qt3DWindow);
+    Q_D(const Qt3DWindow);
     return d->m_aspectEngine;
 }
 

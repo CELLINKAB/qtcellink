@@ -77,7 +77,7 @@ static void initResources()
 QT_BEGIN_NAMESPACE
 
 namespace {
-Q_LOGGING_CATEGORY(lc, "qtcellink.Qt3DWindow");
+Q_LOGGING_CATEGORY(lc, "qtcellink.Qt3DWindow")
 }
 
 namespace QtCellink {

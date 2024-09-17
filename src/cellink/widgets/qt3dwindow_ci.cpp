@@ -141,22 +141,20 @@ Qt3DWindow::Qt3DWindow(QScreen* screen)
 
     resize(1024, 768);
 
-    /*
-    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
-#ifdef QT_OPENGL_ES_2
-    format.setRenderableType(QSurfaceFormat::OpenGLES);
-#else
-    if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL) {
+    auto format = QSurfaceFormat::defaultFormat();
+    if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGLES) {
+        format.setRenderableType(QSurfaceFormat::OpenGLES);
+    } else if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL) {
         format.setVersion(4, 3);
         format.setProfile(QSurfaceFormat::CoreProfile);
     }
-#endif
+
     format.setDepthBufferSize(24);
     format.setSamples(4);
     format.setStencilBufferSize(8);
     setFormat(format);
-    */
-    //    QSurfaceFormat::setDefaultFormat(format);
+    // must set default format to see change?!
+    QSurfaceFormat::setDefaultFormat(format);
 
     d->m_aspectEngine->registerAspect(d->m_renderAspect);
     d->m_aspectEngine->registerAspect(d->m_inputAspect);

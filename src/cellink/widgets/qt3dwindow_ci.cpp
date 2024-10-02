@@ -125,7 +125,9 @@ Qt3DWindowPrivate::Qt3DWindowPrivate()
     , m_root(new Qt3DCore::QEntity)
     , m_userRoot(nullptr)
     , m_initialized(false)
-{}
+{
+    m_root->setObjectName("Qt3DWindowRootEntity");
+}
 
 Qt3DWindow::Qt3DWindow(QScreen* screen)
     : QWindow(*new Qt3DWindowPrivate(), nullptr)

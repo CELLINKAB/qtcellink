@@ -528,6 +528,9 @@ void NodeItem::mouseReleaseEvent(QMouseEvent *event)
             setPressed(false);
         }
     } else {
+        if (m_selectionMode != NoSelection && m_selectionModel) {
+            emit selectionFinished();
+        }
         cancelSelection();
     }
     event->setAccepted(m_selectionMode != NoSelection && m_selectionModel);

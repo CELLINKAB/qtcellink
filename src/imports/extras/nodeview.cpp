@@ -371,6 +371,7 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         disconnect(m_nodeItem, &NodeItem::nodeSpacingChanged, this, &NodeView::nodeSpacingChanged);
         disconnect(m_nodeItem, &NodeItem::nodeScaleXChanged, this, &NodeView::nodeScaleXChanged);
         disconnect(m_nodeItem, &NodeItem::nodeScaleYChanged, this, &NodeView::nodeScaleYChanged);
+        disconnect(m_nodeItem, &NodeItem::selectionFinished, this, &NodeView::selectionFinished);
     }
 
     if (nodeItem) {
@@ -399,6 +400,7 @@ void NodeView::setNodeItem(NodeItem *nodeItem)
         connect(nodeItem, &NodeItem::nodeSpacingChanged, this, &NodeView::nodeSpacingChanged);
         connect(nodeItem, &NodeItem::nodeScaleXChanged, this, &NodeView::nodeScaleXChanged);
         connect(nodeItem, &NodeItem::nodeScaleYChanged, this, &NodeView::nodeScaleYChanged);
+        connect(nodeItem, &NodeItem::selectionFinished, this, &NodeView::selectionFinished);
     }
 
     m_nodeItem = nodeItem;

@@ -27,6 +27,6 @@ exists($$BUILD_TREE/conanbuildinfo.pri) {
     include($$BUILD_TREE/conanbuildinfo.pri)
 } else {
     CONFIG += assimp
-    message("Assumping we can load assimp from system/SDK, as conan is not available")
+    message("Assuming we can load assimp from system/SDK, as conan is not available")
     load(assimp)
 }

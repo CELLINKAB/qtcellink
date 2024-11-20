@@ -16,11 +16,13 @@ set(PROJECT_SOURCES
     ${QRC_FILES}
 )
 
+qt_add_resources(QtCellink.Plugins.GeometryLoaders.Amf amf.pro)
+
 add_library(QtCellink.Plugins.GeometryLoaders.Amf MODULE ${PROJECT_SOURCES})
 
 set_target_properties(QtCellink.Plugins.GeometryLoaders.Amf PROPERTIES
     OUTPUT_NAME "amfgeometryloader"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins/geometryloaders"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins/geometryloaders"
 )
 
 target_include_directories(QtCellink.Plugins.GeometryLoaders.Amf PRIVATE
@@ -36,7 +38,7 @@ target_link_libraries(QtCellink.Plugins.GeometryLoaders.Amf PUBLIC
     assimp::assimp
 )
 
-file(GLOB_RECURSE MISC_FILES LIST_DIRECTORIES false
+file(GLOB_RECURSE MISC_FILES LIST_DIRECTORIES OFF
     "${CMAKE_CURRENT_LIST_DIR}/*.md"
     "${CMAKE_CURRENT_LIST_DIR}/.*"
     "${CMAKE_CURRENT_LIST_DIR}/*.pro"

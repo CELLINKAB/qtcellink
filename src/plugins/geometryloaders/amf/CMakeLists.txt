@@ -18,7 +18,7 @@ set(PROJECT_SOURCES
 
 qt_add_resources(QtCellink.Plugins.GeometryLoaders.Amf amf.pro)
 
-add_library(QtCellink.Plugins.GeometryLoaders.Amf MODULE ${PROJECT_SOURCES})
+add_library(QtCellink.Plugins.GeometryLoaders.Amf SHARED ${PROJECT_SOURCES})
 
 set_target_properties(QtCellink.Plugins.GeometryLoaders.Amf PROPERTIES
     OUTPUT_NAME "amfgeometryloader"

@@ -20,7 +20,7 @@
 ****************************************************************************/
 
 #include <Qt3DRender/private/qgeometryloaderfactory_p.h>
-#include <QtGlobal>
+#include <QtCore/qobjectdefs.h>
 
 #include "amfgeometryloader.h"
 

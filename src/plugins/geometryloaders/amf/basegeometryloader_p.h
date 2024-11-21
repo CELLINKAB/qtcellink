@@ -176,7 +176,7 @@ public:
         for (auto it = begin; it != end; ++it) {
             if (*it == delimiter) {
                 if (position > lastPosition
-                    || splitBehavior == QString::KeepEmptyParts) { // skip multiple consecutive delimiters
+                    || splitBehavior == Qt::KeepEmptyParts) { // skip multiple consecutive delimiters
                     const ByteArraySplitterEntry entry = {lastPosition, position - lastPosition};
                     m_entries.append(entry);
                 }

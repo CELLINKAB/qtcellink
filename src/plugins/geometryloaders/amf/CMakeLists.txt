@@ -22,7 +22,7 @@ add_library(QtCellink.Plugins.GeometryLoaders.Amf SHARED ${PROJECT_SOURCES})
 
 set_target_properties(QtCellink.Plugins.GeometryLoaders.Amf PROPERTIES
     OUTPUT_NAME "amfgeometryloader"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/src/3rdparty/qtcellink"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins/geometryloaders"
 )
 
 target_include_directories(QtCellink.Plugins.GeometryLoaders.Amf PRIVATE

@@ -9,9 +9,10 @@ find_package(assimp REQUIRED)
 add_library(QtCellink.Plugins.GeometryLoaders.Amf SHARED ${PROJECT_SOURCES})
 
 set_target_properties(QtCellink.Plugins.GeometryLoaders.Amf PROPERTIES
-    OUTPUT_NAME "amfgeometryloader"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins/geometryloaders"
+    OUTPUT_NAME "amf"
+    RUNTIME_OUTPUT_DIRECTORY "${CELLINK_PLUGIN_PATH}/geometryloaders"
 )
+install(TARGETS QtCellink.Plugins.GeometryLoaders.Amf RUNTIME DESTINATION lib/plugins/geometryloaders)
 
 target_link_libraries(QtCellink.Plugins.GeometryLoaders.Amf PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
@@ -25,12 +26,7 @@ target_link_libraries(QtCellink.Plugins.GeometryLoaders.Amf PUBLIC
 
 file(GLOB SRC_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/*.cpp)
 file(GLOB H_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/*.h)
-file(GLOB MISC_FILES LIST_DIRECTORIES OFF
-    ${CMAKE_CURRENT_LIST_DIR}/*.md
-    ${CMAKE_CURRENT_LIST_DIR}/.*
-    ${CMAKE_CURRENT_LIST_DIR}/*.pro
-    ${CMAKE_CURRENT_LIST_DIR}/*.txt
-)
+file(GLOB MISC_FILES LIST_DIRECTORIES OFF *.md .* *.pro)
 
 target_sources(QtCellink.Plugins.GeometryLoaders.Amf PRIVATE
     ${SRC_FILES}

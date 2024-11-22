@@ -6,18 +6,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
 )
 find_package(assimp REQUIRED)
 
-file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/*.cpp)
-file(GLOB_RECURSE H_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/*.h)
-file(GLOB QRC_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/*.qrc)
-
-set(PROJECT_SOURCES
-    ${SRC_FILES}
-    ${H_FILES}
-    ${QRC_FILES}
-)
-
-qt_add_resources(QtCellink.Plugins.GeometryLoaders.Amf amf.pro)
-
 add_library(QtCellink.Plugins.GeometryLoaders.Amf SHARED ${PROJECT_SOURCES})
 
 set_target_properties(QtCellink.Plugins.GeometryLoaders.Amf PROPERTIES
@@ -25,24 +13,28 @@ set_target_properties(QtCellink.Plugins.GeometryLoaders.Amf PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins/geometryloaders"
 )
 
-target_include_directories(QtCellink.Plugins.GeometryLoaders.Amf PRIVATE
-    ${Qt${QT_VERSION_MAJOR}Core_PRIVATE_INCLUDE_DIRS}
-    ${Qt${QT_VERSION_MAJOR}3DCore_PRIVATE_INCLUDE_DIRS}
-    ${Qt${QT_VERSION_MAJOR}3DRender_PRIVATE_INCLUDE_DIRS}
-)
-
 target_link_libraries(QtCellink.Plugins.GeometryLoaders.Amf PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::3DCore
     Qt${QT_VERSION_MAJOR}::3DRender
+    Qt${QT_VERSION_MAJOR}::CorePrivate
+    Qt${QT_VERSION_MAJOR}::3DCorePrivate
+    Qt${QT_VERSION_MAJOR}::3DRenderPrivate
     assimp::assimp
 )
 
-file(GLOB_RECURSE MISC_FILES LIST_DIRECTORIES OFF
-    "${CMAKE_CURRENT_LIST_DIR}/*.md"
-    "${CMAKE_CURRENT_LIST_DIR}/.*"
-    "${CMAKE_CURRENT_LIST_DIR}/*.pro"
-    "${CMAKE_CURRENT_LIST_DIR}/*.txt"
+file(GLOB SRC_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/*.cpp)
+file(GLOB H_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/*.h)
+file(GLOB MISC_FILES LIST_DIRECTORIES OFF
+    ${CMAKE_CURRENT_LIST_DIR}/*.md
+    ${CMAKE_CURRENT_LIST_DIR}/.*
+    ${CMAKE_CURRENT_LIST_DIR}/*.pro
+    ${CMAKE_CURRENT_LIST_DIR}/*.txt
 )
 
-add_custom_target(QtCellink.Plugins.GeometryLoaders.Amf.misc SOURCES ${MISC_FILES})
+target_sources(QtCellink.Plugins.GeometryLoaders.Amf PRIVATE
+    ${SRC_FILES}
+    ${H_FILES}
+    amf.json
+    ${MISC_FILES}
+)

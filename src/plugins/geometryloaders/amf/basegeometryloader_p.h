@@ -168,7 +168,7 @@ public:
     explicit ByteArraySplitter(const char* begin,
                                const char* end,
                                char delimiter,
-                               QString::SplitBehavior splitBehavior)
+                               Qt::SplitBehavior splitBehavior)
         : m_input(begin)
     {
         int position = 0;
@@ -206,7 +206,7 @@ public:
         return QString::fromLatin1(m_input + m_entries[index].start, m_entries[index].size);
     }
 
-    ByteArraySplitter splitterAt(int index, char delimiter, QString::SplitBehavior splitBehavior) const
+    ByteArraySplitter splitterAt(int index, char delimiter, Qt::SplitBehavior splitBehavior) const
     {
         return ByteArraySplitter(m_input + m_entries[index].start,
                                  m_input + m_entries[index].start + m_entries[index].size,

@@ -6,7 +6,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
 )
 find_package(assimp REQUIRED)
 
-add_library(QtCellink.Plugins.GeometryLoaders.Amf SHARED ${PROJECT_SOURCES})
+add_library(QtCellink.Plugins.GeometryLoaders.Amf SHARED)
 
 set_target_properties(QtCellink.Plugins.GeometryLoaders.Amf PROPERTIES
     OUTPUT_NAME "amf"

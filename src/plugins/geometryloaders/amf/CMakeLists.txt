@@ -12,7 +12,7 @@ set_target_properties(QtCellink.Plugins.GeometryLoaders.Amf PROPERTIES
     OUTPUT_NAME "amf"
     RUNTIME_OUTPUT_DIRECTORY "${CELLINK_PLUGIN_PATH}/geometryloaders"
 )
-install(TARGETS QtCellink.Plugins.GeometryLoaders.Amf RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/plugins/geometryloaders)
+install(TARGETS QtCellink.Plugins.GeometryLoaders.Amf RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/geometryloaders)
 
 target_link_libraries(QtCellink.Plugins.GeometryLoaders.Amf PUBLIC
     Qt${QT_VERSION_MAJOR}::Core

@@ -34,6 +34,8 @@
 // copied from qabstractbutton.cpp
 static const int AUTO_REPEAT_DELAY = 300;
 static const int AUTO_REPEAT_INTERVAL = 100;
+static const qreal PRESS_EVENT_ACCELERATION_FACTOR = 0.005;
+static const qint64 PRESS_EVENT_THRESHOLD_MS = 2000;
 
 class DoubleSpinBoxPrivate : public QQuickControlPrivate
 {
@@ -79,6 +81,7 @@ public:
     qreal value = 0;
     qreal stepSize = 1;
     qreal pageStepSize = 10;
+    qreal accelerationFactor = 0.005;
     int delayTimer = 0;
     int repeatTimer = 0;
     int  decimals = 2;
@@ -91,6 +94,7 @@ public:
     mutable QJSValue textFromValue;
     mutable QJSValue valueFromText;
     Qt::InputMethodHints inputMethodHints = Qt::ImhDigitsOnly | Qt::ImhNoTextHandles;
+    QElapsedTimer pressTimer;
 };
 
 class DoubleSpinButtonPrivate : public QObjectPrivate
@@ -192,7 +196,14 @@ void DoubleSpinBoxPrivate::pageStepDown(bool modified)
 
 qreal DoubleSpinBoxPrivate::effectiveStepSize(qreal step) const
 {
-    return from > to ? -1 * step : step;
+    qreal tmpStep = from > to ? -1 * step : step;
+
+    qint64 elapsedMs = pressTimer.elapsed();
+    if (elapsedMs >= PRESS_EVENT_THRESHOLD_MS) {
+        tmpStep = tmpStep * std::round(1 + PRESS_EVENT_ACCELERATION_FACTOR * elapsedMs);
+    }
+
+    return tmpStep;
 }
 
 void DoubleSpinBoxPrivate::updateDisplayText()
@@ -267,6 +278,7 @@ void DoubleSpinBoxPrivate::startRepeatDelay()
     Q_Q(DoubleSpinBox);
     stopPressRepeat();
     delayTimer = q->startTimer(AUTO_REPEAT_DELAY);
+    pressTimer.start();
 }
 
 void DoubleSpinBoxPrivate::startPressRepeat()
@@ -893,6 +905,24 @@ QPalette DoubleSpinBox::defaultPalette() const
 #else
     return QQuickTheme::palette(QQuickTheme::SpinBox);
 #endif
+}
+
+qreal DoubleSpinBox::accelerationFactor() const
+{
+    Q_D(const DoubleSpinBox);
+    return d->accelerationFactor;
+}
+
+void DoubleSpinBox::setAccelerationFactor(qreal newAccelerationFactor)
+{
+    Q_D(DoubleSpinBox);
+    d->accelerationFactor = newAccelerationFactor;
+}
+
+qint64 DoubleSpinBox::elapsedMsSinceButtonPress() const
+{
+    Q_D(const DoubleSpinBox);
+    return d->pressTimer.elapsed();
 }
 
 #if QT_CONFIG(accessibility)

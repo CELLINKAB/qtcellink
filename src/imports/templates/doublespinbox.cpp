@@ -154,9 +154,6 @@ bool DoubleSpinBoxPrivate::setValue(qreal newValue, bool allowWrap, bool modifie
     if (q->isComponentComplete())
         newValue = boundValue(newValue, allowWrap);
 
-    if (value == newValue)
-        return false;
-
     value = newValue;
 
     updateDisplayText();
@@ -227,8 +224,6 @@ void DoubleSpinBoxPrivate::updateDisplayText()
 void DoubleSpinBoxPrivate::setDisplayText(const QString &text)
 {
     Q_Q(DoubleSpinBox);
-    if (displayText == text)
-        return;
 
     displayText = text;
     emit q->displayTextChanged();

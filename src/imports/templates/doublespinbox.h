@@ -106,6 +106,11 @@ public:
     QString suffix() const;
     void setSuffix(const QString &suffix);
 
+    qreal accelerationFactor() const;
+    void setAccelerationFactor(qreal newAccelerationFactor);
+
+    qint64 elapsedMsSinceButtonPress() const;
+
 public Q_SLOTS:
     void increase();
     void decrease();

@@ -27,6 +27,6 @@ exists($$BUILD_TREE/conanbuildinfo.pri) {
     include($$BUILD_TREE/conanbuildinfo.pri)
 } else {
     CONFIG += assimp
-    warning("Need assimp included via conan in the top level project, attempting to sideload")
+    message("Assumping we can load assimp from system/SDK, as conan is not available")
     load(assimp)
 }

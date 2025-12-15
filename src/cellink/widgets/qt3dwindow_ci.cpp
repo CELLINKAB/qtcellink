@@ -145,7 +145,12 @@ Qt3DWindow::Qt3DWindow(QScreen* screen)
     if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGLES) {
         format.setRenderableType(QSurfaceFormat::OpenGLES);
     } else if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL) {
+#ifdef Q_OS_FOTONOS
+        // Only OpenGL 2.1 is supported
+        format.setVersion(2, 1);
+#else
         format.setVersion(4, 3);
+#endif
         format.setProfile(QSurfaceFormat::CoreProfile);
     }
 
